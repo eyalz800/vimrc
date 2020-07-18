@@ -88,6 +88,12 @@ function! ZGenTagsAndCsFiles()
     exec ":AsyncRun ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && ctags -R " . g:ctagsOptions
 endfunction
 
+" Generate C++
+function! ZGenerateCpp()
+    copen
+    exec ":AsyncRun ctags -R " . g:ctagsOptions . " && echo '" . g:ctagsOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cscope -bq"
+endfunction
+
 " Install Mapping
 nnoremap <leader>zi :call ZInstall()<CR>
 
@@ -97,6 +103,9 @@ nnoremap <leader>zG :call ZGenerateEverything()<CR>
 
 " Generate Tags and Cscope Files Mapping
 nnoremap <leader>zt :call ZGenTagsAndCsFiles()<CR>
+
+" Generate C++
+nnoremap <leader>zp :call ZGenerateCpp()<CR>
 
 " Codesearch
 nnoremap <leader>zx "tyiw:exe "CSearch " . @t . ""<CR>
