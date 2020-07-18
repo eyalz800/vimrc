@@ -1,9 +1,29 @@
-" Plug
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+if !empty($INSTALL_VIMRC)
+    silent !apt install -y curl silversearcher-ag exuberant-ctags cscope global codesearch git clang-tools-8 make autoconf automake pkg-config libc++-8-dev
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    silent !update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-8 800
+    silent !mkdir -p ~/.vim
+    silent !mkdir -p ~/.vim/tmp
+    silent exec "!cd ~/.vim/tmp; git clone https://github.com/universal-ctags/ctags.git; cd ./ctags; ./autogen.sh; ./configure; make; make install"
+    silent !INSTALL_VIMRC_PLUGINS=1 INSTALL_VIMRC= vim +qa
+    silent exec "!sed -i 's/ autochdir/ noautochdir/' ~/.vim/plugged/SrcExpl/plugin/srcexpl.vim"
+    silent exec "!sed -i 's@ . redraw\\!@ . \" > /dev/null\"@' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim"
+    silent exec "!sed -i 's@silent execute \"perl system.*@silent execute \"\\!\" . a:cmd . \" > /dev/null\"@' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim"
+    silent exec "!sed -i \"s/'String',[ \\t]*s:green/'String', \\['\\#d78787', 174\\]/\" ~/.vim/plugged/gruvbox/colors/gruvbox.vim"
+    silent exec "!sed -i 's/s:did_snips_mappings/g:did_snips_mappings/' ~/.vim/plugged/snipMate-acp/after/plugin/snipMate.vim"
+    silent !chown -R $SUDO_USER:$SUDO_GID ~/.vim
+    silent !chown -R $SUDO_USER:$SUDO_GID ~/.vim/tmp
+    silent !chown $SUDO_USER:$SUDO_GID ~/.vimrc
+    exec ":q"
 endif
+
+let g:use_lsp = 1
+if !executable('clangd')
+    let g:use_lsp = 0
+endif
+
+let g:did_snips_mappings = 1
 
 call plug#begin()
 "Plug 'ctrlpvim/ctrlp.vim'
@@ -13,11 +33,10 @@ Plug 'wesleyche/SrcExpl'
 Plug 'vim-scripts/taglist.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'wesleyche/Trinity'
-Plug 'vim-scripts/OmniCppComplete'
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
 Plug 'rdolgushin/snipMate-acp'
-Plug 'vim-scripts/AutoComplPop'
+"Plug 'vim-scripts/snipMate'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'skywind3000/gutentags_plus'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -35,21 +54,59 @@ Plug 'morhetz/gruvbox'
 Plug 'vim-scripts/TagHighlight'
 Plug 'erig0/cscope_dynamic'
 Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'asenac/vim-opengrok'
+Plug 'airblade/vim-gitgutter'
+"Plug 'davidhalter/jedi-vim'
+Plug 'gotcha/vimpdb'
+Plug 'tpope/vim-fugitive'
+"Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"Plug 'dense-analysis/ale'
+"Plug 'ycm-core/YouCompleteMe'
+Plug 'vim-scripts/AutoComplPop'
+if g:use_lsp
+    Plug 'prabirshrestha/async.vim'
+    Plug 'prabirshrestha/vim-lsp'
+    Plug 'prabirshrestha/asyncomplete.vim'
+    Plug 'prabirshrestha/asyncomplete-lsp.vim'
+    Plug 'prabirshrestha/asyncomplete-tags.vim'
+else
+    Plug 'vim-scripts/OmniCppComplete'
+endif
 call plug#end()
+
+if !empty($INSTALL_VIMRC_PLUGINS)
+    exec ":PlugInstall --sync"
+    exec ":q"
+endif
+
+" Ignore no write since last change errors
+set hidden
+
+" Cursor Line
+highlight CursorLineNr cterm=NONE ctermbg=15 ctermfg=8 gui=NONE guibg=#ffffff guifg=#d70000
+set cursorline
+
+" Opengrok
+let g:opengrok_jar = '~/.vim/opengrok/lib/lib/opengrok-1.3.16.jar'
 
 " Generation Parameters
 let g:ctagsFilePatterns = '\.c$|\.cc$|\.cpp$|\.cxx$|\.h$|\.hh$|\.hpp$'
 let g:ctagsOptions = '--languages=C,C++ --c++-kinds=+p --fields=+iaS --extra=+q --sort=foldcase --tag-relative'
 let g:ctagsEverythingOptions = '--c++-kinds=+p --fields=+iaS --extra=+q --sort=foldcase --tag-relative'
 
-" Install
-function! ZInstall()
+" Generate Flags
+function! ZGenerateFlags()
     copen
-    exec ":AsyncRun sudo apt install silversearcher-ag exuberant-ctags cscope global codesearch -y
-    \ & sed -i 's/ autochdir/ noautochdir/' ~/.vim/plugged/SrcExpl/plugin/srcexpl.vim
-    \ & sed -i 's/silent execute \"perl/silent execute \"!perl/' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim 
-    \ & sed -i 's@ . redraw!@\ . \" > /dev/null\"@' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim
-    \ & sed -i \"s/'String',[ \\t]*s\\:green/'String', \\['\\#d78787', 174\\]/\" ~/.vim/plugged/gruvbox/colors/gruvbox.vim"
+    exec ":AsyncRun find . -name inc -or -name include | sed s@^@-isystem\\\\n@g > compile_flags.txt
+    \ && echo -std=c++1z >> compile_flags.txt
+    \ && echo -isystem >> compile_flags.txt
+    \ && echo /usr/include >> compile_flags.txt
+    \ && echo -isystem >> compile_flags.txt
+    \ && echo $(dirname $(find /usr/lib -name string_view | sort | grep -v experimental | sort | tail -n 1 | grep -v __$placeholder$__ || echo '/usr/include')) >> compile_flags.txt
+    \ && echo -isystem >> compile_flags.txt
+    \ && echo $(dirname $(find /usr/include/c++ -name cstdlib | grep -v tr1 | sort | tail -n 1 | grep -v __$placeholder$__ || echo '/usr/include')) >> compile_flags.txt
+    \ && echo -x >> compile_flags.txt
+    \ && echo c++ >> compile_flags.txt"
 endfunction
 
 " Generate All
@@ -91,24 +148,52 @@ endfunction
 " Generate C++
 function! ZGenerateCpp()
     copen
+    exec ":AsyncRun find . -name inc -or -name include | sed s@^@-isystem\\\\n@g > compile_flags.txt
+    \ && echo -std=c++1z >> compile_flags.txt
+    \ && echo -isystem >> compile_flags.txt
+    \ && echo /usr/include >> compile_flags.txt
+    \ && echo -isystem >> compile_flags.txt
+    \ && echo $(dirname $(find /usr/lib -name string_view | sort | grep -v experimental | sort | tail -n 1 | grep -v __$placeholder$__ || echo '/usr/include')) >> compile_flags.txt
+    \ && echo -isystem >> compile_flags.txt
+    \ && echo $(dirname $(find /usr/include/c++ -name cstdlib | grep -v tr1 | sort | tail -n 1 | grep -v __$placeholder$__ || echo '/usr/include')) >> compile_flags.txt
+    \ && echo -x >> compile_flags.txt
+    \ && echo c++ >> compile_flags.txt
+    \ && echo '" . g:ctagsOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cscope -bq"
+endfunction
+function! ZGenerateTagsBasedCpp()
+    copen
     exec ":AsyncRun ctags -R " . g:ctagsOptions . " && echo '" . g:ctagsOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cscope -bq"
 endfunction
+function! ZGenerateCppScope()
+    copen
+    exec ":AsyncRun echo '" . g:ctagsOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cscope -bq"
+endfunction
 
-" Install Mapping
-nnoremap <leader>zi :call ZInstall()<CR>
-
-" Generate All Mapping
+" Generate All
 nnoremap <leader>zg :call ZGenerateAll()<CR>
 nnoremap <leader>zG :call ZGenerateEverything()<CR>
 
-" Generate Tags and Cscope Files Mapping
+" Generate Tags and Cscope Files
 nnoremap <leader>zt :call ZGenTagsAndCsFiles()<CR>
 
 " Generate C++
 nnoremap <leader>zp :call ZGenerateCpp()<CR>
+nnoremap <leader>zP :call ZGenerateTagsBasedCpp()<CR>
+nnoremap <leader>zc :call ZGenerateCppScope()<CR>
+
+" Generate Flags
+nnoremap <leader>zf :call ZGenerateFlags()<CR>
 
 " Codesearch
 nnoremap <leader>zx "tyiw:exe "CSearch " . @t . ""<CR>
+
+" Lsp
+highlight clear LspWarningLine
+highlight clear LspErrorHighlight
+highlight link LspErrorText GruvboxRedSign
+nnoremap <leader>ld :LspDocumentDiagnostics<CR>
+nnoremap <leader>lh :highlight link LspErrorHighlight Error<CR>
+nnoremap <leader>ln :highlight link LspErrorHighlight None<CR>
 
 " VimClang
 let g:clang_c_options = '-std=c11'
@@ -141,6 +226,8 @@ let g:acp_behaviorSnipmateLength = 1
 " GutenTags
 let g:gutentags_modules = ['ctags', 'gtags_cscope']
 let g:gutentags_plus_nomap = 1
+let g:gutentags_cache_dir = expand('~/.vim/tmp/tags')
+
 noremap <silent> <leader>gs :GscopeFind s <C-R><C-W><cr>
 noremap <silent> <leader>gg :GscopeFind g <C-R><C-W><cr>
 noremap <silent> <leader>gc :GscopeFind c <C-R><C-W><cr>
@@ -225,8 +312,8 @@ set noerrorbells visualbell t_vb=
 
 " Extensions
 function! Cscope(option, query, ...)
-  let a:ignorecase = get(a:, 1, 0)
-  if a:ignorecase
+  let l:ignorecase = get(a:, 1, 0)
+  if l:ignorecase
     let realoption = "C" . a:option
   else
     let realoption = a:option
@@ -275,8 +362,8 @@ function! CscopeQuery(option, ...)
   endif
   call inputrestore()
   if query != ""
-    let a:ignorecase = get(a:, 1, 0)
-    if a:ignorecase
+    let l:ignorecase = get(a:, 1, 0)
+    if l:ignorecase
       call Cscope(a:option, query, 1)
     else
       call Cscope(a:option, query)
@@ -321,3 +408,17 @@ set background=dark
 let g:gruvbox_contrast_datk = 'medium'
 color gruvbox
 hi Normal ctermbg=none
+
+" Clangd
+if g:use_lsp
+    augroup lsp_clangd
+        autocmd!
+        autocmd User lsp_setup call lsp#register_server({
+                    \ 'name': 'clangd',
+                    \ 'cmd': {server_info->['clangd']},
+                    \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+                    \ })
+    augroup end
+else
+
+endif
