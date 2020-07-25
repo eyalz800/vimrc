@@ -243,6 +243,7 @@ let $FZF_DEFAULT_COMMAND = "if [ -f cscope.files ]; then cat cscope.files; else 
 set rtp+=~/.fzf
 nnoremap <C-p> :call ZSwitchToRoot()<CR>:Files<CR>
 nnoremap <C-n> :call ZSwitchToRoot()<CR>:Tags<CR>
+nnoremap <leader>b :Buf<CR>
 
 " Sneak
 let g:sneak#use_ic_scs = 1
