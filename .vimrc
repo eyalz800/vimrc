@@ -1,10 +1,15 @@
 if !empty($INSTALL_VIMRC)
-    silent !apt install -y curl silversearcher-ag exuberant-ctags cscope global codesearch git clang-tools-8 make autoconf automake pkg-config libc++-8-dev
+    silent !apt install -y curl silversearcher-ag exuberant-ctags cscope global codesearch git clang-tools-8 make autoconf automake pkg-config libc++-8-dev openjdk-8-jre
     silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
       \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     silent !update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-8 800
     silent !mkdir -p ~/.vim
     silent !mkdir -p ~/.vim/tmp
+    silent !curl -fLo ~/.vim/bin/opengrok.tar.gz --create-dirs
+      \ https://github.com/oracle/opengrok/releases/download/1.0/opengrok-1.0.tar.gz
+    silent exec "!cd ~/.vim/bin; tar -xzvf opengrok.tar.gz"
+    silent !rm ~/.vim/bin/opengrok.tar.gz
+    silent !mv ~/.vim/bin/opengrok* ~/.vim/bin/opengrok
     silent exec "!cd ~/.vim/tmp; git clone https://github.com/universal-ctags/ctags.git; cd ./ctags; ./autogen.sh; ./configure; make; make install"
     silent !INSTALL_VIMRC_PLUGINS=1 INSTALL_VIMRC= vim +qa
     silent exec "!sed -i 's/ autochdir/ noautochdir/' ~/.vim/plugged/SrcExpl/plugin/srcexpl.vim"
@@ -54,7 +59,6 @@ Plug 'morhetz/gruvbox'
 Plug 'vim-scripts/TagHighlight'
 Plug 'erig0/cscope_dynamic'
 Plug 'octol/vim-cpp-enhanced-highlight'
-Plug 'asenac/vim-opengrok'
 Plug 'airblade/vim-gitgutter'
 "Plug 'davidhalter/jedi-vim'
 Plug 'gotcha/vimpdb'
@@ -86,9 +90,6 @@ set hidden
 highlight CursorLineNr cterm=NONE ctermbg=15 ctermfg=8 gui=NONE guibg=#ffffff guifg=#d70000
 set cursorline
 
-" Opengrok
-let g:opengrok_jar = '~/.vim/opengrok/lib/lib/opengrok-1.3.16.jar'
-
 " Generation Parameters
 let g:ctagsFilePatterns = '\.c$|\.cc$|\.cpp$|\.cxx$|\.h$|\.hh$|\.hpp$'
 let g:ctagsOptions = '--languages=C,C++ --c++-kinds=+p --fields=+iaS --extra=+q --sort=foldcase --tag-relative'
@@ -115,7 +116,7 @@ function! ZGenerateAll()
     exec ":AsyncRun ctags -R " . g:ctagsOptions . " && echo '" . g:ctagsOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cscope -bq && cindex . && gtags"
 endfunction
 
-" Generate All
+" Generate Everything
 function! ZGenerateEverything()
     copen
     exec ":AsyncRun ctags -R " . g:ctagsEverythingOptions . " && echo '" . g:ctagsEverythingOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l > cscope.files && cscope -bq && cindex . && gtags"
@@ -169,6 +170,12 @@ function! ZGenerateCppScope()
     exec ":AsyncRun echo '" . g:ctagsOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cscope -bq"
 endfunction
 
+" Generate Opengrok
+function! ZGenerateOpengrok()
+    copen
+    exec ":AsyncRun java -Xmx2048m -jar ~/.vim/bin/opengrok/lib/opengrok.jar -q -c /usr/bin/ctags-exuberant -s . -d .opengrok -I *.cpp -I *.c -I *.cc -I *.h -I *.hh -I *.hpp -I *.S -I *.py -I *.java -I *.cs -P -S -G -W .opengrok/configuration.xml"
+endfunction
+
 " Generate All
 nnoremap <leader>zg :call ZGenerateAll()<CR>
 nnoremap <leader>zG :call ZGenerateEverything()<CR>
@@ -187,6 +194,9 @@ nnoremap <leader>zf :call ZGenerateFlags()<CR>
 " Codesearch
 nnoremap <leader>zx "tyiw:exe "CSearch " . @t . ""<CR>
 
+" Generate Opengrok
+nnoremap <leader>zk :call ZGenerateOpengrok()<CR>
+
 " Lsp
 highlight clear LspWarningLine
 highlight clear LspErrorHighlight
@@ -194,6 +204,10 @@ highlight link LspErrorText GruvboxRedSign
 nnoremap <leader>ld :LspDocumentDiagnostics<CR>
 nnoremap <leader>lh :highlight link LspErrorHighlight Error<CR>
 nnoremap <leader>ln :highlight link LspErrorHighlight None<CR>
+
+" Opengrok
+let g:opengrok_jar = '~/.vim/bin/opengrok/lib/opengrok.jar'
+let g:opengrok_ctags = '/usr/bin/ctags-exuberant'
 
 " VimClang
 let g:clang_c_options = '-std=c11'
@@ -420,6 +434,25 @@ if g:use_lsp
                     \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
                     \ })
     augroup end
-else
-
 endif
+
+" Opengrok Search
+function! OgQuery(option, query, ...)
+  let opts = {
+  \ 'source': "java -Xmx2048m -cp ~/.vim/bin/opengrok/lib/opengrok.jar org.opensolaris.opengrok.search.Search -R .opengrok/configuration.xml -" . a:option . " " . a:query . "| grep \"^/.*\" | sed 's@</\\?.>@@g' | sed 's/&amp;/\\&/g' | sed 's/-\&gt;/->/g'",
+  \ 'options': ['--ansi', '--prompt', '> ',
+  \             '--multi', '--bind', 'alt-a:select-all,alt-d:deselect-all',
+  \             '--color', 'fg:188,fg+:222,bg+:#3a3a3a,hl+:104'],
+  \ 'down': '40%'
+  \ }
+
+  function! opts.sink(lines) 
+    let data = split(a:lines)
+    let file = split(data[0], ":")
+    execute 'e ' . '+' . file[1] . ' ' . file[0]
+  endfunction
+  call fzf#run(opts)
+endfunction
+
+nnoremap <leader>zo :call OgQuery('f', expand('<cword>'))<CR>
+nnoremap <leader><leader>zo :call OgQuery('f', input('Text: '))<CR>
