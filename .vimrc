@@ -325,6 +325,9 @@ noremap <F7> :bn<CR>
 noremap <F5> :set nu!<CR>:set paste!<CR>i
 set noerrorbells visualbell t_vb=
 
+" In some windows machines this prevents launching in REPLACE mode.
+"set t_u7=
+
 " Extensions
 function! Cscope(option, query, ...)
   let l:ignorecase = get(a:, 1, 0)
