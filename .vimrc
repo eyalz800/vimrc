@@ -47,9 +47,6 @@ endif
 let g:did_snips_mappings = 1
 
 call plug#begin()
-"Plug 'ctrlpvim/ctrlp.vim'
-"Plug 'justmao945/vim-clang'
-"Plug 'chazy/cscope_maps'
 Plug 'wesleyche/SrcExpl'
 Plug 'vim-scripts/taglist.vim'
 Plug 'scrooloose/nerdtree'
@@ -57,7 +54,6 @@ Plug 'wesleyche/Trinity'
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
 Plug 'rdolgushin/snipMate-acp'
-"Plug 'vim-scripts/snipMate'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'skywind3000/gutentags_plus'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -76,12 +72,8 @@ Plug 'vim-scripts/TagHighlight'
 Plug 'erig0/cscope_dynamic'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'airblade/vim-gitgutter'
-"Plug 'davidhalter/jedi-vim'
 Plug 'gotcha/vimpdb'
 Plug 'tpope/vim-fugitive'
-"Plug 'neoclide/coc.nvim', {'branch': 'release'}
-"Plug 'dense-analysis/ale'
-"Plug 'ycm-core/YouCompleteMe'
 Plug 'vim-scripts/AutoComplPop'
 if g:use_lsp
     Plug 'prabirshrestha/async.vim'
