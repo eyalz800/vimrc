@@ -1,5 +1,11 @@
 if !empty($INSTALL_VIMRC)
-    silent !apt install -y curl silversearcher-ag exuberant-ctags cscope global codesearch git clang-tools-8 make autoconf automake pkg-config libc++-8-dev openjdk-8-jre
+    silent !DEBIAN_FRONTEND=noninteractive apt install -y curl silversearcher-ag exuberant-ctags cscope global codesearch git clang-tools-8 make autoconf automake pkg-config libc++-8-dev openjdk-8-jre python-pip python3-pip
+    if executable('pip')
+        silent !pip install python-language-server
+    endif
+    if executable('pip3')
+        silent !pip3 install python-language-server
+    endif
     silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
       \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     silent !update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-8 800
@@ -23,9 +29,19 @@ if !empty($INSTALL_VIMRC)
     exec ":q"
 endif
 
-let g:use_lsp = 1
+let g:use_lsp = 0
+let g:use_clangd_lsp = 1
 if !executable('clangd')
-    let g:use_lsp = 0
+    let g:use_clangd_lsp = 0
+else
+    let g:use_lsp = 1
+endif
+
+let g:use_pyls_lsp = 1
+if !executable('pyls')
+    let g:use_pyls_lsp = 0
+else
+    let g:use_lsp = 1
 endif
 
 let g:did_snips_mappings = 1
@@ -326,7 +342,7 @@ noremap <F5> :set nu!<CR>:set paste!<CR>i
 set noerrorbells visualbell t_vb=
 
 " In some windows machines this prevents launching in REPLACE mode.
-"set t_u7=
+set t_u7=
 
 " Extensions
 function! Cscope(option, query, ...)
@@ -428,13 +444,26 @@ color gruvbox
 hi Normal ctermbg=none
 
 " Clangd
-if g:use_lsp
+if g:use_clangd_lsp
     augroup lsp_clangd
         autocmd!
         autocmd User lsp_setup call lsp#register_server({
                     \ 'name': 'clangd',
                     \ 'cmd': {server_info->['clangd']},
                     \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+                    \ })
+    augroup end
+endif
+
+" Pyls
+if g:use_pyls_lsp
+    augroup lsp_pyls
+        autocmd!
+        autocmd User lsp_setup call lsp#register_server({
+                    \ 'name': 'pyls',
+                    \ 'cmd': {server_info->['pyls']},
+                    \ 'whitelist': ['python'],
+                    \ 'workspace_config': {'pyls': {'plugins': {'pydocstyle': {'enabled': v:true}}}}
                     \ })
     augroup end
 endif
