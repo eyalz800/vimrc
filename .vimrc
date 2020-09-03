@@ -1,5 +1,5 @@
-if !empty($INSTALL_VIMRC)
-    silent !DEBIAN_FRONTEND=noninteractive apt install -y curl silversearcher-ag exuberant-ctags cscope global codesearch git clang-tools-8 make autoconf automake pkg-config libc++-8-dev openjdk-8-jre python-pip python3-pip
+function! InstallVimrc()
+    silent !DEBIAN_FRONTEND=noninteractive apt install -y curl silversearcher-ag exuberant-ctags cscope global codesearch git clang-tools-8 make autoconf automake pkg-config libc++-8-dev openjdk-8-jre python3 python-pip python3-pip
     if executable('pip')
         silent !pip install python-language-server
     endif
@@ -18,35 +18,41 @@ if !empty($INSTALL_VIMRC)
     silent !mv ~/.vim/bin/opengrok* ~/.vim/bin/opengrok
     silent exec "!cd ~/.vim/tmp; git clone https://github.com/universal-ctags/ctags.git; cd ./ctags; ./autogen.sh; ./configure; make; make install"
     silent !INSTALL_VIMRC_PLUGINS=1 INSTALL_VIMRC= vim +qa
+    silent exec "!python3 ~/.vim/plugged/vimspector/install_gadget.py --enable-c --enable-python"
+    call CustomizePlugins()
+    silent !chown -R $SUDO_USER:$SUDO_GID ~/.vim
+    silent !chown -R $SUDO_USER:$SUDO_GID ~/.vim/tmp
+    silent !chown $SUDO_USER:$SUDO_GID ~/.vimrc
+endfunction
+
+function! CustomizePlugins()
     silent exec "!sed -i 's/ autochdir/ noautochdir/' ~/.vim/plugged/SrcExpl/plugin/srcexpl.vim"
     silent exec "!sed -i 's@ . redraw\\!@ . \" > /dev/null\"@' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim"
     silent exec "!sed -i 's@silent execute \"perl system.*@silent execute \"\\!\" . a:cmd . \" > /dev/null\"@' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim"
     silent exec "!sed -i \"s/'String',[ \\t]*s:green/'String', \\['\\#d78787', 174\\]/\" ~/.vim/plugged/gruvbox/colors/gruvbox.vim"
+    silent exec "!sed -i \"s/'String',[ \\t]*s:gb\.green/'String', \\['\\#d78787', 174\\]/\" ~/.vim/plugged/gruvbox/colors/gruvbox.vim"
     silent exec "!sed -i 's/s:did_snips_mappings/g:did_snips_mappings/' ~/.vim/plugged/snipMate-acp/after/plugin/snipMate.vim"
-    silent !chown -R $SUDO_USER:$SUDO_GID ~/.vim
-    silent !chown -R $SUDO_USER:$SUDO_GID ~/.vim/tmp
-    silent !chown $SUDO_USER:$SUDO_GID ~/.vimrc
+endfunction
+
+if !empty($INSTALL_VIMRC)
+    call InstallVimrc()
     exec ":q"
 endif
 
-let g:use_lsp = 0
 let g:use_clangd_lsp = 1
 if !executable('clangd')
     let g:use_clangd_lsp = 0
-else
-    let g:use_lsp = 1
 endif
 
 let g:use_pyls_lsp = 1
 if !executable('pyls')
     let g:use_pyls_lsp = 0
-else
-    let g:use_lsp = 1
 endif
 
 let g:did_snips_mappings = 1
 
 call plug#begin()
+Plug 'puremourning/vimspector'
 Plug 'wesleyche/SrcExpl'
 Plug 'vim-scripts/taglist.vim'
 Plug 'scrooloose/nerdtree'
@@ -67,7 +73,7 @@ Plug 'brandonbloom/csearch.vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'majutsushi/tagbar'
 Plug 'terryma/vim-multiple-cursors'
-Plug 'morhetz/gruvbox'
+Plug 'gruvbox-community/gruvbox'
 Plug 'vim-scripts/TagHighlight'
 Plug 'erig0/cscope_dynamic'
 Plug 'octol/vim-cpp-enhanced-highlight'
@@ -75,15 +81,12 @@ Plug 'airblade/vim-gitgutter'
 Plug 'gotcha/vimpdb'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-scripts/AutoComplPop'
-if g:use_lsp
-    Plug 'prabirshrestha/async.vim'
-    Plug 'prabirshrestha/vim-lsp'
-    Plug 'prabirshrestha/asyncomplete.vim'
-    Plug 'prabirshrestha/asyncomplete-lsp.vim'
-    Plug 'prabirshrestha/asyncomplete-tags.vim'
-else
-    Plug 'vim-scripts/OmniCppComplete'
-endif
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'prabirshrestha/asyncomplete-tags.vim'
+Plug 'vim-scripts/OmniCppComplete'
 call plug#end()
 
 if !empty($INSTALL_VIMRC_PLUGINS)
@@ -185,33 +188,37 @@ function! ZGenerateOpengrok()
 endfunction
 
 " Generate All
-nnoremap <leader>zg :call ZGenerateAll()<CR>
-nnoremap <leader>zG :call ZGenerateEverything()<CR>
+nnoremap <silent> <leader>zg :call ZGenerateAll()<CR>
+nnoremap <silent> <leader>zG :call ZGenerateEverything()<CR>
 
 " Generate Tags and Cscope Files
-nnoremap <leader>zt :call ZGenTagsAndCsFiles()<CR>
+nnoremap <silent> <leader>zt :call ZGenTagsAndCsFiles()<CR>
 
 " Generate C++
-nnoremap <leader>zp :call ZGenerateCpp()<CR>
-nnoremap <leader>zP :call ZGenerateTagsBasedCpp()<CR>
-nnoremap <leader>zc :call ZGenerateCppScope()<CR>
+nnoremap <silent> <leader>zp :call ZGenerateCpp()<CR>
+nnoremap <silent> <leader>zP :call ZGenerateTagsBasedCpp()<CR>
+nnoremap <silent> <leader>zc :call ZGenerateCppScope()<CR>
 
 " Generate Flags
-nnoremap <leader>zf :call ZGenerateFlags()<CR>
+nnoremap <silent> <leader>zf :call ZGenerateFlags()<CR>
 
 " Codesearch
-nnoremap <leader>zx "tyiw:exe "CSearch " . @t . ""<CR>
+nnoremap <silent> <leader>zx "tyiw:exe "CSearch " . @t . ""<CR>
 
 " Generate Opengrok
-nnoremap <leader>zk :call ZGenerateOpengrok()<CR>
+nnoremap <silent> <leader>zk :call ZGenerateOpengrok()<CR>
+
+" Terminal
+nnoremap <silent> <leader>zb :below terminal ++rows=10<CR>
+nnoremap <silent> <leader>zB :below terminal ++rows=20<CR>
 
 " Lsp
 highlight clear LspWarningLine
 highlight clear LspErrorHighlight
 highlight link LspErrorText GruvboxRedSign
-nnoremap <leader>ld :LspDocumentDiagnostics<CR>
-nnoremap <leader>lh :highlight link LspErrorHighlight Error<CR>
-nnoremap <leader>ln :highlight link LspErrorHighlight None<CR>
+nnoremap <silent> <leader>ld :LspDocumentDiagnostics<CR>
+nnoremap <silent> <leader>lh :highlight link LspErrorHighlight Error<CR>
+nnoremap <silent> <leader>ln :highlight link LspErrorHighlight None<CR>
 
 " Opengrok
 let g:opengrok_jar = '~/.vim/bin/opengrok/lib/opengrok.jar'
@@ -225,12 +232,12 @@ let g:vimroot=$PWD
 function! ZSwitchToRoot()
     execute "cd " . g:vimroot 
 endfunction
-nnoremap <leader>zr :call ZSwitchToRoot()<CR>
+nnoremap <silent> <leader>zr :call ZSwitchToRoot()<CR>
 
 " Trinity
 "nnoremap <C-L> :TrinityToggleNERDTree<CR>:TrinityToggleTagList<CR>
-nnoremap <leader>zs :TrinityToggleSourceExplorer<CR>
-nnoremap <C-w>e :TrinityUpdateWindow<CR>
+nnoremap <silent> <leader>zs :TrinityToggleSourceExplorer<CR>
+nnoremap <silent> <C-w>e :TrinityUpdateWindow<CR>
 
 " NERDTree and TagBar
 let g:NERDTreeWinSize = 23
@@ -241,8 +248,7 @@ nnoremap <C-L> :NERDTreeToggle<CR>:wincmd w<CR>:TagbarToggle<CR>
 " Ctrlp
 let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 
-" Omni
-"au BufNewFile,BufRead,BufEnter *.cpp,*.hpp,*.c,*.h,*.cxx,*.cc,*.hh set omnifunc=omni#cpp#complete#Main
+" Acp snipmate length
 let g:acp_behaviorSnipmateLength = 1
 
 " GutenTags
@@ -265,7 +271,7 @@ let $FZF_DEFAULT_COMMAND = "if [ -f cscope.files ]; then cat cscope.files; else 
 set rtp+=~/.fzf
 nnoremap <C-p> :call ZSwitchToRoot()<CR>:Files<CR>
 nnoremap <C-n> :call ZSwitchToRoot()<CR>:Tags<CR>
-nnoremap <leader>b :Buf<CR>
+nnoremap <silent> <leader>b :Buf<CR>
 
 " Sneak
 let g:sneak#use_ic_scs = 1
@@ -299,7 +305,7 @@ nnoremap <C-w>p :copen<CR>
 " Generic
 syntax on
 filetype plugin indent on
-nnoremap ` :noh<CR>
+nnoremap <silent> ` :noh<CR>
 set expandtab
 set ignorecase
 set smartcase
@@ -336,7 +342,7 @@ set noerrorbells visualbell t_vb=
 " In some windows machines this prevents launching in REPLACE mode.
 set t_u7=
 
-" Extensions
+" Cscope
 function! Cscope(option, query, ...)
   let l:ignorecase = get(a:, 1, 0)
   if l:ignorecase
@@ -399,35 +405,34 @@ function! CscopeQuery(option, ...)
   endif
 endfunction
 
-nnoremap <silent> <Leader>ca :call Cscope('9', expand('<cword>'))<CR>
-nnoremap <silent> <Leader>cc :call Cscope('3', expand('<cword>'))<CR>
-nnoremap <silent> <Leader>cd :call Cscope('2', expand('<cword>'))<CR>
-nnoremap <silent> <Leader>ce :call Cscope('6', expand('<cword>'))<CR>
-nnoremap <silent> <Leader>cf :call Cscope('7', expand('<cword>'))<CR>
-nnoremap <silent> <Leader>cg :call Cscope('1', expand('<cword>'))<CR>
-nnoremap <silent> <Leader>ci :call Cscope('8', expand('<cword>'))<CR>
-nnoremap <silent> <Leader>cs :call Cscope('0', expand('<cword>'))<CR>
-nnoremap <silent> <Leader>ct :call Cscope('4', expand('<cword>'))<CR>
-
-nnoremap <silent> <Leader><Leader>fa :call CscopeQuery('9')<CR>
-nnoremap <silent> <Leader><Leader>fc :call CscopeQuery('3')<CR>
-nnoremap <silent> <Leader><Leader>fd :call CscopeQuery('2')<CR>
-nnoremap <silent> <Leader><Leader>fe :call CscopeQuery('6')<CR>
-nnoremap <silent> <Leader><Leader>ff :call CscopeQuery('7')<CR>
-nnoremap <silent> <Leader><Leader>fg :call CscopeQuery('1')<CR>
-nnoremap <silent> <Leader><Leader>fi :call CscopeQuery('8')<CR>
-nnoremap <silent> <Leader><Leader>fs :call CscopeQuery('0')<CR>
-nnoremap <silent> <Leader><Leader>ct :call CscopeQuery('4')<CR>
-
-nnoremap <silent> <Leader><Leader>ca :call CscopeQuery('9', 1)<CR>
-nnoremap <silent> <Leader><Leader>cc :call CscopeQuery('3', 1)<CR>
-nnoremap <silent> <Leader><Leader>cd :call CscopeQuery('2', 1)<CR>
-nnoremap <silent> <Leader><Leader>ce :call CscopeQuery('6', 1)<CR>
-nnoremap <silent> <Leader><Leader>cf :call CscopeQuery('7', 1)<CR>
-nnoremap <silent> <Leader><Leader>cg :call CscopeQuery('1', 1)<CR>
-nnoremap <silent> <Leader><Leader>ci :call CscopeQuery('8', 1)<CR>
-nnoremap <silent> <Leader><Leader>cs :call CscopeQuery('0', 1)<CR>
-nnoremap <silent> <Leader><Leader>ct :call CscopeQuery('4', 1)<CR>
+" Cscope
+nnoremap <silent> <leader>ca :call Cscope('9', expand('<cword>'))<CR>
+nnoremap <silent> <leader>cc :call Cscope('3', expand('<cword>'))<CR>
+nnoremap <silent> <leader>cd :call Cscope('2', expand('<cword>'))<CR>
+nnoremap <silent> <leader>ce :call Cscope('6', expand('<cword>'))<CR>
+nnoremap <silent> <leader>cf :call Cscope('7', expand('<cword>'))<CR>
+nnoremap <silent> <leader>cg :call Cscope('1', expand('<cword>'))<CR>
+nnoremap <silent> <leader>ci :call Cscope('8', expand('<cword>'))<CR>
+nnoremap <silent> <leader>cs :call Cscope('0', expand('<cword>'))<CR>
+nnoremap <silent> <leader>ct :call Cscope('4', expand('<cword>'))<CR>
+nnoremap <silent> <leader><leader>fa :call CscopeQuery('9')<CR>
+nnoremap <silent> <leader><leader>fc :call CscopeQuery('3')<CR>
+nnoremap <silent> <leader><leader>fd :call CscopeQuery('2')<CR>
+nnoremap <silent> <leader><leader>fe :call CscopeQuery('6')<CR>
+nnoremap <silent> <leader><leader>ff :call CscopeQuery('7')<CR>
+nnoremap <silent> <leader><leader>fg :call CscopeQuery('1')<CR>
+nnoremap <silent> <leader><leader>fi :call CscopeQuery('8')<CR>
+nnoremap <silent> <leader><leader>fs :call CscopeQuery('0')<CR>
+nnoremap <silent> <leader><leader>ct :call CscopeQuery('4')<CR>
+nnoremap <silent> <leader><leader>ca :call CscopeQuery('9', 1)<CR>
+nnoremap <silent> <leader><leader>cc :call CscopeQuery('3', 1)<CR>
+nnoremap <silent> <leader><leader>cd :call CscopeQuery('2', 1)<CR>
+nnoremap <silent> <leader><leader>ce :call CscopeQuery('6', 1)<CR>
+nnoremap <silent> <leader><leader>cf :call CscopeQuery('7', 1)<CR>
+nnoremap <silent> <leader><leader>cg :call CscopeQuery('1', 1)<CR>
+nnoremap <silent> <leader><leader>ci :call CscopeQuery('8', 1)<CR>
+nnoremap <silent> <leader><leader>cs :call CscopeQuery('0', 1)<CR>
+nnoremap <silent> <leader><leader>ct :call CscopeQuery('4', 1)<CR>
 
 " Gruvbox
 set background=dark
@@ -460,6 +465,27 @@ if g:use_pyls_lsp
     augroup end
 endif
 
+" Lsp Generic
+function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    setlocal signcolumn=yes
+    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+    nmap <silent> <buffer> gd <plug>(lsp-definition)
+    nmap <silent> <buffer> gr <plug>(lsp-references)
+    nmap <silent> <buffer> gi <plug>(lsp-implementation)
+    nmap <silent> <buffer> gy <plug>(lsp-type-definition)
+    nmap <silent> <buffer> <leader>rn <plug>(lsp-rename)
+    nmap <silent> <buffer> [g <plug>(lsp-previous-diagnostic)
+    nmap <silent> <buffer> ]g <plug>(lsp-next-diagnostic)
+    nmap <silent> <buffer> K <plug>(lsp-hover)
+endfunction
+
+augroup lsp_install
+    au!
+    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup end
+
 " Opengrok Search
 function! OgQuery(option, query, ...)
   let opts = {
@@ -478,5 +504,114 @@ function! OgQuery(option, query, ...)
   call fzf#run(opts)
 endfunction
 
-nnoremap <leader>zo :call OgQuery('f', expand('<cword>'))<CR>
-nnoremap <leader><leader>zo :call OgQuery('f', input('Text: '))<CR>
+nnoremap <silent> <leader>zo :call OgQuery('f', expand('<cword>'))<CR>
+nnoremap <silent> <leader><leader>zo :call OgQuery('f', input('Text: '))<CR>
+
+" Vimspector
+nnoremap <silent> <leader>dd :call vimspector#Launch()<CR>
+nnoremap <silent> <leader>dc :call vimspector#Continue()<CR>
+nnoremap <silent> <leader>ds :call vimspector#Stop()<CR>
+nnoremap <silent> <leader>dr :call vimspector#Restart()<CR>
+nnoremap <silent> <leader>dp :call vimspector#Pause()<CR>
+nnoremap <silent> <leader>db :call vimspector#ToggleBreakpoint()<CR>
+nnoremap <silent> <F9> :call vimspector#ToggleBreakpoint()<CR>
+nnoremap <silent> <leader>bf :call vimspector#AddFunctionBreakpoint('<cexpr>')<CR>
+nnoremap <silent> <leader>dn :call vimspector#StepOver()<CR>
+nnoremap <silent> <F10> :call vimspector#StepOver()<CR>
+nnoremap <silent> <leader>di :call vimspector#StepInto()<CR>
+nnoremap <silent> <F11> :call vimspector#StepInto()<CR>
+nnoremap <silent> <leader>do :call vimspector#StepOut()<CR>
+nnoremap <silent> <leader><F11> :call vimspector#StepOut()<CR>
+nnoremap <silent> <leader>dl :call ZDebugLaunchSettings()<CR>
+
+function! ZGenerateVimspectorCpp()
+    call inputsave()
+    let target = input('Target (Executable/IP): ')
+    call inputrestore()
+    if filereadable(target)
+        exec ":AsyncRun
+            \ echo '{' > .vimspector.json &&
+            \ echo '    \"configurations\": {' >> .vimspector.json &&
+            \ echo '        \"Launch\": {' >> .vimspector.json &&
+            \ echo '            \"adapter\": \"vscode-cpptools\",' >> .vimspector.json &&
+            \ echo '            \"configuration\": {' >> .vimspector.json &&
+            \ echo '                \"request\": \"launch\",' >> .vimspector.json &&
+            \ echo '                \"type\": \"cppdbg\",' >> .vimspector.json &&
+            \ echo '                \"program\": \"" . target . "\",' >> .vimspector.json &&
+            \ echo '                \"args\": [],' >> .vimspector.json &&
+            \ echo '                \"environment\": [],' >> .vimspector.json &&
+            \ echo '                \"cwd\": \"" . g:vimroot . "\",' >> .vimspector.json &&
+            \ echo '                \"externalConsole\": true,' >> .vimspector.json &&
+            \ echo '                \"stopAtEntry\": true,' >> .vimspector.json &&
+            \ echo '                \"setupCommands\": [' >> .vimspector.json &&
+            \ echo '                    { \"text\": \"-enable-pretty-printing\", \"description\": \"\", \"ignoreFailures\": false }' >> .vimspector.json &&
+            \ echo '                ],' >> .vimspector.json &&
+            \ echo '                \"MIMode\": \"gdb\"' >> .vimspector.json &&
+            \ echo '            }' >> .vimspector.json &&
+            \ echo '        }' >> .vimspector.json &&
+            \ echo '    }' >> .vimspector.json &&
+            \ echo '}' >> .vimspector.json"
+    elseif stridx(target, ':') != -1
+        call inputsave()
+        let main_file = input('Main File: ')
+        call inputrestore()
+        exec ":AsyncRun
+            \ echo '{' > .vimspector.json &&
+            \ echo '    \"configurations\": {' >> .vimspector.json &&
+            \ echo '        \"Launch\": {' >> .vimspector.json &&
+            \ echo '            \"adapter\": \"vscode-cpptools\",' >> .vimspector.json &&
+            \ echo '            \"configuration\": {' >> .vimspector.json &&
+            \ echo '                \"request\": \"launch\",' >> .vimspector.json &&
+            \ echo '                \"program\": \"" . main_file . "\",' >> .vimspector.json &&
+            \ echo '                \"type\": \"cppdbg\",' >> .vimspector.json &&
+            \ echo '                \"setupCommands\": [' >> .vimspector.json &&
+            \ echo '                    { \"text\": \"-enable-pretty-printing\", \"description\": \"\", \"ignoreFailures\": false }' >> .vimspector.json &&
+            \ echo '                ],' >> .vimspector.json &&
+            \ echo '                \"miDebuggerServerAddress\": \"" . target . "\",' >> .vimspector.json &&
+            \ echo '                \"externalConsole\": true,' >> .vimspector.json &&
+            \ echo '                \"stopAtEntry\": true,' >> .vimspector.json &&
+            \ echo '                \"miDebuggerPath\": \"gdb\",' >> .vimspector.json &&
+            \ echo '                \"MIMode\": \"gdb\"' >> .vimspector.json &&
+            \ echo '            }' >> .vimspector.json &&
+            \ echo '        }' >> .vimspector.json &&
+            \ echo '    }' >> .vimspector.json &&
+            \ echo '}' >> .vimspector.json"
+    endif
+endfunction
+
+function! ZGenerateVimspectorPy()
+    call inputsave()
+    let program = input('Program: ')
+    let python = input('Python: ')
+    call inputrestore()
+    exec ":AsyncRun
+        \ echo '{' > .vimspector.json &&
+        \ echo '    \"configurations\": {' >> .vimspector.json &&
+        \ echo '        \"Launch\": {' >> .vimspector.json &&
+        \ echo '            \"adapter\": \"debugpy\",' >> .vimspector.json &&
+        \ echo '            \"configuration\": {' >> .vimspector.json &&
+        \ echo '                \"request\": \"launch\",' >> .vimspector.json &&
+        \ echo '                \"type\": \"python\",' >> .vimspector.json &&
+        \ echo '                \"program\": \"" . program . "\",' >> .vimspector.json &&
+        \ echo '                \"python\": \"" . python . "\",' >> .vimspector.json &&
+        \ echo '                \"cwd\": \"" . g:vimroot . "\",' >> .vimspector.json &&
+        \ echo '                \"externalConsole\": true,' >> .vimspector.json &&
+        \ echo '                \"stopAtEntry\": true' >> .vimspector.json &&
+        \ echo '            }' >> .vimspector.json &&
+        \ echo '        }' >> .vimspector.json &&
+        \ echo '    }' >> .vimspector.json &&
+        \ echo '}' >> .vimspector.json"
+endfunction
+
+function ZDebugLaunchSettings()
+    if empty(&filetype)
+        call ZSwitchToRoot()
+        exec ":Files"
+    endif
+
+    if &filetype == 'cpp' || &filetype == 'c'
+        call ZGenerateVimspectorCpp()
+    elseif &filetype == 'python'
+        call ZGenerateVimspectorPy()
+    endif
+endfunction

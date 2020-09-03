@@ -43,3 +43,14 @@ Useful Commands
 <C-L> - Turn on / off the directory tree and source code function panes.
 ```
 
+* Terminal commands:
+```
+<leader>zb - Open small terminal window below.
+<leader>zB - Open large terminal window below.
+```
+
+* Debugging commands:
+```
+<leader>dl - Configure debugging configuration - requires an open cpp or python file.
+<leader>dd - Start debugging - search vimrc for "vimspector" for additional mapping.
+```
