@@ -516,6 +516,7 @@ nnoremap <silent> <leader>zo :call OgQuery('f', expand('<cword>'))<CR>
 nnoremap <silent> <leader><leader>zo :call OgQuery('f', input('Text: '))<CR>
 
 " Vimspector
+nnoremap <silent> <leader>dl :call ZDebugLaunchSettings()<CR>
 nnoremap <silent> <leader>dd :call vimspector#Launch()<CR>
 nnoremap <silent> <leader>dc :call vimspector#Continue()<CR>
 nnoremap <silent> <leader>ds :call vimspector#Stop()<CR>
@@ -530,7 +531,6 @@ nnoremap <silent> <leader>di :call vimspector#StepInto()<CR>
 nnoremap <silent> <F11> :call vimspector#StepInto()<CR>
 nnoremap <silent> <leader>do :call vimspector#StepOut()<CR>
 nnoremap <silent> <leader><F11> :call vimspector#StepOut()<CR>
-nnoremap <silent> <leader>dl :call ZDebugLaunchSettings()<CR>
 
 function! ZGenerateVimspectorCpp()
     call inputsave()

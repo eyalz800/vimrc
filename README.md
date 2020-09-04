@@ -55,4 +55,18 @@ gd - Go to definition (current word).
 ```
 <leader>dl - Configure debugging configuration - requires an open cpp or python file.
 <leader>dd - Start debugging - search vimrc for "vimspector" for additional mapping.
+<leader>dc - Continue debuggee
+<leader>ds - Stop debugging
+<leader>dr - Restart debugging
+<leader>dp - Pause debugging
+<leader>db / F9 - Breakpoint
+<leader>bf - Add function breakpoint
+<leader>dn / F10 - Step Over
+<leader>di / F11 - Step Into
+<leader>do - Step Out
+```
+
+* Undo tree commands:
+```
+<leader>zu - Toggle undo tree.
 ```
