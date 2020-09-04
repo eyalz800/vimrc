@@ -58,7 +58,7 @@ call plug#begin()
 Plug 'puremourning/vimspector'
 Plug 'wesleyche/SrcExpl'
 Plug 'vim-scripts/taglist.vim'
-Plug 'scrooloose/nerdtree'
+Plug 'preservim/nerdtree'
 Plug 'wesleyche/Trinity'
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
@@ -91,12 +91,17 @@ Plug 'prabirshrestha/asyncomplete-tags.vim'
 Plug 'vim-scripts/OmniCppComplete'
 Plug 'mbbill/undotree'
 Plug 'thezeroalpha/vim-lf'
+Plug 'tpope/vim-commentary'
+Plug 'bfrg/vim-cpp-modern'
 call plug#end()
 
 if !empty($INSTALL_VIMRC_PLUGINS)
     exec ":PlugInstall --sync"
     exec ":q"
 endif
+
+" Mouse
+set mouse=a
 
 " Set path
 let $PATH .= ':' . $HOME . '/.vim/bin/lf'
