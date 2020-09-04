@@ -535,8 +535,7 @@ let g:pear_tree_pairs = {
             \ '[': {'closer': ']'},
             \ '{': {'closer': '}'},
             \ "'": {'closer': "'"},
-            \ '"': {'closer': '"'},
-            \ '<': {'closer': '>'}
+            \ '"': {'closer': '"'}
             \ }
 
 " Pear Tree is enabled for all filetypes by default:
