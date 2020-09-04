@@ -223,14 +223,6 @@ nnoremap <silent> <leader>zk :call ZGenerateOpengrok()<CR>
 nnoremap <silent> <leader>zb :below terminal ++rows=10<CR>
 nnoremap <silent> <leader>zB :below terminal ++rows=20<CR>
 
-" Lsp
-highlight clear LspWarningLine
-highlight clear LspErrorHighlight
-highlight link LspErrorText GruvboxRedSign
-nnoremap <silent> <leader>ld :LspDocumentDiagnostics<CR>
-nnoremap <silent> <leader>lh :highlight link LspErrorHighlight Error<CR>
-nnoremap <silent> <leader>ln :highlight link LspErrorHighlight None<CR>
-
 " Lf
 nmap <silent> <leader>fe <plug>LfEdit
 nmap <silent> <leader>fs :LF %:p vsplit<CR>
@@ -284,8 +276,8 @@ noremap <silent> <leader>ga :GscopeFind a <C-R><C-W><cr>
 " Fzf
 let $FZF_DEFAULT_COMMAND = "if [ -f .files ]; then cat .files; else ag -l; fi"
 set rtp+=~/.fzf
-nnoremap <C-p> :call ZSwitchToRoot()<CR>:Files<CR>
-nnoremap <C-n> :call ZSwitchToRoot()<CR>:Tags<CR>
+nnoremap <silent> <C-p> :call ZSwitchToRoot()<CR>:Files<CR>
+nnoremap <silent> <C-n> :call ZSwitchToRoot()<CR>:Tags<CR>
 nnoremap <silent> <leader>b :Buf<CR>
 
 " Sneak
@@ -341,7 +333,7 @@ set tabstop=4
 set cmdheight=1
 set number
 set wildmode=list:longest,full
-set completeopt=longest,menuone
+set completeopt=longest,menuone,preview
 set nowrap
 nnoremap <C-q> <C-v>
 set shellslash
@@ -484,9 +476,18 @@ if g:use_pyls_lsp
 endif
 
 " Lsp Generic
+let g:asyncomplete_remove_duplicates = 1
+let g:asyncomplete_smart_completion = 1
+
+highlight clear LspWarningLine
+highlight clear LspErrorHighlight
+highlight link LspErrorText GruvboxRedSign
+nnoremap <silent> <leader>ld :LspDocumentDiagnostics<CR>
+nnoremap <silent> <leader>lh :highlight link LspErrorHighlight Error<CR>
+nnoremap <silent> <leader>ln :highlight link LspErrorHighlight None<CR>
+
 function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
-    setlocal signcolumn=yes
     if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
     nmap <silent> <buffer> gd <plug>(lsp-definition)
     nmap <silent> <buffer> gr <plug>(lsp-references)
