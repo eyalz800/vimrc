@@ -224,8 +224,10 @@ nnoremap <silent> <leader>zb :below terminal ++rows=10<CR>
 nnoremap <silent> <leader>zB :below terminal ++rows=20<CR>
 
 " Lf
-nmap <silent> <leader>fe <plug>LfEdit
-nmap <silent> <leader>fs :LF %:p vsplit<CR>
+" The use of timer_start is a workaround that the lsp does not detect the file
+" after open.
+nmap <silent> <leader>fe :LF %:p call\ timer_start(0,{tid->execute('e!')})\|n<CR>
+nmap <silent> <leader>fs :LF %:p call\ timer_start(0,{tid->execute('e!')})\|vs<CR>
 
 " Opengrok
 let g:opengrok_jar = '~/.vim/bin/opengrok/lib/opengrok.jar'
