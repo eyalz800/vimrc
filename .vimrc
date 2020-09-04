@@ -86,6 +86,7 @@ Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'prabirshrestha/asyncomplete-tags.vim'
 Plug 'vim-scripts/OmniCppComplete'
+Plug 'mbbill/undotree'
 call plug#end()
 
 if !empty($INSTALL_VIMRC_PLUGINS)
@@ -344,6 +345,9 @@ set noerrorbells visualbell t_vb=
 
 " In some windows machines this prevents launching in REPLACE mode.
 set t_u7=
+
+" Undo Tree
+nnoremap <silent> <leader>zu :UndotreeToggle<cr>
 
 " Cscope
 function! Cscope(option, query, ...)
