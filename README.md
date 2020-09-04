@@ -70,3 +70,9 @@ gd - Go to definition (current word).
 ```
 <leader>zu - Toggle undo tree.
 ```
+
+* File manager commands:
+```
+<leader>fe - Open file manager, for editting.
+<leader>fs - Open file manager, for split.
+```

@@ -19,6 +19,9 @@ function! InstallVimrc()
     silent exec "!cd ~/.vim/tmp; git clone https://github.com/universal-ctags/ctags.git; cd ./ctags; ./autogen.sh; ./configure; make; make install"
     silent !INSTALL_VIMRC_PLUGINS=1 INSTALL_VIMRC= vim +qa
     silent exec "!python3 ~/.vim/plugged/vimspector/install_gadget.py --enable-c --enable-python"
+    silent !curl -fLo ~/.vim/bin/lf/lf.tar.gz --create-dirs
+      \ https://github.com/gokcehan/lf/releases/download/r16/lf-linux-amd64.tar.gz
+    silent exec "!cd ~/.vim/bin/lf; tar -xzvf lf.tar.gz"
     call CustomizePlugins()
     silent !chown -R $SUDO_USER:$SUDO_GID ~/.vim
     silent !chown -R $SUDO_USER:$SUDO_GID ~/.vim/tmp
@@ -87,12 +90,16 @@ Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'prabirshrestha/asyncomplete-tags.vim'
 Plug 'vim-scripts/OmniCppComplete'
 Plug 'mbbill/undotree'
+Plug 'thezeroalpha/vim-lf'
 call plug#end()
 
 if !empty($INSTALL_VIMRC_PLUGINS)
     exec ":PlugInstall --sync"
     exec ":q"
 endif
+
+" Set path
+let $PATH .= ':' . $HOME . '/.vim/bin/lf'
 
 " Ignore no write since last change errors
 set hidden
@@ -223,6 +230,10 @@ highlight link LspErrorText GruvboxRedSign
 nnoremap <silent> <leader>ld :LspDocumentDiagnostics<CR>
 nnoremap <silent> <leader>lh :highlight link LspErrorHighlight Error<CR>
 nnoremap <silent> <leader>ln :highlight link LspErrorHighlight None<CR>
+
+" Lf
+nmap <silent> <leader>fe <plug>LfEdit
+nmap <silent> <leader>fs :LF %:p vsplit<CR>
 
 " Opengrok
 let g:opengrok_jar = '~/.vim/bin/opengrok/lib/opengrok.jar'
