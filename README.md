@@ -36,6 +36,8 @@ Useful Commands
 
 <leader>cs - Search cscope for word under cursor.
 <leader><leader>cs - Search cscope for arbitrary input text.
+
+gd - Go to definition (current word).
 ```
 
 * Commands to view directory tree and source code function pane on each side of the screen:

@@ -479,6 +479,7 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <silent> <buffer> ]g <plug>(lsp-next-diagnostic)
     nmap <silent> <buffer> K <plug>(lsp-hover)
 endfunction
+inoremap <silent> <expr> <CR> pumvisible() ? asyncomplete#close_popup() . "\<CR>" : "\<CR>"
 
 augroup lsp_install
     au!
@@ -596,6 +597,7 @@ function! ZGenerateVimspectorPy()
         \ echo '                \"python\": \"" . python . "\",' >> .vimspector.json &&
         \ echo '                \"cwd\": \"" . g:vimroot . "\",' >> .vimspector.json &&
         \ echo '                \"externalConsole\": true,' >> .vimspector.json &&
+        \ echo '                \"breakpoints\": {\"exception\": {\"caught\": \"N\", \"uncaught\": \"Y\"}},' >> .vimspector.json &&
         \ echo '                \"stopAtEntry\": true' >> .vimspector.json &&
         \ echo '            }' >> .vimspector.json &&
         \ echo '        }' >> .vimspector.json &&
