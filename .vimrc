@@ -93,6 +93,7 @@ Plug 'mbbill/undotree'
 Plug 'thezeroalpha/vim-lf'
 Plug 'tpope/vim-commentary'
 Plug 'bfrg/vim-cpp-modern'
+Plug 'tomasiser/vim-code-dark'
 call plug#end()
 
 if !empty($INSTALL_VIMRC_PLUGINS)
@@ -334,7 +335,6 @@ set ruler
 set showcmd
 set incsearch
 set hlsearch
-color desert
 set shiftwidth=4
 set tabstop=4
 set cmdheight=1
@@ -456,6 +456,9 @@ set background=dark
 let g:gruvbox_contrast_datk = 'medium'
 color gruvbox
 hi Normal ctermbg=none
+
+" Color
+color codedark
 
 " Clangd
 if g:use_clangd_lsp
