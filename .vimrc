@@ -729,6 +729,7 @@ function! ZGenerateVimspectorCpp()
             \ echo '                \"externalConsole\": true,' >> .vimspector.json &&
             \ echo '                \"stopAtEntry\": true,' >> .vimspector.json &&
             \ echo '                \"setupCommands\": [' >> .vimspector.json &&
+            \ echo '                    { \"text\": \"set disassembly-flavor intel\", \"description\": \"\", \"ignoreFailures\": false },' >> .vimspector.json &&
             \ echo '                    { \"text\": \"-enable-pretty-printing\", \"description\": \"\", \"ignoreFailures\": false }' >> .vimspector.json &&
             \ echo '                ],' >> .vimspector.json &&
             \ echo '                \"MIMode\": \"gdb\"' >> .vimspector.json &&
@@ -750,6 +751,7 @@ function! ZGenerateVimspectorCpp()
             \ echo '                \"program\": \"" . main_file . "\",' >> .vimspector.json &&
             \ echo '                \"type\": \"cppdbg\",' >> .vimspector.json &&
             \ echo '                \"setupCommands\": [' >> .vimspector.json &&
+            \ echo '                    { \"text\": \"set disassembly-flavor intel\", \"description\": \"\", \"ignoreFailures\": false },' >> .vimspector.json &&
             \ echo '                    { \"text\": \"-enable-pretty-printing\", \"description\": \"\", \"ignoreFailures\": false }' >> .vimspector.json &&
             \ echo '                ],' >> .vimspector.json &&
             \ echo '                \"miDebuggerServerAddress\": \"" . target . "\",' >> .vimspector.json &&
