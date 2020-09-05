@@ -166,7 +166,11 @@ endif
 
 " Mouse
 set mouse=a
-set ttymouse=xterm2
+if has('mouse_sgr')
+    set ttymouse=sgr
+else
+    set ttymouse=xterm2
+endif
 nnoremap <silent> <leader>zm :call ZToggleMouse()<CR>
 
 " Sign column
@@ -898,6 +902,10 @@ function! ZToggleMouse()
         set ttymouse=xterm
     else
         set mouse=a
-        set ttymouse=xterm2
+        if has('mouse_sgr')
+            set ttymouse=sgr
+        else
+            set ttymouse=xterm2
+        endif
     endif
 endfunction
