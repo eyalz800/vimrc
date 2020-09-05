@@ -858,17 +858,21 @@ endfunction
 " Generate C++
 function! ZGenerateCpp()
     copen
-    exec ":AsyncRun find . -name inc -or -name include | sed s@^@-isystem\\\\n@g > compile_flags.txt
-    \ && echo -std=c++1z >> compile_flags.txt
-    \ && echo -isystem >> compile_flags.txt
-    \ && echo /usr/include >> compile_flags.txt
-    \ && echo -isystem >> compile_flags.txt
-    \ && echo $(dirname $(find /usr/lib -name string_view | sort | grep -v experimental | sort | tail -n 1 | grep -v __$placeholder$__ || echo '/usr/include')) >> compile_flags.txt
-    \ && echo -isystem >> compile_flags.txt
-    \ && echo $(dirname $(find /usr/include/c++ -name cstdlib | grep -v tr1 | sort | tail -n 1 | grep -v __$placeholder$__ || echo '/usr/include')) >> compile_flags.txt
-    \ && echo -x >> compile_flags.txt
-    \ && echo c++ >> compile_flags.txt
-    \ && echo '" . g:ctagsOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq"
+    if !filereadable('compile_commands.json')
+        exec ":AsyncRun find . -name inc -or -name include | sed s@^@-isystem\\\\n@g > compile_flags.txt
+        \ && echo -std=c++1z >> compile_flags.txt
+        \ && echo -isystem >> compile_flags.txt
+        \ && echo /usr/include >> compile_flags.txt
+        \ && echo -isystem >> compile_flags.txt
+        \ && echo $(dirname $(find /usr/lib -name string_view | sort | grep -v experimental | sort | tail -n 1 | grep -v __$placeholder$__ || echo '/usr/include')) >> compile_flags.txt
+        \ && echo -isystem >> compile_flags.txt
+        \ && echo $(dirname $(find /usr/include/c++ -name cstdlib | grep -v tr1 | sort | tail -n 1 | grep -v __$placeholder$__ || echo '/usr/include')) >> compile_flags.txt
+        \ && echo -x >> compile_flags.txt
+        \ && echo c++ >> compile_flags.txt
+        \ && echo '" . g:ctagsOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq"
+    else
+        exec ":AsyncRun echo '" . g:ctagsOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq"
+    endif
 endfunction
 function! ZGenerateTagsBasedCpp()
     copen
