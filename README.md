@@ -15,6 +15,14 @@ Highlights
 * Nice color scheme.
 * Comes with a good set of plugins.
 * More surprises are waiting for those who read the vimrc.
+* Debugging support.
+
+Screenshots
+-----------
+<img src="screenshots/image1.png"/>
+<img src="screenshots/image2.png"/>
+<img src="screenshots/image3.png"/>
+<img src="screenshots/image4.png"/>
 
 Useful Commands
 ---------------
