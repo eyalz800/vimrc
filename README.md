@@ -76,3 +76,14 @@ gd - Go to definition (current word).
 <leader>fe - Open file manager, for editting.
 <leader>fs - Open file manager, for split.
 ```
+
+* Trailing whitespaces:
+```
+<leader>zw - Strip trailing whitespaces.
+<leader>zW - Toggle trailing whitespace visibility on/off.
+```
+
+* Mouse
+```
+<leader>zm - Toggle mouse on/off.
+```

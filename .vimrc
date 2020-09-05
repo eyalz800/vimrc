@@ -1,31 +1,49 @@
 function! InstallVimrc()
     silent !DEBIAN_FRONTEND=noninteractive apt install -y curl silversearcher-ag exuberant-ctags cscope global git clang-tools-8 make autoconf automake pkg-config libc++-8-dev openjdk-8-jre python3 python-pip python3-pip
+    silent !update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-8 800
+    silent exec "!curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -"
+    silent !DEBIAN_FRONTEND=noninteractive apt install -y nodejs
     if executable('pip')
         silent !pip install python-language-server
+        silent !pip install pylint
+        silent !pip install compiledb
     endif
     if executable('pip3')
         silent !pip3 install python-language-server
+        silent !pip3 install pylint
+        silent !pip3 install compiledb
     endif
-    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    silent !update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-8 800
     silent !mkdir -p ~/.vim
     silent !mkdir -p ~/.vim/tmp
-    silent !curl -fLo ~/.vim/bin/opengrok.tar.gz --create-dirs
-      \ https://github.com/oracle/opengrok/releases/download/1.0/opengrok-1.0.tar.gz
-    silent exec "!cd ~/.vim/bin; tar -xzvf opengrok.tar.gz"
-    silent !rm ~/.vim/bin/opengrok.tar.gz
-    silent !mv ~/.vim/bin/opengrok* ~/.vim/bin/opengrok
-    silent exec "!cd ~/.vim/tmp; git clone https://github.com/universal-ctags/ctags.git; cd ./ctags; ./autogen.sh; ./configure; make; make install"
-    silent !INSTALL_VIMRC_PLUGINS=1 INSTALL_VIMRC= vim +qa
-    silent exec "!python3 ~/.vim/plugged/vimspector/install_gadget.py --enable-c --enable-python"
-    silent !curl -fLo ~/.vim/bin/lf/lf.tar.gz --create-dirs
-      \ https://github.com/gokcehan/lf/releases/download/r16/lf-linux-amd64.tar.gz
-    silent exec "!cd ~/.vim/bin/lf; tar -xzvf lf.tar.gz"
-    call CustomizePlugins()
+    silent !mkdir -p ~/.config
+    silent !mkdir -p ~/.config/coc
+    if !filereadable($HOME . '/.vim/autoload/plug.vim')
+        silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+          \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    endif
+    if !filereadable($HOME .'/.vim/bin/opengrok/lib/opengrok.jar')
+        silent !curl -fLo ~/.vim/bin/opengrok.tar.gz --create-dirs
+          \ https://github.com/oracle/opengrok/releases/download/1.0/opengrok-1.0.tar.gz
+        silent exec "!cd ~/.vim/bin; tar -xzvf opengrok.tar.gz"
+        silent !rm ~/.vim/bin/opengrok.tar.gz
+        silent !mv ~/.vim/bin/opengrok* ~/.vim/bin/opengrok
+    endif
+    if !filereadable($HOME . '/.vim/tmp/ctags/Makefile')
+        silent exec "!cd ~/.vim/tmp; git clone https://github.com/universal-ctags/ctags.git; cd ./ctags; ./autogen.sh; ./configure; make; make install"
+    endif
+    if !filereadable($HOME . '/.vim/bin/lf/lf')
+        silent !curl -fLo ~/.vim/bin/lf/lf.tar.gz --create-dirs
+          \ https://github.com/gokcehan/lf/releases/download/r16/lf-linux-amd64.tar.gz
+        silent exec "!cd ~/.vim/bin/lf; tar -xzvf lf.tar.gz"
+    endif
     silent !chown -R $SUDO_USER:$SUDO_GID ~/.vim
     silent !chown -R $SUDO_USER:$SUDO_GID ~/.vim/tmp
+    silent !chown -R $SUDO_USER:$SUDO_GID ~/.config
+    silent !chown -R $SUDO_USER:$SUDO_GID ~/.cache
     silent !chown $SUDO_USER:$SUDO_GID ~/.vimrc
+    silent !sudo -u $SUDO_USER INSTALL_VIMRC_PLUGINS=1 INSTALL_VIMRC= vim +qa
+    silent !sudo -u $SUDO_USER python3 ~/.vim/plugged/vimspector/install_gadget.py --sudo --enable-c --enable-python
+    call CustomizePlugins()
 endfunction
 
 function! CustomizePlugins()
@@ -41,6 +59,8 @@ if !empty($INSTALL_VIMRC)
     call InstallVimrc()
     exec ":q"
 endif
+
+let g:lsp_choice = 'coc'
 
 call plug#begin()
 Plug 'puremourning/vimspector'
@@ -69,28 +89,47 @@ Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'airblade/vim-gitgutter'
 Plug 'gotcha/vimpdb'
 Plug 'tpope/vim-fugitive'
-Plug 'vim-scripts/AutoComplPop'
-Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/vim-lsp'
-Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
-Plug 'prabirshrestha/asyncomplete-tags.vim'
-Plug 'vim-scripts/OmniCppComplete'
+if !empty($INSTALL_VIMRC_PLUGINS) || g:lsp_choice == 'vim-lsp'
+    Plug 'prabirshrestha/async.vim'
+    Plug 'prabirshrestha/vim-lsp'
+    Plug 'prabirshrestha/asyncomplete.vim'
+    Plug 'prabirshrestha/asyncomplete-lsp.vim'
+    Plug 'prabirshrestha/asyncomplete-tags.vim'
+endif
+if !empty($INSTALL_VIMRC_PLUGINS) || g:lsp_choice == 'coc'
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
+endif
+if g:lsp_choice != 'coc'
+    Plug 'vim-scripts/AutoComplPop'
+    Plug 'vim-scripts/OmniCppComplete'
+endif
 Plug 'mbbill/undotree'
 Plug 'thezeroalpha/vim-lf'
 Plug 'tpope/vim-commentary'
 Plug 'bfrg/vim-cpp-modern'
 Plug 'tomasiser/vim-code-dark'
 Plug 'joeytwiddle/sexy_scroller.vim'
+Plug 'ntpeters/vim-better-whitespace'
 call plug#end()
 
 if !empty($INSTALL_VIMRC_PLUGINS)
-    exec ":PlugInstall --sync"
-    exec ":q"
+    let g:coc_disable_startup_warning = 1
+    if $INSTALL_VIMRC_PLUGINS != 'post'
+        exec ":PlugInstall --sync"
+        silent !INSTALL_VIMRC_PLUGINS=post vim +'CocInstall -sync coc-json coc-clangd coc-sh coc-python coc-vimlsp' +qa
+        exec ":q"
+    endif
+endif
+
+" Gui colors
+if has('termguicolors')
+    set termguicolors
 endif
 
 " Mouse
 set mouse=a
+set ttymouse=xterm2
+nnoremap <silent> <leader>zm :call ZToggleMouse()<CR>
 
 " Sign column
 set signcolumn=yes
@@ -104,10 +143,6 @@ let $PATH .= ':' . $HOME . '/.vim/bin/lf'
 
 " Ignore no write since last change errors
 set hidden
-
-" Cursor Line
-highlight CursorLineNr cterm=NONE ctermbg=15 ctermfg=8 gui=NONE guibg=#ffffff guifg=#d70000
-set cursorline
 
 " Generic
 syntax on
@@ -174,6 +209,10 @@ nnoremap <silent> <leader>zk :call ZGenerateOpengrok()<CR>
 nnoremap <silent> <leader>zb :below terminal ++rows=10<CR>
 nnoremap <silent> <leader>zB :below terminal ++rows=20<CR>
 
+" Vim-better-whitespace
+nnoremap <silent> <leader>zw :StripWhitespace<CR>
+nnoremap <silent> <leader>zW :ToggleWhitespace<CR>
+
 " Sexy Scroller
 let g:SexyScroller_MaxTime = 250
 let g:SexyScroller_EasingStyle = 2
@@ -197,7 +236,7 @@ let g:clang_cpp_options = '-std=c++17 -stdlib=libc++'
 
 let g:vimroot=$PWD
 function! ZSwitchToRoot()
-    execute "cd " . g:vimroot 
+    execute "cd " . g:vimroot
 endfunction
 nnoremap <silent> <leader>zr :call ZSwitchToRoot()<CR>
 
@@ -277,29 +316,103 @@ set t_u7=
 nnoremap <silent> <leader>zu :UndotreeToggle<cr>
 
 " Cscope
+nnoremap <silent> <leader>cA :call Cscope('9', expand('<cword>'))<CR>
+nnoremap <silent> <leader>cC :call Cscope('3', expand('<cword>'))<CR>
+nnoremap <silent> <leader>cD :call Cscope('2', expand('<cword>'))<CR>
+nnoremap <silent> <leader>cE :call Cscope('6', expand('<cword>'))<CR>
+nnoremap <silent> <leader>cF :call Cscope('7', expand('<cword>'))<CR>
+nnoremap <silent> <leader>cG :call Cscope('1', expand('<cword>'))<CR>
+nnoremap <silent> <leader>cI :call Cscope('8', expand('<cword>'))<CR>
+nnoremap <silent> <leader>cS :call Cscope('0', expand('<cword>'))<CR>
+nnoremap <silent> <leader>cT :call Cscope('4', expand('<cword>'))<CR>
+nnoremap <silent> <leader><leader>fA :call CscopeQuery('9')<CR>
+nnoremap <silent> <leader><leader>fC :call CscopeQuery('3')<CR>
+nnoremap <silent> <leader><leader>fD :call CscopeQuery('2')<CR>
+nnoremap <silent> <leader><leader>fE :call CscopeQuery('6')<CR>
+nnoremap <silent> <leader><leader>fF :call CscopeQuery('7')<CR>
+nnoremap <silent> <leader><leader>fG :call CscopeQuery('1')<CR>
+nnoremap <silent> <leader><leader>fI :call CscopeQuery('8')<CR>
+nnoremap <silent> <leader><leader>fS :call CscopeQuery('0')<CR>
+nnoremap <silent> <leader><leader>cT :call CscopeQuery('4')<CR>
+nnoremap <silent> <leader><leader>cA :call CscopeQuery('9', 1)<CR>
+nnoremap <silent> <leader><leader>cC :call CscopeQuery('3', 1)<CR>
+nnoremap <silent> <leader><leader>cD :call CscopeQuery('2', 1)<CR>
+nnoremap <silent> <leader><leader>cE :call CscopeQuery('6', 1)<CR>
+nnoremap <silent> <leader><leader>cF :call CscopeQuery('7', 1)<CR>
+nnoremap <silent> <leader><leader>cG :call CscopeQuery('1', 1)<CR>
+nnoremap <silent> <leader><leader>cI :call CscopeQuery('8', 1)<CR>
+nnoremap <silent> <leader><leader>cS :call CscopeQuery('0', 1)<CR>
+nnoremap <silent> <leader><leader>cT :call CscopeQuery('4', 1)<CR>
+
+nnoremap <silent> <leader>ca :call CscopePreview('9', expand('<cword>'))<CR>
+nnoremap <silent> <leader>cc :call CscopePreview('3', expand('<cword>'))<CR>
+nnoremap <silent> <leader>cd :call CscopePreview('2', expand('<cword>'))<CR>
+nnoremap <silent> <leader>ce :call CscopePreview('6', expand('<cword>'))<CR>
+nnoremap <silent> <leader>cf :call CscopePreview('7', expand('<cword>'))<CR>
+nnoremap <silent> <leader>cg :call CscopePreview('1', expand('<cword>'))<CR>
+nnoremap <silent> <leader>ci :call CscopePreview('8', expand('<cword>'))<CR>
+nnoremap <silent> <leader>cs :call CscopePreview('0', expand('<cword>'))<CR>
+nnoremap <silent> <leader>ct :call CscopePreview('4', expand('<cword>'))<CR>
+nnoremap <silent> <leader><leader>fa :call CscopeQueryPreview('9')<CR>
+nnoremap <silent> <leader><leader>fc :call CscopeQueryPreview('3')<CR>
+nnoremap <silent> <leader><leader>fd :call CscopeQueryPreview('2')<CR>
+nnoremap <silent> <leader><leader>fe :call CscopeQueryPreview('6')<CR>
+nnoremap <silent> <leader><leader>ff :call CscopeQueryPreview('7')<CR>
+nnoremap <silent> <leader><leader>fg :call CscopeQueryPreview('1')<CR>
+nnoremap <silent> <leader><leader>fi :call CscopeQueryPreview('8')<CR>
+nnoremap <silent> <leader><leader>fs :call CscopeQueryPreview('0')<CR>
+nnoremap <silent> <leader><leader>ct :call CscopeQueryPreview('4')<CR>
+nnoremap <silent> <leader><leader>ca :call CscopeQueryPreview('9', 1)<CR>
+nnoremap <silent> <leader><leader>cc :call CscopeQueryPreview('3', 1)<CR>
+nnoremap <silent> <leader><leader>cd :call CscopeQueryPreview('2', 1)<CR>
+nnoremap <silent> <leader><leader>ce :call CscopeQueryPreview('6', 1)<CR>
+nnoremap <silent> <leader><leader>cf :call CscopeQueryPreview('7', 1)<CR>
+nnoremap <silent> <leader><leader>cg :call CscopeQueryPreview('1', 1)<CR>
+nnoremap <silent> <leader><leader>ci :call CscopeQueryPreview('8', 1)<CR>
+nnoremap <silent> <leader><leader>cs :call CscopeQueryPreview('0', 1)<CR>
+nnoremap <silent> <leader><leader>ct :call CscopeQueryPreview('4', 1)<CR>
+
 function! Cscope(option, query, ...)
-  let l:ignorecase = get(a:, 1, 0)
-  if l:ignorecase
-    let realoption = "C" . a:option
-  else
-    let realoption = a:option
-  endif
+    let l:ignorecase = get(a:, 1, 0)
+    if l:ignorecase
+        let realoption = "C" . a:option
+    else
+        let realoption = a:option
+    endif
 
-  let color = '{ x = $1; $1 = ""; z = $3; $3 = ""; printf "\033[36m%s\033[0m:\033[36m%s\033[0m\011\033[37m%s\033[0m\n", x,z,$0; }'
-  let opts = {
-  \ 'source':  "cscope -dL" . realoption . " " . a:query . " | awk '" . color . "' && cscope -f cscope_small.out -dL" . realoption . " " . a:query . " | awk '" . color . "'",
-  \ 'options': ['--ansi', '--prompt', '> ',
-  \             '--multi', '--bind', 'alt-a:select-all,alt-d:deselect-all',
-  \             '--color', 'fg:188,fg+:222,bg+:#3a3a3a,hl+:104'],
-  \ 'down': '40%'
-  \ }
+    let color = '{ x = $1; $1 = ""; z = $3; $3 = ""; printf "\033[36m%s\033[0m:\033[36m%s\033[0m\011\033[37m%s\033[0m\n", x,z,$0; }'
+    let opts = {
+    \ 'source':  "cscope -dL" . realoption . " " . shellescape(a:query) . " | awk '"
+    \            . color . "' && cscope -f cscope_small.out -dL" . realoption . " " . a:query . " | awk '" . color . "'",
+    \ 'options': ['--ansi', '--prompt', '> ',
+    \             '--multi', '--bind', 'alt-a:select-all,alt-d:deselect-all'],
+    \ 'down': '40%'
+    \ }
 
-  function! opts.sink(lines) 
-    let data = split(a:lines)
-    let file = split(data[0], ":")
-    execute 'e ' . '+' . file[1] . ' ' . file[0]
-  endfunction
-  call fzf#run(opts)
+    function! opts.sink(lines)
+        let data = split(a:lines)
+        let file = split(data[0], ":")
+        execute 'e ' . '+' . file[1] . ' ' . file[0]
+    endfunction
+    call fzf#run(opts)
+endfunction
+
+function! CscopePreview(option, query, ...)
+    let l:ignorecase = get(a:, 1, 0)
+    if l:ignorecase
+      let realoption = "C" . a:option
+    else
+      let realoption = a:option
+    endif
+    let awk_program =
+        \    '{ x = $1; $1 = ""; z = $3; $3 = ""; ' .
+        \    'printf "%s:%s:%s\n", x,z,$0; }'
+    let grep_command =
+        \    'cscope -dL' . realoption . " " . shellescape(a:query) .
+        \    " | awk '" . awk_program . "'"
+    let fzf_color_option = split(fzf#wrap()['options'])[0]
+    let opts = { 'options': fzf_color_option . ' --prompt "> "'}
+    call fzf#vim#grep(grep_command, 0, fzf#vim#with_preview(opts), 0)
 endfunction
 
 function! CscopeQuery(option, ...)
@@ -319,7 +432,7 @@ function! CscopeQuery(option, ...)
   elseif a:option == '8'
     let query = input('Files #including: ')
   elseif a:option == '0'
-    let query = input('C Symbol: ')
+    let query = input('Symbol: ')
   elseif a:option == '4'
     let query = input('Text: ')
   else
@@ -339,34 +452,78 @@ function! CscopeQuery(option, ...)
   endif
 endfunction
 
-" Cscope
-nnoremap <silent> <leader>ca :call Cscope('9', expand('<cword>'))<CR>
-nnoremap <silent> <leader>cc :call Cscope('3', expand('<cword>'))<CR>
-nnoremap <silent> <leader>cd :call Cscope('2', expand('<cword>'))<CR>
-nnoremap <silent> <leader>ce :call Cscope('6', expand('<cword>'))<CR>
-nnoremap <silent> <leader>cf :call Cscope('7', expand('<cword>'))<CR>
-nnoremap <silent> <leader>cg :call Cscope('1', expand('<cword>'))<CR>
-nnoremap <silent> <leader>ci :call Cscope('8', expand('<cword>'))<CR>
-nnoremap <silent> <leader>cs :call Cscope('0', expand('<cword>'))<CR>
-nnoremap <silent> <leader>ct :call Cscope('4', expand('<cword>'))<CR>
-nnoremap <silent> <leader><leader>fa :call CscopeQuery('9')<CR>
-nnoremap <silent> <leader><leader>fc :call CscopeQuery('3')<CR>
-nnoremap <silent> <leader><leader>fd :call CscopeQuery('2')<CR>
-nnoremap <silent> <leader><leader>fe :call CscopeQuery('6')<CR>
-nnoremap <silent> <leader><leader>ff :call CscopeQuery('7')<CR>
-nnoremap <silent> <leader><leader>fg :call CscopeQuery('1')<CR>
-nnoremap <silent> <leader><leader>fi :call CscopeQuery('8')<CR>
-nnoremap <silent> <leader><leader>fs :call CscopeQuery('0')<CR>
-nnoremap <silent> <leader><leader>ct :call CscopeQuery('4')<CR>
-nnoremap <silent> <leader><leader>ca :call CscopeQuery('9', 1)<CR>
-nnoremap <silent> <leader><leader>cc :call CscopeQuery('3', 1)<CR>
-nnoremap <silent> <leader><leader>cd :call CscopeQuery('2', 1)<CR>
-nnoremap <silent> <leader><leader>ce :call CscopeQuery('6', 1)<CR>
-nnoremap <silent> <leader><leader>cf :call CscopeQuery('7', 1)<CR>
-nnoremap <silent> <leader><leader>cg :call CscopeQuery('1', 1)<CR>
-nnoremap <silent> <leader><leader>ci :call CscopeQuery('8', 1)<CR>
-nnoremap <silent> <leader><leader>cs :call CscopeQuery('0', 1)<CR>
-nnoremap <silent> <leader><leader>ct :call CscopeQuery('4', 1)<CR>
+function! CscopeQueryPreview(option, ...)
+  call inputsave()
+  if a:option == '9'
+    let query = input('Assignments to: ')
+  elseif a:option == '3'
+    let query = input('Functions calling: ')
+  elseif a:option == '2'
+    let query = input('Functions called by: ')
+  elseif a:option == '6'
+    let query = input('Egrep: ')
+  elseif a:option == '7'
+    let query = input('File: ')
+  elseif a:option == '1'
+    let query = input('Definition: ')
+  elseif a:option == '8'
+    let query = input('Files #including: ')
+  elseif a:option == '0'
+    let query = input('Symbol: ')
+  elseif a:option == '4'
+    let query = input('Text: ')
+  else
+    echo "Invalid option!"
+    return
+  endif
+  call inputrestore()
+  if query != ""
+    let l:ignorecase = get(a:, 1, 0)
+    if l:ignorecase
+      call CscopePreview(a:option, query, 1)
+    else
+      call CscopePreview(a:option, query)
+    endif
+  else
+    echom "Cancelled Search!"
+  endif
+endfunction
+
+" Opengrok Search
+nnoremap <silent> <leader>zo :call OgQueryPreview('f', expand('<cword>'))<CR>
+nnoremap <silent> <leader><leader>zo :call OgQueryPreview('f', input('Text: '))<CR>
+nnoremap <silent> <leader>zO :call OgQuery('f', expand('<cword>'))<CR>
+nnoremap <silent> <leader><leader>zO :call OgQuery('f', input('Text: '))<CR>
+
+function! OgQuery(option, query, ...)
+    let opts = {
+    \ 'source': "java -Xmx2048m -cp ~/.vim/bin/opengrok/lib/opengrok.jar org.opensolaris.opengrok.search.Search -R .opengrok/configuration.xml -" .
+    \           a:option . " " . a:query . "| grep \"^/.*\" | sed 's@</\\?.>@@g' | sed 's/&amp;/\\&/g' | sed 's/-\&gt;/->/g'",
+    \ 'options': ['--ansi', '--prompt', '> ',
+    \             '--multi', '--bind', 'alt-a:select-all,alt-d:deselect-all'],
+    \ 'down': '40%'
+    \ }
+
+    function! opts.sink(lines)
+        let data = split(a:lines)
+        let file = split(data[0], ":")
+        execute 'e ' . '+' . file[1] . ' ' . file[0]
+    endfunction
+    call fzf#run(opts)
+endfunction
+
+function! OgQueryPreview(option, query, ...)
+    let awk_program =
+        \    '{ x = $1; $1 = ""; z = $3; $3 = ""; ' .
+        \    'printf "%s:%s:%s\n", x,z,$0; }'
+    let grep_command =
+        \    "java -Xmx2048m -cp ~/.vim/bin/opengrok/lib/opengrok.jar org.opensolaris.opengrok.search.Search -R .opengrok/configuration.xml -" .
+        \    a:option . " " . shellescape(a:query) .
+        \    " | awk '" . awk_program . "'"
+    let fzf_color_option = split(fzf#wrap()['options'])[0]
+    let opts = { 'options': fzf_color_option . ' --prompt "> "'}
+    call fzf#vim#grep(grep_command, 0, fzf#vim#with_preview(opts), 0)
+endfunction
 
 " Gruvbox
 set background=dark
@@ -376,6 +533,10 @@ hi Normal ctermbg=none
 
 " Color
 color codedark
+
+" Cursor Line
+highlight CursorLine ctermbg=235 guibg=#2b2b2b
+set cursorline
 
 " Lsp usage
 let g:use_clangd_lsp = 1
@@ -388,82 +549,89 @@ if !executable('pyls')
     let g:use_pyls_lsp = 0
 endif
 
-" Clangd
-if g:use_clangd_lsp
-    augroup lsp_clangd
-        autocmd!
-        autocmd User lsp_setup call lsp#register_server({
-                    \ 'name': 'clangd',
-                    \ 'cmd': {server_info->['clangd']},
-                    \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
-                    \ })
+" vim-lsp configuration
+if g:lsp_choice == 'vim-lsp'
+    let g:asyncomplete_remove_duplicates = 1
+    let g:asyncomplete_smart_completion = 1
+
+    inoremap <silent> <C-@> <plug>(asyncomplete_force_refresh)
+
+    highlight clear LspWarningLine
+    highlight clear LspErrorHighlight
+    highlight link LspErrorText GruvboxRedSign
+    nnoremap <silent> <leader>ld :LspDocumentDiagnostics<CR>
+    nnoremap <silent> <leader>lh :highlight link LspErrorHighlight Error<CR>
+    nnoremap <silent> <leader>ln :highlight link LspErrorHighlight None<CR>
+
+    " clangd
+    if g:use_clangd_lsp
+        augroup lsp_clangd
+            autocmd!
+            autocmd User lsp_setup call lsp#register_server({
+                        \ 'name': 'clangd',
+                        \ 'cmd': {server_info->['clangd']},
+                        \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+                        \ })
+        augroup end
+    endif
+
+    " pyls
+    if g:use_pyls_lsp
+        augroup lsp_pyls
+            autocmd!
+            autocmd User lsp_setup call lsp#register_server({
+                        \ 'name': 'pyls',
+                        \ 'cmd': {server_info->['pyls']},
+                        \ 'whitelist': ['python'],
+                        \ 'workspace_config': {'pyls': {'plugins': {'pydocstyle': {'enabled': v:true}}}}
+                        \ })
+        augroup end
+    endif
+
+    function! s:on_lsp_buffer_enabled() abort
+        setlocal omnifunc=lsp#complete
+        if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+        nmap <silent> <buffer> gd <plug>(lsp-definition)
+        nmap <silent> <buffer> gr <plug>(lsp-references)
+        nmap <silent> <buffer> gi <plug>(lsp-implementation)
+        nmap <silent> <buffer> gy <plug>(lsp-type-definition)
+        nmap <silent> <buffer> <leader>rn <plug>(lsp-rename)
+        nmap <silent> <buffer> [g <plug>(lsp-previous-diagnostic)
+        nmap <silent> <buffer> ]g <plug>(lsp-next-diagnostic)
+        nmap <silent> <buffer> K <plug>(lsp-hover)
+    endfunction
+    inoremap <silent> <expr> <CR> pumvisible() ? asyncomplete#close_popup() . "\<CR>" : "\<CR>"
+
+    augroup lsp_install
+        au!
+        " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+        autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
     augroup end
 endif
 
-" Pyls
-if g:use_pyls_lsp
-    augroup lsp_pyls
-        autocmd!
-        autocmd User lsp_setup call lsp#register_server({
-                    \ 'name': 'pyls',
-                    \ 'cmd': {server_info->['pyls']},
-                    \ 'whitelist': ['python'],
-                    \ 'workspace_config': {'pyls': {'plugins': {'pydocstyle': {'enabled': v:true}}}}
-                    \ })
-    augroup end
+" Coc
+if g:lsp_choice == 'coc'
+    nmap <silent> gd <Plug>(coc-definition)
+    nmap <silent> gy <Plug>(coc-type-definition)
+    nmap <silent> gi <Plug>(coc-implementation)
+    nmap <silent> gr <Plug>(coc-references)
+    nnoremap <silent> K :call <SID>show_documentation()<CR>
+    nmap <silent> [g <Plug>(coc-diagnostic-prev)
+    nmap <silent> ]g <Plug>(coc-diagnostic-next)
+    nmap <leader>rn <Plug>(coc-rename)
+    xmap <leader>lf <Plug>(coc-format-selected)
+    nnoremap <silent> <leader>ld :CocDiagnostics<CR>
+
+    autocmd CursorHold * silent call CocActionAsync('highlight')
+
+    function! s:show_documentation()
+      if (index(['vim','help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+      else
+        call CocAction('doHover')
+      endif
+    endfunction
 endif
-
-" Lsp Generic
-let g:asyncomplete_remove_duplicates = 1
-let g:asyncomplete_smart_completion = 1
-
-highlight clear LspWarningLine
-highlight clear LspErrorHighlight
-highlight link LspErrorText GruvboxRedSign
-nnoremap <silent> <leader>ld :LspDocumentDiagnostics<CR>
-nnoremap <silent> <leader>lh :highlight link LspErrorHighlight Error<CR>
-nnoremap <silent> <leader>ln :highlight link LspErrorHighlight None<CR>
-
-function! s:on_lsp_buffer_enabled() abort
-    setlocal omnifunc=lsp#complete
-    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-    nmap <silent> <buffer> gd <plug>(lsp-definition)
-    nmap <silent> <buffer> gr <plug>(lsp-references)
-    nmap <silent> <buffer> gi <plug>(lsp-implementation)
-    nmap <silent> <buffer> gy <plug>(lsp-type-definition)
-    nmap <silent> <buffer> <leader>rn <plug>(lsp-rename)
-    nmap <silent> <buffer> [g <plug>(lsp-previous-diagnostic)
-    nmap <silent> <buffer> ]g <plug>(lsp-next-diagnostic)
-    nmap <silent> <buffer> K <plug>(lsp-hover)
-endfunction
-inoremap <silent> <expr> <CR> pumvisible() ? asyncomplete#close_popup() . "\<CR>" : "\<CR>"
-
-augroup lsp_install
-    au!
-    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
-    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-augroup end
-
-" Opengrok Search
-function! OgQuery(option, query, ...)
-  let opts = {
-  \ 'source': "java -Xmx2048m -cp ~/.vim/bin/opengrok/lib/opengrok.jar org.opensolaris.opengrok.search.Search -R .opengrok/configuration.xml -" . a:option . " " . a:query . "| grep \"^/.*\" | sed 's@</\\?.>@@g' | sed 's/&amp;/\\&/g' | sed 's/-\&gt;/->/g'",
-  \ 'options': ['--ansi', '--prompt', '> ',
-  \             '--multi', '--bind', 'alt-a:select-all,alt-d:deselect-all',
-  \             '--color', 'fg:188,fg+:222,bg+:#3a3a3a,hl+:104'],
-  \ 'down': '40%'
-  \ }
-
-  function! opts.sink(lines) 
-    let data = split(a:lines)
-    let file = split(data[0], ":")
-    execute 'e ' . '+' . file[1] . ' ' . file[0]
-  endfunction
-  call fzf#run(opts)
-endfunction
-
-nnoremap <silent> <leader>zo :call OgQuery('f', expand('<cword>'))<CR>
-nnoremap <silent> <leader><leader>zo :call OgQuery('f', input('Text: '))<CR>
 
 " Pear-tree
 let g:pear_tree_pairs = {
@@ -687,3 +855,23 @@ function! ZGenerateOpengrok()
          \ -P -S -G -W .opengrok/configuration.xml"
 endfunction
 
+" Generate compile_commands.json
+function! ZGenerateCompileCommandsJson()
+    call inputsave()
+    let compile_command = input('Compile (make) command: ')
+    call inputrestore()
+    copen
+    exec ":AsyncRun compiledb " . compile_command
+endfunction
+nnoremap <silent> <leader>zj :call ZGenerateCompileCommandsJson()<CR>
+
+" Toggle mouse
+function! ZToggleMouse()
+    if &mouse == 'a'
+        set mouse=
+        set ttymouse=xterm
+    else
+        set mouse=a
+        set ttymouse=xterm2
+    endif
+endfunction
