@@ -64,6 +64,7 @@ gd - Go to definition (current word).
 <leader>dn / F10 - Step Over
 <leader>di / F11 - Step Into
 <leader>do - Step Out
+<leader>dq - Quit debugger
 ```
 
 * Undo tree commands:

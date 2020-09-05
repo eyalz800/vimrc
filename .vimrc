@@ -703,6 +703,7 @@ nnoremap <silent> <leader>di :call vimspector#StepInto()<CR>
 nnoremap <silent> <F11> :call vimspector#StepInto()<CR>
 nnoremap <silent> <leader>do :call vimspector#StepOut()<CR>
 nnoremap <silent> <leader><F11> :call vimspector#StepOut()<CR>
+nnoremap <silent> <leader>dq :call vimspector#Reset()<CR>
 
 function! ZGenerateVimspectorCpp()
     call inputsave()
