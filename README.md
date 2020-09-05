@@ -120,3 +120,8 @@ gd - Go to definition (current word).
 <leader>M / <leader>gm - Vimagit staging plugin
 <leader>gb - View blame
 ```
+
+* Comment out
+```
+gc - Comment in/out selected code.
+```
