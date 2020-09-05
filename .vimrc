@@ -110,6 +110,7 @@ Plug 'bfrg/vim-cpp-modern'
 Plug 'tomasiser/vim-code-dark'
 Plug 'joeytwiddle/sexy_scroller.vim'
 Plug 'ntpeters/vim-better-whitespace'
+Plug 'troydm/zoomwintab.vim'
 call plug#end()
 
 if !empty($INSTALL_VIMRC_PLUGINS)
@@ -120,29 +121,6 @@ if !empty($INSTALL_VIMRC_PLUGINS)
         exec ":q"
     endif
 endif
-
-" Gui colors
-if has('termguicolors')
-    set termguicolors
-endif
-
-" Mouse
-set mouse=a
-set ttymouse=xterm2
-nnoremap <silent> <leader>zm :call ZToggleMouse()<CR>
-
-" Sign column
-set signcolumn=yes
-
-" Updatetime
-set updatetime=300
-set shortmess+=c
-
-" Set path
-let $PATH .= ':' . $HOME . '/.vim/bin/lf'
-
-" Ignore no write since last change errors
-set hidden
 
 " Generic
 syntax on
@@ -177,8 +155,41 @@ noremap <F1> <C-w><C-p>
 noremap <F2> <C-w><C-w>
 noremap <F6> :bp<CR>
 noremap <F7> :bn<CR>
-noremap <F5> :set nu!<CR>:set paste!<CR>i
 set noerrorbells visualbell t_vb=
+
+" Gui colors
+if has('termguicolors')
+    set termguicolors
+endif
+
+" Mouse
+set mouse=a
+set ttymouse=xterm2
+nnoremap <silent> <leader>zm :call ZToggleMouse()<CR>
+
+" Sign column
+set signcolumn=yes
+
+" Updatetime
+set updatetime=300
+set shortmess+=c
+
+" Set path
+let $PATH .= ':' . $HOME . '/.vim/bin/lf'
+
+" Ignore no write since last change errors
+set hidden
+
+" Pasting
+noremap <F5> :set nu!<CR>:set paste!<CR>i
+
+" Resize splits
+nnoremap <silent> L :vertical resize +1<CR>
+nnoremap <silent> H :vertical resize -1<CR>
+nnoremap <silent> <C-w>= :resize +1<CR>
+
+" Zoom
+noremap <silent> <C-w>z :ZoomWinTabToggle<CR>
 
 " Generation Parameters
 let g:ctagsFilePatterns = '\.c$|\.cc$|\.cpp$|\.cxx$|\.h$|\.hh$|\.hpp$'

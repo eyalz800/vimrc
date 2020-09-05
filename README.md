@@ -83,7 +83,25 @@ gd - Go to definition (current word).
 <leader>zW - Toggle trailing whitespace visibility on/off.
 ```
 
-* Mouse
+* Mouse:
 ```
 <leader>zm - Toggle mouse on/off.
+```
+
+* Resizing:
+```
+<S-l> - Modify width + 1
+<S-h> - Modify width - 1
+<C-w>= - Modify height + 1
+<C-w>- - Modify height - 1
+```
+
+* Zoom:
+```
+<C-w>z - Zoom in window
+```
+
+* Paste mode:
+```
+<F5> - Toggle paste mode.
 ```
