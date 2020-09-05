@@ -273,12 +273,33 @@ noremap <silent> <leader>gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>
 noremap <silent> <leader>gd :GscopeFind d <C-R><C-W><cr>
 noremap <silent> <leader>ga :GscopeFind a <C-R><C-W><cr>
 
+" Gruvbox
+let g:gruvbox_contrast_datk = 'medium'
+color gruvbox
+
+" Color
+color codedark
+
 " Fzf
 let $FZF_DEFAULT_COMMAND = "if [ -f .files ]; then cat .files; else ag -l; fi"
 set rtp+=~/.fzf
 nnoremap <silent> <C-p> :call ZSwitchToRoot()<CR>:Files<CR>
 nnoremap <silent> <C-n> :call ZSwitchToRoot()<CR>:Tags<CR>
 nnoremap <silent> <leader>b :Buf<CR>
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'SpecialKey'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'String'],
+  \ 'info':    ['fg', 'Comment'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'StorageClass'],
+  \ 'pointer': ['fg', 'Error'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
 
 " Sneak
 let g:sneak#use_ic_scs = 1
@@ -524,15 +545,6 @@ function! OgQueryPreview(option, query, ...)
     let opts = { 'options': fzf_color_option . ' --prompt "> "'}
     call fzf#vim#grep(grep_command, 0, fzf#vim#with_preview(opts), 0)
 endfunction
-
-" Gruvbox
-set background=dark
-let g:gruvbox_contrast_datk = 'medium'
-color gruvbox
-hi Normal ctermbg=none
-
-" Color
-color codedark
 
 " Cursor Line
 highlight CursorLine ctermbg=235 guibg=#2b2b2b
