@@ -1,5 +1,5 @@
 function! InstallVimrc()
-    silent !DEBIAN_FRONTEND=noninteractive apt install -y curl silversearcher-ag exuberant-ctags cscope global codesearch git clang-tools-8 make autoconf automake pkg-config libc++-8-dev openjdk-8-jre python3 python-pip python3-pip
+    silent !DEBIAN_FRONTEND=noninteractive apt install -y curl silversearcher-ag exuberant-ctags cscope global git clang-tools-8 make autoconf automake pkg-config libc++-8-dev openjdk-8-jre python3 python-pip python3-pip
     if executable('pip')
         silent !pip install python-language-server
     endif
@@ -42,18 +42,6 @@ if !empty($INSTALL_VIMRC)
     exec ":q"
 endif
 
-let g:use_clangd_lsp = 1
-if !executable('clangd')
-    let g:use_clangd_lsp = 0
-endif
-
-let g:use_pyls_lsp = 1
-if !executable('pyls')
-    let g:use_pyls_lsp = 0
-endif
-
-let g:did_snips_mappings = 1
-
 call plug#begin()
 Plug 'puremourning/vimspector'
 Plug 'wesleyche/SrcExpl'
@@ -71,7 +59,6 @@ Plug 'ervandew/supertab'
 Plug 'vim-airline/vim-airline'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'justinmk/vim-sneak'
-Plug 'brandonbloom/csearch.vim'
 Plug 'tmsvg/pear-tree'
 Plug 'majutsushi/tagbar'
 Plug 'terryma/vim-multiple-cursors'
@@ -94,6 +81,7 @@ Plug 'thezeroalpha/vim-lf'
 Plug 'tpope/vim-commentary'
 Plug 'bfrg/vim-cpp-modern'
 Plug 'tomasiser/vim-code-dark'
+Plug 'joeytwiddle/sexy_scroller.vim'
 call plug#end()
 
 if !empty($INSTALL_VIMRC_PLUGINS)
@@ -103,6 +91,13 @@ endif
 
 " Mouse
 set mouse=a
+
+" Sign column
+set signcolumn=yes
+
+" Updatetime
+set updatetime=300
+set shortmess+=c
 
 " Set path
 let $PATH .= ':' . $HOME . '/.vim/bin/lf'
@@ -114,95 +109,48 @@ set hidden
 highlight CursorLineNr cterm=NONE ctermbg=15 ctermfg=8 gui=NONE guibg=#ffffff guifg=#d70000
 set cursorline
 
+" Generic
+syntax on
+filetype plugin indent on
+nnoremap <silent> ` :noh<CR>
+set expandtab
+set ignorecase
+set smartcase
+set nocompatible
+set shellslash
+set autoindent
+autocmd filetype cpp setlocal cindent
+autocmd filetype c setlocal cindent
+set cinoptions=g0N-s
+set backspace=indent,eol,start
+set ruler
+set showcmd
+set incsearch
+set hlsearch
+set shiftwidth=4
+set tabstop=4
+set cmdheight=1
+set number
+set wildmode=list:longest,full
+set completeopt=longest,menuone,preview
+set nowrap
+nnoremap <C-q> <C-v>
+set shellslash
+map <C-w>w :q<CR>
+autocmd filetype make setlocal noexpandtab autoindent
+noremap <F1> <C-w><C-p>
+noremap <F2> <C-w><C-w>
+noremap <F6> :bp<CR>
+noremap <F7> :bn<CR>
+noremap <F5> :set nu!<CR>:set paste!<CR>i
+set noerrorbells visualbell t_vb=
+
 " Generation Parameters
 let g:ctagsFilePatterns = '\.c$|\.cc$|\.cpp$|\.cxx$|\.h$|\.hh$|\.hpp$'
 let g:opengrokFilePatterns = "-I *.cpp -I *.c -I *.cc -I *.cxx -I *.h -I *.hh -I *.hpp -I *.S -I *.s -I *.asm -I *.py -I *.java -I *.cs -I *.mk -I makefile -I Makefile"
 let g:otherFilePatterns = '\.py$|\.te$|\.S$|\.asm$|\.mk$|\.md$makefile$|Makefile'
 let g:ctagsOptions = '--languages=C,C++ --c++-kinds=+p --fields=+iaS --extra=+q --sort=foldcase --tag-relative'
 let g:ctagsEverythingOptions = '--c++-kinds=+p --fields=+iaS --extra=+q --sort=foldcase --tag-relative'
-
-" Generate Flags
-function! ZGenerateFlags()
-    copen
-    exec ":AsyncRun find . -name inc -or -name include | sed s@^@-isystem\\\\n@g > compile_flags.txt
-    \ && echo -std=c++1z >> compile_flags.txt
-    \ && echo -isystem >> compile_flags.txt
-    \ && echo /usr/include >> compile_flags.txt
-    \ && echo -isystem >> compile_flags.txt
-    \ && echo $(dirname $(find /usr/lib -name string_view | sort | grep -v experimental | sort | tail -n 1 | grep -v __$placeholder$__ || echo '/usr/include')) >> compile_flags.txt
-    \ && echo -isystem >> compile_flags.txt
-    \ && echo $(dirname $(find /usr/include/c++ -name cstdlib | grep -v tr1 | sort | tail -n 1 | grep -v __$placeholder$__ || echo '/usr/include')) >> compile_flags.txt
-    \ && echo -x >> compile_flags.txt
-    \ && echo c++ >> compile_flags.txt"
-endfunction
-
-" Generate All
-function! ZGenerateAll()
-    copen
-    exec ":AsyncRun ctags -R " . g:ctagsOptions . " && echo '" . g:ctagsOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq && cindex . && gtags"
-endfunction
-
-" Generate Everything
-function! ZGenerateEverything()
-    copen
-    exec ":AsyncRun ctags -R " . g:ctagsEverythingOptions . " && echo '" . g:ctagsEverythingOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files &&  cscope -bq && cindex . && gtags"
-endfunction
-
-" Write tags options.
-function! ZWriteTagsOptions()
-    copen
-    exec ":AsyncRun echo " . g:ctagsOptions . " > .gutctags && sed -i 's/ /\\n/g' .gutctags"
-endfunction
-
-" Generate Tags
-function! ZGenTags()
-    copen
-    exec ":AsyncRun ctags -R " . g:ctagsOptions
-endfunction
-
-" Generate Cscope Files
-function! ZGenCsFiles()
-    copen
-    exec ":AsyncRun ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files"
-endfunction
-
-" Generate Tags and Cscope Files
-function! ZGenTagsAndCsFiles()
-    copen
-    exec ":AsyncRun ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && ctags -R " . g:ctagsOptions
-endfunction
-
-" Generate C++
-function! ZGenerateCpp()
-    copen
-    exec ":AsyncRun find . -name inc -or -name include | sed s@^@-isystem\\\\n@g > compile_flags.txt
-    \ && echo -std=c++1z >> compile_flags.txt
-    \ && echo -isystem >> compile_flags.txt
-    \ && echo /usr/include >> compile_flags.txt
-    \ && echo -isystem >> compile_flags.txt
-    \ && echo $(dirname $(find /usr/lib -name string_view | sort | grep -v experimental | sort | tail -n 1 | grep -v __$placeholder$__ || echo '/usr/include')) >> compile_flags.txt
-    \ && echo -isystem >> compile_flags.txt
-    \ && echo $(dirname $(find /usr/include/c++ -name cstdlib | grep -v tr1 | sort | tail -n 1 | grep -v __$placeholder$__ || echo '/usr/include')) >> compile_flags.txt
-    \ && echo -x >> compile_flags.txt
-    \ && echo c++ >> compile_flags.txt
-    \ && echo '" . g:ctagsOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq"
-endfunction
-function! ZGenerateTagsBasedCpp()
-    copen
-    exec ":AsyncRun ctags -R " . g:ctagsOptions . " && echo '" . g:ctagsOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq"
-endfunction
-function! ZGenerateCppScope()
-    copen
-    exec ":AsyncRun echo '" . g:ctagsOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq"
-endfunction
-
-" Generate Opengrok
-function! ZGenerateOpengrok()
-    copen
-    exec ":AsyncRun java -Xmx2048m -jar ~/.vim/bin/opengrok/lib/opengrok.jar -q -c /usr/bin/ctags-exuberant -s . -d .opengrok
-         \ " . g:opengrokFilePatterns . "
-         \ -P -S -G -W .opengrok/configuration.xml"
-endfunction
 
 " Generate All
 nnoremap <silent> <leader>zg :call ZGenerateAll()<CR>
@@ -219,15 +167,19 @@ nnoremap <silent> <leader>zc :call ZGenerateCppScope()<CR>
 " Generate Flags
 nnoremap <silent> <leader>zf :call ZGenerateFlags()<CR>
 
-" Codesearch
-nnoremap <silent> <leader>zx "tyiw:exe "CSearch " . @t . ""<CR>
-
 " Generate Opengrok
 nnoremap <silent> <leader>zk :call ZGenerateOpengrok()<CR>
 
 " Terminal
 nnoremap <silent> <leader>zb :below terminal ++rows=10<CR>
 nnoremap <silent> <leader>zB :below terminal ++rows=20<CR>
+
+" Sexy Scroller
+let g:SexyScroller_MaxTime = 250
+let g:SexyScroller_EasingStyle = 2
+let g:SexyScroller_ScrollTime = 5
+let g:SexyScroller_CursorTime = 5
+nnoremap <silent> <leader>zx :SexyScrollerToggle<CR>
 
 " Lf
 " The use of timer_start is a workaround that the lsp does not detect the file
@@ -264,6 +216,7 @@ nnoremap <C-L> :NERDTreeToggle<CR>:wincmd w<CR>:TagbarToggle<CR>
 let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 
 " Acp snipmate length
+let g:did_snips_mappings = 1
 let g:acp_behaviorSnipmateLength = 1
 
 " GutenTags
@@ -316,42 +269,6 @@ let g:cpp_experimental_template_highlight = 1
 
 " QuickFix
 nnoremap <C-w>p :copen<CR>
-
-" Generic
-syntax on
-filetype plugin indent on
-nnoremap <silent> ` :noh<CR>
-set expandtab
-set ignorecase
-set smartcase
-set nocompatible
-set shellslash
-set autoindent
-autocmd filetype cpp setlocal cindent
-autocmd filetype c setlocal cindent
-set cinoptions=g0N-s
-set backspace=indent,eol,start
-set ruler
-set showcmd
-set incsearch
-set hlsearch
-set shiftwidth=4
-set tabstop=4
-set cmdheight=1
-set number
-set wildmode=list:longest,full
-set completeopt=longest,menuone,preview
-set nowrap
-nnoremap <C-q> <C-v>
-set shellslash
-map <C-w>w :q<CR>
-autocmd filetype make setlocal noexpandtab autoindent
-noremap <F1> <C-w><C-p>
-noremap <F2> <C-w><C-w>
-noremap <F6> :bp<CR>
-noremap <F7> :bn<CR>
-noremap <F5> :set nu!<CR>:set paste!<CR>i
-set noerrorbells visualbell t_vb=
 
 " In some windows machines this prevents launching in REPLACE mode.
 set t_u7=
@@ -459,6 +376,17 @@ hi Normal ctermbg=none
 
 " Color
 color codedark
+
+" Lsp usage
+let g:use_clangd_lsp = 1
+if !executable('clangd')
+    let g:use_clangd_lsp = 0
+endif
+
+let g:use_pyls_lsp = 1
+if !executable('pyls')
+    let g:use_pyls_lsp = 0
+endif
 
 " Clangd
 if g:use_clangd_lsp
@@ -675,3 +603,87 @@ function ZDebugLaunchSettings()
         call ZGenerateVimspectorPy()
     endif
 endfunction
+
+" Generate Flags
+function! ZGenerateFlags()
+    copen
+    exec ":AsyncRun find . -name inc -or -name include | sed s@^@-isystem\\\\n@g > compile_flags.txt
+    \ && echo -std=c++1z >> compile_flags.txt
+    \ && echo -isystem >> compile_flags.txt
+    \ && echo /usr/include >> compile_flags.txt
+    \ && echo -isystem >> compile_flags.txt
+    \ && echo $(dirname $(find /usr/lib -name string_view | sort | grep -v experimental | sort | tail -n 1 | grep -v __$placeholder$__ || echo '/usr/include')) >> compile_flags.txt
+    \ && echo -isystem >> compile_flags.txt
+    \ && echo $(dirname $(find /usr/include/c++ -name cstdlib | grep -v tr1 | sort | tail -n 1 | grep -v __$placeholder$__ || echo '/usr/include')) >> compile_flags.txt
+    \ && echo -x >> compile_flags.txt
+    \ && echo c++ >> compile_flags.txt"
+endfunction
+
+" Generate All
+function! ZGenerateAll()
+    copen
+    exec ":AsyncRun ctags -R " . g:ctagsOptions . " && echo '" . g:ctagsOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq && gtags"
+endfunction
+
+" Generate Everything
+function! ZGenerateEverything()
+    copen
+    exec ":AsyncRun ctags -R " . g:ctagsEverythingOptions . " && echo '" . g:ctagsEverythingOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files &&  cscope -bq && gtags"
+endfunction
+
+" Write tags options.
+function! ZWriteTagsOptions()
+    copen
+    exec ":AsyncRun echo " . g:ctagsOptions . " > .gutctags && sed -i 's/ /\\n/g' .gutctags"
+endfunction
+
+" Generate Tags
+function! ZGenTags()
+    copen
+    exec ":AsyncRun ctags -R " . g:ctagsOptions
+endfunction
+
+" Generate Cscope Files
+function! ZGenCsFiles()
+    copen
+    exec ":AsyncRun ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files"
+endfunction
+
+" Generate Tags and Cscope Files
+function! ZGenTagsAndCsFiles()
+    copen
+    exec ":AsyncRun ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && ctags -R " . g:ctagsOptions
+endfunction
+
+" Generate C++
+function! ZGenerateCpp()
+    copen
+    exec ":AsyncRun find . -name inc -or -name include | sed s@^@-isystem\\\\n@g > compile_flags.txt
+    \ && echo -std=c++1z >> compile_flags.txt
+    \ && echo -isystem >> compile_flags.txt
+    \ && echo /usr/include >> compile_flags.txt
+    \ && echo -isystem >> compile_flags.txt
+    \ && echo $(dirname $(find /usr/lib -name string_view | sort | grep -v experimental | sort | tail -n 1 | grep -v __$placeholder$__ || echo '/usr/include')) >> compile_flags.txt
+    \ && echo -isystem >> compile_flags.txt
+    \ && echo $(dirname $(find /usr/include/c++ -name cstdlib | grep -v tr1 | sort | tail -n 1 | grep -v __$placeholder$__ || echo '/usr/include')) >> compile_flags.txt
+    \ && echo -x >> compile_flags.txt
+    \ && echo c++ >> compile_flags.txt
+    \ && echo '" . g:ctagsOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq"
+endfunction
+function! ZGenerateTagsBasedCpp()
+    copen
+    exec ":AsyncRun ctags -R " . g:ctagsOptions . " && echo '" . g:ctagsOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq"
+endfunction
+function! ZGenerateCppScope()
+    copen
+    exec ":AsyncRun echo '" . g:ctagsOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq"
+endfunction
+
+" Generate Opengrok
+function! ZGenerateOpengrok()
+    copen
+    exec ":AsyncRun java -Xmx2048m -jar ~/.vim/bin/opengrok/lib/opengrok.jar -q -c /usr/bin/ctags-exuberant -s . -d .opengrok
+         \ " . g:opengrokFilePatterns . "
+         \ -P -S -G -W .opengrok/configuration.xml"
+endfunction
+
