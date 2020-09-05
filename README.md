@@ -114,3 +114,9 @@ gd - Go to definition (current word).
 ```
 <F5> - Toggle paste mode.
 ```
+
+* Git
+```
+<leader>M / <leader>gm - Vimagit staging plugin
+<leader>gb - View blame
+```

@@ -275,6 +275,10 @@ let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 let g:did_snips_mappings = 1
 let g:acp_behaviorSnipmateLength = 1
 
+" Git
+nnoremap <silent> <leader>gb :Git blame<CR>
+nnoremap <silent> <leader>gm :Magit<CR>
+
 " GutenTags
 let g:gutentags_modules = ['ctags', 'gtags_cscope']
 let g:gutentags_plus_nomap = 1
