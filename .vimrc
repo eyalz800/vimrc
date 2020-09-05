@@ -111,6 +111,7 @@ Plug 'tomasiser/vim-code-dark'
 Plug 'joeytwiddle/sexy_scroller.vim'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'troydm/zoomwintab.vim'
+Plug 'wincent/terminus'
 call plug#end()
 
 if !empty($INSTALL_VIMRC_PLUGINS)
