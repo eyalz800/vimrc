@@ -131,3 +131,8 @@ gc - Comment in/out selected code.
 s{char1}{char2} - Jump to a location with the following two characters {char1}{char2}.
 ; - Move forward to next option.
 ```
+
+* Close current window:
+```
+<C-w>w - Close current window.
+```
