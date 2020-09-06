@@ -50,7 +50,7 @@ gd - Go to definition (current word).
 
 * Commands to view directory tree and source code function pane on each side of the screen:
 ```
-<C-L> - Turn on / off the directory tree and source code function panes.
+<C-l> - Turn on / off the directory tree and source code function panes.
 ```
 
 * Terminal commands:
@@ -99,8 +99,8 @@ gd - Go to definition (current word).
 
 * Resizing:
 ```
-<S-l> - Modify width + 1
-<S-h> - Modify width - 1
+L - Modify width + 1
+H - Modify width - 1
 <C-w>= - Modify height + 1
 <C-w>- - Modify height - 1
 ```
