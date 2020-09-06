@@ -125,3 +125,9 @@ gd - Go to definition (current word).
 ```
 gc - Comment in/out selected code.
 ```
+
+* Jump within file:
+```
+s{char1}{char2} - Jump to a location with the following two characters {char1}{char2}.
+; - Move forward to next option.
+```
