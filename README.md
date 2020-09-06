@@ -136,3 +136,8 @@ s{char1}{char2} - Jump to a location with the following two characters {char1}{c
 ```
 <C-w>w - Close current window.
 ```
+
+* View / select from open buffers:
+```
+<leader>b - View / select from open buffers.
+```
