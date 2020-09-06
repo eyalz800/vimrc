@@ -73,6 +73,7 @@ gd - Go to definition (current word).
 <leader>di / F11 - Step Into
 <leader>do - Step Out
 <leader>dq - Quit debugger
+<leader>de - Use within command window, a shortcut to immediately type '-exec '.
 ```
 
 * Undo tree commands:
