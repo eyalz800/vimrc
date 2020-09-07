@@ -1,17 +1,34 @@
 function! InstallVimrc()
-    silent !DEBIAN_FRONTEND=noninteractive apt install -y curl silversearcher-ag exuberant-ctags cscope global git clang-tools-8 make autoconf automake pkg-config libc++-8-dev openjdk-8-jre python3 python-pip python3-pip
-    silent !update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-8 800
-    silent exec "!curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -"
-    silent !DEBIAN_FRONTEND=noninteractive apt install -y nodejs
+    if empty($SUDO_USER)
+        echo "Please run as sudo."
+        exec ":q"
+    endif
+    if !executable('brew')
+        silent !DEBIAN_FRONTEND=noninteractive apt install -y curl silversearcher-ag exuberant-ctags cscope global git clang-tools-8 make autoconf automake pkg-config libc++-8-dev openjdk-8-jre python3 python-pip python3-pip gdb
+        silent exec "!curl -sL https://deb.nodesource.com/setup_10.x | bash -"
+        silent !DEBIAN_FRONTEND=noninteractive apt install -y nodejs
+        silent !update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-8 800
+    else
+        silent !sudo -u $SUDO_USER brew install curl ag ctags cscope global git llvm make autoconf automake pkg-config python3 nodejs gnu-sed
+        silent !sudo -u $SUDO_USER brew link python3
+        silent !sudo -u $SUDO_USER brew tap AdoptOpenJDK/openjdk
+        silent !sudo -u $SUDO_USER brew cask install adoptopenjdk8
+        silent !sudo -u $SUDO_USER curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+        silent !sudo -u $SUDO_USER python get-pip.py
+        silent !sudo -u $SUDO_USER python3 get-pip.py
+        if !executable('clangd')
+            silent exec "!echo export PATH=\\$PATH:/usr/local/opt/llvm/bin >> ~/.bashrc"
+        endif
+    endif
     if executable('pip')
-        silent !pip install python-language-server
-        silent !pip install pylint
-        silent !pip install compiledb
+        silent !pip install python-language-server pylint compiledb setuptools
+    elseif executable('python')
+        silent !sudo -u $SUDO_USER python -m pip install python-language-server pylint compiledb setuptools
     endif
     if executable('pip3')
-        silent !pip3 install python-language-server
-        silent !pip3 install pylint
-        silent !pip3 install compiledb
+        silent !pip3 install python-language-server pylint compiledb setuptools
+    elseif executable('python3')
+        silent !sudo -u $SUDO_USER python3 -m pip install python-language-server pylint compiledb setuptools
     endif
     silent !mkdir -p ~/.vim
     silent !mkdir -p ~/.vim/tmp
@@ -31,6 +48,13 @@ function! InstallVimrc()
     if !filereadable($HOME . '/.vim/tmp/ctags/Makefile')
         silent exec "!cd ~/.vim/tmp; git clone https://github.com/universal-ctags/ctags.git; cd ./ctags; ./autogen.sh; ./configure; make; make install"
     endif
+    if !executable('ctags-exuberant') && !filereadable('~/.vim/bin/ctags-exuberant/ctags/ctags')
+        silent !curl -fLo ~/.vim/bin/ctags-exuberant/ctags.tar.gz --create-dirs
+          \ http://prdownloads.sourceforge.net/ctags/ctags-5.8.tar.gz
+        silent exec "!cd ~/.vim/bin/ctags-exuberant; tar -xzvf ctags.tar.gz"
+        silent exec "!mv ~/.vim/bin/ctags-exuberant/ctags-5.8 ~/.vim/bin/ctags-exuberant/ctags"
+        silent exec "!cd ~/.vim/bin/ctags-exuberant/ctags; ./configure; make"
+    endif
     if !filereadable($HOME . '/.vim/bin/lf/lf')
         silent !curl -fLo ~/.vim/bin/lf/lf.tar.gz --create-dirs
           \ https://github.com/gokcehan/lf/releases/download/r16/lf-linux-amd64.tar.gz
@@ -46,13 +70,18 @@ function! InstallVimrc()
     call CustomizePlugins()
 endfunction
 
+let s:sed = 'sed'
+if executable('brew')
+    let s:sed = 'gsed'
+endif
+
 function! CustomizePlugins()
-    silent exec "!sed -i 's/ autochdir/ noautochdir/' ~/.vim/plugged/SrcExpl/plugin/srcexpl.vim"
-    silent exec "!sed -i 's@ . redraw\\!@ . \" > /dev/null\"@' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim"
-    silent exec "!sed -i 's@silent execute \"perl system.*@silent execute \"\\!\" . a:cmd . \" > /dev/null\"@' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim"
-    silent exec "!sed -i \"s/'String',[ \\t]*s:green/'String', \\['\\#d78787', 174\\]/\" ~/.vim/plugged/gruvbox/colors/gruvbox.vim"
-    silent exec "!sed -i \"s/'String',[ \\t]*s:gb\.green/'String', \\['\\#d78787', 174\\]/\" ~/.vim/plugged/gruvbox/colors/gruvbox.vim"
-    silent exec "!sed -i 's/s:did_snips_mappings/g:did_snips_mappings/' ~/.vim/plugged/snipMate-acp/after/plugin/snipMate.vim"
+    silent exec "!" . s:sed . " -i 's/ autochdir/ noautochdir/' ~/.vim/plugged/SrcExpl/plugin/srcexpl.vim"
+    silent exec "!" . s:sed . " -i 's@ . redraw\\!@ . \" > /dev/null\"@' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim"
+    silent exec "!" . s:sed . " -i 's@silent execute \"perl system.*@silent execute \"\\!\" . a:cmd . \" > /dev/null\"@' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim"
+    silent exec "!" . s:sed . " -i \"s/'String',[ \\t]*s:green/'String', \\['\\#d78787', 174\\]/\" ~/.vim/plugged/gruvbox/colors/gruvbox.vim"
+    silent exec "!" . s:sed . " -i \"s/'String',[ \\t]*s:gb\.green/'String', \\['\\#d78787', 174\\]/\" ~/.vim/plugged/gruvbox/colors/gruvbox.vim"
+    silent exec "!" . s:sed . " -i 's/s:did_snips_mappings/g:did_snips_mappings/' ~/.vim/plugged/snipMate-acp/after/plugin/snipMate.vim"
 endfunction
 
 if !empty($INSTALL_VIMRC)
@@ -160,9 +189,21 @@ noremap <F7> :bn<CR>
 set noerrorbells visualbell t_vb=
 
 " Gui colors
-if has('termguicolors')
+if has('termguicolors') && !filereadable($HOME . "/.vim/.notermguicolors")
     set termguicolors
 endif
+nnoremap <leader>tg :call ToggleGuiColorsPersistent()<CR>
+function! ToggleGuiColorsPersistent()
+    if has('termguicolors')
+        if filereadable($HOME . "/.vim/.notermguicolors")
+            call system("rm ~/.vim/.notermguicolors")
+            set termguicolors
+        else
+            call system("touch ~/.vim/.notermguicolors")
+            set notermguicolors
+        endif
+    endif
+endfunction
 
 " Mouse
 set mouse=a
@@ -182,6 +223,9 @@ set shortmess+=c
 
 " Set path
 let $PATH .= ':' . $HOME . '/.vim/bin/lf'
+if !executable('clangd') && filereadable('/usr/local/opt/llvm/bin/clangd')
+    let $PATH .= ':/usr/local/opt/llvm/bin'
+endif
 
 " Ignore no write since last change errors
 set hidden
@@ -199,7 +243,7 @@ noremap <silent> <C-w>z :ZoomWinTabToggle<CR>
 
 " Generation Parameters
 let g:ctagsFilePatterns = '\.c$|\.cc$|\.cpp$|\.cxx$|\.h$|\.hh$|\.hpp$'
-let g:opengrokFilePatterns = "-I *.cpp -I *.c -I *.cc -I *.cxx -I *.h -I *.hh -I *.hpp -I *.S -I *.s -I *.asm -I *.py -I *.java -I *.cs -I *.mk -I makefile -I Makefile"
+let g:opengrokFilePatterns = "-I '*.cpp' -I '*.c' -I '*.cc' -I '*.cxx' -I '*.h' -I '*.hh' -I '*.hpp' -I '*.S' -I '*.s' -I '*.asm' -I '*.py' -I '*.java' -I '*.cs' -I '*.mk' -I '*.te' -I makefile -I Makefile"
 let g:otherFilePatterns = '\.py$|\.te$|\.S$|\.asm$|\.mk$|\.md$makefile$|Makefile'
 let g:ctagsOptions = '--languages=C,C++ --c++-kinds=+p --fields=+iaS --extra=+q --sort=foldcase --tag-relative'
 let g:ctagsEverythingOptions = '--c++-kinds=+p --fields=+iaS --extra=+q --sort=foldcase --tag-relative'
@@ -245,7 +289,11 @@ nmap <silent> <leader>fs :LF %:p call\ timer_start(0,{tid->execute('e!')})\|vs<C
 
 " Opengrok
 let g:opengrok_jar = '~/.vim/bin/opengrok/lib/opengrok.jar'
-let g:opengrok_ctags = '/usr/bin/ctags-exuberant'
+if executable('ctags-exuberant')
+    let g:opengrok_ctags = '/usr/bin/ctags-exuberant'
+else
+    let g:opengrok_ctags = '~/.vim/bin/ctags-exuberant/ctags/ctags'
+endif
 
 " VimClang
 let g:clang_c_options = '-std=c11'
@@ -540,7 +588,7 @@ nnoremap <silent> <leader><leader>zO :call OgQuery('f', input('Text: '))<CR>
 function! OgQuery(option, query, ...)
     let opts = {
     \ 'source': "java -Xmx2048m -cp ~/.vim/bin/opengrok/lib/opengrok.jar org.opensolaris.opengrok.search.Search -R .opengrok/configuration.xml -" .
-    \           a:option . " " . a:query . "| grep \"^/.*\" | sed 's@</\\?.>@@g' | sed 's/&amp;/\\&/g' | sed 's/-\&gt;/->/g'",
+    \           a:option . " " . a:query . "| grep \"^/.*\" | " . s:sed . " 's@</\\?.>@@g' | " . s:sed . " 's/&amp;/\\&/g' | " . s:sed . " 's/-\&gt;/->/g'",
     \ 'options': ['--ansi', '--prompt', '> ',
     \             '--multi', '--bind', 'alt-a:select-all,alt-d:deselect-all'],
     \ 'down': '40%'
@@ -560,7 +608,7 @@ function! OgQueryPreview(option, query, ...)
         \    'printf "%s:%s:%s\n", x,z,$0; }'
     let grep_command =
         \    "java -Xmx2048m -cp ~/.vim/bin/opengrok/lib/opengrok.jar org.opensolaris.opengrok.search.Search -R .opengrok/configuration.xml -" .
-        \    a:option . " " . shellescape(a:query) .
+        \    a:option . " " . shellescape(a:query) . "| grep \"^/.*\" | " . s:sed . " 's@</\\?.>@@g' | " . s:sed . " 's/&amp;/\\&/g' | " . s:sed . " 's/-\&gt;/->/g'" .
         \    " | awk '" . awk_program . "'"
     let fzf_color_option = split(fzf#wrap()['options'])[0]
     let opts = { 'options': fzf_color_option . ' --prompt "> "'}
@@ -655,8 +703,6 @@ if g:lsp_choice == 'coc'
     xmap <leader>lf <Plug>(coc-format-selected)
     nnoremap <silent> <leader>ld :CocDiagnostics<CR>
 
-    autocmd CursorHold * silent call CocActionAsync('highlight')
-
     function! s:show_documentation()
       if (index(['vim','help'], &filetype) >= 0)
         execute 'h '.expand('<cword>')
@@ -717,6 +763,10 @@ function! ZGenerateVimspectorCpp()
     call inputsave()
     let target = input('Target (Executable/IP): ')
     call inputrestore()
+    let debugger = 'gdb'
+    if !executable('gdb') && executable('lldb')
+        let debugger = 'lldb'
+    endif
     if filereadable(target)
         exec ":AsyncRun
             \ echo '{' > .vimspector.json &&
@@ -736,7 +786,7 @@ function! ZGenerateVimspectorCpp()
             \ echo '                    { \"text\": \"set disassembly-flavor intel\", \"description\": \"\", \"ignoreFailures\": false },' >> .vimspector.json &&
             \ echo '                    { \"text\": \"-enable-pretty-printing\", \"description\": \"\", \"ignoreFailures\": false }' >> .vimspector.json &&
             \ echo '                ],' >> .vimspector.json &&
-            \ echo '                \"MIMode\": \"gdb\"' >> .vimspector.json &&
+            \ echo '                \"MIMode\": \"" . debugger . "\"' >> .vimspector.json &&
             \ echo '            }' >> .vimspector.json &&
             \ echo '        }' >> .vimspector.json &&
             \ echo '    }' >> .vimspector.json &&
@@ -761,8 +811,8 @@ function! ZGenerateVimspectorCpp()
             \ echo '                \"miDebuggerServerAddress\": \"" . target . "\",' >> .vimspector.json &&
             \ echo '                \"externalConsole\": true,' >> .vimspector.json &&
             \ echo '                \"stopAtEntry\": true,' >> .vimspector.json &&
-            \ echo '                \"miDebuggerPath\": \"gdb\",' >> .vimspector.json &&
-            \ echo '                \"MIMode\": \"gdb\"' >> .vimspector.json &&
+            \ echo '                \"miDebuggerPath\": \"" . debugger . "\",' >> .vimspector.json &&
+            \ echo '                \"MIMode\": \"" . debugger . "\"' >> .vimspector.json &&
             \ echo '            }' >> .vimspector.json &&
             \ echo '        }' >> .vimspector.json &&
             \ echo '    }' >> .vimspector.json &&
@@ -810,15 +860,32 @@ endfunction
 
 " Generate Flags
 function! ZGenerateFlags()
+    let cpp_include_1 = system("ag -l -g string_view /usr/lib | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+    if empty(cpp_include_1)
+        let cpp_include_1 = system("ag -l -g string_view /usr/local | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+    endif
+    if empty(cpp_include_1)
+        let cpp_include_1 = '/usr/include'
+    else
+        let cpp_include_1 = system("dirname " . cpp_include_1)
+    endif
+
+    let cpp_include_2 = system("ag -l -g cstdlib /usr/include/c++ | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+    if empty(cpp_include_2)
+        let cpp_include_2 = '/usr/include'
+    else
+        let cpp_include_2 = system("dirname " . cpp_include_2)
+    endif
+
     copen
-    exec ":AsyncRun find . -name inc -or -name include | sed s@^@-isystem\\\\n@g > compile_flags.txt
+    exec ":AsyncRun find . -type d -name inc -or -name include | grep -v \"/\\.\" | " . s:sed . " s@^@-isystem\\\\n@g > compile_flags.txt
     \ && echo -std=c++1z >> compile_flags.txt
     \ && echo -isystem >> compile_flags.txt
     \ && echo /usr/include >> compile_flags.txt
     \ && echo -isystem >> compile_flags.txt
-    \ && echo $(dirname $(find /usr/lib -name string_view | sort | grep -v experimental | sort | tail -n 1 | grep -v __$placeholder$__ || echo '/usr/include')) >> compile_flags.txt
+    \ && echo " . trim(cpp_include_1) . " >> compile_flags.txt
     \ && echo -isystem >> compile_flags.txt
-    \ && echo $(dirname $(find /usr/include/c++ -name cstdlib | grep -v tr1 | sort | tail -n 1 | grep -v __$placeholder$__ || echo '/usr/include')) >> compile_flags.txt
+    \ && echo " . trim(cpp_include_2) . " >> compile_flags.txt
     \ && echo -x >> compile_flags.txt
     \ && echo c++ >> compile_flags.txt"
 endfunction
@@ -826,19 +893,19 @@ endfunction
 " Generate All
 function! ZGenerateAll()
     copen
-    exec ":AsyncRun ctags -R " . g:ctagsOptions . " && echo '" . g:ctagsOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq && gtags"
+    exec ":AsyncRun ctags -R " . g:ctagsOptions . " && echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq && gtags"
 endfunction
 
 " Generate Everything
 function! ZGenerateEverything()
     copen
-    exec ":AsyncRun ctags -R " . g:ctagsEverythingOptions . " && echo '" . g:ctagsEverythingOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files &&  cscope -bq && gtags"
+    exec ":AsyncRun ctags -R " . g:ctagsEverythingOptions . " && echo '" . g:ctagsEverythingOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && ag -l > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files &&  cscope -bq && gtags"
 endfunction
 
 " Write tags options.
 function! ZWriteTagsOptions()
     copen
-    exec ":AsyncRun echo " . g:ctagsOptions . " > .gutctags && sed -i 's/ /\\n/g' .gutctags"
+    exec ":AsyncRun echo " . g:ctagsOptions . " > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags"
 endfunction
 
 " Generate Tags
@@ -863,34 +930,52 @@ endfunction
 function! ZGenerateCpp()
     copen
     if !filereadable('compile_commands.json')
-        exec ":AsyncRun find . -name inc -or -name include | sed s@^@-isystem\\\\n@g > compile_flags.txt
+        let cpp_include_1 = system("ag -l -g string_view /usr/lib | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+        if empty(cpp_include_1)
+            let cpp_include_1 = system("ag -l -g string_view /usr/local | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+        endif
+        if empty(cpp_include_1)
+            let cpp_include_1 = '/usr/include'
+        else
+            let cpp_include_1 = system("dirname " . cpp_include_1)
+        endif
+
+        let cpp_include_2 = system("ag -l -g cstdlib /usr/include/c++ | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+        if empty(cpp_include_2)
+            let cpp_include_2 = '/usr/include'
+        else
+            let cpp_include_2 = system("dirname " . cpp_include_2)
+        endif
+
+        copen
+        exec ":AsyncRun find . -type d -name inc -or -name include | grep -v \"/\\.\" | " . s:sed . " s@^@-isystem\\\\n@g > compile_flags.txt
         \ && echo -std=c++1z >> compile_flags.txt
         \ && echo -isystem >> compile_flags.txt
         \ && echo /usr/include >> compile_flags.txt
         \ && echo -isystem >> compile_flags.txt
-        \ && echo $(dirname $(find /usr/lib -name string_view | sort | grep -v experimental | sort | tail -n 1 | grep -v __$placeholder$__ || echo '/usr/include')) >> compile_flags.txt
+        \ && echo " . trim(cpp_include_1) . " >> compile_flags.txt
         \ && echo -isystem >> compile_flags.txt
-        \ && echo $(dirname $(find /usr/include/c++ -name cstdlib | grep -v tr1 | sort | tail -n 1 | grep -v __$placeholder$__ || echo '/usr/include')) >> compile_flags.txt
+        \ && echo " . trim(cpp_include_2) . " >> compile_flags.txt
         \ && echo -x >> compile_flags.txt
         \ && echo c++ >> compile_flags.txt
-        \ && echo '" . g:ctagsOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq"
+        \ && echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq"
     else
-        exec ":AsyncRun echo '" . g:ctagsOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq"
+        exec ":AsyncRun echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq"
     endif
 endfunction
 function! ZGenerateTagsBasedCpp()
     copen
-    exec ":AsyncRun ctags -R " . g:ctagsOptions . " && echo '" . g:ctagsOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq"
+    exec ":AsyncRun ctags -R " . g:ctagsOptions . " && echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq"
 endfunction
 function! ZGenerateCppScope()
     copen
-    exec ":AsyncRun echo '" . g:ctagsOptions . "' > .gutctags && sed -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq"
+    exec ":AsyncRun echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq"
 endfunction
 
 " Generate Opengrok
 function! ZGenerateOpengrok()
     copen
-    exec ":AsyncRun java -Xmx2048m -jar ~/.vim/bin/opengrok/lib/opengrok.jar -q -c /usr/bin/ctags-exuberant -s . -d .opengrok
+    exec ":AsyncRun java -Xmx2048m -jar ~/.vim/bin/opengrok/lib/opengrok.jar -q -c " . g:opengrok_ctags . " -s . -d .opengrok
          \ " . g:opengrokFilePatterns . "
          \ -P -S -G -W .opengrok/configuration.xml"
 endfunction
@@ -901,7 +986,11 @@ function! ZGenerateCompileCommandsJson()
     let compile_command = input('Compile (make) command: ')
     call inputrestore()
     copen
-    exec ":AsyncRun compiledb " . compile_command
+    if executable('compiledb')
+        exec ":AsyncRun compiledb " . compile_command
+    else
+        exec ":AsyncRun python3 -m compiledb " . compile_command
+    endif
 endfunction
 nnoremap <silent> <leader>zj :call ZGenerateCompileCommandsJson()<CR>
 

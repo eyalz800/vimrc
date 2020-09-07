@@ -142,3 +142,8 @@ s{char1}{char2} - Jump to a location with the following two characters {char1}{c
 ```
 <leader>b - View / select from open buffers.
 ```
+
+* Toggle on/off term gui colors persistently, by default it is on but may cause problems:
+```
+<leader>tg - Toggle on/off term gui colors persistently.
+```
