@@ -885,7 +885,7 @@ function! ZGenerateFlags()
 
     copen
     exec ":AsyncRun find . -type d -name inc -or -name include | grep -v \"/\\.\" | " . s:sed . " s@^@-isystem\\\\n@g > compile_flags.txt
-    \ && echo -std=c++1z >> compile_flags.txt
+    \ & echo -std=c++1z >> compile_flags.txt
     \ && echo -isystem >> compile_flags.txt
     \ && echo /usr/include >> compile_flags.txt
     \ && echo -isystem >> compile_flags.txt
@@ -955,7 +955,7 @@ function! ZGenerateCpp()
 
         copen
         exec ":AsyncRun find . -type d -name inc -or -name include | grep -v \"/\\.\" | " . s:sed . " s@^@-isystem\\\\n@g > compile_flags.txt
-        \ && echo -std=c++1z >> compile_flags.txt
+        \ & echo -std=c++1z >> compile_flags.txt
         \ && echo -isystem >> compile_flags.txt
         \ && echo /usr/include >> compile_flags.txt
         \ && echo -isystem >> compile_flags.txt
