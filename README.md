@@ -51,6 +51,7 @@ gd - Go to definition (current word).
 * Commands to view directory tree and source code function pane on each side of the screen:
 ```
 <C-l> - Turn on / off the directory tree and source code function panes.
+<leader>nf - Show current file in the directory tree.
 ```
 
 * Terminal commands:
