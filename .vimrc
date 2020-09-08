@@ -886,14 +886,14 @@ function! ZGenerateFlags()
 
     copen
     exec ":AsyncRun
-    \ set +e ; find . -type d -name inc -or -name include | grep -v \"/\\.\" | " . s:sed . " s@^@-isystem\\\\n@g > compile_flags.txt ; set -e
-    \ && echo -std=c++1z >> compile_flags.txt
+    \ echo -std=c++1z > compile_flags.txt
     \ && echo -isystem >> compile_flags.txt
     \ && echo /usr/include >> compile_flags.txt
     \ && echo -isystem >> compile_flags.txt
     \ && echo " . trim(cpp_include_1) . " >> compile_flags.txt
     \ && echo -isystem >> compile_flags.txt
     \ && echo " . trim(cpp_include_2) . " >> compile_flags.txt
+    \ && set +e ; find . -type d -name inc -or -name include | grep -v \"/\\.\" | " . s:sed . " s@^@-isystem\\\\n@g >> compile_flags.txt ; set -e
     \ && echo -x >> compile_flags.txt
     \ && echo c++ >> compile_flags.txt"
 endfunction
@@ -958,14 +958,14 @@ function! ZGenerateCpp()
         copen
 
         exec ":AsyncRun
-        \ set +e ; find . -type d -name inc -or -name include | grep -v \"/\\.\" | " . s:sed . " s@^@-isystem\\\\n@g > compile_flags.txt ; set -e
-        \ && echo -std=c++1z >> compile_flags.txt
+        \ && echo -std=c++1z > compile_flags.txt
         \ && echo -isystem >> compile_flags.txt
         \ && echo /usr/include >> compile_flags.txt
         \ && echo -isystem >> compile_flags.txt
         \ && echo " . trim(cpp_include_1) . " >> compile_flags.txt
         \ && echo -isystem >> compile_flags.txt
         \ && echo " . trim(cpp_include_2) . " >> compile_flags.txt
+        \ && set +e ; find . -type d -name inc -or -name include | grep -v \"/\\.\" | " . s:sed . " s@^@-isystem\\\\n@g >> compile_flags.txt ; set -e
         \ && echo -x >> compile_flags.txt
         \ && echo c++ >> compile_flags.txt
         \ && echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq"
