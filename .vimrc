@@ -56,8 +56,13 @@ function! InstallVimrc()
         silent exec "!cd ~/.vim/bin/ctags-exuberant/ctags; ./configure; make"
     endif
     if !filereadable($HOME . '/.vim/bin/lf/lf')
-        silent !curl -fLo ~/.vim/bin/lf/lf.tar.gz --create-dirs
-          \ https://github.com/gokcehan/lf/releases/download/r16/lf-linux-amd64.tar.gz
+        if !executable('brew')
+            silent !curl -fLo ~/.vim/bin/lf/lf.tar.gz --create-dirs
+              \ https://github.com/gokcehan/lf/releases/download/r16/lf-linux-amd64.tar.gz
+        else
+            silent !curl -fLo ~/.vim/bin/lf/lf.tar.gz --create-dirs
+              \ https://github.com/gokcehan/lf/releases/download/r16/lf-darwin-amd64.tar.gz
+        endif
         silent exec "!cd ~/.vim/bin/lf; tar -xzvf lf.tar.gz"
     endif
     silent !chown -R $SUDO_USER:$SUDO_GID ~/.vim
