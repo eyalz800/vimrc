@@ -970,7 +970,7 @@ function! ZGenerateCpp()
         copen
 
         exec ":AsyncRun
-        \ && echo -std=c++1z > compile_flags.txt
+        \ echo -std=c++1z > compile_flags.txt
         \ && echo -isystem >> compile_flags.txt
         \ && echo /usr/include >> compile_flags.txt
         \ && echo -isystem >> compile_flags.txt
