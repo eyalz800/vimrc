@@ -147,3 +147,8 @@ s{char1}{char2} - Jump to a location with the following two characters {char1}{c
 ```
 <leader>tg - Toggle on/off term gui colors persistently.
 ```
+
+* Generate compile commands json:
+```
+<leader>zj - Type in the make command and it will generate the compile commands.
+```
