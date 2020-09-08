@@ -861,9 +861,9 @@ endfunction
 
 " Generate Flags
 function! ZGenerateFlags()
-    let cpp_include_1 = system("ag -l -g string_view /usr/lib | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+    let cpp_include_1 = system("ag -l -g string_view /usr/lib 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
     if empty(cpp_include_1)
-        let cpp_include_1 = system("ag -l -g string_view /usr/local | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+        let cpp_include_1 = system("ag -l -g string_view /usr/local 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
     endif
     if empty(cpp_include_1)
         let cpp_include_1 = '/usr/include'
@@ -871,7 +871,7 @@ function! ZGenerateFlags()
         let cpp_include_1 = system("dirname " . cpp_include_1)
     endif
 
-    let cpp_include_2 = system("ag -l -g cstdlib /usr/include/c++ | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+    let cpp_include_2 = system("ag -l -g cstdlib /usr/include/c++ 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
     if empty(cpp_include_2)
         let cpp_include_2 = '/usr/include'
     else
@@ -931,9 +931,9 @@ endfunction
 function! ZGenerateCpp()
     copen
     if !filereadable('compile_commands.json')
-        let cpp_include_1 = system("ag -l -g string_view /usr/lib | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+        let cpp_include_1 = system("ag -l -g string_view /usr/lib 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
         if empty(cpp_include_1)
-            let cpp_include_1 = system("ag -l -g string_view /usr/local | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+            let cpp_include_1 = system("ag -l -g string_view /usr/local 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
         endif
         if empty(cpp_include_1)
             let cpp_include_1 = '/usr/include'
@@ -941,7 +941,7 @@ function! ZGenerateCpp()
             let cpp_include_1 = system("dirname " . cpp_include_1)
         endif
 
-        let cpp_include_2 = system("ag -l -g cstdlib /usr/include/c++ | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+        let cpp_include_2 = system("ag -l -g cstdlib /usr/include/c++ 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
         if empty(cpp_include_2)
             let cpp_include_2 = '/usr/include'
         else
