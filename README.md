@@ -153,3 +153,8 @@ s{char1}{char2} - Jump to a location with the following two characters {char1}{c
 ```
 <leader>zj - Type in the make command and it will generate the compile commands.
 ```
+
+* Toggle LSP server, switch between coc and vim-lsp:
+```
+<leader>tl - Switch between coc and vim-lsp.
+```

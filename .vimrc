@@ -95,6 +95,18 @@ if !empty($INSTALL_VIMRC)
 endif
 
 let g:lsp_choice = 'coc'
+if filereadable($HOME . '/.vim/.nococ')
+    let g:lsp_choice = 'vim-lsp'
+endif
+
+nnoremap <silent> <leader>tl :call ToggleLspPersistent()<CR>:source ~/.vimrc<CR>
+function! ToggleLspPersistent()
+    if filereadable($HOME . "/.vim/.nococ")
+        call system("rm ~/.vim/.nococ")
+    else
+        call system("touch ~/.vim/.nococ")
+    endif
+endfunction
 
 call plug#begin()
 Plug 'puremourning/vimspector'
