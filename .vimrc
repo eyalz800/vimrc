@@ -6,7 +6,7 @@ function! InstallVimrc()
         exec ":q"
     endif
     if !executable('brew')
-        silent !DEBIAN_FRONTEND=noninteractive apt install -y curl silversearcher-ag exuberant-ctags cscope global git clang-tools-8 make autoconf automake pkg-config libc++-8-dev openjdk-8-jre python3 python-pip python3-pip gdb
+        silent !DEBIAN_FRONTEND=noninteractive apt install -y curl silversearcher-ag exuberant-ctags cscope global git clang-tools-8 make autoconf automake pkg-config libc++-8-dev openjdk-8-jre python3 python3-pip gdb
         silent exec "!curl -sL https://deb.nodesource.com/setup_10.x | bash -"
         silent !DEBIAN_FRONTEND=noninteractive apt install -y nodejs
         silent !update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-8 800
@@ -16,26 +16,32 @@ function! InstallVimrc()
         silent !sudo -u $SUDO_USER brew tap AdoptOpenJDK/openjdk
         silent !sudo -u $SUDO_USER brew cask install adoptopenjdk8
         silent !sudo -u $SUDO_USER curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-        silent !sudo -u $SUDO_USER python get-pip.py
         silent !sudo -u $SUDO_USER python3 get-pip.py
         if !executable('clangd')
             silent exec "!echo export PATH=\\$PATH:/usr/local/opt/llvm/bin >> ~/.bashrc"
         endif
     endif
-    if executable('pip')
-        silent !pip install python-language-server pylint compiledb setuptools
-    elseif executable('python')
-        silent !sudo -u $SUDO_USER python -m pip install python-language-server pylint compiledb setuptools
-    endif
-    if executable('pip3')
-        silent !pip3 install python-language-server pylint compiledb setuptools
-    elseif executable('python3')
-        silent !sudo -u $SUDO_USER python3 -m pip install python-language-server pylint compiledb setuptools
-    endif
     silent !mkdir -p ~/.vim
     silent !mkdir -p ~/.vim/tmp
+    silent !mkdir -p ~/.vim/bin/python
     silent !mkdir -p ~/.config
     silent !mkdir -p ~/.config/coc
+    if 0 == system('python3 --version | python3 -c "
+                \ import sys;
+                \ major, minor = [int(c) for c in sys.stdin.read().split(\" \")[1].split(\".\")][:2];
+                \ print(1 if major >= 3 and minor >= 6 else 0)"')
+        if executable('python3.6')
+            silent !ln -s $(command -v python3.6) ~/.vim/bin/python/python3
+            let $PATH = $HOME . '/.vim/bin/python:' . $PATH
+            let python3_command = 'python3.6'
+        endif
+    endif
+    if executable('pip3')
+        silent !pip3 install compiledb
+    endif
+    if executable('python3')
+        silent exec "!sudo -u $SUDO_USER " . python3_command . " -m pip install python-language-server pylint compiledb setuptools"
+    endif
     if !filereadable($HOME . '/.vim/autoload/plug.vim')
         silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
           \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -82,7 +88,7 @@ function! InstallVimrc()
     silent !chown -R $SUDO_USER:$SUDO_GID ~/.cache
     silent !chown $SUDO_USER:$SUDO_GID ~/.vimrc
     silent !sudo -u $SUDO_USER INSTALL_VIMRC_PLUGINS=1 INSTALL_VIMRC= vim +qa
-    silent !sudo -u $SUDO_USER python3 ~/.vim/plugged/vimspector/install_gadget.py --sudo --enable-c --enable-python
+    silent exec "!sudo -u $SUDO_USER " . python3_command . " ~/.vim/plugged/vimspector/install_gadget.py --sudo --enable-c --enable-python"
     call CustomizePlugins()
 endfunction
 
@@ -250,6 +256,9 @@ set shortmess+=c
 
 " Set path
 let $PATH .= ':' . $HOME . '/.vim/bin/lf'
+if executable($HOME . '/.vim/bin/python/python3')
+    let $PATH = $HOME . '/.vim/bin/python:' . $PATH
+endif
 if !executable('clangd') && filereadable('/usr/local/opt/llvm/bin/clangd')
     let $PATH .= ':/usr/local/opt/llvm/bin'
 endif
