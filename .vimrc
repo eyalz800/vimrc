@@ -1,3 +1,5 @@
+set nocompatible
+
 function! InstallVimrc()
     if empty($SUDO_USER)
         echo "Please run as sudo."
@@ -186,7 +188,6 @@ nnoremap <silent> ` :noh<CR>
 set expandtab
 set ignorecase
 set smartcase
-set nocompatible
 set shellslash
 set autoindent
 autocmd filetype cpp setlocal cindent
