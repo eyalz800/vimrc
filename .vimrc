@@ -9,7 +9,7 @@ function! InstallVimrc()
         silent !DEBIAN_FRONTEND=noninteractive apt install -y nodejs
         silent !update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-8 800
     else
-        silent !sudo -u $SUDO_USER brew install curl ag ctags cscope global git llvm make autoconf automake pkg-config python3 nodejs gnu-sed
+        silent !sudo -u $SUDO_USER brew install curl ag ctags cscope global git llvm make autoconf automake pkg-config python3 nodejs gnu-sed bat
         silent !sudo -u $SUDO_USER brew link python3
         silent !sudo -u $SUDO_USER brew tap AdoptOpenJDK/openjdk
         silent !sudo -u $SUDO_USER brew cask install adoptopenjdk8
@@ -64,6 +64,15 @@ function! InstallVimrc()
               \ https://github.com/gokcehan/lf/releases/download/r16/lf-darwin-amd64.tar.gz
         endif
         silent exec "!cd ~/.vim/bin/lf; tar -xzvf lf.tar.gz"
+    endif
+    if !executable('bat') && !executable('brew')
+        if !empty(system('apt-cache search --names-only ^bat\$'))
+            silent !DEBIAN_FRONTEND=noninteractive apt install -y bat
+        else
+            silent !curl -fLo ~/.vim/tmp/bat --create-dirs
+                \ https://github.com/sharkdp/bat/releases/download/v0.15.1/bat_0.15.1_amd64.deb
+            silent !dpkg -i ~/.vim/tmp/bat
+        endif
     endif
     silent !chown -R $SUDO_USER:$SUDO_GID ~/.vim
     silent !chown -R $SUDO_USER:$SUDO_GID ~/.vim/tmp
