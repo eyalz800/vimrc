@@ -222,6 +222,9 @@ noremap <F6> :bp<CR>
 noremap <F7> :bn<CR>
 set noerrorbells visualbell t_vb=
 
+" Exclude remote clipboard.
+set clipboard=exclude:.*
+
 " Gui colors
 if has('termguicolors') && !filereadable($HOME . "/.vim/.notermguicolors")
     set termguicolors
