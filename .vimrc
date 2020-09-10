@@ -166,6 +166,7 @@ if g:lsp_choice != 'coc'
     Plug 'vim-scripts/AutoComplPop'
     Plug 'vim-scripts/OmniCppComplete'
 endif
+Plug 'jackguo380/vim-lsp-cxx-highlight'
 Plug 'mbbill/undotree'
 Plug 'thezeroalpha/vim-lf'
 Plug 'tpope/vim-commentary'
