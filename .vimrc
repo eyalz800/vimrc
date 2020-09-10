@@ -177,6 +177,7 @@ Plug 'ntpeters/vim-better-whitespace'
 Plug 'troydm/zoomwintab.vim'
 Plug 'wincent/terminus'
 Plug 'jreybert/vimagit'
+Plug 'tpope/vim-obsession'
 call plug#end()
 
 if !empty($INSTALL_VIMRC_PLUGINS)
