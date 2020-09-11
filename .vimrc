@@ -98,7 +98,6 @@ if executable('brew')
 endif
 
 function! CustomizePlugins()
-    silent exec "!" . s:sed . " -i 's/ autochdir/ noautochdir/' ~/.vim/plugged/SrcExpl/plugin/srcexpl.vim"
     silent exec "!" . s:sed . " -i 's@ . redraw\\!@ . \" > /dev/null\"@' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim"
     silent exec "!" . s:sed . " -i 's@silent execute \"perl system.*@silent execute \"\\!\" . a:cmd . \" > /dev/null\"@' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim"
     silent exec "!" . s:sed . " -i \"s/'String',[ \\t]*s:green/'String', \\['\\#d78787', 174\\]/\" ~/.vim/plugged/gruvbox/colors/gruvbox.vim"
@@ -127,7 +126,6 @@ endfunction
 
 call plug#begin()
 Plug 'puremourning/vimspector'
-Plug 'wesleyche/SrcExpl'
 Plug 'vim-scripts/taglist.vim'
 Plug 'preservim/nerdtree'
 Plug 'wesleyche/Trinity'
@@ -352,8 +350,6 @@ endfunction
 nnoremap <silent> <leader>zr :call ZSwitchToRoot()<CR>
 
 " Trinity
-"nnoremap <C-L> :TrinityToggleNERDTree<CR>:TrinityToggleTagList<CR>
-nnoremap <silent> <leader>zs :TrinityToggleSourceExplorer<CR>
 nnoremap <silent> <C-w>e :TrinityUpdateWindow<CR>
 
 " NERDTree and TagBar
