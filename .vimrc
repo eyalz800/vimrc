@@ -185,6 +185,11 @@ if !empty($INSTALL_VIMRC_PLUGINS)
     if $INSTALL_VIMRC_PLUGINS != 'post'
         exec ":PlugInstall --sync"
         silent !INSTALL_VIMRC_PLUGINS=post vim +'CocInstall -sync coc-pairs coc-json coc-clangd coc-sh coc-python coc-vimlsp' +qa
+        silent !
+            \ echo '{' > ~/.vim/coc-settings.json
+            \ && echo '    "clangd.semanticHighlighting": true,' >> ~/.vim/coc-settings.json
+            \ && echo '    "coc.preferences.formatOnType": true' >> ~/.vim/coc-settings.json
+            \ && echo '}' >> ~/.vim/coc-settings.json
         exec ":q"
     endif
 endif
@@ -753,6 +758,8 @@ if g:lsp_choice == 'coc'
         call CocAction('doHover')
       endif
     endfunction
+
+    inoremap <silent><expr> <cr> "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"")"))
 endif
 
 " Pear-tree
