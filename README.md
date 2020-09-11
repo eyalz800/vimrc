@@ -48,6 +48,11 @@ Useful Commands
 gd - Go to definition (current word).
 ```
 
+* Toggle between source and header file:
+```
+go - Toggle between source and header file.
+```
+
 * Commands to view directory tree and source code function pane on each side of the screen:
 ```
 <C-l> - Turn on / off the directory tree and source code function panes.

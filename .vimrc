@@ -744,11 +744,12 @@ if g:lsp_choice == 'coc'
     nmap <silent> gy <Plug>(coc-type-definition)
     nmap <silent> gi <Plug>(coc-implementation)
     nmap <silent> gr <Plug>(coc-references)
+    nmap <silent> go :CocCommand clangd.switchSourceHeader<CR>
     nnoremap <silent> K :call <SID>show_documentation()<CR>
     nmap <silent> [g <Plug>(coc-diagnostic-prev)
     nmap <silent> ]g <Plug>(coc-diagnostic-next)
-    nmap <leader>rn <Plug>(coc-rename)
-    xmap <leader>lf <Plug>(coc-format-selected)
+    nmap <silent> <leader>rn <Plug>(coc-rename)
+    xmap <silent> <leader>lf <Plug>(coc-format-selected)
     nnoremap <silent> <leader>ld :CocDiagnostics<CR>
 
     function! s:show_documentation()
