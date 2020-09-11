@@ -142,7 +142,6 @@ Plug 'ervandew/supertab'
 Plug 'vim-airline/vim-airline'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'justinmk/vim-sneak'
-Plug 'tmsvg/pear-tree'
 Plug 'majutsushi/tagbar'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'gruvbox-community/gruvbox'
@@ -162,9 +161,10 @@ endif
 if !empty($INSTALL_VIMRC_PLUGINS) || g:lsp_choice == 'coc'
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
 endif
-if g:lsp_choice != 'coc'
+if !empty($INSTALL_VIMRC_PLUGINS) || g:lsp_choice != 'coc'
     Plug 'vim-scripts/AutoComplPop'
     Plug 'vim-scripts/OmniCppComplete'
+    Plug 'tmsvg/pear-tree'
 endif
 Plug 'jackguo380/vim-lsp-cxx-highlight'
 Plug 'mbbill/undotree'
@@ -184,7 +184,7 @@ if !empty($INSTALL_VIMRC_PLUGINS)
     let g:coc_disable_startup_warning = 1
     if $INSTALL_VIMRC_PLUGINS != 'post'
         exec ":PlugInstall --sync"
-        silent !INSTALL_VIMRC_PLUGINS=post vim +'CocInstall -sync coc-json coc-clangd coc-sh coc-python coc-vimlsp' +qa
+        silent !INSTALL_VIMRC_PLUGINS=post vim +'CocInstall -sync coc-pairs coc-json coc-clangd coc-sh coc-python coc-vimlsp' +qa
         exec ":q"
     endif
 endif
@@ -734,7 +734,7 @@ endif
 
 " Coc
 if g:lsp_choice == 'coc'
-    let g:coc_global_extensions = ['coc-clangd', 'coc-python', 'coc-json', 'coc-sh', 'coc-vimlsp']
+    let g:coc_global_extensions = ['coc-pairs', 'coc-clangd', 'coc-python', 'coc-json', 'coc-sh', 'coc-vimlsp']
     nmap <silent> gd <Plug>(coc-definition)
     nmap <silent> gy <Plug>(coc-type-definition)
     nmap <silent> gi <Plug>(coc-implementation)
@@ -756,33 +756,35 @@ if g:lsp_choice == 'coc'
 endif
 
 " Pear-tree
-let g:pear_tree_pairs = {
-            \ '(': {'closer': ')'},
-            \ '[': {'closer': ']'},
-            \ '{': {'closer': '}'},
-            \ "'": {'closer': "'"},
-            \ '"': {'closer': '"'}
-            \ }
+if g:lsp_choice != 'coc'
+    let g:pear_tree_pairs = {
+                \ '(': {'closer': ')'},
+                \ '[': {'closer': ']'},
+                \ '{': {'closer': '}'},
+                \ "'": {'closer': "'"},
+                \ '"': {'closer': '"'}
+                \ }
 
-" Pear Tree is enabled for all filetypes by default:
-let g:pear_tree_ft_disabled = []
+    " Pear Tree is enabled for all filetypes by default:
+    let g:pear_tree_ft_disabled = []
 
-" Pair expansion is dot-repeatable by default:
-let g:pear_tree_repeatable_expand = 1
+    " Pair expansion is dot-repeatable by default:
+    let g:pear_tree_repeatable_expand = 1
 
-" Smart pairs are disabled by default:
-let g:pear_tree_smart_openers = 0
-let g:pear_tree_smart_closers = 0
-let g:pear_tree_smart_backspace = 0
+    " Smart pairs are disabled by default:
+    let g:pear_tree_smart_openers = 0
+    let g:pear_tree_smart_closers = 0
+    let g:pear_tree_smart_backspace = 0
 
-" If enabled, smart pair functions timeout after 60ms:
-let g:pear_tree_timeout = 60
+    " If enabled, smart pair functions timeout after 60ms:
+    let g:pear_tree_timeout = 60
 
-" Automatically map <BS>, <CR>, and <Esc>
-let g:pear_tree_map_special_keys = 1
+    " Automatically map <BS>, <CR>, and <Esc>
+    let g:pear_tree_map_special_keys = 1
 
-" Peer tree mappings:
-imap <C-CR> <Plug>(PearTreeExpand)
+    " Peer tree mappings:
+    imap <C-CR> <Plug>(PearTreeExpand)
+endif
 
 " Vimspector
 nnoremap <silent> <leader>dl :call ZDebugLaunchSettings()<CR>
