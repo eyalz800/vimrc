@@ -363,7 +363,7 @@ let g:acp_behaviorSnipmateLength = 1
 
 " Git
 nnoremap <silent> <leader>gb :Git blame<CR>
-nnoremap <silent> <leader>gm :Magit<CR>
+nnoremap <silent> <leader>gm :MagitOnly<CR>
 
 " GutenTags
 let g:gutentags_modules = ['ctags', 'gtags_cscope']
