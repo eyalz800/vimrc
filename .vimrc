@@ -284,9 +284,9 @@ nnoremap <silent> <C-w>= :resize +1<CR>
 noremap <silent> <C-w>z :ZoomWinTabToggle<CR>
 
 " Generation Parameters
-let g:ctagsFilePatterns = '\.c$|\.cc$|\.cpp$|\.cxx$|\.h$|\.hh$|\.hpp$'
-let g:otherFilePatterns = '\.py$|\.te$|\.S$|\.asm$|\.mk$|\.md$makefile$|Makefile$'
-let g:agFilePatterns = g:ctagsFilePatterns . g:otherFilePatterns
+let g:ctagsFilePatterns = '-g "*.c" -g "*.cc" -g "*.cpp" -g "*.cxx" -g "*.h" -g "*.hh" -g "*.hpp"'
+let g:otherFilePatterns = '-g "*.py" -g "*.te" -g "*.S" -g "*.asm" -g "*.mk" -g "*.md" -g "makefile" -g "Makefile"'
+let g:rgFilePatterns = '-g "*.c" -g "*.cc" -g "*.cpp" -g "*.cxx" -g "*.h" -g "*.hh" -g "*.hpp" -g "*.py" -g "*.te" -g "*.S" -g "*.asm" -g "*.mk" -g "*.md" -g "makefile" -g "Makefile"'
 let g:opengrokFilePatterns = "-I '*.cpp' -I '*.c' -I '*.cc' -I '*.cxx' -I '*.h' -I '*.hh' -I '*.hpp' -I '*.S' -I '*.s' -I '*.asm' -I '*.py' -I '*.java' -I '*.cs' -I '*.mk' -I '*.te' -I makefile -I Makefile"
 let g:ctagsOptions = '--languages=C,C++ --c++-kinds=+p --fields=+iaS --extra=+q --sort=foldcase --tag-relative'
 let g:ctagsEverythingOptions = '--c++-kinds=+p --fields=+iaS --extra=+q --sort=foldcase --tag-relative'
@@ -392,13 +392,7 @@ color codedark
 let g:SuperTabDefaultCompletionType = "<c-n>"
 
 " Fzf
-let $FZF_DEFAULT_COMMAND = "
-    \ if ! [ -f .files ]; then
-        \ touch .files;
-    \ fi;
-    \ cat .files;
-    \ ag -p .files -l -g '" . g:agFilePatterns . "' | tee -a .files;
-\ "
+let $FZF_DEFAULT_COMMAND = "rg --files --no-ignore-vcs --hidden " . g:rgFilePatterns
 set rtp+=~/.fzf
 nnoremap <silent> <C-p> :call ZSwitchToRoot()<CR>:Files<CR>
 nnoremap <silent> <C-n> :call ZSwitchToRoot()<CR>:Tags<CR>
@@ -933,9 +927,9 @@ endfunction
 
 " Generate Flags
 function! ZGenerateFlags()
-    let cpp_include_1 = system("ag -l -g string_view /usr/lib 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+    let cpp_include_1 = system("rg --files -g string_view /usr/lib 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
     if empty(cpp_include_1)
-        let cpp_include_1 = system("ag -l -g string_view /usr/local 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+        let cpp_include_1 = system("rg --files -g string_view /usr/local 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
     endif
     if empty(cpp_include_1)
         let cpp_include_1 = '/usr/include'
@@ -943,7 +937,7 @@ function! ZGenerateFlags()
         let cpp_include_1 = system("dirname " . cpp_include_1)
     endif
 
-    let cpp_include_2 = system("ag -l -g cstdlib /usr/include/c++ 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+    let cpp_include_2 = system("rg --files -g cstdlib /usr/include/c++ 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
     if empty(cpp_include_2)
         let cpp_include_2 = '/usr/include'
     else
@@ -967,13 +961,13 @@ endfunction
 " Generate All
 function! ZGenerateAll()
     copen
-    exec ":AsyncRun ctags -R " . g:ctagsOptions . " && echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq && gtags"
+    exec ":AsyncRun ctags -R " . g:ctagsOptions . " && echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && rg --files " . g:ctagsFilePatterns . " > cscope.files && cp cscope.files .files && rg --files " . g:otherFilePatterns . " >> .files && cscope -bq && gtags"
 endfunction
 
 " Generate Everything
 function! ZGenerateEverything()
     copen
-    exec ":AsyncRun ctags -R " . g:ctagsEverythingOptions . " && echo '" . g:ctagsEverythingOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && ag -l > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files &&  cscope -bq && gtags"
+    exec ":AsyncRun ctags -R " . g:ctagsEverythingOptions . " && echo '" . g:ctagsEverythingOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && rg --files > cscope.files && cp cscope.files .files && rg --files " . g:otherFilePatterns . " >> .files &&  cscope -bq && gtags"
 endfunction
 
 " Write tags options.
@@ -991,22 +985,22 @@ endfunction
 " Generate Cscope Files
 function! ZGenCsFiles()
     copen
-    exec ":AsyncRun ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files"
+    exec ":AsyncRun rg --files " . g:ctagsFilePatterns . " > cscope.files && cp cscope.files .files && rg --files " . g:otherFilePatterns . " >> .files"
 endfunction
 
 " Generate Tags and Cscope Files
 function! ZGenTagsAndCsFiles()
     copen
-    exec ":AsyncRun ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && ctags -R " . g:ctagsOptions
+    exec ":AsyncRun rg --files " . g:ctagsFilePatterns . " > cscope.files && cp cscope.files .files && rg --files " . g:otherFilePatterns . " >> .files && ctags -R " . g:ctagsOptions
 endfunction
 
 " Generate C++
 function! ZGenerateCpp()
     copen
     if !filereadable('compile_commands.json')
-        let cpp_include_1 = system("ag -l -g string_view /usr/lib 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+        let cpp_include_1 = system("rg --files -g string_view /usr/lib 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
         if empty(cpp_include_1)
-            let cpp_include_1 = system("ag -l -g string_view /usr/local 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+            let cpp_include_1 = system("rg --files -g string_view /usr/local 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
         endif
         if empty(cpp_include_1)
             let cpp_include_1 = '/usr/include'
@@ -1014,7 +1008,7 @@ function! ZGenerateCpp()
             let cpp_include_1 = system("dirname " . cpp_include_1)
         endif
 
-        let cpp_include_2 = system("ag -l -g cstdlib /usr/include/c++ 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+        let cpp_include_2 = system("rg --files -g cstdlib /usr/include/c++ 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
         if empty(cpp_include_2)
             let cpp_include_2 = '/usr/include'
         else
@@ -1034,18 +1028,18 @@ function! ZGenerateCpp()
         \ && set +e ; find . -type d -name inc -or -name include | grep -v \"/\\.\" | " . s:sed . " s@^@-isystem\\\\n@g >> compile_flags.txt ; set -e
         \ && echo -x >> compile_flags.txt
         \ && echo c++ >> compile_flags.txt
-        \ && echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq"
+        \ && echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && rg --files " . g:ctagsFilePatterns . " > cscope.files && cp cscope.files .files && rg --files " . g:otherFilePatterns . " >> .files && cscope -bq"
     else
-        exec ":AsyncRun echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq"
+        exec ":AsyncRun echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && rg --files " . g:ctagsFilePatterns . " > cscope.files && cp cscope.files .files && rg --files " . g:otherFilePatterns . " >> .files && cscope -bq"
     endif
 endfunction
 function! ZGenerateTagsBasedCpp()
     copen
-    exec ":AsyncRun ctags -R " . g:ctagsOptions . " && echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq"
+    exec ":AsyncRun ctags -R " . g:ctagsOptions . " && echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && rg --files " . g:ctagsFilePatterns . " > cscope.files && cp cscope.files .files && rg --files " . g:otherFilePatterns . " >> .files && cscope -bq"
 endfunction
 function! ZGenerateCppScope()
     copen
-    exec ":AsyncRun echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && ag -l -g '" . g:ctagsFilePatterns . "' > cscope.files && cp cscope.files .files && ag -l -g '" . g:otherFilePatterns . "' >> .files && cscope -bq"
+    exec ":AsyncRun echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && rg --files " . g:ctagsFilePatterns . " > cscope.files && cp cscope.files .files && rg --files " . g:otherFilePatterns . " >> .files && cscope -bq"
 endfunction
 
 " Generate Opengrok
