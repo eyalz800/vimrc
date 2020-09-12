@@ -126,9 +126,8 @@ endfunction
 
 call plug#begin()
 Plug 'puremourning/vimspector'
-Plug 'vim-scripts/taglist.vim'
-Plug 'preservim/nerdtree'
-Plug 'wesleyche/Trinity'
+Plug 'preservim/nerdtree', {'on': 'NERDTreeToggle'}
+Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
 Plug 'rdolgushin/snipMate-acp'
@@ -140,7 +139,6 @@ Plug 'ervandew/supertab'
 Plug 'vim-airline/vim-airline'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'justinmk/vim-sneak'
-Plug 'majutsushi/tagbar'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'gruvbox-community/gruvbox'
 Plug 'vim-scripts/TagHighlight'
@@ -157,14 +155,14 @@ if !empty($INSTALL_VIMRC_PLUGINS) || g:lsp_choice == 'vim-lsp'
     Plug 'prabirshrestha/asyncomplete-tags.vim'
 endif
 if !empty($INSTALL_VIMRC_PLUGINS) || g:lsp_choice == 'coc'
-    Plug 'neoclide/coc.nvim', {'branch': 'release'}
+    Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 endif
 if !empty($INSTALL_VIMRC_PLUGINS) || g:lsp_choice != 'coc'
     Plug 'vim-scripts/AutoComplPop'
     Plug 'vim-scripts/OmniCppComplete'
     Plug 'tmsvg/pear-tree'
 endif
-Plug 'jackguo380/vim-lsp-cxx-highlight'
+Plug 'jackguo380/vim-lsp-cxx-highlight', { 'for': 'cpp' }
 Plug 'mbbill/undotree'
 Plug 'thezeroalpha/vim-lf'
 Plug 'tpope/vim-commentary'
@@ -349,9 +347,6 @@ function! ZSwitchToRoot()
 endfunction
 nnoremap <silent> <leader>zr :call ZSwitchToRoot()<CR>
 
-" Trinity
-nnoremap <silent> <C-w>e :TrinityUpdateWindow<CR>
-
 " NERDTree and TagBar
 let g:NERDTreeWinSize = 23
 let g:NERDTreeAutoCenter = 0
@@ -391,6 +386,9 @@ color gruvbox
 
 " Color
 color codedark
+
+" Supertab
+let g:SuperTabDefaultCompletionType = "<c-n>"
 
 " Fzf
 let $FZF_DEFAULT_COMMAND = "if [ -f .files ]; then cat .files; else ag -l; fi"
@@ -759,8 +757,8 @@ if g:lsp_choice == 'coc'
     inoremap <silent><expr> <cr> "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"")"))
 endif
 
-" Pear-tree
 if g:lsp_choice != 'coc'
+    " Pear-tree
     let g:pear_tree_pairs = {
                 \ '(': {'closer': ')'},
                 \ '[': {'closer': ']'},
