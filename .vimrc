@@ -490,6 +490,7 @@ let g:VM_theme = 'iceblue'
 let g:VM_leader = 'm'
 let g:VM_maps = {
     \ 'Find Under': '<C-m>',
+    \ 'Find Subword Under': '<C-m>',
     \ 'Add Cursor At Pos': 'm'
 \ }
 nmap <C-j> <plug>(VM-Add-Cursor-Down)
