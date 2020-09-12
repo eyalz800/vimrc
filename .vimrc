@@ -393,12 +393,12 @@ let g:SuperTabDefaultCompletionType = "<c-n>"
 
 " Fzf
 let $FZF_DEFAULT_COMMAND = "
-    \ if [ -f .files ]; then
-        \ cat .files;
-        \ ag -p .files -l -g '" . g:agFilePatterns . "';
-    \ else
-        \ ag -l -g '" . g:agFilePatterns . "';
-    \ fi"
+    \ if ! [ -f .files ]; then
+        \ touch .files;
+    \ fi;
+    \ cat .files;
+    \ ag -p .files -l -g '" . g:agFilePatterns . "' | tee -a .files;
+\ "
 set rtp+=~/.fzf
 nnoremap <silent> <C-p> :call ZSwitchToRoot()<CR>:Files<CR>
 nnoremap <silent> <C-n> :call ZSwitchToRoot()<CR>:Tags<CR>
