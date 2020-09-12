@@ -312,6 +312,9 @@ nnoremap <silent> <leader>zp :call ZGenerateCpp()<CR>
 nnoremap <silent> <leader>zP :call ZGenerateTagsBasedCpp()<CR>
 nnoremap <silent> <leader>zc :call ZGenerateCppScope()<CR>
 
+" Generate Files Cache
+nnoremap <silent> <leader>zh :call ZGenerateFilesCache()<CR>
+
 " Generate Flags
 nnoremap <silent> <leader>zf :call ZGenerateFlags()<CR>
 
@@ -401,11 +404,27 @@ color codedark
 let g:SuperTabDefaultCompletionType = "<c-n>"
 
 " Fzf
-let $FZF_DEFAULT_COMMAND = "rg --files --no-ignore-vcs --hidden " . g:rgFilePatterns
+let g:fzf_files_nocache_command = "rg --files --no-ignore-vcs --hidden " . g:rgFilePatterns
+let g:fzf_files_cache_command = "
+    \ if [ -f .files ]; then
+    \     cat .files;
+    \ else
+    \     rg --files --no-ignore-vcs --hidden " . g:rgFilePatterns . ";
+    \ fi
+\ "
+
+if filereadable($HOME . '/.vim/.fzf-files-cache') || filereadable('.fzf-files-cache')
+    let $FZF_DEFAULT_COMMAND = g:fzf_files_cache_command
+else
+    let $FZF_DEFAULT_COMMAND = g:fzf_files_nocache_command
+endif
+
 set rtp+=~/.fzf
 nnoremap <silent> <C-p> :call ZSwitchToRoot()<CR>:Files<CR>
 nnoremap <silent> <C-n> :call ZSwitchToRoot()<CR>:Tags<CR>
 nnoremap <silent> <leader>b :Buf<CR>
+nnoremap <silent> <leader>fh :call ZFzfToggleFilesCache()<CR>
+nnoremap <silent> <leader>fH :call ZFzfToggleGlobalFilesCache()<CR>
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
@@ -420,6 +439,40 @@ let g:fzf_colors =
   \ 'marker':  ['fg', 'Keyword'],
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
+
+function! ZFzfToggleFilesCache()
+    if filereadable($HOME . "/.vim/.fzf-files-cache")
+        let $FZF_DEFAULT_COMMAND = g:fzf_files_cache_command
+        if filereadable('.fzf-files-cache')
+            call system("rm .fzf-files-cache")
+        else
+            call system("touch .fzf-files-cache")
+        endif
+    else
+        if filereadable('.fzf-files-cache')
+            call system("rm .fzf-files-cache")
+            let $FZF_DEFAULT_COMMAND = g:fzf_files_nocache_command
+        else
+            call system("touch .fzf-files-cache")
+            let $FZF_DEFAULT_COMMAND = g:fzf_files_cache_command
+        endif
+    endif
+endfunction
+
+function! ZFzfToggleGlobalFilesCache()
+    if filereadable($HOME . "/.vim/.fzf-files-cache")
+        call system("rm -rf ~/.vim/.fzf-files-cache")
+        if filereadable('.fzf-files-cache')
+            let $FZF_DEFAULT_COMMAND = g:fzf_files_cache_command
+        else
+            let $FZF_DEFAULT_COMMAND = g:fzf_files_nocache_command
+        endif
+    else
+        call system("touch ~/.vim/.fzf-files-cache")
+        let $FZF_DEFAULT_COMMAND = g:fzf_files_cache_command
+    endif
+endfunction
+
 
 " Sneak
 let g:sneak#use_ic_scs = 1
@@ -989,6 +1042,12 @@ endfunction
 function! ZGenTags()
     copen
     exec ":AsyncRun ctags -R " . g:ctagsOptions
+endfunction
+
+" Generate Files
+function! ZGenerateFilesCache()
+    copen
+    exec ":AsyncRun rg --files " . g:rgFilePatterns . " > .files"
 endfunction
 
 " Generate Cscope Files
