@@ -11,7 +11,7 @@ function! InstallVimrc()
         silent !DEBIAN_FRONTEND=noninteractive apt install -y nodejs
         silent !update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-8 800
     else
-        silent !sudo -u $SUDO_USER brew install curl ag ctags cscope global git llvm make autoconf automake pkg-config python3 nodejs gnu-sed bat
+        silent !sudo -u $SUDO_USER brew install curl ag ctags cscope global git llvm make autoconf automake pkg-config python3 nodejs gnu-sed bat ripgrep
         silent !sudo -u $SUDO_USER brew link python3
         silent !sudo -u $SUDO_USER brew tap AdoptOpenJDK/openjdk
         silent !sudo -u $SUDO_USER brew cask install adoptopenjdk8
@@ -80,6 +80,15 @@ function! InstallVimrc()
             silent !curl -fLo ~/.vim/tmp/bat --create-dirs
                 \ https://github.com/sharkdp/bat/releases/download/v0.15.1/bat_0.15.1_amd64.deb
             silent !dpkg -i ~/.vim/tmp/bat
+        endif
+    endif
+    if !executable('rg') && !executable('brew')
+        if !empty(system('apt-cache search --names-only ^ripgrep\$'))
+            silent !DEBIAN_FRONTEND=noninteractive apt install -y ripgrep
+        else
+            silent !curl -fLo ~/.vim/tmp/ripgrep --create-dirs
+                \ https://github.com/BurntSushi/ripgrep/releases/download/11.0.2/ripgrep_11.0.2_amd64.deb
+            silent !dpkg -i ~/.vim/tmp/ripgrep
         endif
     endif
     silent !chown -R $SUDO_USER:$SUDO_GID ~/.vim
