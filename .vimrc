@@ -350,7 +350,7 @@ nnoremap <silent> <leader>zr :call ZSwitchToRoot()<CR>
 " NERDTree and TagBar
 let g:NERDTreeWinSize = 23
 let g:NERDTreeAutoCenter = 0
-let g:tagbar_width=23
+let g:tagbar_width = 23
 nnoremap <silent> <C-l> :NERDTreeToggle<CR>:wincmd w<CR>:TagbarToggle<CR>
 nnoremap <silent> <leader>nf :NERDTreeFind<CR>
 
