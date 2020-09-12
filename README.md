@@ -46,6 +46,8 @@ Useful Commands
 <leader><leader>cs - Search cscope for arbitrary input text.
 
 gd - Go to definition (current word).
+
+<C-n> - Search tags.
 ```
 
 * Toggle between source and header file:
@@ -162,4 +164,15 @@ s{char1}{char2} - Jump to a location with the following two characters {char1}{c
 * Toggle LSP server, switch between coc and vim-lsp:
 ```
 <leader>tl - Switch between coc and vim-lsp.
+```
+
+* Multiple Cursors:
+```
+<C-m> - Find word under cursor.
+<C-j> / <C-Down> - Add cursor below.
+<C-k> / <C-Up> - Add cursor above.
+<leader>mA - Find all words.
+<leader>ma - Align all cursors.
+<leader>m/ - Regex search.
+<leader>mm - Add cursor at poition.
 ```

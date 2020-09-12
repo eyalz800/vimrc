@@ -139,7 +139,7 @@ Plug 'ervandew/supertab'
 Plug 'vim-airline/vim-airline'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'justinmk/vim-sneak'
-Plug 'terryma/vim-multiple-cursors'
+Plug 'mg979/vim-visual-multi'
 Plug 'gruvbox-community/gruvbox'
 Plug 'vim-scripts/TagHighlight'
 Plug 'erig0/cscope_dynamic'
@@ -420,16 +420,17 @@ let g:cscopedb_big_file = 'cscope.out'
 let g:cscopedb_small_file = 'cscope_small.out'
 let g:cscopedb_auto_files = 0
 
-" Multi Cursor
-let g:multi_cursor_use_default_mapping = 0
-let g:multi_cursor_start_word_key      = '<C-k>'
-"let g:multi_cursor_select_all_word_key = '<A-k>'
-let g:multi_cursor_start_key           = 'g<C-k>'
-"let g:multi_cursor_select_all_key      = 'g<A-k>'
-let g:multi_cursor_next_key            = '<C-k>'
-let g:multi_cursor_prev_key            = '<C-e>'
-let g:multi_cursor_skip_key            = '<C-x>'
-let g:multi_cursor_quit_key            = '<Esc>'
+" Visual Multi
+" Mappings - (See https://github.com/mg979/vim-visual-multi/wiki/Mappings)
+" Tutorial - ~/.vim/plugged/vim-visual-multi/doc/vm-tutorial
+let g:VM_theme = 'iceblue'
+let g:VM_leader = 'm'
+let g:VM_maps = {
+    \ 'Find Under': '<C-m>',
+    \ 'Add Cursor At Pos': 'm'
+\ }
+nmap <C-j> <plug>(VM-Add-Cursor-Down)
+nmap <C-k> <plug>(VM-Add-Cursor-Up)
 
 " Cpp Highlight
 let g:cpp_class_scope_highlight = 1
