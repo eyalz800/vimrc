@@ -431,6 +431,23 @@ let g:VM_maps = {
 \ }
 nmap <C-j> <plug>(VM-Add-Cursor-Down)
 nmap <C-k> <plug>(VM-Add-Cursor-Up)
+if g:lsp_choice == 'coc'
+    autocmd User visual_multi_before_cmd call ZVisualMultiCocBefore()
+    autocmd User visual_multi_after_cmd call ZVisualMultiCocAfter()
+endif
+function! ZVisualMultiCocBefore()
+    if g:coc_enabled
+        let g:visual_multi_coc_before = 1
+        silent exec ":CocDisable"
+    else
+        let g:visual_multi_coc_before = 0
+    endif
+endfunction
+function! ZVisualMultiCocAfter()
+    if g:visual_multi_coc_before
+        silent exec ":CocEnable"
+    endif
+endfunction
 
 " Cpp Highlight
 let g:cpp_class_scope_highlight = 1
