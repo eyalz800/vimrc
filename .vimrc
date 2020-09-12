@@ -285,8 +285,9 @@ noremap <silent> <C-w>z :ZoomWinTabToggle<CR>
 
 " Generation Parameters
 let g:ctagsFilePatterns = '\.c$|\.cc$|\.cpp$|\.cxx$|\.h$|\.hh$|\.hpp$'
+let g:otherFilePatterns = '\.py$|\.te$|\.S$|\.asm$|\.mk$|\.md$makefile$|Makefile$'
+let g:agFilePatterns = g:ctagsFilePatterns . g:otherFilePatterns
 let g:opengrokFilePatterns = "-I '*.cpp' -I '*.c' -I '*.cc' -I '*.cxx' -I '*.h' -I '*.hh' -I '*.hpp' -I '*.S' -I '*.s' -I '*.asm' -I '*.py' -I '*.java' -I '*.cs' -I '*.mk' -I '*.te' -I makefile -I Makefile"
-let g:otherFilePatterns = '\.py$|\.te$|\.S$|\.asm$|\.mk$|\.md$makefile$|Makefile'
 let g:ctagsOptions = '--languages=C,C++ --c++-kinds=+p --fields=+iaS --extra=+q --sort=foldcase --tag-relative'
 let g:ctagsEverythingOptions = '--c++-kinds=+p --fields=+iaS --extra=+q --sort=foldcase --tag-relative'
 
@@ -391,7 +392,13 @@ color codedark
 let g:SuperTabDefaultCompletionType = "<c-n>"
 
 " Fzf
-let $FZF_DEFAULT_COMMAND = "if [ -f .files ]; then cat .files; else ag -l; fi"
+let $FZF_DEFAULT_COMMAND = "
+    \ if [ -f .files ]; then
+        \ cat .files;
+        \ ag -p .files -l -g '" . g:agFilePatterns . "';
+    \ else
+        \ ag -l -g '" . g:agFilePatterns . "';
+    \ fi"
 set rtp+=~/.fzf
 nnoremap <silent> <C-p> :call ZSwitchToRoot()<CR>:Files<CR>
 nnoremap <silent> <C-n> :call ZSwitchToRoot()<CR>:Tags<CR>
