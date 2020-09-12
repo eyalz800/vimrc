@@ -169,6 +169,8 @@ s{char1}{char2} - Jump to a location with the following two characters {char1}{c
 * Multiple Cursors:
 ```
 <C-m> - Find word under cursor.
+    n - next word.
+    q - skip word.
 <C-j> / <C-Down> - Add cursor below.
 <C-k> / <C-Up> - Add cursor above.
 <leader>mA - Find all words.
