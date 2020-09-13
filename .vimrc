@@ -1,103 +1,114 @@
 set nocompatible
 
+function! InstallCommand(command)
+    silent exec "!" . a:command
+    if v:shell_error
+        silent exec "!echo Installation failed, error: " . string(v:shell_error)
+        throw "Error: installation failed."
+    endif
+endfunction
+
 function! InstallVimrc()
     if empty($SUDO_USER)
         echo "Please run as sudo."
         exec ":q"
     endif
     if !executable('brew')
-        silent !DEBIAN_FRONTEND=noninteractive apt install -y curl silversearcher-ag exuberant-ctags cscope global git clang-tools-8 make autoconf automake pkg-config libc++-8-dev openjdk-8-jre python3 python3-pip gdb
-        silent exec "!curl -sL https://deb.nodesource.com/setup_10.x | bash -"
-        silent !DEBIAN_FRONTEND=noninteractive apt install -y nodejs
-        silent !update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-8 800
+        call InstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y curl silversearcher-ag exuberant-ctags cscope global git
+            \ clang-tools-8 make autoconf automake pkg-config libc++-8-dev openjdk-8-jre python3 python3-pip gdb")
+        call InstallCommand("curl -sL https://deb.nodesource.com/setup_10.x | bash -")
+        call InstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y nodejs")
+        call InstallCommand("update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-8 800")
     else
-        silent !sudo -u $SUDO_USER brew install curl ag ctags cscope global git llvm make autoconf automake pkg-config python3 nodejs gnu-sed bat ripgrep
-        silent !sudo -u $SUDO_USER brew link python3
-        silent !sudo -u $SUDO_USER brew tap AdoptOpenJDK/openjdk
-        silent !sudo -u $SUDO_USER brew cask install adoptopenjdk8
-        silent !sudo -u $SUDO_USER curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-        silent !sudo -u $SUDO_USER python3 get-pip.py
+        call InstallCommand("sudo -u $SUDO_USER brew install curl ag ctags cscope global git
+            \ llvm make autoconf automake pkg-config python3 nodejs gnu-sed bat ripgrep")
+        call InstallCommand("sudo -u $SUDO_USER brew link python3")
+        call InstallCommand("sudo -u $SUDO_USER brew tap AdoptOpenJDK/openjdk")
+        call InstallCommand("sudo -u $SUDO_USER brew cask install adoptopenjdk8")
+        call InstallCommand("sudo -u $SUDO_USER curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py")
+        call InstallCommand("sudo -u $SUDO_USER python3 get-pip.py")
         if !executable('clangd')
-            silent exec "!echo export PATH=\\$PATH:/usr/local/opt/llvm/bin >> ~/.bashrc"
+            call InstallCommand("echo export PATH=\\$PATH:/usr/local/opt/llvm/bin >> ~/.bashrc")
         endif
     endif
-    silent !mkdir -p ~/.vim
-    silent !mkdir -p ~/.vim/tmp
-    silent !mkdir -p ~/.vim/bin/python
-    silent !mkdir -p ~/.config
-    silent !mkdir -p ~/.config/coc
+    call InstallCommand("mkdir -p ~/.vim")
+    call InstallCommand("mkdir -p ~/.vim/tmp")
+    call InstallCommand("mkdir -p ~/.vim/bin/python")
+    call InstallCommand("mkdir -p ~/.config")
+    call InstallCommand("mkdir -p ~/.config/coc")
     if 0 == system('python3 --version | python3 -c "
                 \ import sys;
                 \ major, minor = [int(c) for c in sys.stdin.read().split(\" \")[1].split(\".\")][:2];
                 \ print(1 if major >= 3 and minor >= 6 else 0)"')
         if executable('python3.6')
-            silent !ln -s $(command -v python3.6) ~/.vim/bin/python/python3
+            call InstallCommand("rm -rf ~/.vim/bin/python/python3")
+            call InstallCommand("ln -s $(command -v python3.6) ~/.vim/bin/python/python3")
             let $PATH = $HOME . '/.vim/bin/python:' . $PATH
             let python3_command = 'python3.6'
         endif
     endif
     if executable('pip3')
-        silent !pip3 install compiledb
+        call InstallCommand("pip3 install compiledb")
     endif
     if executable('python3')
-        silent exec "!sudo -u $SUDO_USER " . python3_command . " -m pip install python-language-server pylint compiledb setuptools"
+        call InstallCommand("sudo -u $SUDO_USER " . python3_command . " -m pip install python-language-server pylint compiledb setuptools")
     endif
     if !filereadable($HOME . '/.vim/autoload/plug.vim')
-        silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-          \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        call InstallCommand("curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+          \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim")
     endif
     if !filereadable($HOME .'/.vim/bin/opengrok/lib/opengrok.jar')
-        silent !curl -fLo ~/.vim/bin/opengrok.tar.gz --create-dirs
-          \ https://github.com/oracle/opengrok/releases/download/1.0/opengrok-1.0.tar.gz
-        silent exec "!cd ~/.vim/bin; tar -xzvf opengrok.tar.gz"
-        silent !rm ~/.vim/bin/opengrok.tar.gz
-        silent !mv ~/.vim/bin/opengrok* ~/.vim/bin/opengrok
+        call InstallCommand("curl -fLo ~/.vim/bin/opengrok.tar.gz --create-dirs
+          \ https://github.com/oracle/opengrok/releases/download/1.0/opengrok-1.0.tar.gz")
+        call InstallCommand("cd ~/.vim/bin; tar -xzvf opengrok.tar.gz")
+        call InstallCommand("rm ~/.vim/bin/opengrok.tar.gz")
+        call InstallCommand("mv ~/.vim/bin/opengrok* ~/.vim/bin/opengrok")
     endif
     if !filereadable($HOME . '/.vim/tmp/ctags/Makefile')
-        silent exec "!cd ~/.vim/tmp; git clone https://github.com/universal-ctags/ctags.git; cd ./ctags; ./autogen.sh; ./configure; make; make install"
+        call InstallCommand("cd ~/.vim/tmp; git clone https://github.com/universal-ctags/ctags.git; cd ./ctags; ./autogen.sh; ./configure; make; make install")
     endif
     if !executable('ctags-exuberant') && !filereadable('~/.vim/bin/ctags-exuberant/ctags/ctags')
-        silent !curl -fLo ~/.vim/bin/ctags-exuberant/ctags.tar.gz --create-dirs
-          \ http://prdownloads.sourceforge.net/ctags/ctags-5.8.tar.gz
-        silent exec "!cd ~/.vim/bin/ctags-exuberant; tar -xzvf ctags.tar.gz"
-        silent exec "!mv ~/.vim/bin/ctags-exuberant/ctags-5.8 ~/.vim/bin/ctags-exuberant/ctags"
-        silent exec "!cd ~/.vim/bin/ctags-exuberant/ctags; ./configure; make"
+        call InstallCommand("curl -fLo ~/.vim/bin/ctags-exuberant/ctags.tar.gz --create-dirs
+          \ http://prdownloads.sourceforge.net/ctags/ctags-5.8.tar.gz")
+        call InstallCommand("cd ~/.vim/bin/ctags-exuberant; tar -xzvf ctags.tar.gz")
+        call InstallCommand("mv ~/.vim/bin/ctags-exuberant/ctags-5.8 ~/.vim/bin/ctags-exuberant/ctags")
+        call InstallCommand("cd ~/.vim/bin/ctags-exuberant/ctags; ./configure; make")
     endif
     if !filereadable($HOME . '/.vim/bin/lf/lf')
         if !executable('brew')
-            silent !curl -fLo ~/.vim/bin/lf/lf.tar.gz --create-dirs
-              \ https://github.com/gokcehan/lf/releases/download/r16/lf-linux-amd64.tar.gz
+            call InstallCommand("curl -fLo ~/.vim/bin/lf/lf.tar.gz --create-dirs
+              \ https://github.com/gokcehan/lf/releases/download/r16/lf-linux-amd64.tar.gz")
         else
-            silent !curl -fLo ~/.vim/bin/lf/lf.tar.gz --create-dirs
-              \ https://github.com/gokcehan/lf/releases/download/r16/lf-darwin-amd64.tar.gz
+            call InstallCommand("curl -fLo ~/.vim/bin/lf/lf.tar.gz --create-dirs
+              \ https://github.com/gokcehan/lf/releases/download/r16/lf-darwin-amd64.tar.gz")
         endif
-        silent exec "!cd ~/.vim/bin/lf; tar -xzvf lf.tar.gz"
+        call InstallCommand("cd ~/.vim/bin/lf; tar -xzvf lf.tar.gz")
     endif
     if !executable('bat') && !executable('brew')
         if !empty(system('apt-cache search --names-only ^bat\$'))
-            silent !DEBIAN_FRONTEND=noninteractive apt install -y bat
+            call InstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y bat")
         else
-            silent !curl -fLo ~/.vim/tmp/bat --create-dirs
-                \ https://github.com/sharkdp/bat/releases/download/v0.15.1/bat_0.15.1_amd64.deb
-            silent !dpkg -i ~/.vim/tmp/bat
+            call InstallCommand("curl -fLo ~/.vim/tmp/bat --create-dirs
+                \ https://github.com/sharkdp/bat/releases/download/v0.15.1/bat_0.15.1_amd64.deb")
+            call InstallCommand("dpkg -i ~/.vim/tmp/bat")
         endif
     endif
     if !executable('rg') && !executable('brew')
         if !empty(system('apt-cache search --names-only ^ripgrep\$'))
-            silent !DEBIAN_FRONTEND=noninteractive apt install -y ripgrep
+            call InstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y ripgrep")
         else
-            silent !curl -fLo ~/.vim/tmp/ripgrep --create-dirs
-                \ https://github.com/BurntSushi/ripgrep/releases/download/11.0.2/ripgrep_11.0.2_amd64.deb
-            silent !dpkg -i ~/.vim/tmp/ripgrep
+            call InstallCommand("curl -fLo ~/.vim/tmp/ripgrep --create-dirs
+                \ https://github.com/BurntSushi/ripgrep/releases/download/11.0.2/ripgrep_11.0.2_amd64.deb")
+            call InstallCommand("dpkg -i ~/.vim/tmp/ripgrep")
         endif
     endif
-    silent !chown -R $SUDO_USER:$SUDO_GID ~/.vim
-    silent !chown -R $SUDO_USER:$SUDO_GID ~/.vim/tmp
-    silent !chown -R $SUDO_USER:$SUDO_GID ~/.config
-    silent !chown -R $SUDO_USER:$SUDO_GID ~/.cache
-    silent !chown $SUDO_USER:$SUDO_GID ~/.vimrc
-    silent !sudo -u $SUDO_USER INSTALL_VIMRC_PLUGINS=1 INSTALL_VIMRC= vim +qa
-    silent exec "!sudo -u $SUDO_USER " . python3_command . " ~/.vim/plugged/vimspector/install_gadget.py --sudo --enable-c --enable-python"
+    call InstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim")
+    call InstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim/tmp")
+    call InstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.config")
+    call InstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.cache")
+    call InstallCommand("chown $SUDO_USER:$SUDO_GID ~/.vimrc")
+    call InstallCommand("sudo -u $SUDO_USER INSTALL_VIMRC_PLUGINS=1 INSTALL_VIMRC= vim +qa")
+    call InstallCommand("sudo -u $SUDO_USER " . python3_command . " ~/.vim/plugged/vimspector/install_gadget.py --sudo --enable-c --enable-python")
     call CustomizePlugins()
 endfunction
 
@@ -107,11 +118,11 @@ if executable('brew')
 endif
 
 function! CustomizePlugins()
-    silent exec "!" . s:sed . " -i 's@ . redraw\\!@ . \" > /dev/null\"@' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim"
-    silent exec "!" . s:sed . " -i 's@silent execute \"perl system.*@silent execute \"\\!\" . a:cmd . \" > /dev/null\"@' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim"
-    silent exec "!" . s:sed . " -i \"s/'String',[ \\t]*s:green/'String', \\['\\#d78787', 174\\]/\" ~/.vim/plugged/gruvbox/colors/gruvbox.vim"
-    silent exec "!" . s:sed . " -i \"s/'String',[ \\t]*s:gb\.green/'String', \\['\\#d78787', 174\\]/\" ~/.vim/plugged/gruvbox/colors/gruvbox.vim"
-    silent exec "!" . s:sed . " -i 's/s:did_snips_mappings/g:did_snips_mappings/' ~/.vim/plugged/snipMate-acp/after/plugin/snipMate.vim"
+    call InstallCommand(s:sed . " -i 's@ . redraw\\!@ . \" > /dev/null\"@' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim")
+    call InstallCommand(s:sed . " -i 's@silent execute \"perl system.*@silent execute \"\\!\" . a:cmd . \" > /dev/null\"@' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim")
+    call InstallCommand(s:sed . " -i \"s/'String',[ \\t]*s:green/'String', \\['\\#d78787', 174\\]/\" ~/.vim/plugged/gruvbox/colors/gruvbox.vim")
+    call InstallCommand(s:sed . " -i \"s/'String',[ \\t]*s:gb\.green/'String', \\['\\#d78787', 174\\]/\" ~/.vim/plugged/gruvbox/colors/gruvbox.vim")
+    call InstallCommand(s:sed . " -i 's/s:did_snips_mappings/g:did_snips_mappings/' ~/.vim/plugged/snipMate-acp/after/plugin/snipMate.vim")
 endfunction
 
 if !empty($INSTALL_VIMRC)
@@ -189,13 +200,12 @@ if !empty($INSTALL_VIMRC_PLUGINS)
     let g:coc_disable_startup_warning = 1
     if $INSTALL_VIMRC_PLUGINS != 'post'
         exec ":PlugInstall --sync"
-        silent !INSTALL_VIMRC_PLUGINS=post vim +'CocInstall -sync coc-pairs coc-json coc-clangd coc-sh coc-python coc-vimlsp' +qa
-        silent !
+        call InstallCommand("INSTALL_VIMRC_PLUGINS=post vim +'CocInstall -sync coc-pairs coc-json coc-clangd coc-sh coc-python coc-vimlsp' +qa")
+        call InstallCommand("
             \ echo '{' > ~/.vim/coc-settings.json
-            \ && echo '    "clangd.semanticHighlighting": true,' >> ~/.vim/coc-settings.json
-            \ && echo '    "coc.preferences.formatOnType": true' >> ~/.vim/coc-settings.json
-            \ && echo '}' >> ~/.vim/coc-settings.json
-        exec ":q"
+            \ && echo '    \"clangd.semanticHighlighting\": true,' >> ~/.vim/coc-settings.json
+            \ && echo '    \"coc.preferences.formatOnType\": true' >> ~/.vim/coc-settings.json
+            \ && echo '}' >> ~/.vim/coc-settings.json")
     endif
 endif
 
