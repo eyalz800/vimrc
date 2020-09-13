@@ -597,7 +597,7 @@ function! ZGoToSymbol(symbol, type)
             endif
         endfor
     endfor
-    echoerr "Could not find " . a:type . " of ''" . a:symbol . "''"
+    echoerr "Could not find " . a:type . " of '" . a:symbol . "'"
 endfunction
 
 " Cscope
