@@ -45,7 +45,13 @@ Useful Commands
 <leader>cs - Search cscope for word under cursor.
 <leader><leader>cs - Search cscope for arbitrary input text.
 
-gd - Go to definition (current word).
+gd - Go to definition (fast) (current word).
+
+<leader>zd - Go to definition (current word)
+<leader><leader>zd - Go to definition - Search arbitrary input text.
+
+<leader>zD - Go to declaration (current word)
+<leader><leader>zD - Go to declaration - Search arbitrary input text.
 
 <C-n> - Search tags.
 ```

@@ -307,7 +307,7 @@ let g:ctagsFilePatterns = '-g "*.c" -g "*.cc" -g "*.cpp" -g "*.cxx" -g "*.h" -g 
 let g:otherFilePatterns = '-g "*.py" -g "*.te" -g "*.S" -g "*.asm" -g "*.mk" -g "*.md" -g "makefile" -g "Makefile"'
 let g:rgFilePatterns = '-g "*.c" -g "*.cc" -g "*.cpp" -g "*.cxx" -g "*.h" -g "*.hh" -g "*.hpp" -g "*.py" -g "*.te" -g "*.S" -g "*.asm" -g "*.mk" -g "*.md" -g "makefile" -g "Makefile"'
 let g:opengrokFilePatterns = "-I '*.cpp' -I '*.c' -I '*.cc' -I '*.cxx' -I '*.h' -I '*.hh' -I '*.hpp' -I '*.S' -I '*.s' -I '*.asm' -I '*.py' -I '*.java' -I '*.cs' -I '*.mk' -I '*.te' -I makefile -I Makefile"
-let g:ctagsOptions = '--languages=C,C++ --c++-kinds=+p --fields=+iaS --extra=+q --sort=foldcase --tag-relative'
+let g:ctagsOptions = '--languages=C,C++ --c++-kinds=+p --fields=+iaSn --extra=+q --sort=foldcase --tag-relative'
 let g:ctagsEverythingOptions = '--c++-kinds=+p --fields=+iaS --extra=+q --sort=foldcase --tag-relative'
 
 " Generate All
@@ -536,6 +536,69 @@ set t_u7=
 
 " Undo Tree
 nnoremap <silent> <leader>zu :UndotreeToggle<cr>
+
+" Go to definition.
+nnoremap <silent> <leader>zd :call ZGoToSymbol(expand('<cword>'), 'definition')<CR>
+nnoremap <silent> <leader>zD :call ZGoToSymbol(expand('<cword>'), 'declaration')<CR>
+nnoremap <silent> <leader><leader>zd :call ZGoToSymbolInput('definition')<CR>
+nnoremap <silent> <leader><leader>zD :call ZGoToSymbolInput('declaration')<CR>
+
+function! ZGoToSymbolInput(type)
+    call inputsave()
+    let symbol = input('Symbol: ')
+    call inputrestore()
+    call ZGoToSymbol(symbol, a:type)
+endfunction
+
+function! ZGoToSymbol(symbol, type)
+    if a:symbol == ''
+        echoerr "Empty symbol"
+        return
+    endif
+    let ctags_tag_types = []
+    let opengrok_query_type = 'f'
+    if a:type == 'definition'
+        let ctags_tag_types = ['f', 'c']
+        let opengrok_query_type = 'd'
+    elseif a:type == 'declaration'
+        let ctags_tag_types = ['p']
+        let opengrok_query_type = 'f'
+    endif
+    let results = split(system("java -Xmx2048m -cp ~/.vim/bin/opengrok/lib/opengrok.jar
+        \ org.opensolaris.opengrok.search.Search -R .opengrok/configuration.xml -" . opengrok_query_type
+        \ . " ". a:symbol . "| grep \"^/.*\""), '\n')
+    for result in results
+        let file_line = split(trim(split(result, '[')[0]), ':')
+        let file = file_line[0]
+        let line = file_line[1]
+        let ctags = split(system("ctags -o - " . g:ctagsOptions . " " . file . " 2>/dev/null | grep " . a:symbol), '\n')
+        for ctag in ctags
+            let ctag = split(ctag, '\t')
+            let ctag_field_name = ctag[0]
+            if ctag_field_name != a:symbol
+                continue
+            endif
+            let ctag_field_type = ''
+            let ctag_field_line = ''
+            let ctag_field_column = 0
+            for ctag_field in ctag
+                if ctag_field_type == '' && len(ctag_field) == 1
+                    let ctag_field_type = ctag_field
+                elseif ctag_field_line == '' && stridx(ctag_field, 'line:') == 0
+                    let ctag_field_line = split(ctag_field, ':')[1]
+                elseif ctag_field_column == 0 && stridx(ctag_field, '/^') == 0 && stridx(ctag_field, a:symbol) != -1
+                    let ctag_field_column = stridx(ctag_field, a:symbol) - 1
+                endif
+            endfor
+
+            if index(ctags_tag_types, ctag_field_type) != -1 && ctag_field_line != '' && ctag_field_line == line
+                call ZJumpToLocation(file, line, ctag_field_column)
+                return
+            endif
+        endfor
+    endfor
+    echoerr "Could not find " . a:type . " of ''" . a:symbol . "''"
+endfunction
 
 " Cscope
 nnoremap <silent> <leader>cA :call Cscope('9', expand('<cword>'))<CR>
@@ -1156,3 +1219,14 @@ function! ZToggleMouse()
         endif
     endif
 endfunction
+
+" Jump to location
+function! ZJumpToLocation(file, line, column)
+    silent exec ":edit " . fnameescape(a:file) . ""
+    silent exec ":" . a:line
+    if a:column
+        silent exec ":normal! " . a:column . "|"
+    endif
+    normal! zz
+endfunction
+
