@@ -659,7 +659,7 @@ function! ZGoToSymbol(symbol, type)
     if filereadable('.opengrok/configuration.xml') && filereadable(g:opengrok_jar)
         let results = split(system("java -Xmx2048m -cp ~/.vim/bin/opengrok/lib/opengrok.jar
             \ org.opensolaris.opengrok.search.Search -R .opengrok/configuration.xml -" . opengrok_query_type
-            \ . " ". a:symbol . "| grep \"^/.*\""), '\n')
+            \ . " ". shellescape(a:symbol) . "| grep \"^/.*\""), '\n')
 
         if len(results) > limit
             return OgQuery(opengrok_query_type, a:symbol, 1)
@@ -691,7 +691,8 @@ function! ZGoToSymbol(symbol, type)
 endfunction
 
 function! ZGetTargetSymbolJumpIfCtagType(symbol, file, line, ctags_tag_types)
-    let ctags = split(system("ctags -o - " . g:ctagsOptions . " " . a:file . " 2>/dev/null | grep " . a:symbol), '\n')
+    let ctags = split(system("ctags -o - " . g:ctagsOptions . " " . shellescape(a:file)
+        \ . " 2>/dev/null | grep " . shellescape(a:symbol)), '\n')
     for ctag in ctags
         let ctag = split(ctag, '\t')
         let ctag_field_name = ctag[0]
