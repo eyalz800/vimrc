@@ -47,11 +47,11 @@ Useful Commands
 
 gd - Go to definition (fast) (current word).
 
-<leader>zd - Go to definition (current word)
-<leader><leader>zd - Go to definition - Search arbitrary input text.
+<leader>zd - Go to definition (current word).
+<leader><leader>zd - Go to definition - search arbitrary input text.
 
 <leader>zD - Go to declaration (current word)
-<leader><leader>zD - Go to declaration - Search arbitrary input text.
+<leader><leader>zD - Go to declaration - search arbitrary input text.
 
 <C-n> - Search tags.
 ```
@@ -192,4 +192,9 @@ s{char1}{char2} - Jump to a location with the following two characters {char1}{c
 Toggle use of file cache - note - if either local or global is on, it will use the cache:
 <leader>fh - Toggle use of file cache locally.
 <leader>fH - Toggle use of file cache globally.
+```
+
+* Pop tag stack - go to previous location in some supported functions:
+```
+<leader>p - Pop tag stack.
 ```

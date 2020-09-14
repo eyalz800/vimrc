@@ -537,7 +537,28 @@ set t_u7=
 " Undo Tree
 nnoremap <silent> <leader>zu :UndotreeToggle<cr>
 
-" Go to definition.
+" Tag stack
+nnoremap <silent> <leader>p :pop<CR>
+
+function! TagstackPush(name)
+    let curpos = getcurpos()
+    let curpos[0] = bufnr()
+    let item = {'tagname': a:name, 'from': curpos}
+    let tagstack = gettagstack()
+    let curidx = tagstack['curidx']
+
+    if curidx == (tagstack['length'] + 1)
+        call add(tagstack['items'], item)
+        let tagstack['length'] = curidx
+    else
+        let tagstack['items'][curidx-1] = item
+    endif
+    let tagstack['curidx'] = curidx + 1
+
+    call settagstack(winnr(), tagstack, 'r')
+endfunction
+
+" Go to definition
 nnoremap <silent> <leader>zd :call ZGoToSymbol(expand('<cword>'), 'definition')<CR>
 nnoremap <silent> <leader>zD :call ZGoToSymbol(expand('<cword>'), 'declaration')<CR>
 nnoremap <silent> <leader><leader>zd :call ZGoToSymbolInput('definition')<CR>
@@ -592,6 +613,7 @@ function! ZGoToSymbol(symbol, type)
             endfor
 
             if index(ctags_tag_types, ctag_field_type) != -1 && ctag_field_line != '' && ctag_field_line == line
+                call TagstackPush(a:symbol)
                 call ZJumpToLocation(file, line, ctag_field_column)
                 return
             endif
