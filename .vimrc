@@ -1336,6 +1336,11 @@ function! ZJumpToLocation(file, line, column)
 endfunction
 
 " Additional highlighting
+function! ZSyntaxInfo()
+    let l:s = synID(line('.'), col('.'), 1)
+    echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
+endfun
+
 if g:colors_name == 'codedark'
 
     " Terminal colors (base16):
@@ -1384,7 +1389,27 @@ if g:colors_name == 'codedark'
     let s:cdBlue = {'gui': '#569CD6', 'cterm': s:cterm0D, 'cterm256': '75'}
     let s:cdYellow = {'gui': '#DCDCAA', 'cterm': s:cterm0A, 'cterm256': '187'}
     let s:cdPink = {'gui': '#C586C0', 'cterm': s:cterm0E, 'cterm256': '176'}
+    let s:cdBlueGreen = {'gui': '#4EC9B0', 'cterm': s:cterm0F, 'cterm256': '43'}
 
+    " C++
+    call ZHighLight('cCustomAccessKey', s:cdBlue, {}, 'none', {})
+    call ZHighLight('cppModifier', s:cdBlue, {}, 'none', {})
+    call ZHighLight('cppExceptions', s:cdBlue, {}, 'none', {})
+    call ZHighLight('cppSTLType', s:cdBlueGreen, {}, 'none', {})
+    call ZHighLight('cppSTLnamespace', s:cdBlueGreen, {}, 'none', {})
+    call ZHighLight('cCustomClassName', s:cdBlueGreen, {}, 'none', {})
+    call ZHighLight('cppSTLexception', s:cdBlueGreen, {}, 'none', {})
+    call ZHighLight('cppSTLconstant', s:cdLightBlue, {}, 'none', {})
+    call ZHighLight('cppSTLvariable', s:cdLightBlue, {}, 'none', {})
+    call ZHighLight('cppSTLfunction', s:cdYellow, {}, 'none', {})
+    call ZHighLight('cCustomOperator', s:cdYellow, {}, 'none', {})
+    call ZHighLight('cConstant', s:cdPink, {}, 'none', {})
+    "call ZHighLight('cRepeat', s:cdPink, {}, 'none', {})
+    "call ZHighLight('cConditional', s:cdPink, {}, 'none', {})
+    "call ZHighLight('cStatement', s:cdPink, {}, 'none', {})
+    "call ZHighLight('cppStatement', s:cdPink, {}, 'none', {})
+
+    " Python
     call ZHighLight('pythonBuiltin', s:cdLightBlue, {}, 'none', {})
     call ZHighLight('pythonBuiltinFunc', s:cdLightBlue, {}, 'none', {})
     call ZHighLight('pythonBuiltinObj', s:cdLightBlue, {}, 'none', {})
@@ -1397,4 +1422,5 @@ if g:colors_name == 'codedark'
     call ZHighLight('pythonInclude', s:cdBlue, {}, 'none', {})
     call ZHighLight('pythonFunction', s:cdYellow, {}, 'none', {})
     call ZHighLight('pythonDecorator', s:cdYellow, {}, 'none', {})
+
 endif
