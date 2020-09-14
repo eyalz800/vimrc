@@ -629,6 +629,11 @@ function! ZGoToSymbol(symbol, type)
         let results = split(system(cscope_command), '\n')
         let valid_results = []
         let valid_jumps = []
+
+        if len(results) > 100
+            return Cscope(cscope_query_type, a:symbol, 1)
+        endif
+
         for result in results
             let file_line = split(trim(split(result, '[')[0]), ':')
             let target_symbol_jump = ZGetTargetSymbolJumpIfCtagType(a:symbol, file_line[0], file_line[1], ctags_tag_types)
@@ -643,8 +648,7 @@ function! ZGoToSymbol(symbol, type)
             call ZJumpToLocation(valid_jumps[0][0], valid_jumps[0][1], valid_jumps[0][2])
             return 1
         elseif len(valid_jumps) > 1
-            call ZFzfStringPreview(join(valid_results, '\n'))
-            return 1
+            return ZFzfStringPreview(join(valid_results, '\n'))
         endif
     endif
 
@@ -653,6 +657,11 @@ function! ZGoToSymbol(symbol, type)
         let results = split(system("java -Xmx2048m -cp ~/.vim/bin/opengrok/lib/opengrok.jar
             \ org.opensolaris.opengrok.search.Search -R .opengrok/configuration.xml -" . opengrok_query_type
             \ . " ". a:symbol . "| grep \"^/.*\""), '\n')
+
+        if len(results) > 100
+            return OgQuery(opengrok_query_type, a:symbol, 1)
+        endif
+
         for result in results
             let file_line = split(trim(split(result, '[')[0]), ':')
             let target_symbol_jump = ZGetTargetSymbolJumpIfCtagType(a:symbol, file_line[0], file_line[1], ctags_tag_types)
@@ -667,8 +676,7 @@ function! ZGoToSymbol(symbol, type)
             call ZJumpToLocation(valid_jumps[0][0], valid_jumps[0][1], valid_jumps[0][2])
             return 1
         elseif len(valid_jumps) > 1
-            call ZFzfStringPreview(join(valid_results, '\n'))
-            return 1
+            return ZFzfStringPreview(join(valid_results, '\n'))
         endif
     endif
 
