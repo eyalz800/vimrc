@@ -578,7 +578,7 @@ function! ZGoToSymbolInput(type)
 endfunction
 
 function! ZGoToDefinition()
-    if g:lsp_jump_function && ZLspJump('definition')
+    if g:lsp_jump_function && ZLspJump('definition-fallback')
         return 1
     endif
     return ZGoToSymbol(expand('<cword>'), 'definition')
@@ -994,19 +994,23 @@ if g:lsp_choice == 'coc'
     endfunction
 
     let g:lsp_jump_function = 1
+    let g:lsp_jump_last_position_hold = []
     function! ZLspJump(jump_type)
-        if a:jump_type == 'definition'
+        if a:jump_type == 'definition-fallback'
             let jump_type = 'Definition'
         else
             let jump_type = a:jump_type
+            let g:lsp_jump_last_position_hold = []
         endif
         let name = expand('<cword>')
         let pos = getcurpos()
         let buf = bufnr()
-        if CocAction('jump' . jump_type)
+        if g:lsp_jump_last_position_hold != [buf, name, pos[1]] && CocAction('jump' . jump_type)
             if buf == bufnr() && pos[1] == getcurpos()[1]
-                return 0
+                let g:lsp_jump_last_position_hold = [buf, name, pos[1]]
+                return 1
             endif
+            let g:lsp_jump_last_position_hold = []
             if name != expand('<cword>')
                 execute "normal \<C-o>"
                 return 0
@@ -1014,6 +1018,7 @@ if g:lsp_choice == 'coc'
             call TagstackPush(name, pos, buf)
             return 1
         endif
+        let g:lsp_jump_last_position_hold = []
         return 0
     endfunction
 endif
