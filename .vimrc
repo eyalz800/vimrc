@@ -584,11 +584,12 @@ endfunction
 
 function! ZGoToSymbol(symbol, type)
     if a:symbol == ''
-        echomsg "Empty symbol"
+        echomsg "Empty symbol!"
         return 0
     endif
     let ctags_tag_types = []
     let opengrok_query_type = 'f'
+    let cscope_query_type = '0'
     if a:type == 'definition'
         let ctags_tag_types = ['f', 'c']
         let opengrok_query_type = 'd'
@@ -597,17 +598,40 @@ function! ZGoToSymbol(symbol, type)
         let opengrok_query_type = 'f'
     endif
 
-    let results = split(system("java -Xmx2048m -cp ~/.vim/bin/opengrok/lib/opengrok.jar
-        \ org.opensolaris.opengrok.search.Search -R .opengrok/configuration.xml -" . opengrok_query_type
-        \ . " ". a:symbol . "| grep \"^/.*\""), '\n')
-    for result in results
-        let file_line = split(trim(split(result, '[')[0]), ':')
-        let file = file_line[0]
-        let line = file_line[1]
-        if ZGoToSymbolIfCtagType(a:symbol, file, line, ctags_tag_types)
-            return 1
-        endif
-    endfor
+    " Cscope
+    if filereadable('cscope.out')
+        let awk_program =
+            \    '{ x = $1; $1 = ""; z = $3; $3 = ""; ' .
+            \    'printf "%s:%s:%s\n", x,z,$0; }'
+        let cscope_command =
+            \    'cscope -dL' . cscope_query_type . " " . shellescape(a:symbol) .
+            \    " | awk '" . awk_program . "'"
+        let results = split(system(cscope_command), '\n')
+        for result in results
+            let file_line = split(trim(split(result, ': ')[0]), ':')
+            let file = file_line[0]
+            let line = file_line[1]
+            if ZGoToSymbolIfCtagType(a:symbol, file, line, ctags_tag_types)
+                return 1
+            endif
+        endfor
+    endif
+
+    " Opengrok
+    if filereadable('.opengrok/configuration.xml') && filereadable('~/.vim/bin/ipengrok/lib/opengrok.jar')
+        let results = split(system("java -Xmx2048m -cp ~/.vim/bin/opengrok/lib/opengrok.jar
+            \ org.opensolaris.opengrok.search.Search -R .opengrok/configuration.xml -" . opengrok_query_type
+            \ . " ". a:symbol . "| grep \"^/.*\""), '\n')
+        for result in results
+            let file_line = split(trim(split(result, '[')[0]), ':')
+            let file = file_line[0]
+            let line = file_line[1]
+            if ZGoToSymbolIfCtagType(a:symbol, file, line, ctags_tag_types)
+                return 1
+            endif
+        endfor
+    endif
+
     echomsg "Could not find " . a:type . " of '" . a:symbol . "'"
     return 0
 endfunction
@@ -972,7 +996,7 @@ if g:lsp_choice == 'coc'
         let pos = getcurpos()
         let buf = bufnr()
         if CocAction('jump' . jump_type)
-            if buf == bufnr() && getcurpos() == pos
+            if buf == bufnr() && pos[1] == getcurpos()[1]
                 return 0
             endif
             call TagstackPush(name, pos, buf)
