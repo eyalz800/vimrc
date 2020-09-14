@@ -613,7 +613,7 @@ function! ZGoToSymbol(symbol, type)
     let opengrok_query_type = 'f'
     let cscope_query_type = '0'
     if a:type == 'definition'
-        let ctags_tag_types = ['f', 'c', 's']
+        let ctags_tag_types = ['f', 'c', 's', 't']
         let opengrok_query_type = 'd'
     elseif a:type == 'declaration'
         let ctags_tag_types = ['p']
@@ -1005,6 +1005,10 @@ if g:lsp_choice == 'coc'
         let buf = bufnr()
         if CocAction('jump' . jump_type)
             if buf == bufnr() && pos[1] == getcurpos()[1]
+                return 0
+            endif
+            if name != expand('<cword>')
+                execute "normal \<C-o>"
                 return 0
             endif
             call TagstackPush(name, pos, buf)
