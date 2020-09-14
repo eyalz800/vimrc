@@ -572,6 +572,7 @@ function! ZGoToSymbolInput(type)
     call inputsave()
     let symbol = input('Symbol: ')
     call inputrestore()
+    normal :<ESC>
     call ZGoToSymbol(symbol, a:type)
 endfunction
 
@@ -582,9 +583,27 @@ function! ZGoToDefinition()
     return ZGoToSymbol(expand('<cword>'), 'definition')
 endfunction
 
+function! ZFzfStringPreview(string)
+    let name = expand('<cword>')
+    let pos = getcurpos()
+    let buf = bufnr()
+
+    let result = fzf#vim#grep('echo -e ' . shellescape(a:string),
+        \ 0, fzf#vim#with_preview({ 'options': split(fzf#wrap()['options'])[0] . ' --prompt "> "'}), 0)
+
+    if len(result) != 0
+        if buf == bufnr() && pos[1] == getcurpos()[1]
+            return 1
+        endif
+        call TagstackPush(name, pos, buf)
+        return 1
+    endif
+    return 0
+endfunction
+
 function! ZGoToSymbol(symbol, type)
     if a:symbol == ''
-        echomsg "Empty symbol!"
+        echom "Empty symbol!"
         return 0
     endif
 
@@ -592,7 +611,7 @@ function! ZGoToSymbol(symbol, type)
     let opengrok_query_type = 'f'
     let cscope_query_type = '0'
     if a:type == 'definition'
-        let ctags_tag_types = ['f', 'c']
+        let ctags_tag_types = ['f', 'c', 's']
         let opengrok_query_type = 'd'
     elseif a:type == 'declaration'
         let ctags_tag_types = ['p']
@@ -619,9 +638,12 @@ function! ZGoToSymbol(symbol, type)
             endif
         endfor
 
-        if len(valid_jumps) != 0
+        if len(valid_jumps) == 1
             call TagstackPushCurrent(a:symbol)
             call ZJumpToLocation(valid_jumps[0][0], valid_jumps[0][1], valid_jumps[0][2])
+            return 1
+        elseif len(valid_jumps) > 1
+            call ZFzfStringPreview(join(valid_results, '\n'))
             return 1
         endif
     endif
@@ -640,14 +662,17 @@ function! ZGoToSymbol(symbol, type)
             endif
         endfor
 
-        if len(valid_jumps) != 0
+        if len(valid_jumps) == 1
             call TagstackPushCurrent(a:symbol)
             call ZJumpToLocation(valid_jumps[0][0], valid_jumps[0][1], valid_jumps[0][2])
+            return 1
+        elseif len(valid_jumps) > 1
+            call ZFzfStringPreview(join(valid_results, '\n'))
             return 1
         endif
     endif
 
-    echomsg "Could not find " . a:type . " of '" . a:symbol . "'"
+    echom "Could not find " . a:type . " of '" . a:symbol . "'"
     return 0
 endfunction
 
@@ -758,7 +783,21 @@ function! Cscope(option, query, ...)
         let file = split(data[0], ":")
         execute 'e ' . '+' . file[1] . ' ' . file[0]
     endfunction
-    call fzf#run(opts)
+
+    let name = expand('<cword>')
+    let pos = getcurpos()
+    let buf = bufnr()
+
+    let result = fzf#run(opts)
+
+    if len(result) != 0
+        if buf == bufnr() && pos[1] == getcurpos()[1]
+            return 1
+        endif
+        call TagstackPush(name, pos, buf)
+        return 1
+    endif
+    return 0
 endfunction
 
 function! CscopePreview(option, query, ...)
@@ -776,7 +815,21 @@ function! CscopePreview(option, query, ...)
         \    " | awk '" . awk_program . "'"
     let fzf_color_option = split(fzf#wrap()['options'])[0]
     let opts = { 'options': fzf_color_option . ' --prompt "> "'}
-    call fzf#vim#grep(grep_command, 0, fzf#vim#with_preview(opts), 0)
+
+    let name = expand('<cword>')
+    let pos = getcurpos()
+    let buf = bufnr()
+
+    let result = fzf#vim#grep(grep_command, 0, fzf#vim#with_preview(opts), 0)
+
+    if len(result) != 0
+        if buf == bufnr() && pos[1] == getcurpos()[1]
+            return 1
+        endif
+        call TagstackPush(name, pos, buf)
+        return 1
+    endif
+    return 0
 endfunction
 
 function! CscopeQuery(option, ...)
@@ -873,7 +926,21 @@ function! OgQuery(option, query, ...)
         let file = split(data[0], ":")
         execute 'e ' . '+' . file[1] . ' ' . file[0]
     endfunction
-    call fzf#run(opts)
+
+    let name = expand('<cword>')
+    let pos = getcurpos()
+    let buf = bufnr()
+
+    let result = fzf#run(opts)
+
+    if len(result) != 0
+        if buf == bufnr() && pos[1] == getcurpos()[1]
+            return 1
+        endif
+        call TagstackPush(name, pos, buf)
+        return 1
+    endif
+    return 0
 endfunction
 
 function! OgQueryPreview(option, query, ...)
@@ -886,7 +953,21 @@ function! OgQueryPreview(option, query, ...)
         \    " | awk '" . awk_program . "'"
     let fzf_color_option = split(fzf#wrap()['options'])[0]
     let opts = { 'options': fzf_color_option . ' --prompt "> "'}
-    call fzf#vim#grep(grep_command, 0, fzf#vim#with_preview(opts), 0)
+
+    let name = expand('<cword>')
+    let pos = getcurpos()
+    let buf = bufnr()
+
+    let result = fzf#vim#grep(grep_command, 0, fzf#vim#with_preview(opts), 0)
+
+    if len(result) != 0
+        if buf == bufnr() && pos[1] == getcurpos()[1]
+            return 1
+        endif
+        call TagstackPush(name, pos, buf)
+        return 1
+    endif
+    return 0
 endfunction
 
 " Cursor Line
