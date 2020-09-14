@@ -1,5 +1,5 @@
 #!/bin/bash
-set +e
+set -e
 
 if [ -x "$(command -v brew)" ]; then
     sudo -u $SUDO_USER brew install vim
