@@ -540,9 +540,13 @@ nnoremap <silent> <leader>zu :UndotreeToggle<cr>
 " Tag stack
 nnoremap <silent> <leader>p :pop<CR>
 
-function! TagstackPush(name)
-    let curpos = getcurpos()
-    let curpos[0] = bufnr()
+function! TagstackPushCurrent(name)
+    return TagstackPush(a:name, getcurpos(), bufnr())
+endfunction
+
+function! TagstackPush(name, pos, buf)
+    let curpos = a:pos
+    let curpos[0] = a:buf
     let item = {'tagname': a:name, 'from': curpos}
     let tagstack = gettagstack()
     let curidx = tagstack['curidx']
@@ -551,7 +555,7 @@ function! TagstackPush(name)
         call add(tagstack['items'], item)
         let tagstack['length'] = curidx
     else
-        let tagstack['items'][curidx-1] = item
+        let tagstack['items'][curidx - 1] = item
     endif
     let tagstack['curidx'] = curidx + 1
 
@@ -559,7 +563,7 @@ function! TagstackPush(name)
 endfunction
 
 " Go to definition
-nnoremap <silent> <leader>zd :call ZGoToSymbol(expand('<cword>'), 'definition')<CR>
+nnoremap <silent> <leader>zd :call ZGoToDefinition()<CR>
 nnoremap <silent> <leader>zD :call ZGoToSymbol(expand('<cword>'), 'declaration')<CR>
 nnoremap <silent> <leader><leader>zd :call ZGoToSymbolInput('definition')<CR>
 nnoremap <silent> <leader><leader>zD :call ZGoToSymbolInput('declaration')<CR>
@@ -571,10 +575,17 @@ function! ZGoToSymbolInput(type)
     call ZGoToSymbol(symbol, a:type)
 endfunction
 
+function! ZGoToDefinition()
+    if g:lsp_jump_function && ZLspJump('definition')
+        return 1
+    endif
+    return ZGoToSymbol(expand('<cword>'), 'definition')
+endfunction
+
 function! ZGoToSymbol(symbol, type)
     if a:symbol == ''
-        echoerr "Empty symbol"
-        return
+        echomsg "Empty symbol"
+        return 0
     endif
     let ctags_tag_types = []
     let opengrok_query_type = 'f'
@@ -613,13 +624,14 @@ function! ZGoToSymbol(symbol, type)
             endfor
 
             if index(ctags_tag_types, ctag_field_type) != -1 && ctag_field_line != '' && ctag_field_line == line
-                call TagstackPush(a:symbol)
+                call TagstackPushCurrent(a:symbol)
                 call ZJumpToLocation(file, line, ctag_field_column)
-                return
+                return 1
             endif
         endfor
     endfor
-    echoerr "Could not find " . a:type . " of '" . a:symbol . "'"
+    echomsg "Could not find " . a:type . " of '" . a:symbol . "'"
+    return 0
 endfunction
 
 " Cscope
@@ -847,6 +859,9 @@ if !executable('pyls')
     let g:use_pyls_lsp = 0
 endif
 
+" Lsp Jump
+let g:lsp_jump_function = 0
+
 " vim-lsp configuration
 if g:lsp_choice == 'vim-lsp'
     let g:asyncomplete_remove_duplicates = 1
@@ -910,10 +925,17 @@ endif
 " Coc
 if g:lsp_choice == 'coc'
     let g:coc_global_extensions = ['coc-pairs', 'coc-clangd', 'coc-python', 'coc-json', 'coc-sh', 'coc-vimlsp']
-    nmap <silent> gd <Plug>(coc-definition)
+
+    "nmap <silent> gd <Plug>(coc-definition)
+    nmap <silent> gd :call ZLspJump('Definition')<CR>
+
+    "nmap <silent> gi <Plug>(coc-implementation)
+    nmap <silent> gi :call ZLspJump('Implementation')<CR>
+
+    "nmap <silent> gr <Plug>(coc-references)
+    nmap <silent> gr :call ZLspJump('References')<CR>
+
     nmap <silent> gy <Plug>(coc-type-definition)
-    nmap <silent> gi <Plug>(coc-implementation)
-    nmap <silent> gr <Plug>(coc-references)
     nmap <silent> go :CocCommand clangd.switchSourceHeader<CR>
     nnoremap <silent> K :call <SID>show_documentation()<CR>
     nmap <silent> [g <Plug>(coc-diagnostic-prev)
@@ -921,6 +943,7 @@ if g:lsp_choice == 'coc'
     nmap <silent> <leader>rn <Plug>(coc-rename)
     xmap <silent> <leader>lf <Plug>(coc-format-selected)
     nnoremap <silent> <leader>ld :CocDiagnostics<CR>
+    inoremap <silent><expr> <cr> "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"")"))
 
     function! s:show_documentation()
       if (index(['vim','help'], &filetype) >= 0)
@@ -930,7 +953,25 @@ if g:lsp_choice == 'coc'
       endif
     endfunction
 
-    inoremap <silent><expr> <cr> "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"")"))
+    let g:lsp_jump_function = 1
+    function! ZLspJump(jump_type)
+        if a:jump_type == 'definition'
+            let jump_type = 'Definition'
+        else
+            let jump_type = a:jump_type
+        endif
+        let name = expand('<cword>')
+        let pos = getcurpos()
+        let buf = bufnr()
+        if CocAction('jump' . jump_type)
+            if buf == bufnr() && getcurpos() == pos
+                return 0
+            endif
+            call TagstackPush(name, pos, buf)
+            return 1
+        endif
+        return 0
+    endfunction
 endif
 
 if g:lsp_choice != 'coc'
