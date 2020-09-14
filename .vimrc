@@ -353,7 +353,7 @@ nmap <silent> <leader>fe :LF %:p call\ timer_start(0,{tid->execute('e!')})\|n<CR
 nmap <silent> <leader>fs :LF %:p call\ timer_start(0,{tid->execute('e!')})\|vs<CR>
 
 " Opengrok
-let g:opengrok_jar = '~/.vim/bin/opengrok/lib/opengrok.jar'
+let g:opengrok_jar = $HOME . '/.vim/bin/opengrok/lib/opengrok.jar'
 if executable('ctags-exuberant')
     let g:opengrok_ctags = '/usr/bin/ctags-exuberant'
 else
@@ -628,12 +628,13 @@ function! ZGoToSymbol(symbol, type)
             \    'cscope -dL' . cscope_query_type . " " . shellescape(a:symbol) .
             \    " | awk '" . awk_program . "'"
         let results = split(system(cscope_command), '\n')
-        let valid_results = []
-        let valid_jumps = []
 
         if len(results) > limit
             return Cscope(cscope_query_type, a:symbol, 1)
         endif
+
+        let valid_results = []
+        let valid_jumps = []
 
         for result in results
             let file_line = split(trim(split(result, '[')[0]), ':')
@@ -654,7 +655,7 @@ function! ZGoToSymbol(symbol, type)
     endif
 
     " Opengrok
-    if filereadable('.opengrok/configuration.xml') && filereadable('~/.vim/bin/opengrok/lib/opengrok.jar')
+    if filereadable('.opengrok/configuration.xml') && filereadable(g:opengrok_jar)
         let results = split(system("java -Xmx2048m -cp ~/.vim/bin/opengrok/lib/opengrok.jar
             \ org.opensolaris.opengrok.search.Search -R .opengrok/configuration.xml -" . opengrok_query_type
             \ . " ". a:symbol . "| grep \"^/.*\""), '\n')
@@ -662,6 +663,9 @@ function! ZGoToSymbol(symbol, type)
         if len(results) > limit
             return OgQuery(opengrok_query_type, a:symbol, 1)
         endif
+
+        let valid_results = []
+        let valid_jumps = []
 
         for result in results
             let file_line = split(trim(split(result, '[')[0]), ':')
