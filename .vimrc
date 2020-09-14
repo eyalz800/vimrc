@@ -608,15 +608,22 @@ function! ZGoToSymbol(symbol, type)
             \    'cscope -dL' . cscope_query_type . " " . shellescape(a:symbol) .
             \    " | awk '" . awk_program . "'"
         let results = split(system(cscope_command), '\n')
+        let valid_results = []
+        let valid_jumps = []
         for result in results
             let file_line = split(trim(split(result, '[')[0]), ':')
             let target_symbol_jump = ZGetTargetSymbolJumpIfCtagType(a:symbol, file_line[0], file_line[1], ctags_tag_types)
             if target_symbol_jump[0]
-                call TagstackPushCurrent(a:symbol)
-                call ZJumpToLocation(file_line[0], file_line[1], target_symbol_jump[1])
-                return 1
+                call add(valid_jumps, [file_line[0], file_line[1], target_symbol_jump[1]])
+                call add(valid_results, result)
             endif
         endfor
+
+        if len(valid_jumps) != 0
+            call TagstackPushCurrent(a:symbol)
+            call ZJumpToLocation(valid_jumps[0][0], valid_jumps[0][1], valid_jumps[0][2])
+            return 1
+        endif
     endif
 
     " Opengrok
@@ -628,11 +635,16 @@ function! ZGoToSymbol(symbol, type)
             let file_line = split(trim(split(result, '[')[0]), ':')
             let target_symbol_jump = ZGetTargetSymbolJumpIfCtagType(a:symbol, file_line[0], file_line[1], ctags_tag_types)
             if target_symbol_jump[0]
-                call TagstackPushCurrent(a:symbol)
-                call ZJumpToLocation(file_line[0], file_line[1], target_symbol_jump[1])
-                return 1
+                call add(valid_jumps, [file_line[0], file_line[1], target_symbol_jump[1]])
+                call add(valid_results, result)
             endif
         endfor
+
+        if len(valid_jumps) != 0
+            call TagstackPushCurrent(a:symbol)
+            call ZJumpToLocation(valid_jumps[0][0], valid_jumps[0][1], valid_jumps[0][2])
+            return 1
+        endif
     endif
 
     echomsg "Could not find " . a:type . " of '" . a:symbol . "'"
