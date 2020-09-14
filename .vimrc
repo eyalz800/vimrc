@@ -607,6 +607,7 @@ function! ZGoToSymbol(symbol, type)
         return 0
     endif
 
+    let limit = 100
     let ctags_tag_types = []
     let opengrok_query_type = 'f'
     let cscope_query_type = '0'
@@ -630,7 +631,7 @@ function! ZGoToSymbol(symbol, type)
         let valid_results = []
         let valid_jumps = []
 
-        if len(results) > 100
+        if len(results) > limit
             return Cscope(cscope_query_type, a:symbol, 1)
         endif
 
@@ -653,12 +654,12 @@ function! ZGoToSymbol(symbol, type)
     endif
 
     " Opengrok
-    if filereadable('.opengrok/configuration.xml') && filereadable('~/.vim/bin/ipengrok/lib/opengrok.jar')
+    if filereadable('.opengrok/configuration.xml') && filereadable('~/.vim/bin/opengrok/lib/opengrok.jar')
         let results = split(system("java -Xmx2048m -cp ~/.vim/bin/opengrok/lib/opengrok.jar
             \ org.opensolaris.opengrok.search.Search -R .opengrok/configuration.xml -" . opengrok_query_type
             \ . " ". a:symbol . "| grep \"^/.*\""), '\n')
 
-        if len(results) > 100
+        if len(results) > limit
             return OgQuery(opengrok_query_type, a:symbol, 1)
         endif
 
