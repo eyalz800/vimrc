@@ -596,6 +596,7 @@ function! ZGoToSymbol(symbol, type)
         let ctags_tag_types = ['p']
         let opengrok_query_type = 'f'
     endif
+
     let results = split(system("java -Xmx2048m -cp ~/.vim/bin/opengrok/lib/opengrok.jar
         \ org.opensolaris.opengrok.search.Search -R .opengrok/configuration.xml -" . opengrok_query_type
         \ . " ". a:symbol . "| grep \"^/.*\""), '\n')
@@ -603,34 +604,41 @@ function! ZGoToSymbol(symbol, type)
         let file_line = split(trim(split(result, '[')[0]), ':')
         let file = file_line[0]
         let line = file_line[1]
-        let ctags = split(system("ctags -o - " . g:ctagsOptions . " " . file . " 2>/dev/null | grep " . a:symbol), '\n')
-        for ctag in ctags
-            let ctag = split(ctag, '\t')
-            let ctag_field_name = ctag[0]
-            if ctag_field_name != a:symbol
-                continue
-            endif
-            let ctag_field_type = ''
-            let ctag_field_line = ''
-            let ctag_field_column = 0
-            for ctag_field in ctag
-                if ctag_field_type == '' && len(ctag_field) == 1
-                    let ctag_field_type = ctag_field
-                elseif ctag_field_line == '' && stridx(ctag_field, 'line:') == 0
-                    let ctag_field_line = split(ctag_field, ':')[1]
-                elseif ctag_field_column == 0 && stridx(ctag_field, '/^') == 0 && stridx(ctag_field, a:symbol) != -1
-                    let ctag_field_column = stridx(ctag_field, a:symbol) - 1
-                endif
-            endfor
-
-            if index(ctags_tag_types, ctag_field_type) != -1 && ctag_field_line != '' && ctag_field_line == line
-                call TagstackPushCurrent(a:symbol)
-                call ZJumpToLocation(file, line, ctag_field_column)
-                return 1
-            endif
-        endfor
+        if ZGoToSymbolIfCtagType(a:symbol, file, line, ctags_tag_types)
+            return 1
+        endif
     endfor
     echomsg "Could not find " . a:type . " of '" . a:symbol . "'"
+    return 0
+endfunction
+
+function! ZGoToSymbolIfCtagType(symbol, file, line, ctags_tag_types)
+    let ctags = split(system("ctags -o - " . g:ctagsOptions . " " . a:file . " 2>/dev/null | grep " . a:symbol), '\n')
+    for ctag in ctags
+        let ctag = split(ctag, '\t')
+        let ctag_field_name = ctag[0]
+        if ctag_field_name != a:symbol
+            continue
+        endif
+        let ctag_field_type = ''
+        let ctag_field_line = ''
+        let ctag_field_column = 0
+        for ctag_field in ctag
+            if ctag_field_type == '' && len(ctag_field) == 1
+                let ctag_field_type = ctag_field
+            elseif ctag_field_line == '' && stridx(ctag_field, 'line:') == 0
+                let ctag_field_line = split(ctag_field, ':')[1]
+            elseif ctag_field_column == 0 && stridx(ctag_field, '/^') == 0 && stridx(ctag_field, a:symbol) != -1
+                let ctag_field_column = stridx(ctag_field, a:symbol) - 1
+            endif
+        endfor
+
+        if index(a:ctags_tag_types, ctag_field_type) != -1 && ctag_field_line != '' && ctag_field_line == a:line
+            call TagstackPushCurrent(a:symbol)
+            call ZJumpToLocation(a:file, a:line, ctag_field_column)
+            return 1
+        endif
+    endfor
     return 0
 endfunction
 
