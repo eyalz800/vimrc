@@ -587,6 +587,7 @@ function! ZGoToSymbol(symbol, type)
         echomsg "Empty symbol!"
         return 0
     endif
+
     let ctags_tag_types = []
     let opengrok_query_type = 'f'
     let cscope_query_type = '0'
@@ -608,10 +609,11 @@ function! ZGoToSymbol(symbol, type)
             \    " | awk '" . awk_program . "'"
         let results = split(system(cscope_command), '\n')
         for result in results
-            let file_line = split(trim(split(result, ': ')[0]), ':')
-            let file = file_line[0]
-            let line = file_line[1]
-            if ZGoToSymbolIfCtagType(a:symbol, file, line, ctags_tag_types)
+            let file_line = split(trim(split(result, '[')[0]), ':')
+            let target_symbol_jump = ZGetTargetSymbolJumpIfCtagType(a:symbol, file_line[0], file_line[1], ctags_tag_types)
+            if target_symbol_jump[0]
+                call TagstackPushCurrent(a:symbol)
+                call ZJumpToLocation(file_line[0], file_line[1], target_symbol_jump[1])
                 return 1
             endif
         endfor
@@ -624,9 +626,10 @@ function! ZGoToSymbol(symbol, type)
             \ . " ". a:symbol . "| grep \"^/.*\""), '\n')
         for result in results
             let file_line = split(trim(split(result, '[')[0]), ':')
-            let file = file_line[0]
-            let line = file_line[1]
-            if ZGoToSymbolIfCtagType(a:symbol, file, line, ctags_tag_types)
+            let target_symbol_jump = ZGetTargetSymbolJumpIfCtagType(a:symbol, file_line[0], file_line[1], ctags_tag_types)
+            if target_symbol_jump[0]
+                call TagstackPushCurrent(a:symbol)
+                call ZJumpToLocation(file_line[0], file_line[1], target_symbol_jump[1])
                 return 1
             endif
         endfor
@@ -636,7 +639,7 @@ function! ZGoToSymbol(symbol, type)
     return 0
 endfunction
 
-function! ZGoToSymbolIfCtagType(symbol, file, line, ctags_tag_types)
+function! ZGetTargetSymbolJumpIfCtagType(symbol, file, line, ctags_tag_types)
     let ctags = split(system("ctags -o - " . g:ctagsOptions . " " . a:file . " 2>/dev/null | grep " . a:symbol), '\n')
     for ctag in ctags
         let ctag = split(ctag, '\t')
@@ -658,12 +661,10 @@ function! ZGoToSymbolIfCtagType(symbol, file, line, ctags_tag_types)
         endfor
 
         if index(a:ctags_tag_types, ctag_field_type) != -1 && ctag_field_line != '' && ctag_field_line == a:line
-            call TagstackPushCurrent(a:symbol)
-            call ZJumpToLocation(a:file, a:line, ctag_field_column)
-            return 1
+            return [1, ctag_field_column]
         endif
     endfor
-    return 0
+    return [0]
 endfunction
 
 " Cscope
