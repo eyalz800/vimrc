@@ -705,103 +705,64 @@ function! ZGetTargetSymbolJumpIfCtagType(symbol, file, line, ctags_tag_types)
 endfunction
 
 " Cscope
-nnoremap <silent> <leader>cA :call Cscope('9', expand('<cword>'))<CR>
-nnoremap <silent> <leader>cC :call Cscope('3', expand('<cword>'))<CR>
-nnoremap <silent> <leader>cD :call Cscope('2', expand('<cword>'))<CR>
-nnoremap <silent> <leader>cE :call Cscope('6', expand('<cword>'))<CR>
-nnoremap <silent> <leader>cF :call Cscope('7', expand('<cword>'))<CR>
-nnoremap <silent> <leader>cG :call Cscope('1', expand('<cword>'))<CR>
-nnoremap <silent> <leader>cI :call Cscope('8', expand('<cword>'))<CR>
-nnoremap <silent> <leader>cS :call Cscope('0', expand('<cword>'))<CR>
-nnoremap <silent> <leader>cT :call Cscope('4', expand('<cword>'))<CR>
-nnoremap <silent> <leader><leader>fA :call CscopeQuery('9')<CR>
-nnoremap <silent> <leader><leader>fC :call CscopeQuery('3')<CR>
-nnoremap <silent> <leader><leader>fD :call CscopeQuery('2')<CR>
-nnoremap <silent> <leader><leader>fE :call CscopeQuery('6')<CR>
-nnoremap <silent> <leader><leader>fF :call CscopeQuery('7')<CR>
-nnoremap <silent> <leader><leader>fG :call CscopeQuery('1')<CR>
-nnoremap <silent> <leader><leader>fI :call CscopeQuery('8')<CR>
-nnoremap <silent> <leader><leader>fS :call CscopeQuery('0')<CR>
-nnoremap <silent> <leader><leader>cT :call CscopeQuery('4')<CR>
-nnoremap <silent> <leader><leader>cA :call CscopeQuery('9', 1)<CR>
-nnoremap <silent> <leader><leader>cC :call CscopeQuery('3', 1)<CR>
-nnoremap <silent> <leader><leader>cD :call CscopeQuery('2', 1)<CR>
-nnoremap <silent> <leader><leader>cE :call CscopeQuery('6', 1)<CR>
-nnoremap <silent> <leader><leader>cF :call CscopeQuery('7', 1)<CR>
-nnoremap <silent> <leader><leader>cG :call CscopeQuery('1', 1)<CR>
-nnoremap <silent> <leader><leader>cI :call CscopeQuery('8', 1)<CR>
-nnoremap <silent> <leader><leader>cS :call CscopeQuery('0', 1)<CR>
-nnoremap <silent> <leader><leader>cT :call CscopeQuery('4', 1)<CR>
+nnoremap <silent> <leader>cA :call Cscope('9', expand('<cword>'), 0)<CR>
+nnoremap <silent> <leader>cC :call Cscope('3', expand('<cword>'), 0)<CR>
+nnoremap <silent> <leader>cD :call Cscope('2', expand('<cword>'), 0)<CR>
+nnoremap <silent> <leader>cE :call Cscope('6', expand('<cword>'), 0)<CR>
+nnoremap <silent> <leader>cF :call Cscope('7', expand('<cword>'), 0)<CR>
+nnoremap <silent> <leader>cG :call Cscope('1', expand('<cword>'), 0)<CR>
+nnoremap <silent> <leader>cI :call Cscope('8', expand('<cword>'), 0)<CR>
+nnoremap <silent> <leader>cS :call Cscope('0', expand('<cword>'), 0)<CR>
+nnoremap <silent> <leader>cT :call Cscope('4', expand('<cword>'), 0)<CR>
+nnoremap <silent> <leader><leader>fA :call CscopeQuery('9', 0)<CR>
+nnoremap <silent> <leader><leader>fC :call CscopeQuery('3', 0)<CR>
+nnoremap <silent> <leader><leader>fD :call CscopeQuery('2', 0)<CR>
+nnoremap <silent> <leader><leader>fE :call CscopeQuery('6', 0)<CR>
+nnoremap <silent> <leader><leader>fF :call CscopeQuery('7', 0)<CR>
+nnoremap <silent> <leader><leader>fG :call CscopeQuery('1', 0)<CR>
+nnoremap <silent> <leader><leader>fI :call CscopeQuery('8', 0)<CR>
+nnoremap <silent> <leader><leader>fS :call CscopeQuery('0', 0)<CR>
+nnoremap <silent> <leader><leader>cT :call CscopeQuery('4', 0)<CR>
+nnoremap <silent> <leader><leader>cA :call CscopeQuery('9', 0, 1)<CR>
+nnoremap <silent> <leader><leader>cC :call CscopeQuery('3', 0, 1)<CR>
+nnoremap <silent> <leader><leader>cD :call CscopeQuery('2', 0, 1)<CR>
+nnoremap <silent> <leader><leader>cE :call CscopeQuery('6', 0, 1)<CR>
+nnoremap <silent> <leader><leader>cF :call CscopeQuery('7', 0, 1)<CR>
+nnoremap <silent> <leader><leader>cG :call CscopeQuery('1', 0, 1)<CR>
+nnoremap <silent> <leader><leader>cI :call CscopeQuery('8', 0, 1)<CR>
+nnoremap <silent> <leader><leader>cS :call CscopeQuery('0', 0, 1)<CR>
+nnoremap <silent> <leader><leader>cT :call CscopeQuery('4', 0, 1)<CR>
 
-nnoremap <silent> <leader>ca :call CscopePreview('9', expand('<cword>'))<CR>
-nnoremap <silent> <leader>cc :call CscopePreview('3', expand('<cword>'))<CR>
-nnoremap <silent> <leader>cd :call CscopePreview('2', expand('<cword>'))<CR>
-nnoremap <silent> <leader>ce :call CscopePreview('6', expand('<cword>'))<CR>
-nnoremap <silent> <leader>cf :call CscopePreview('7', expand('<cword>'))<CR>
-nnoremap <silent> <leader>cg :call CscopePreview('1', expand('<cword>'))<CR>
-nnoremap <silent> <leader>ci :call CscopePreview('8', expand('<cword>'))<CR>
-nnoremap <silent> <leader>cs :call CscopePreview('0', expand('<cword>'))<CR>
-nnoremap <silent> <leader>ct :call CscopePreview('4', expand('<cword>'))<CR>
-nnoremap <silent> <leader><leader>fa :call CscopeQueryPreview('9')<CR>
-nnoremap <silent> <leader><leader>fc :call CscopeQueryPreview('3')<CR>
-nnoremap <silent> <leader><leader>fd :call CscopeQueryPreview('2')<CR>
-nnoremap <silent> <leader><leader>fe :call CscopeQueryPreview('6')<CR>
-nnoremap <silent> <leader><leader>ff :call CscopeQueryPreview('7')<CR>
-nnoremap <silent> <leader><leader>fg :call CscopeQueryPreview('1')<CR>
-nnoremap <silent> <leader><leader>fi :call CscopeQueryPreview('8')<CR>
-nnoremap <silent> <leader><leader>fs :call CscopeQueryPreview('0')<CR>
-nnoremap <silent> <leader><leader>ct :call CscopeQueryPreview('4')<CR>
-nnoremap <silent> <leader><leader>ca :call CscopeQueryPreview('9', 1)<CR>
-nnoremap <silent> <leader><leader>cc :call CscopeQueryPreview('3', 1)<CR>
-nnoremap <silent> <leader><leader>cd :call CscopeQueryPreview('2', 1)<CR>
-nnoremap <silent> <leader><leader>ce :call CscopeQueryPreview('6', 1)<CR>
-nnoremap <silent> <leader><leader>cf :call CscopeQueryPreview('7', 1)<CR>
-nnoremap <silent> <leader><leader>cg :call CscopeQueryPreview('1', 1)<CR>
-nnoremap <silent> <leader><leader>ci :call CscopeQueryPreview('8', 1)<CR>
-nnoremap <silent> <leader><leader>cs :call CscopeQueryPreview('0', 1)<CR>
-nnoremap <silent> <leader><leader>ct :call CscopeQueryPreview('4', 1)<CR>
+nnoremap <silent> <leader>ca :call Cscope('9', expand('<cword>'), 1)<CR>
+nnoremap <silent> <leader>cc :call Cscope('3', expand('<cword>'), 1)<CR>
+nnoremap <silent> <leader>cd :call Cscope('2', expand('<cword>'), 1)<CR>
+nnoremap <silent> <leader>ce :call Cscope('6', expand('<cword>'), 1)<CR>
+nnoremap <silent> <leader>cf :call Cscope('7', expand('<cword>'), 1)<CR>
+nnoremap <silent> <leader>cg :call Cscope('1', expand('<cword>'), 1)<CR>
+nnoremap <silent> <leader>ci :call Cscope('8', expand('<cword>'), 1)<CR>
+nnoremap <silent> <leader>cs :call Cscope('0', expand('<cword>'), 1)<CR>
+nnoremap <silent> <leader>ct :call Cscope('4', expand('<cword>'), 1)<CR>
+nnoremap <silent> <leader><leader>fa :call CscopeQuery('9', 1)<CR>
+nnoremap <silent> <leader><leader>fc :call CscopeQuery('3', 1)<CR>
+nnoremap <silent> <leader><leader>fd :call CscopeQuery('2', 1)<CR>
+nnoremap <silent> <leader><leader>fe :call CscopeQuery('6', 1)<CR>
+nnoremap <silent> <leader><leader>ff :call CscopeQuery('7', 1)<CR>
+nnoremap <silent> <leader><leader>fg :call CscopeQuery('1', 1)<CR>
+nnoremap <silent> <leader><leader>fi :call CscopeQuery('8', 1)<CR>
+nnoremap <silent> <leader><leader>fs :call CscopeQuery('0', 1)<CR>
+nnoremap <silent> <leader><leader>ct :call CscopeQuery('4', 1)<CR>
+nnoremap <silent> <leader><leader>ca :call CscopeQuery('9', 1, 1)<CR>
+nnoremap <silent> <leader><leader>cc :call CscopeQuery('3', 1, 1)<CR>
+nnoremap <silent> <leader><leader>cd :call CscopeQuery('2', 1, 1)<CR>
+nnoremap <silent> <leader><leader>ce :call CscopeQuery('6', 1, 1)<CR>
+nnoremap <silent> <leader><leader>cf :call CscopeQuery('7', 1, 1)<CR>
+nnoremap <silent> <leader><leader>cg :call CscopeQuery('1', 1, 1)<CR>
+nnoremap <silent> <leader><leader>ci :call CscopeQuery('8', 1, 1)<CR>
+nnoremap <silent> <leader><leader>cs :call CscopeQuery('0', 1, 1)<CR>
+nnoremap <silent> <leader><leader>ct :call CscopeQuery('4', 1, 1)<CR>
 
-function! Cscope(option, query, ...)
-    let l:ignorecase = get(a:, 1, 0)
-    if l:ignorecase
-        let realoption = "C" . a:option
-    else
-        let realoption = a:option
-    endif
-
-    let color = '{ x = $1; $1 = ""; z = $3; $3 = ""; printf "\033[36m%s\033[0m:\033[36m%s\033[0m\011\033[37m%s\033[0m\n", x,z,$0; }'
-    let opts = {
-    \ 'source':  "cscope -dL" . realoption . " " . shellescape(a:query) . " | awk '"
-    \            . color . "' && cscope -f cscope_small.out -dL" . realoption . " " . a:query . " | awk '" . color . "'",
-    \ 'options': ['--ansi', '--prompt', '> ',
-    \             '--multi', '--bind', 'alt-a:select-all,alt-d:deselect-all'],
-    \ 'down': '40%'
-    \ }
-
-    function! opts.sink(lines)
-        let data = split(a:lines)
-        let file = split(data[0], ":")
-        execute 'e ' . '+' . file[1] . ' ' . file[0]
-    endfunction
-
-    let name = expand('<cword>')
-    let pos = getcurpos()
-    let buf = bufnr()
-
-    let result = fzf#run(opts)
-
-    if len(result) != 0
-        if buf == bufnr() && pos[1] == getcurpos()[1]
-            return 1
-        endif
-        call TagstackPush(name, pos, buf)
-        return 1
-    endif
-    return 0
-endfunction
-
-function! CscopePreview(option, query, ...)
-    let l:ignorecase = get(a:, 1, 0)
+function! Cscope(option, query, preview, ...)
+    let l:ignorecase = get(a:, 2, 0)
     if l:ignorecase
       let realoption = "C" . a:option
     else
@@ -815,12 +776,15 @@ function! CscopePreview(option, query, ...)
         \    " | awk '" . awk_program . "'"
     let fzf_color_option = split(fzf#wrap()['options'])[0]
     let opts = { 'options': fzf_color_option . ' --prompt "> "'}
+    if a:preview
+        let opts = fzf#vim#with_preview(opts)
+    endif
 
     let name = expand('<cword>')
     let pos = getcurpos()
     let buf = bufnr()
 
-    let result = fzf#vim#grep(grep_command, 0, fzf#vim#with_preview(opts), 0)
+    let result = fzf#vim#grep(grep_command, 0, opts, 0)
 
     if len(result) != 0
         if buf == bufnr() && pos[1] == getcurpos()[1]
@@ -832,7 +796,7 @@ function! CscopePreview(option, query, ...)
     return 0
 endfunction
 
-function! CscopeQuery(option, ...)
+function! CscopeQuery(option, preview, ...)
   call inputsave()
   if a:option == '9'
     let query = input('Assignments to: ')
@@ -858,48 +822,11 @@ function! CscopeQuery(option, ...)
   endif
   call inputrestore()
   if query != ""
-    let l:ignorecase = get(a:, 1, 0)
+    let l:ignorecase = get(a:, 2, 0)
     if l:ignorecase
-      call Cscope(a:option, query, 1)
+      call Cscope(a:option, query, a:preview, 1)
     else
-      call Cscope(a:option, query)
-    endif
-  else
-    echom "Cancelled Search!"
-  endif
-endfunction
-
-function! CscopeQueryPreview(option, ...)
-  call inputsave()
-  if a:option == '9'
-    let query = input('Assignments to: ')
-  elseif a:option == '3'
-    let query = input('Functions calling: ')
-  elseif a:option == '2'
-    let query = input('Functions called by: ')
-  elseif a:option == '6'
-    let query = input('Egrep: ')
-  elseif a:option == '7'
-    let query = input('File: ')
-  elseif a:option == '1'
-    let query = input('Definition: ')
-  elseif a:option == '8'
-    let query = input('Files #including: ')
-  elseif a:option == '0'
-    let query = input('Symbol: ')
-  elseif a:option == '4'
-    let query = input('Text: ')
-  else
-    echo "Invalid option!"
-    return
-  endif
-  call inputrestore()
-  if query != ""
-    let l:ignorecase = get(a:, 1, 0)
-    if l:ignorecase
-      call CscopePreview(a:option, query, 1)
-    else
-      call CscopePreview(a:option, query)
+      call Cscope(a:option, query, a:preview)
     endif
   else
     echom "Cancelled Search!"
@@ -907,43 +834,12 @@ function! CscopeQueryPreview(option, ...)
 endfunction
 
 " Opengrok Search
-nnoremap <silent> <leader>zo :call OgQueryPreview('f', expand('<cword>'))<CR>
-nnoremap <silent> <leader><leader>zo :call OgQueryPreview('f', input('Text: '))<CR>
-nnoremap <silent> <leader>zO :call OgQuery('f', expand('<cword>'))<CR>
-nnoremap <silent> <leader><leader>zO :call OgQuery('f', input('Text: '))<CR>
+nnoremap <silent> <leader>zo :call OgQuery('f', expand('<cword>'), 1)<CR>
+nnoremap <silent> <leader><leader>zo :call OgQuery('f', input('Text: '), 1)<CR>
+nnoremap <silent> <leader>zO :call OgQuery('f', expand('<cword>'), 0)<CR>
+nnoremap <silent> <leader><leader>zO :call OgQuery('f', input('Text: '), 0)<CR>
 
-function! OgQuery(option, query, ...)
-    let opts = {
-    \ 'source': "java -Xmx2048m -cp ~/.vim/bin/opengrok/lib/opengrok.jar org.opensolaris.opengrok.search.Search -R .opengrok/configuration.xml -" .
-    \           a:option . " " . a:query . "| grep \"^/.*\" | " . s:sed . " 's@</\\?.>@@g' | " . s:sed . " 's/&amp;/\\&/g' | " . s:sed . " 's/-\&gt;/->/g'",
-    \ 'options': ['--ansi', '--prompt', '> ',
-    \             '--multi', '--bind', 'alt-a:select-all,alt-d:deselect-all'],
-    \ 'down': '40%'
-    \ }
-
-    function! opts.sink(lines)
-        let data = split(a:lines)
-        let file = split(data[0], ":")
-        execute 'e ' . '+' . file[1] . ' ' . file[0]
-    endfunction
-
-    let name = expand('<cword>')
-    let pos = getcurpos()
-    let buf = bufnr()
-
-    let result = fzf#run(opts)
-
-    if len(result) != 0
-        if buf == bufnr() && pos[1] == getcurpos()[1]
-            return 1
-        endif
-        call TagstackPush(name, pos, buf)
-        return 1
-    endif
-    return 0
-endfunction
-
-function! OgQueryPreview(option, query, ...)
+function! OgQuery(option, query, preview)
     let awk_program =
         \    '{ x = $1; $1 = ""; z = $3; $3 = ""; ' .
         \    'printf "%s:%s:%s\n", x,z,$0; }'
@@ -951,14 +847,18 @@ function! OgQueryPreview(option, query, ...)
         \    "java -Xmx2048m -cp ~/.vim/bin/opengrok/lib/opengrok.jar org.opensolaris.opengrok.search.Search -R .opengrok/configuration.xml -" .
         \    a:option . " " . shellescape(a:query) . "| grep \"^/.*\" | " . s:sed . " 's@</\\?.>@@g' | " . s:sed . " 's/&amp;/\\&/g' | " . s:sed . " 's/-\&gt;/->/g'" .
         \    " | awk '" . awk_program . "'"
+
     let fzf_color_option = split(fzf#wrap()['options'])[0]
     let opts = { 'options': fzf_color_option . ' --prompt "> "'}
+    if a:preview
+        let opts = fzf#vim#with_preview(opts)
+    endif
 
     let name = expand('<cword>')
     let pos = getcurpos()
     let buf = bufnr()
 
-    let result = fzf#vim#grep(grep_command, 0, fzf#vim#with_preview(opts), 0)
+    let result = fzf#vim#grep(grep_command, 0, opts, 0)
 
     if len(result) != 0
         if buf == bufnr() && pos[1] == getcurpos()[1]
