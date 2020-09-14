@@ -194,7 +194,8 @@ Toggle use of file cache - note - if either local or global is on, it will use t
 <leader>fH - Toggle use of file cache globally.
 ```
 
-* Pop tag stack - go to previous location in some supported functions:
+* Tag stack - go back/forward in the tag stack:
 ```
-<leader>p - Pop tag stack.
+<leader>o - Pop tag stack.
+<leader>i - Go to newer tag.
 ```

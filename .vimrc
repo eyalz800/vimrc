@@ -538,7 +538,8 @@ set t_u7=
 nnoremap <silent> <leader>zu :UndotreeToggle<cr>
 
 " Tag stack
-nnoremap <silent> <leader>p :pop<CR>
+nnoremap <silent> <leader>o :pop<CR>
+nnoremap <silent> <leader>i :tag<CR>
 
 function! TagstackPushCurrent(name)
     return TagstackPush(a:name, getcurpos(), bufnr())
