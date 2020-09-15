@@ -312,17 +312,12 @@ let g:opengrokFilePatterns = "-I '*.cpp' -I '*.c' -I '*.cc' -I '*.cxx' -I '*.h' 
 let g:ctagsOptions = '--languages=C,C++ --c++-kinds=+p --fields=+iaSn --extra=+q --sort=foldcase --tag-relative'
 let g:ctagsEverythingOptions = '--c++-kinds=+p --fields=+iaS --extra=+q --sort=foldcase --tag-relative'
 
-" Generate All
-nnoremap <silent> <leader>zg :call ZGenerateAll()<CR>
-nnoremap <silent> <leader>zG :call ZGenerateEverything()<CR>
-
-" Generate Tags and Cscope Files
-nnoremap <silent> <leader>zt :call ZGenTagsAndCsFiles()<CR>
-
 " Generate C++
 nnoremap <silent> <leader>zp :call ZGenerateCpp()<CR>
-nnoremap <silent> <leader>zP :call ZGenerateTagsBasedCpp()<CR>
-nnoremap <silent> <leader>zc :call ZGenerateCppScope()<CR>
+
+" Generate tags.
+nnoremap <silent> <leader>zt :call ZGenerateTags()<CR>
+nnoremap <silent> <leader>zT :call ZGenerateEveryTags()<CR>
 
 " Generate Files Cache
 nnoremap <silent> <leader>zh :call ZGenerateFilesCache()<CR>
@@ -1221,46 +1216,21 @@ function! ZGenerateFlags()
     \ && echo c++ >> compile_flags.txt"
 endfunction
 
-" Generate All
-function! ZGenerateAll()
-    copen
-    exec ":AsyncRun ctags -R " . g:ctagsOptions . " && echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && rg --files " . g:ctagsFilePatterns . " > cscope.files && cp cscope.files .files && rg --files " . g:otherFilePatterns . " >> .files && cscope -bq && gtags"
-endfunction
-
-" Generate Everything
-function! ZGenerateEverything()
-    copen
-    exec ":AsyncRun ctags -R " . g:ctagsEverythingOptions . " && echo '" . g:ctagsEverythingOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && rg --files > cscope.files && cp cscope.files .files && rg --files " . g:otherFilePatterns . " >> .files &&  cscope -bq && gtags"
-endfunction
-
-" Write tags options.
-function! ZWriteTagsOptions()
-    copen
-    exec ":AsyncRun echo " . g:ctagsOptions . " > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags"
-endfunction
-
 " Generate Tags
-function! ZGenTags()
+function! ZGenerateTags()
     copen
-    exec ":AsyncRun ctags -R " . g:ctagsOptions
+    exec ":AsyncRun echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && ctags -R " . g:ctagsOptions
+endfunction
+
+function! ZGenerateEveryTags()
+    copen
+    exec ":AsyncRun echo '" . g:ctagsEverythingOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && ctags -R " . g:ctagsEverythingOptions
 endfunction
 
 " Generate Files
 function! ZGenerateFilesCache()
     copen
     exec ":AsyncRun rg --files " . g:rgFilePatterns . " > .files"
-endfunction
-
-" Generate Cscope Files
-function! ZGenCsFiles()
-    copen
-    exec ":AsyncRun rg --files " . g:ctagsFilePatterns . " > cscope.files && cp cscope.files .files && rg --files " . g:otherFilePatterns . " >> .files"
-endfunction
-
-" Generate Tags and Cscope Files
-function! ZGenTagsAndCsFiles()
-    copen
-    exec ":AsyncRun rg --files " . g:ctagsFilePatterns . " > cscope.files && cp cscope.files .files && rg --files " . g:otherFilePatterns . " >> .files && ctags -R " . g:ctagsOptions
 endfunction
 
 " Generate C++
@@ -1301,14 +1271,6 @@ function! ZGenerateCpp()
     else
         exec ":AsyncRun echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && rg --files " . g:ctagsFilePatterns . " > cscope.files && cp cscope.files .files && rg --files " . g:otherFilePatterns . " >> .files && cscope -bq"
     endif
-endfunction
-function! ZGenerateTagsBasedCpp()
-    copen
-    exec ":AsyncRun ctags -R " . g:ctagsOptions . " && echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && rg --files " . g:ctagsFilePatterns . " > cscope.files && cp cscope.files .files && rg --files " . g:otherFilePatterns . " >> .files && cscope -bq"
-endfunction
-function! ZGenerateCppScope()
-    copen
-    exec ":AsyncRun echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && rg --files " . g:ctagsFilePatterns . " > cscope.files && cp cscope.files .files && rg --files " . g:otherFilePatterns . " >> .files && cscope -bq"
 endfunction
 
 " Generate Opengrok

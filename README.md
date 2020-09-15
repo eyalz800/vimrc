@@ -32,6 +32,12 @@ Useful Commands
 <leader>zk - Generate/update opengrok database for common source files (see ZGenerateOpengrok)
 ```
 
+* Commands to generate tags (this is optional and usually unnecessary):
+```
+<leader>zt - Generate tags for C/C++.
+<leader>zT - Generate tags for everything.
+```
+
 * Commands to search for files:
 ```
 <C-p> - Search for a file name.
