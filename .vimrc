@@ -1421,4 +1421,15 @@ if g:colors_name == 'codedark'
     call ZHighLight('GitGutterAdd', s:cdGreen, {}, 'none', {})
     call ZHighLight('GitGutterChange', s:cdFront, {}, 'none', {})
     call ZHighLight('GitGutterDelete', s:cdRed, {}, 'none', {})
+
+    " NERD Tree
+    call ZHighLight('NERDTreeOpenable', s:cdPink, {}, 'none', {})
+    call ZHighLight('NERDTreeClosable', s:cdPink, {}, 'none', {})
+    call ZHighLight('NERDTreeHelp', s:cdPink, {}, 'none', {})
+    call ZHighLight('NERDTreeDir', s:cdLightBlue, {}, 'none', {})
+    call ZHighLight('NERDTreeDirSlash', s:cdBlue, {}, 'none', {})
+    call ZHighLight('NERDTreeCWD', s:cdYellow, {}, 'none', {})
+    call ZHighLight('NERDTreeUp', s:cdBlue, {}, 'none', {})
+    call ZHighLight('NERDTreeFile', s:cdFront, {}, 'none', {})
+    call ZHighLight('NERDTreeExecFile', s:cdFront, {}, 'none', {})
 endif
