@@ -510,7 +510,9 @@ let g:VM_leader = '<leader>m'
 let g:VM_maps = {
     \ 'Find Under': '<C-m>',
     \ 'Find Subword Under': '<C-m>',
-    \ 'Add Cursor At Pos': '<leader>mm'
+    \ 'Add Cursor At Pos': '<leader>mm',
+    \ 'Merge Regions': '<leader>mM',
+    \ 'Toggle Multiline': '<leader>mL',
 \ }
 nmap <C-j> <plug>(VM-Add-Cursor-Down)
 nmap <C-k> <plug>(VM-Add-Cursor-Up)
