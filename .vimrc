@@ -43,7 +43,7 @@ function! InstallVimrc()
         if executable('python3.6')
             call InstallCommand("rm -rf ~/.vim/bin/python/python3")
             call InstallCommand("ln -s $(command -v python3.6) ~/.vim/bin/python/python3")
-            let $PATH = expand('~/.vim/bin/python:') . $PATH
+            let $PATH = expand('~/.vim/bin/python') . ':' . $PATH
             let python3_command = 'python3.6'
         endif
     endif
@@ -286,7 +286,7 @@ set shortmess+=c
 " Set path
 let $PATH .= ':' . expand('~/.vim/bin/lf')
 if executable(expand('~/.vim/bin/python/python3'))
-    let $PATH = expand('~/.vim/bin/python:') . $PATH
+    let $PATH = expand('~/.vim/bin/python') . ':' . $PATH
 endif
 if !executable('clangd') && filereadable('/usr/local/opt/llvm/bin/clangd')
     let $PATH .= ':/usr/local/opt/llvm/bin'
