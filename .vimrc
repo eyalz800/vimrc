@@ -176,6 +176,7 @@ if !empty($INSTALL_VIMRC_PLUGINS) || g:lsp_choice == 'vim-lsp'
 endif
 if !empty($INSTALL_VIMRC_PLUGINS) || g:lsp_choice == 'coc'
     Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+    Plug 'antoinemadec/coc-fzf'
 endif
 if !empty($INSTALL_VIMRC_PLUGINS) || g:lsp_choice != 'coc'
     Plug 'vim-scripts/AutoComplPop'
