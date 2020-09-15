@@ -22,6 +22,7 @@ else
         tar -xzf ~/.vim/tmp/vim/vim.tar.gz
         cd vim-8.2.0
         ./configure --with-features=huge \
+            --enable-fail-if-missing \
             --prefix=/usr \
             --enable-cscope \
             --enable-python3interp \
