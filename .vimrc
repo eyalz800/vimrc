@@ -1081,7 +1081,7 @@ nnoremap <silent> <leader>dr :call vimspector#Restart()<CR>
 nnoremap <silent> <leader>dp :call vimspector#Pause()<CR>
 nnoremap <silent> <leader>db :call vimspector#ToggleBreakpoint()<CR>
 nnoremap <silent> <F9> :call vimspector#ToggleBreakpoint()<CR>
-nnoremap <silent> <leader>bf :call vimspector#AddFunctionBreakpoint('<cexpr>')<CR>
+nnoremap <silent> <leader>df :call vimspector#AddFunctionBreakpoint('<cexpr>')<CR>
 nnoremap <silent> <leader>dn :call vimspector#StepOver()<CR>
 nnoremap <silent> <F10> :call vimspector#StepOver()<CR>
 nnoremap <silent> <leader>di :call vimspector#StepInto()<CR>

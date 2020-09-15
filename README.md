@@ -92,7 +92,7 @@ go - Toggle between source and header file.
 <leader>dr - Restart debugging
 <leader>dp - Pause debugging
 <leader>db / F9 - Breakpoint
-<leader>bf - Add function breakpoint
+<leader>df - Add function breakpoint
 <leader>dn / F10 - Step Over
 <leader>di / F11 / S-F10 - Step Into
 <leader>do / S-F11 - Step Out
