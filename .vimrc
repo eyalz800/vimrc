@@ -234,6 +234,7 @@ set tabstop=4
 set cmdheight=1
 set number
 set wildmode=list:longest,full
+set wildmenu
 set completeopt=longest,menuone,preview
 set nowrap
 nnoremap <C-q> <C-v>
