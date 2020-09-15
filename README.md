@@ -92,8 +92,8 @@ go - Toggle between source and header file.
 <leader>db / F9 - Breakpoint
 <leader>bf - Add function breakpoint
 <leader>dn / F10 - Step Over
-<leader>di / F11 - Step Into
-<leader>do - Step Out
+<leader>di / F11 / S-F10 - Step Into
+<leader>do / S-F11 - Step Out
 <leader>dq - Quit debugger
 <leader>de - Use within command window, a shortcut to immediately type '-exec '.
 ```

@@ -1079,8 +1079,9 @@ nnoremap <silent> <leader>dn :call vimspector#StepOver()<CR>
 nnoremap <silent> <F10> :call vimspector#StepOver()<CR>
 nnoremap <silent> <leader>di :call vimspector#StepInto()<CR>
 nnoremap <silent> <F11> :call vimspector#StepInto()<CR>
+nnoremap <silent> <S-F10> :call vimspector#StepInto()<CR>
 nnoremap <silent> <leader>do :call vimspector#StepOut()<CR>
-nnoremap <silent> <leader><F11> :call vimspector#StepOut()<CR>
+nnoremap <silent> <S-F11> :call vimspector#StepOut()<CR>
 nnoremap <silent> <leader>dq :call vimspector#Reset()<CR>
 nnoremap <silent> <leader>de i-exec<space>
 
