@@ -388,19 +388,8 @@ nnoremap <silent> <leader>gb :Git blame<CR>
 nnoremap <silent> <leader>gm :MagitOnly<CR>
 
 " GutenTags
-let g:gutentags_modules = ['ctags', 'gtags_cscope']
-let g:gutentags_plus_nomap = 1
+let g:gutentags_modules = ['ctags']
 let g:gutentags_cache_dir = expand('~/.vim/tmp/tags')
-
-noremap <silent> <leader>gs :GscopeFind s <C-R><C-W><cr>
-noremap <silent> <leader>gg :GscopeFind g <C-R><C-W><cr>
-noremap <silent> <leader>gc :GscopeFind c <C-R><C-W><cr>
-noremap <silent> <leader>gt :GscopeFind t <C-R><C-W><cr>
-noremap <silent> <leader>ge :GscopeFind e <C-R><C-W><cr>
-noremap <silent> <leader>gf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>
-noremap <silent> <leader>gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>
-noremap <silent> <leader>gd :GscopeFind d <C-R><C-W><cr>
-noremap <silent> <leader>ga :GscopeFind a <C-R><C-W><cr>
 
 " Gruvbox
 let g:gruvbox_contrast_datk = 'medium'
@@ -491,6 +480,9 @@ function! ZFzfToggleGlobalFilesCache()
         let $FZF_DEFAULT_COMMAND = g:fzf_files_cache_command
     endif
 endfunction
+
+" Commits
+nnoremap <silent> <leader>gc :BCommits!<CR>
 
 " Sneak
 let g:sneak#use_ic_scs = 1

@@ -142,8 +142,9 @@ H - Modify width - 1
 
 * Git:
 ```
-<leader>M / <leader>gm - Vimagit staging plugin
-<leader>gb - View blame
+<leader>M / <leader>gm - Vimagit staging plugin.
+<leader>gb - View blame.
+<leader>gc - View commits.
 ```
 
 * Comment in/out:
