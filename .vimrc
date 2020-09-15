@@ -43,7 +43,7 @@ function! InstallVimrc()
         if executable('python3.6')
             call InstallCommand("rm -rf ~/.vim/bin/python/python3")
             call InstallCommand("ln -s $(command -v python3.6) ~/.vim/bin/python/python3")
-            let $PATH = $HOME . '/.vim/bin/python:' . $PATH
+            let $PATH = expand('~/.vim/bin/python:') . $PATH
             let python3_command = 'python3.6'
         endif
     endif
@@ -53,18 +53,18 @@ function! InstallVimrc()
     if executable('python3')
         call InstallCommand("sudo -u $SUDO_USER " . python3_command . " -m pip install python-language-server pylint compiledb setuptools")
     endif
-    if !filereadable($HOME . '/.vim/autoload/plug.vim')
+    if !filereadable(expand('~/.vim/autoload/plug.vim'))
         call InstallCommand("curl -fLo ~/.vim/autoload/plug.vim --create-dirs
           \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim")
     endif
-    if !filereadable($HOME .'/.vim/bin/opengrok/lib/opengrok.jar')
+    if !filereadable(expand('~/.vim/bin/opengrok/lib/opengrok.jar'))
         call InstallCommand("curl -fLo ~/.vim/bin/opengrok.tar.gz --create-dirs
           \ https://github.com/oracle/opengrok/releases/download/1.0/opengrok-1.0.tar.gz")
         call InstallCommand("cd ~/.vim/bin; tar -xzvf opengrok.tar.gz")
         call InstallCommand("rm ~/.vim/bin/opengrok.tar.gz")
         call InstallCommand("mv ~/.vim/bin/opengrok* ~/.vim/bin/opengrok")
     endif
-    if !filereadable($HOME . '/.vim/tmp/ctags/Makefile')
+    if !filereadable(expand('~/.vim/tmp/ctags/Makefile'))
         call InstallCommand("cd ~/.vim/tmp; git clone https://github.com/universal-ctags/ctags.git; cd ./ctags; ./autogen.sh; ./configure; make; make install")
     endif
     if !executable('ctags-exuberant') && !filereadable('~/.vim/bin/ctags-exuberant/ctags/ctags')
@@ -74,7 +74,7 @@ function! InstallVimrc()
         call InstallCommand("mv ~/.vim/bin/ctags-exuberant/ctags-5.8 ~/.vim/bin/ctags-exuberant/ctags")
         call InstallCommand("cd ~/.vim/bin/ctags-exuberant/ctags; ./configure; make")
     endif
-    if !filereadable($HOME . '/.vim/bin/lf/lf')
+    if !filereadable(expand('~/.vim/bin/lf/lf'))
         if !executable('brew')
             call InstallCommand("curl -fLo ~/.vim/bin/lf/lf.tar.gz --create-dirs
               \ https://github.com/gokcehan/lf/releases/download/r16/lf-linux-amd64.tar.gz")
@@ -131,13 +131,13 @@ if !empty($INSTALL_VIMRC)
 endif
 
 let g:lsp_choice = 'coc'
-if filereadable($HOME . '/.vim/.nococ')
+if filereadable(expand('~/.vim/.nococ'))
     let g:lsp_choice = 'vim-lsp'
 endif
 
 nnoremap <silent> <leader>tl :call ToggleLspPersistent()<CR>:source ~/.vimrc<CR>
 function! ToggleLspPersistent()
-    if filereadable($HOME . "/.vim/.nococ")
+    if filereadable(expand('~/.vim/.nococ'))
         call system("rm ~/.vim/.nococ")
     else
         call system("touch ~/.vim/.nococ")
@@ -251,13 +251,13 @@ set noerrorbells visualbell t_vb=
 set clipboard=exclude:.*
 
 " Gui colors
-if has('termguicolors') && !filereadable($HOME . "/.vim/.notermguicolors")
+if has('termguicolors') && !filereadable(expand('~/.vim/.notermguicolors'))
     set termguicolors
 endif
 nnoremap <leader>tg :call ToggleGuiColorsPersistent()<CR>
 function! ToggleGuiColorsPersistent()
     if has('termguicolors')
-        if filereadable($HOME . "/.vim/.notermguicolors")
+        if filereadable(expand('~/.vim/.notermguicolors'))
             call system("rm ~/.vim/.notermguicolors")
             set termguicolors
         else
@@ -284,9 +284,9 @@ set updatetime=300
 set shortmess+=c
 
 " Set path
-let $PATH .= ':' . $HOME . '/.vim/bin/lf'
-if executable($HOME . '/.vim/bin/python/python3')
-    let $PATH = $HOME . '/.vim/bin/python:' . $PATH
+let $PATH .= ':' . expand('~/.vim/bin/lf')
+if executable(expand('~/.vim/bin/python/python3'))
+    let $PATH = expand('~/.vim/bin/python:') . $PATH
 endif
 if !executable('clangd') && filereadable('/usr/local/opt/llvm/bin/clangd')
     let $PATH .= ':/usr/local/opt/llvm/bin'
@@ -352,7 +352,7 @@ nmap <silent> <leader>fe :LF %:p call\ timer_start(0,{tid->execute('e!')})\|n<CR
 nmap <silent> <leader>fs :LF %:p call\ timer_start(0,{tid->execute('e!')})\|vs<CR>
 
 " Opengrok
-let g:opengrok_jar = $HOME . '/.vim/bin/opengrok/lib/opengrok.jar'
+let g:opengrok_jar = expand('~/.vim/bin/opengrok/lib/opengrok.jar')
 if executable('ctags-exuberant')
     let g:opengrok_ctags = '/usr/bin/ctags-exuberant'
 else
@@ -418,7 +418,7 @@ let g:fzf_files_cache_command = "
     \ fi
 \ "
 
-if filereadable($HOME . '/.vim/.fzf-files-cache') || filereadable('.fzf-files-cache')
+if filereadable(expand('~/.vim/.fzf-files-cache')) || filereadable('.fzf-files-cache')
     let $FZF_DEFAULT_COMMAND = g:fzf_files_cache_command
 else
     let $FZF_DEFAULT_COMMAND = g:fzf_files_nocache_command
@@ -448,7 +448,7 @@ let g:fzf_colors =
   \ 'header':  ['fg', 'Comment'] }
 
 function! ZFzfToggleFilesCache()
-    if filereadable($HOME . "/.vim/.fzf-files-cache")
+    if filereadable(expand('~/.vim/.fzf-files-cache'))
         let $FZF_DEFAULT_COMMAND = g:fzf_files_cache_command
         if filereadable('.fzf-files-cache')
             call system("rm .fzf-files-cache")
@@ -467,7 +467,7 @@ function! ZFzfToggleFilesCache()
 endfunction
 
 function! ZFzfToggleGlobalFilesCache()
-    if filereadable($HOME . "/.vim/.fzf-files-cache")
+    if filereadable(expand('~/.vim/.fzf-files-cache'))
         call system("rm -rf ~/.vim/.fzf-files-cache")
         if filereadable('.fzf-files-cache')
             let $FZF_DEFAULT_COMMAND = g:fzf_files_cache_command
