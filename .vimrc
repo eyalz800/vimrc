@@ -386,6 +386,7 @@ let g:acp_behaviorSnipmateLength = 1
 " Git
 nnoremap <silent> <leader>gb :Git blame<CR>
 nnoremap <silent> <leader>gm :MagitOnly<CR>
+nnoremap <silent> <leader>gc :BCommits!<CR>
 
 " GutenTags
 let g:gutentags_modules = ['ctags']
@@ -479,9 +480,6 @@ function! ZFzfToggleGlobalFilesCache()
         let $FZF_DEFAULT_COMMAND = g:fzf_files_cache_command
     endif
 endfunction
-
-" Commits
-nnoremap <silent> <leader>gc :BCommits!<CR>
 
 " Sneak
 let g:sneak#use_ic_scs = 1
