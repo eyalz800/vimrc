@@ -311,8 +311,8 @@ let g:ctagsFilePatterns = '-g "*.c" -g "*.cc" -g "*.cpp" -g "*.cxx" -g "*.h" -g 
 let g:otherFilePatterns = '-g "*.py" -g "*.te" -g "*.S" -g "*.asm" -g "*.mk" -g "*.md" -g "makefile" -g "Makefile"'
 let g:rgFilePatterns = '-g "*.c" -g "*.cc" -g "*.cpp" -g "*.cxx" -g "*.h" -g "*.hh" -g "*.hpp" -g "*.py" -g "*.te" -g "*.S" -g "*.asm" -g "*.mk" -g "*.md" -g "makefile" -g "Makefile"'
 let g:opengrokFilePatterns = "-I '*.cpp' -I '*.c' -I '*.cc' -I '*.cxx' -I '*.h' -I '*.hh' -I '*.hpp' -I '*.S' -I '*.s' -I '*.asm' -I '*.py' -I '*.java' -I '*.cs' -I '*.mk' -I '*.te' -I makefile -I Makefile"
-let g:ctagsOptions = '--languages=C,C++ --c++-kinds=+p --fields=+iaSn --extra=+q --sort=foldcase --tag-relative'
-let g:ctagsEverythingOptions = '--c++-kinds=+p --fields=+iaSn --extra=+q --sort=foldcase --tag-relative'
+let g:ctagsOptions = '--languages=C,C++ --c++-kinds=+p --fields=+iaSn --extra=+q --sort=foldcase --tag-relative --recurse=yes'
+let g:ctagsEverythingOptions = '--c++-kinds=+p --fields=+iaSn --extra=+q --sort=foldcase --tag-relative --recurse=yes'
 
 " Generate C++
 nnoremap <silent> <leader>zp :call ZGenerateCpp()<CR>
@@ -389,7 +389,6 @@ nnoremap <silent> <leader>gm :MagitOnly<CR>
 
 " GutenTags
 let g:gutentags_modules = ['ctags']
-let g:gutentags_cache_dir = expand('~/.vim/tmp/tags')
 
 " Gruvbox
 let g:gruvbox_contrast_datk = 'medium'
@@ -1219,12 +1218,12 @@ endfunction
 " Generate Tags
 function! ZGenerateTags()
     copen
-    exec ":AsyncRun echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && ctags -R " . g:ctagsOptions
+    exec ":AsyncRun echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && ctags " . g:ctagsOptions
 endfunction
 
 function! ZGenerateEveryTags()
     copen
-    exec ":AsyncRun echo '" . g:ctagsEverythingOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && ctags -R " . g:ctagsEverythingOptions
+    exec ":AsyncRun echo '" . g:ctagsEverythingOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && ctags " . g:ctagsEverythingOptions
 endfunction
 
 " Generate Files
