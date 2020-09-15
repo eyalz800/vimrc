@@ -181,8 +181,8 @@ s{char1}{char2} - Jump to a location with the following two characters {char1}{c
 <C-k> / <C-Up> - Add cursor above.
 <leader>mA - Find all words.
 <leader>ma - Align all cursors.
-<leader>m/ - Regex search.
 <leader>mm - Add cursor at poition.
+m/ - Regex search.
 ```
 
 * Files Cache Settings:

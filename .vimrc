@@ -511,6 +511,7 @@ let g:VM_maps = {
     \ 'Find Under': '<C-m>',
     \ 'Find Subword Under': '<C-m>',
     \ 'Add Cursor At Pos': '<leader>mm',
+    \ 'Start Regex Search': 'm/',
     \ 'Merge Regions': '<leader>mM',
     \ 'Toggle Multiline': '<leader>mL',
 \ }
@@ -1412,6 +1413,9 @@ if g:colors_name == 'codedark'
     let s:cdYellow = {'gui': '#DCDCAA', 'cterm': s:cterm0A, 'cterm256': '187'}
     let s:cdPink = {'gui': '#C586C0', 'cterm': s:cterm0E, 'cterm256': '176'}
     let s:cdBlueGreen = {'gui': '#4EC9B0', 'cterm': s:cterm0F, 'cterm256': '43'}
+    let s:cdGreen = {'gui': '#6A9955', 'cterm': s:cterm0B, 'cterm256': '65'}
+    let s:cdRed = {'gui': '#F44747', 'cterm': s:cterm08, 'cterm256': '203'}
+    let s:cdFront = {'gui': '#D4D4D4', 'cterm': s:cterm05, 'cterm256': '188'}
 
     " C++
     call ZHighLight('cCustomAccessKey', s:cdBlue, {}, 'none', {})
@@ -1445,4 +1449,8 @@ if g:colors_name == 'codedark'
     call ZHighLight('pythonFunction', s:cdYellow, {}, 'none', {})
     call ZHighLight('pythonDecorator', s:cdYellow, {}, 'none', {})
 
+    " Gitgutter
+    call ZHighLight('GitGutterAdd', s:cdGreen, {}, 'none', {})
+    call ZHighLight('GitGutterChange', s:cdFront, {}, 'none', {})
+    call ZHighLight('GitGutterDelete', s:cdRed, {}, 'none', {})
 endif
