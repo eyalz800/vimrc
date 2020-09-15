@@ -54,6 +54,8 @@ gd - Go to definition (fast) (current word).
 <leader><leader>zD - Go to declaration - search arbitrary input text.
 
 <C-n> - Search tags.
+
+z/ or z? - Fuzzy search inside file.
 ```
 
 * Toggle between source and header file:
