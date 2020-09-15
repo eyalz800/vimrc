@@ -494,6 +494,7 @@ endfunction
 let g:sneak#use_ic_scs = 1
 let g:sneak#s_next = 0
 let g:sneak#label = 1
+let g:sneak#target_labels = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789?/'
 
 " Cscope
 let g:cscopedb_big_file = 'cscope.out'
