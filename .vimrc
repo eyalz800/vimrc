@@ -491,7 +491,8 @@ endfunction
 
 " Sneak
 let g:sneak#use_ic_scs = 1
-let g:sneak#s_next = 1
+let g:sneak#s_next = 0
+let g:sneak#label = 1
 
 " Cscope
 let g:cscopedb_big_file = 'cscope.out'
