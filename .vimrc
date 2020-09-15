@@ -194,6 +194,8 @@ Plug 'troydm/zoomwintab.vim'
 Plug 'wincent/terminus'
 Plug 'jreybert/vimagit'
 Plug 'tpope/vim-obsession'
+Plug 'haya14busa/incsearch.vim'
+Plug 'haya14busa/incsearch-fuzzy.vim'
 call plug#end()
 
 if !empty($INSTALL_VIMRC_PLUGINS)
@@ -413,6 +415,14 @@ color codedark
 " Supertab
 let g:SuperTabDefaultCompletionType = "<c-n>"
 
+" Incsearch
+map / <Plug>(incsearch-forward)
+map ? <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
+map z/ <Plug>(incsearch-fuzzy-/)
+map z? <Plug>(incsearch-fuzzy-?)
+map zg/ <Plug>(incsearch-fuzzy-stay)
+
 " Fzf
 let g:fzf_files_nocache_command = "rg --files --no-ignore-vcs --hidden " . g:rgFilePatterns
 let g:fzf_files_cache_command = "
@@ -496,7 +506,7 @@ let g:cscopedb_auto_files = 0
 " Mappings - (See https://github.com/mg979/vim-visual-multi/wiki/Mappings)
 " Tutorial - ~/.vim/plugged/vim-visual-multi/doc/vm-tutorial
 let g:VM_theme = 'iceblue'
-let g:VM_leader = 'm'
+let g:VM_leader = '<leader>m'
 let g:VM_maps = {
     \ 'Find Under': '<C-m>',
     \ 'Find Subword Under': '<C-m>',
