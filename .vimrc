@@ -176,7 +176,7 @@ if !empty($INSTALL_VIMRC_PLUGINS) || g:lsp_choice == 'vim-lsp'
 endif
 if !empty($INSTALL_VIMRC_PLUGINS) || g:lsp_choice == 'coc'
     Plug 'neoclide/coc.nvim', { 'branch': 'release' }
-    Plug 'antoinemadec/coc-fzf'
+    Plug 'antoinemadec/coc-fzf', { 'branch': 'release' }
 endif
 if !empty($INSTALL_VIMRC_PLUGINS) || g:lsp_choice != 'coc'
     Plug 'vim-scripts/AutoComplPop'
@@ -975,6 +975,7 @@ endif
 " Coc
 if g:lsp_choice == 'coc'
     let g:coc_global_extensions = ['coc-clangd', 'coc-python', 'coc-json', 'coc-sh', 'coc-vimlsp']
+    let g:coc_fzf_preview = 'right:50%'
 
     "nmap <silent> gd <Plug>(coc-definition)
     nmap <silent> gd :call ZLspJump('Definition')<CR>
