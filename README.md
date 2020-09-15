@@ -152,7 +152,7 @@ gc - Comment in/out selected code.
 * Jump within file:
 ```
 s{char1}{char2} - Jump to a location with the following two characters {char1}{char2}.
-; - Move forward to next option.
+Use the labels to select which location or ; to move forward to next option.
 ```
 
 * Close current window:
@@ -206,4 +206,10 @@ Toggle use of file cache - note - if either local or global is on, it will use t
 ```
 <leader>o - Pop tag stack.
 <leader>i - Go to newer tag.
+```
+
+* Save / Restore Session
+```
+Use the ':Obsession' command to start recording to a session file automatically
+and invoke 'vim -S' to restore the session at the next time.
 ```
