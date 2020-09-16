@@ -906,7 +906,6 @@ function! OgQuery(option, query, preview)
 endfunction
 
 " Cursor Line
-highlight CursorLine ctermbg=235 guibg=#2b2b2b
 set cursorline
 
 " Lsp usage
@@ -1450,4 +1449,7 @@ if g:colors_name == 'codedark'
 
     " Vim
     call ZHighLight('VimOperError', s:cdRed, {}, 'none', {})
+
+    " Cursor line
+    highlight CursorLine ctermbg=235 guibg=#2b2b2b
 endif
