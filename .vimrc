@@ -1038,6 +1038,7 @@ if g:lsp_choice == 'coc'
                     return 0
                 endif
                 call setpos('.', pos)
+                call TagstackPush(name, pos, buf)
                 return 1
             endif
             if name != expand('<cword>')
