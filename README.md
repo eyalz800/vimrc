@@ -87,15 +87,16 @@ go - Toggle between source and header file.
 ```
 <leader>dl - Configure debugging configuration - requires an open cpp or python file.
 <leader>dd - Start debugging - search vimrc for "vimspector" for additional mapping.
-<leader>dc - Continue debuggee
-<leader>ds - Stop debugging
-<leader>dr - Restart debugging
-<leader>dp - Pause debugging
+<leader>dc / F5 - Continue debuggee
+<leader>dr / S-F5 - Restart debugging
+<leader>dp / F6 - Pause debugging
+<leader>ds / S-F6 - Stop debugging
 <leader>db / F9 - Breakpoint
-<leader>df - Add function breakpoint
-<leader>dn / F10 - Step Over
-<leader>di / F11 / S-F10 - Step Into
-<leader>do / S-F11 - Step Out
+<leader><leader>db / S-F9 - Conditional breakpoint
+<leader>df / <leader>F9 - Add function breakpoint
+<leader>dn / F10 - Step over
+<leader>di / S-F10 / F11 - Step into
+<leader>do / S-F11 - Step out
 <leader>dq - Quit debugger
 <leader>de - Use within command window, a shortcut to immediately type '-exec '.
 ```
@@ -137,7 +138,7 @@ H - Modify width - 1
 
 * Paste mode:
 ```
-<F5> - Toggle paste mode.
+<F7> - Toggle paste mode.
 ```
 
 * Git:

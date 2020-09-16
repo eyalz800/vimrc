@@ -244,8 +244,6 @@ map <C-w>w :q<CR>
 autocmd filetype make setlocal noexpandtab autoindent
 noremap <F1> <C-w><C-p>
 noremap <F2> <C-w><C-w>
-noremap <F6> :bp<CR>
-noremap <F7> :bn<CR>
 set noerrorbells visualbell t_vb=
 
 " Exclude remote clipboard.
@@ -297,7 +295,7 @@ endif
 set hidden
 
 " Pasting
-noremap <F5> :set nu!<CR>:set paste!<CR>i
+nnoremap <silent> <F7> :set nu!<CR>:set paste!<CR>i
 
 " Resize splits
 nnoremap <silent> L :vertical resize +1<CR>
@@ -1092,22 +1090,29 @@ imap <BS> <Plug>(PearTreeBackspace)
 
 " Vimspector
 nnoremap <silent> <leader>dl :call ZDebugLaunchSettings()<CR>
-nnoremap <silent> <leader>dd :call vimspector#Launch()<CR>
-nnoremap <silent> <leader>dc :call vimspector#Continue()<CR>
-nnoremap <silent> <leader>ds :call vimspector#Stop()<CR>
-nnoremap <silent> <leader>dr :call vimspector#Restart()<CR>
-nnoremap <silent> <leader>dp :call vimspector#Pause()<CR>
-nnoremap <silent> <leader>db :call vimspector#ToggleBreakpoint()<CR>
-nnoremap <silent> <F9> :call vimspector#ToggleBreakpoint()<CR>
-nnoremap <silent> <leader>df :call vimspector#AddFunctionBreakpoint('<cexpr>')<CR>
-nnoremap <silent> <leader>dn :call vimspector#StepOver()<CR>
-nnoremap <silent> <F10> :call vimspector#StepOver()<CR>
-nnoremap <silent> <leader>di :call vimspector#StepInto()<CR>
-nnoremap <silent> <F11> :call vimspector#StepInto()<CR>
-nnoremap <silent> <S-F10> :call vimspector#StepInto()<CR>
-nnoremap <silent> <leader>do :call vimspector#StepOut()<CR>
-nnoremap <silent> <S-F11> :call vimspector#StepOut()<CR>
-nnoremap <silent> <leader>dq :call vimspector#Reset()<CR>
+nmap <leader>dd :call vimspector#Launch()<CR>
+nmap <leader>dc <plug>VimspectorContinue
+nmap <F5> <plug>VimspectorContinue
+nmap <leader>dr <plug>VimspectorRestart
+nmap <S-F5> <plug>VimspectorRestart
+nmap <leader>dp <plug>VimspectorPause
+nmap <F6> <plug>VimspectorPause
+nmap <leader>ds <plug>VimspectorStop
+nmap <S-F6> <plug>VimspectorStop
+nmap <leader>db <plug>VimspectorToggleBreakpoint
+nmap <F9> <plug>VimspectorToggleBreakpoint
+nmap <leader><leader>db <plug>VimspectorToggleConditionalBreakpoint
+nmap <S-F9> <plug>VimspectorToggleConditionalBreakpoint
+nmap <leader>df <plug>VimspectorAddFunctionBreakpoint
+nmap <leader><F9> <plug>VimspectorAddFunctionBreakpoint
+nmap <leader>dn <plug>VimspectorStepOver
+nmap <F10> <plug>VimspectorStepOver
+nmap <leader>di <plug>VimspectorStepInto
+nmap <S-F10> <plug>VimspectorStepInto
+nmap <F11> <plug>VimspectorStepInto
+nmap <leader>do <plug>VimspectorStepOut
+nmap <S-F11> <plug>VimspectorStepOut
+nmap <leader>dq <plug>VimspectorReset
 nnoremap <silent> <leader>de i-exec<space>
 
 function! ZGenerateVimspectorCpp()
