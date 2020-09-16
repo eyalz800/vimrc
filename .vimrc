@@ -1105,6 +1105,8 @@ nmap <leader><leader>db <plug>VimspectorToggleConditionalBreakpoint
 nmap <S-F9> <plug>VimspectorToggleConditionalBreakpoint
 nmap <leader>df <plug>VimspectorAddFunctionBreakpoint
 nmap <leader><F9> <plug>VimspectorAddFunctionBreakpoint
+nnoremap <silent> <leader>dB :call vimspector#ClearBreakpoints()<CR>
+nnoremap <silent> <leader><leader><F9> :call vimspector#ClearBreakpoints()<CR>
 nmap <leader>dn <plug>VimspectorStepOver
 nmap <F10> <plug>VimspectorStepOver
 nmap <leader>di <plug>VimspectorStepInto

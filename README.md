@@ -94,6 +94,7 @@ go - Toggle between source and header file.
 <leader>db / F9 - Breakpoint
 <leader><leader>db / S-F9 - Conditional breakpoint
 <leader>df / <leader>F9 - Add function breakpoint
+<leader>dB / <leader><leader>F9 - Clear all breakpoints
 <leader>dn / F10 - Step over
 <leader>di / S-F10 / F11 - Step into
 <leader>do / S-F11 - Step out
