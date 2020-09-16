@@ -312,7 +312,7 @@ noremap <silent> <C-w>z :ZoomWinTabToggle<CR>
 " Generation Parameters
 let g:ctagsFilePatterns = '-g "*.c" -g "*.cc" -g "*.cpp" -g "*.cxx" -g "*.h" -g "*.hh" -g "*.hpp"'
 let g:otherFilePatterns = '-g "*.py" -g "*.te" -g "*.S" -g "*.asm" -g "*.mk" -g "*.md" -g "makefile" -g "Makefile"'
-let g:rgFilePatterns = '-g "*.c" -g "*.cc" -g "*.cpp" -g "*.cxx" -g "*.h" -g "*.hh" -g "*.hpp" -g "*.py" -g "*.te" -g "*.S" -g "*.asm" -g "*.mk" -g "*.md" -g "makefile" -g "Makefile"'
+let g:sourceFilePatterns = '-g "*.c" -g "*.cc" -g "*.cpp" -g "*.cxx" -g "*.h" -g "*.hh" -g "*.hpp" -g "*.py" -g "*.te" -g "*.S" -g "*.asm" -g "*.mk" -g "*.md" -g "makefile" -g "Makefile"'
 let g:opengrokFilePatterns = "-I '*.cpp' -I '*.c' -I '*.cc' -I '*.cxx' -I '*.h' -I '*.hh' -I '*.hpp' -I '*.S' -I '*.s' -I '*.asm' -I '*.py' -I '*.java' -I '*.cs' -I '*.mk' -I '*.te' -I makefile -I Makefile"
 let g:ctagsOptions = '--languages=C,C++ --c++-kinds=+p --fields=+iaSn --extra=+q --sort=foldcase --tag-relative --recurse=yes'
 let g:ctagsEverythingOptions = '--c++-kinds=+p --fields=+iaSn --extra=+q --sort=foldcase --tag-relative --recurse=yes'
@@ -325,7 +325,8 @@ nnoremap <silent> <leader>zt :call ZGenerateTags()<CR>
 nnoremap <silent> <leader>zT :call ZGenerateEveryTags()<CR>
 
 " Generate Files Cache
-nnoremap <silent> <leader>zh :call ZGenerateFilesCache()<CR>
+nnoremap <silent> <leader>zh :call ZGenerateSourceFilesCache()<CR>
+nnoremap <silent> <leader>zH :call ZGenerateFilesCache()<CR>
 
 " Generate Flags
 nnoremap <silent> <leader>zf :call ZGenerateFlags()<CR>
@@ -431,19 +432,21 @@ map zg/ <Plug>(incsearch-fuzzy-stay)
 let g:Hexokinase_highlighters = ['backgroundfull']
 
 " Fzf
-let g:fzf_files_nocache_command = "rg --files --no-ignore-vcs --hidden " . g:rgFilePatterns
+let g:fzf_files_nocache_command = "rg --files --no-ignore-vcs --hidden"
 let g:fzf_files_cache_command = "
     \ if [ -f .files ]; then
     \     cat .files;
     \ else
-    \     rg --files --no-ignore-vcs --hidden " . g:rgFilePatterns . ";
+    \     rg --files --no-ignore-vcs --hidden;
     \ fi
 \ "
 
 if filereadable(expand('~/.vim/.fzf-files-cache')) || filereadable('.fzf-files-cache')
     let $FZF_DEFAULT_COMMAND = g:fzf_files_cache_command
+    let g:fzf_files_cache = 1
 else
     let $FZF_DEFAULT_COMMAND = g:fzf_files_nocache_command
+    let g:fzf_files_cache = 0
 endif
 
 set rtp+=~/.fzf
@@ -1251,9 +1254,14 @@ function! ZGenerateEveryTags()
 endfunction
 
 " Generate Files
+function! ZGenerateSourceFilesCache()
+    copen
+    exec ":AsyncRun rg --files " . g:sourceFilePatterns . " > .files"
+endfunction
+
 function! ZGenerateFilesCache()
     copen
-    exec ":AsyncRun rg --files " . g:rgFilePatterns . " > .files"
+    exec ":AsyncRun " . g:fzf_files_nocache_command . " > .files"
 endfunction
 
 " Generate C++
@@ -1290,9 +1298,18 @@ function! ZGenerateCpp()
         \ && set +e ; find . -type d -name inc -or -name include | grep -v \"/\\.\" | " . s:sed . " s@^@-isystem\\\\n@g >> compile_flags.txt ; set -e
         \ && echo -x >> compile_flags.txt
         \ && echo c++ >> compile_flags.txt
-        \ && echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && rg --files " . g:ctagsFilePatterns . " > cscope.files && cp cscope.files .files && rg --files " . g:otherFilePatterns . " >> .files && cscope -bq"
+        \ && echo '" . g:ctagsOptions . "' > .gutctags
+        \ && " . s:sed . " -i 's/ /\\n/g' .gutctags
+        \ && rg --files " . g:ctagsFilePatterns . " > cscope.files
+        \ && if ! [ -f .files ]; then cp cscope.files .files; rg --files " . g:otherFilePatterns . " >> .files; fi
+        \ && cscope -bq"
     else
-        exec ":AsyncRun echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && rg --files " . g:ctagsFilePatterns . " > cscope.files && cp cscope.files .files && rg --files " . g:otherFilePatterns . " >> .files && cscope -bq"
+        exec ":AsyncRun
+        \ echo '" . g:ctagsOptions . "' > .gutctags
+        \ && " . s:sed . " -i 's/ /\\n/g' .gutctags
+        \ && rg --files " . g:ctagsFilePatterns . " > cscope.files
+        \ && if ! [ -f .files ]; then cp cscope.files .files; rg --files " . g:otherFilePatterns . " >> .files; fi
+        \ && cscope -bq"
     endif
 endfunction
 
