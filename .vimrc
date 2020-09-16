@@ -16,12 +16,13 @@ function! InstallVimrc()
     if !executable('brew')
         call InstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y curl silversearcher-ag exuberant-ctags cscope global git
             \ clang-tools-8 make autoconf automake pkg-config libc++-8-dev openjdk-8-jre python3 python3-pip gdb")
+        call InstallCommand("add-apt-repository -y ppa:lazygit-team/release")
         call InstallCommand("curl -sL https://deb.nodesource.com/setup_10.x | bash -")
-        call InstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y nodejs")
+        call InstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y nodejs lazygit")
         call InstallCommand("update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-8 800")
     else
         call InstallCommand("sudo -u $SUDO_USER brew install curl ag ctags cscope global git
-            \ llvm make autoconf automake pkg-config python3 nodejs gnu-sed bat ripgrep")
+            \ llvm make autoconf automake pkg-config python3 nodejs gnu-sed bat ripgrep lazygit")
         call InstallCommand("sudo -u $SUDO_USER brew link python3")
         call InstallCommand("sudo -u $SUDO_USER brew tap AdoptOpenJDK/openjdk")
         call InstallCommand("sudo -u $SUDO_USER brew cask install adoptopenjdk8")
@@ -387,6 +388,14 @@ let g:acp_behaviorSnipmateLength = 1
 nnoremap <silent> <leader>gb :Git blame<CR>
 nnoremap <silent> <leader>gm :MagitOnly<CR>
 nnoremap <silent> <leader>gc :BCommits!<CR>
+nnoremap <silent> <leader>gl :call PopTerminal('lazygit -p ' .  expand('%:p:h'))<CR>
+
+" Pop Terminal
+function! PopTerminal(command)
+    let buf = term_start(a:command, #{hidden: 1, term_finish: 'close'})
+    let winid = popup_dialog(buf, #{minheight: 40, minwidth: 150})
+    let bufn = winbufnr(winid)
+endfunction
 
 " GutenTags
 let g:gutentags_modules = ['ctags']

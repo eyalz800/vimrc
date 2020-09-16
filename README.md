@@ -145,6 +145,7 @@ H - Modify width - 1
 <leader>M / <leader>gm - Vimagit staging plugin.
 <leader>gb - View blame.
 <leader>gc - View commits.
+<leader>gl - Lazy git staging plugin.
 ```
 
 * Comment in/out:
