@@ -405,9 +405,15 @@ let g:gutentags_modules = ['ctags']
 let g:gruvbox_contrast_datk = 'medium'
 
 " Color
-"color gruvbox
-color onedark
-color codedark
+if !filereadable(expand('~/.vim/.color'))
+    call system('echo codedark > ~/.vim/.color')
+endif
+let s:vim_color = readfile(expand('~/.vim/.color'))[0]
+if s:vim_color == 'codedark'
+    color onedark
+endif
+exec ':color ' . s:vim_color
+command! -nargs=1 ZSetColor call system('echo ' . <f-args> . ' > ~/.vim/.color') | source ~/.vimrc
 
 " Supertab
 let g:SuperTabDefaultCompletionType = "<c-n>"
@@ -1441,4 +1447,7 @@ if g:colors_name == 'codedark'
         call ZHighLight('CocErrorSign', s:cdFront, {}, 'none', {})
         call ZHighLight('CocErrorFloat', s:cdFront, {}, 'none', {})
     endif
+
+    " Vim
+    call ZHighLight('VimOperError', s:cdRed, {}, 'none', {})
 endif

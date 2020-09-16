@@ -217,3 +217,10 @@ Toggle use of file cache - note - if either local or global is on, it will use t
 Use the ':Obsession' command to start recording to a session file automatically
 and invoke 'vim -S' to restore the session at the next time.
 ```
+
+* Setting persistant color:
+```
+:ZSetColor 'codedark' - using codedark color (default)
+:ZSetColor 'onedark' - using onedark (default)
+:ZSetColor 'gruvbox' - using onedark (default)
+```
