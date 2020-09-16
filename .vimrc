@@ -15,14 +15,14 @@ function! InstallVimrc()
     endif
     if !executable('brew')
         call InstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y curl silversearcher-ag exuberant-ctags cscope global git
-            \ clang-tools-8 make autoconf automake pkg-config libc++-8-dev openjdk-8-jre python3 python3-pip gdb")
+            \ clang-tools-8 make autoconf automake pkg-config libc++-8-dev openjdk-8-jre python3 python3-pip gdb golang")
         call InstallCommand("add-apt-repository -y ppa:lazygit-team/release")
         call InstallCommand("curl -sL https://deb.nodesource.com/setup_10.x | bash -")
         call InstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y nodejs lazygit")
         call InstallCommand("update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-8 800")
     else
         call InstallCommand("sudo -u $SUDO_USER brew install curl ag ctags cscope global git
-            \ llvm make autoconf automake pkg-config python3 nodejs gnu-sed bat ripgrep lazygit")
+            \ llvm make autoconf automake pkg-config python3 nodejs gnu-sed bat ripgrep lazygit golang")
         call InstallCommand("sudo -u $SUDO_USER brew link python3")
         call InstallCommand("sudo -u $SUDO_USER brew tap AdoptOpenJDK/openjdk")
         call InstallCommand("sudo -u $SUDO_USER brew cask install adoptopenjdk8")
@@ -199,6 +199,7 @@ Plug 'tpope/vim-obsession'
 Plug 'haya14busa/incsearch.vim'
 Plug 'haya14busa/incsearch-fuzzy.vim'
 Plug 'joshdick/onedark.vim'
+Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 call plug#end()
 
 if !empty($INSTALL_VIMRC_PLUGINS)
@@ -425,6 +426,9 @@ map g/ <Plug>(incsearch-stay)
 map z/ <Plug>(incsearch-fuzzy-/)
 map z? <Plug>(incsearch-fuzzy-?)
 map zg/ <Plug>(incsearch-fuzzy-stay)
+
+" Hexokinase
+let g:Hexokinase_highlighters = ['backgroundfull']
 
 " Fzf
 let g:fzf_files_nocache_command = "rg --files --no-ignore-vcs --hidden " . g:rgFilePatterns
