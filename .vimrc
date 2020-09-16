@@ -198,6 +198,7 @@ Plug 'jreybert/vimagit'
 Plug 'tpope/vim-obsession'
 Plug 'haya14busa/incsearch.vim'
 Plug 'haya14busa/incsearch-fuzzy.vim'
+Plug 'joshdick/onedark.vim'
 call plug#end()
 
 if !empty($INSTALL_VIMRC_PLUGINS)
@@ -402,9 +403,10 @@ let g:gutentags_modules = ['ctags']
 
 " Gruvbox
 let g:gruvbox_contrast_datk = 'medium'
-color gruvbox
 
 " Color
+"color gruvbox
+color onedark
 color codedark
 
 " Supertab
