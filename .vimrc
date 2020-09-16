@@ -1435,4 +1435,10 @@ if g:colors_name == 'codedark'
     call ZHighLight('NERDTreeFile', s:cdFront, {}, 'none', {})
     call ZHighLight('NERDTreeExecFile', s:cdFront, {}, 'none', {})
     call ZHighLight('NERDTreeLinkFile', s:cdBlueGreen, {}, 'none', {})
+
+    " Coc
+    if g:lsp_choice == 'coc'
+        call ZHighLight('CocErrorSign', s:cdFront, {}, 'none', {})
+        call ZHighLight('CocErrorFloat', s:cdFront, {}, 'none', {})
+    endif
 endif
