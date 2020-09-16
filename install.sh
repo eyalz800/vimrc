@@ -16,11 +16,11 @@ else
         fi
         DEBIAN_FRONTEND=noninteractive apt install -y curl build-essential make libncurses5-dev libncursesw5-dev gcc
         curl -fLo ~/.vim/tmp/vim/vim.tar.gz --create-dirs \
-            https://github.com/vim/vim/archive/v8.2.0.tar.gz
+            https://github.com/vim/vim/archive/v8.2.1539.tar.gz
         INSTALL_VIMRC_CURDIR=`pwd`
         cd ~/.vim/tmp/vim
         tar -xzf ~/.vim/tmp/vim/vim.tar.gz
-        cd vim-8.2.0
+        cd vim-8.2.1539
         ./configure --with-features=huge \
             --enable-fail-if-missing \
             --prefix=/usr \
