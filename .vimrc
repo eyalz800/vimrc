@@ -932,7 +932,7 @@ if g:lsp_choice == 'vim-lsp'
 
     highlight clear LspWarningLine
     highlight clear LspErrorHighlight
-    highlight link LspErrorText GruvboxRedSign
+    highlight link LspErrorText None
     nnoremap <silent> <leader>ld :LspDocumentDiagnostics<CR>
     nnoremap <silent> <leader>lh :highlight link LspErrorHighlight Error<CR>
     nnoremap <silent> <leader>ln :highlight link LspErrorHighlight None<CR>
@@ -1006,6 +1006,11 @@ if g:lsp_choice == 'coc'
     xmap <silent> <leader>lf <Plug>(coc-format-selected)
     nnoremap <silent> <leader>ld :CocDiagnostics<CR>
     inoremap <silent> <expr> <CR> "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"")"))
+
+    highlight clear CocErrorSign
+    highlight link CocErrorSign None
+    highlight clear CocErrorFloat
+    highlight link CocErrorFloat None
 
     function! s:show_documentation()
       if (index(['vim','help'], &filetype) >= 0)
@@ -1441,12 +1446,6 @@ if g:colors_name == 'codedark'
     call ZHighLight('NERDTreeFile', s:cdFront, {}, 'none', {})
     call ZHighLight('NERDTreeExecFile', s:cdFront, {}, 'none', {})
     call ZHighLight('NERDTreeLinkFile', s:cdBlueGreen, {}, 'none', {})
-
-    " Coc
-    if g:lsp_choice == 'coc'
-        call ZHighLight('CocErrorSign', s:cdFront, {}, 'none', {})
-        call ZHighLight('CocErrorFloat', s:cdFront, {}, 'none', {})
-    endif
 
     " Vim
     call ZHighLight('VimOperError', s:cdRed, {}, 'none', {})
