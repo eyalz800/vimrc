@@ -415,7 +415,7 @@ if s:vim_color == 'codedark'
     color onedark
 endif
 exec ':color ' . s:vim_color
-command! -nargs=1 ZSetColor call system('echo ' . <f-args> . ' > ~/.vim/.color') | source ~/.vimrc
+command! -nargs=1 ZColor call system('echo ' . <f-args> . ' > ~/.vim/.color') | source ~/.vimrc
 
 " Supertab
 let g:SuperTabDefaultCompletionType = "<c-n>"
