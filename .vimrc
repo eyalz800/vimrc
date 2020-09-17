@@ -103,6 +103,13 @@ function! InstallVimrc()
             call InstallCommand("dpkg -i ~/.vim/tmp/ripgrep")
         endif
     endif
+    call InstallCommand("
+        \ echo 'startuppopupversion: 1' > ~/.config/jesseduffield/lazygit/config.yml
+        \ && echo 'gui:' >> ~/.config/jesseduffield/lazygit/config.yml
+        \ && echo '  theme:' >> ~/.config/jesseduffield/lazygit/config.yml
+        \ && echo '    selectedLineBgColor:' >> ~/.config/jesseduffield/lazygit/config.yml
+        \ && echo '      - reverse' >> ~/.config/jesseduffield/lazygit/config.yml
+    \ ")
     call InstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim")
     call InstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim/tmp")
     call InstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.config")
