@@ -106,7 +106,9 @@ function! InstallVimrc()
         endif
     endif
     call InstallCommand("
-        \ echo 'startuppopupversion: 1' > " . lazygit_path . "
+        \ sudo -u $SUDO_USER mkdir -p `dirname '" . lazygit_path . "'`
+        \ && sudo -u $SUDO_USER touch " . lazygit_path . "
+        \ && echo 'startuppopupversion: 1' > " . lazygit_path . "
         \ && echo 'gui:' >> " . lazygit_path . "
         \ && echo '  theme:' >> " . lazygit_path . "
         \ && echo '    selectedLineBgColor:' >> " . lazygit_path . "
