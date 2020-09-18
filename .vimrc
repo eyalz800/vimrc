@@ -300,8 +300,17 @@ endif
 " Ignore no write since last change errors
 set hidden
 
-" Pasting
-nnoremap <silent> <F7> :set nu!<CR>:set paste!<CR>i
+" Copy / Paste Mode
+nnoremap <silent> <F7> :set number!<CR>:set paste!<CR>:call ZToggleSignColumn()<CR>
+function! ZToggleSignColumn()
+    if !exists("b:signcolumn_on") || b:signcolumn_on
+        set signcolumn=no
+        let b:signcolumn_on = 0
+    else
+        set signcolumn=yes
+        let b:signcolumn_on = 1
+    endif
+endfunction
 
 " Resize splits
 nnoremap <silent> L :vertical resize +1<CR>
