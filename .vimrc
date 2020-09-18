@@ -1256,7 +1256,7 @@ function! ZGenerateFlags()
     \ && echo " . trim(cpp_include_1) . " >> compile_flags.txt
     \ && echo -isystem >> compile_flags.txt
     \ && echo " . trim(cpp_include_2) . " >> compile_flags.txt
-    \ && set +e ; find . -type d -name inc -or -name include | grep -v \"/\\.\" | " . s:sed . " s@^@-isystem\\\\n@g >> compile_flags.txt ; set -e
+    \ && set +e ; find . -type d -name inc -or -name include -or -name Include | grep -v \"/\\.\" | " . s:sed . " s@^@-isystem\\\\n@g >> compile_flags.txt ; set -e
     \ && echo -x >> compile_flags.txt
     \ && echo c++ >> compile_flags.txt"
 endfunction
@@ -1314,7 +1314,7 @@ function! ZGenerateCpp()
         \ && echo " . trim(cpp_include_1) . " >> compile_flags.txt
         \ && echo -isystem >> compile_flags.txt
         \ && echo " . trim(cpp_include_2) . " >> compile_flags.txt
-        \ && set +e ; find . -type d -name inc -or -name include | grep -v \"/\\.\" | " . s:sed . " s@^@-isystem\\\\n@g >> compile_flags.txt ; set -e
+        \ && set +e ; find . -type d -name inc -or -name include -or -name Include | grep -v \"/\\.\" | " . s:sed . " s@^@-isystem\\\\n@g >> compile_flags.txt ; set -e
         \ && echo -x >> compile_flags.txt
         \ && echo c++ >> compile_flags.txt
         \ && echo '" . g:ctagsOptions . "' > .gutctags
