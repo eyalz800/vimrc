@@ -70,7 +70,7 @@ function! InstallVimrc()
     if !filereadable(expand('~/.vim/tmp/ctags/Makefile'))
         call InstallCommand("cd ~/.vim/tmp; git clone https://github.com/universal-ctags/ctags.git; cd ./ctags; ./autogen.sh; ./configure; make; make install")
     endif
-    if !executable('ctags-exuberant') && !filereadable('~/.vim/bin/ctags-exuberant/ctags/ctags')
+    if !executable('ctags-exuberant') && !filereadable(expand('~/.vim/bin/ctags-exuberant/ctags/ctags'))
         call InstallCommand("curl -fLo ~/.vim/bin/ctags-exuberant/ctags.tar.gz --create-dirs
           \ http://prdownloads.sourceforge.net/ctags/ctags-5.8.tar.gz")
         call InstallCommand("cd ~/.vim/bin/ctags-exuberant; tar -xzvf ctags.tar.gz")
