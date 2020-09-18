@@ -20,7 +20,7 @@ function! InstallVimrc()
         call InstallCommand("curl -sL https://deb.nodesource.com/setup_10.x | bash -")
         call InstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y nodejs lazygit")
         call InstallCommand("update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-8 800")
-        let lazygit_path = '~/.config/jesseduffield/lazygit/config.yml'
+        let lazygit_config_path = '~/.config/jesseduffield/lazygit'
     else
         call InstallCommand("sudo -u $SUDO_USER brew install curl ag ctags cscope global git
             \ llvm make autoconf automake pkg-config python3 nodejs gnu-sed bat ripgrep lazygit golang || true")
@@ -32,7 +32,7 @@ function! InstallVimrc()
         if !executable('clangd')
             call InstallCommand("echo export PATH=\\$PATH:/usr/local/opt/llvm/bin >> ~/.bashrc")
         endif
-        let lazygit_path = '~/Library/Application\ Support/jesseduffield/lazygit/config.yml'
+        let lazygit_config_path = '~/Library/Application\ Support/jesseduffield/lazygit'
     endif
     call InstallCommand("mkdir -p ~/.vim")
     call InstallCommand("mkdir -p ~/.vim/tmp")
@@ -106,13 +106,13 @@ function! InstallVimrc()
         endif
     endif
     call InstallCommand("
-        \ sudo -u $SUDO_USER mkdir -p `dirname '" . lazygit_path . "'`
-        \ && sudo -u $SUDO_USER touch " . lazygit_path . "
-        \ && echo 'startuppopupversion: 1' > " . lazygit_path . "
-        \ && echo 'gui:' >> " . lazygit_path . "
-        \ && echo '  theme:' >> " . lazygit_path . "
-        \ && echo '    selectedLineBgColor:' >> " . lazygit_path . "
-        \ && echo '      - reverse' >> " . lazygit_path . "
+        \ sudo -u $SUDO_USER mkdir -p " . lazygit_config_path . "
+        \ && sudo -u $SUDO_USER touch " . lazygit_config_path . "/config.yml
+        \ && echo 'startuppopupversion: 1' > " . lazygit_config_path . "/config.yml
+        \ && echo 'gui:' >> " . lazygit_config_path . "/config.yml
+        \ && echo '  theme:' >> " . lazygit_config_path . "/config.yml
+        \ && echo '    selectedLineBgColor:' >> " . lazygit_config_path . "/config.yml
+        \ && echo '      - reverse' >> " . lazygit_config_path . "/config.yml
     \ ")
     call InstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim")
     call InstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim/tmp")
