@@ -341,6 +341,7 @@ nnoremap <silent> <leader>zb :below terminal ++rows=10<CR>
 nnoremap <silent> <leader>zB :below terminal ++rows=20<CR>
 
 " Vim-better-whitespace
+let g:better_whitespace_filetypes_blacklist = ['diff', 'gitcommit', 'unite', 'qf', 'help', 'VimspectorPrompt']
 nnoremap <silent> <leader>zw :StripWhitespace<CR>
 nnoremap <silent> <leader>zW :ToggleWhitespace<CR>
 
