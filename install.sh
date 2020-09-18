@@ -2,7 +2,7 @@
 set -e
 
 if [ -x "$(command -v brew)" ]; then
-    sudo -u $SUDO_USER brew install vim
+    sudo -u $SUDO_USER brew install vim || true
 else
     if ! [ -x "$(command -v python3)" ]; then
         DEBIAN_FRONTEND=noninteractive apt install -y python3

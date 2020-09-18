@@ -23,7 +23,7 @@ function! InstallVimrc()
         let lazygit_path = '~/.config/jesseduffield/lazygit/config.yml'
     else
         call InstallCommand("sudo -u $SUDO_USER brew install curl ag ctags cscope global git
-            \ llvm make autoconf automake pkg-config python3 nodejs gnu-sed bat ripgrep lazygit golang")
+            \ llvm make autoconf automake pkg-config python3 nodejs gnu-sed bat ripgrep lazygit golang || true")
         call InstallCommand("sudo -u $SUDO_USER brew link python3")
         call InstallCommand("sudo -u $SUDO_USER brew tap AdoptOpenJDK/openjdk")
         call InstallCommand("sudo -u $SUDO_USER brew cask install adoptopenjdk8")
