@@ -1116,7 +1116,7 @@ nmap <S-F10> <plug>VimspectorStepInto
 nmap <F11> <plug>VimspectorStepInto
 nmap <leader>do <plug>VimspectorStepOut
 nmap <S-F11> <plug>VimspectorStepOut
-nmap <leader>dq <plug>VimspectorReset
+nnoremap <silent> <leader>dq :VimspectorReset<CR>
 nnoremap <silent> <leader>de i-exec<space>
 
 function! ZGenerateVimspectorCpp()
