@@ -39,6 +39,7 @@ function! InstallVimrc()
     call InstallCommand("mkdir -p ~/.vim/bin/python")
     call InstallCommand("mkdir -p ~/.config")
     call InstallCommand("mkdir -p ~/.config/coc")
+    call InstallCommand("mkdir -p ~/.cache")
     if 0 == system('python3 --version | python3 -c "
                 \ import sys;
                 \ major, minor = [int(c) for c in sys.stdin.read().split(\" \")[1].split(\".\")][:2];
