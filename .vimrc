@@ -133,7 +133,6 @@ endif
 function! CustomizePlugins()
     call InstallCommand(s:sed . " -i 's@ . redraw\\!@ . \" > /dev/null\"@' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim")
     call InstallCommand(s:sed . " -i 's@silent execute \"perl system.*@silent execute \"\\!\" . a:cmd . \" > /dev/null\"@' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim")
-    call InstallCommand(s:sed . " -i 's/s:did_snips_mappings/g:did_snips_mappings/' ~/.vim/plugged/snipMate-acp/after/plugin/snipMate.vim")
 endfunction
 
 if !empty($INSTALL_VIMRC)
@@ -159,9 +158,6 @@ call plug#begin()
 Plug 'puremourning/vimspector'
 Plug 'preservim/nerdtree', {'on': 'NERDTreeToggle'}
 Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'tomtom/tlib_vim'
-Plug 'rdolgushin/snipMate-acp'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -176,7 +172,6 @@ Plug 'vim-scripts/TagHighlight'
 Plug 'erig0/cscope_dynamic'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'airblade/vim-gitgutter'
-Plug 'gotcha/vimpdb'
 Plug 'tpope/vim-fugitive'
 if !empty($INSTALL_VIMRC_PLUGINS) || g:lsp_choice == 'vim-lsp'
     Plug 'prabirshrestha/async.vim'
@@ -204,7 +199,7 @@ Plug 'joeytwiddle/sexy_scroller.vim'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'troydm/zoomwintab.vim'
 Plug 'wincent/terminus'
-Plug 'jreybert/vimagit'
+Plug 'jreybert/vimagit', { 'on': ['Magit', 'MagitOnly'] }
 Plug 'tpope/vim-obsession'
 Plug 'haya14busa/incsearch.vim'
 Plug 'haya14busa/incsearch-fuzzy.vim'
@@ -390,10 +385,6 @@ nnoremap <silent> <leader>nf :NERDTreeFind<CR>
 
 " Ctrlp
 let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-
-" Acp snipmate length
-let g:did_snips_mappings = 1
-let g:acp_behaviorSnipmateLength = 1
 
 " Git
 nnoremap <silent> <leader>gb :Git blame<CR>
