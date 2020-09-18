@@ -147,7 +147,14 @@ H - Modify width - 1
 <leader>gm - Vimagit staging plugin.
 <leader>gb - View blame.
 <leader>gc - View commits.
-<leader>gl - Lazy git staging plugin (up/down to move between files, space to stage/unstage, enter to go into staging each lines individually, c to commit, and S-P to push).
+<leader>gl - Lazy git staging plugin.
+    - up/down to move between files.
+    - space to stage/unstage.
+    - enter to go into staging each lines individually.
+    - c to commit.
+    - Shift-A to commit ammend.
+    - Shift-P to push.
+    - ? for help.
 ```
 
 * Comment in/out:
