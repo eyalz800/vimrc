@@ -34,7 +34,7 @@ else
     make distclean
     ./configure --with-features=huge \
         --enable-fail-if-missing \
-        --prefix=/usr \
+        --prefix=/usr/local \
         --enable-cscope \
         --enable-python3interp \
         --enable-clipboard \
