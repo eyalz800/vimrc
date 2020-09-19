@@ -210,7 +210,7 @@ if !empty($INSTALL_VIMRC_PLUGINS)
     let g:coc_disable_startup_warning = 1
     if $INSTALL_VIMRC_PLUGINS != 'post'
         exec ":PlugInstall --sync"
-        call InstallCommand("INSTALL_VIMRC_PLUGINS=post vim +'CocInstall -sync coc-json coc-clangd coc-sh coc-python coc-vimlsp' +qa")
+        call InstallCommand("INSTALL_VIMRC_PLUGINS=post vim +'CocInstall -sync coc-json coc-clangd coc-python coc-vimlsp' +qa")
         call InstallCommand("
             \ echo '{' > ~/.vim/coc-settings.json
             \ && echo '    \"clangd.semanticHighlighting\": true,' >> ~/.vim/coc-settings.json
@@ -1004,7 +1004,7 @@ endif
 
 " Coc
 if g:lsp_choice == 'coc'
-    let g:coc_global_extensions = ['coc-clangd', 'coc-python', 'coc-json', 'coc-sh', 'coc-vimlsp']
+    let g:coc_global_extensions = ['coc-clangd', 'coc-python', 'coc-json', 'coc-vimlsp']
     let g:coc_fzf_preview = 'right:50%'
 
     "nmap <silent> gd <Plug>(coc-definition)
