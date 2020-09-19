@@ -397,9 +397,6 @@ let g:tagbar_width = 23
 nnoremap <silent> <C-l> :NERDTreeToggle<CR>:wincmd w<CR>:TagbarToggle<CR>
 nnoremap <silent> <leader>nf :NERDTreeFind<CR>
 
-" Ctrlp
-let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-
 " Git
 nnoremap <silent> <leader>gb :Git blame<CR>
 nnoremap <silent> <leader>gm :MagitOnly<CR>
