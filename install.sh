@@ -21,7 +21,7 @@ else
         python3_command=python3.6
     fi
 
-    if ! [ -d ~/.vim/tmp/vim/vim-$vim-version ]; then
+    if ! [ -d ~/.vim/tmp/vim/vim-$vim_version ]; then
         curl -fLo ~/.vim/tmp/vim/vim.tar.gz --create-dirs \
             https://github.com/vim/vim/archive/v$vim_version.tar.gz
     fi
