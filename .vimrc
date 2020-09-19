@@ -244,7 +244,7 @@ set wildmode=list:longest,full
 set wildmenu
 set completeopt=longest,menuone,preview
 set nowrap
-nnoremap <C-q> <C-v>
+nnoremap <silent> <C-q> <C-v>
 set shellslash
 map <C-w>w :q<CR>
 autocmd filetype make setlocal noexpandtab autoindent
@@ -254,6 +254,8 @@ set noerrorbells visualbell t_vb=
 
 " Clipboard
 vnoremap <silent> <C-c> "*y
+inoremap <silent> <C-v> <ESC>"*gpa
+nnoremap <silent> <C-v> "*p
 if empty($SSH_CONNECTION)
     set clipboard=unnamed
 else
