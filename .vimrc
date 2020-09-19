@@ -40,16 +40,11 @@ function! InstallVimrc()
     call InstallCommand("mkdir -p ~/.config")
     call InstallCommand("mkdir -p ~/.config/coc")
     call InstallCommand("mkdir -p ~/.cache")
-    if 0 == system('python3 --version | python3 -c "
-                \ import sys;
-                \ major, minor = [int(c) for c in sys.stdin.read().split(\" \")[1].split(\".\")][:2];
-                \ print(1 if major >= 3 and minor >= 6 else 0)"')
-        if executable('python3.6')
-            call InstallCommand("rm -rf ~/.vim/bin/python/python3")
-            call InstallCommand("ln -s $(command -v python3.6) ~/.vim/bin/python/python3")
-            let $PATH = expand('~/.vim/bin/python') . ':' . $PATH
-            let python3_command = 'python3.6'
-        endif
+    if 0 == system('python3 -c "import sys; print(1 if sys.version_info.major >= 3 and sys.version_info.minor >= 6 else 0)"') && executable('python3.6')
+        call InstallCommand("rm -rf ~/.vim/bin/python/python3")
+        call InstallCommand("ln -s $(command -v python3.6) ~/.vim/bin/python/python3")
+        let $PATH = expand('~/.vim/bin/python') . ':' . $PATH
+        let python3_command = 'python3.6'
     endif
     if executable('pip3')
         call InstallCommand("pip3 install compiledb")
