@@ -7,6 +7,7 @@ else
     vim_version=8.2.1539
     python3_command=python3
 
+    DEBIAN_FRONEND=noninteractive apt update
     DEBIAN_FRONTEND=noninteractive apt install -y \
         python3-dev curl build-essential make libncurses5-dev libncursesw5-dev gcc \
         libx11-dev libxtst-dev libxt-dev libsm-dev libxpm-dev
