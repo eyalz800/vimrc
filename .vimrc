@@ -252,8 +252,13 @@ noremap <F1> <C-w><C-p>
 noremap <F2> <C-w><C-w>
 set noerrorbells visualbell t_vb=
 
-" Exclude remote clipboard.
-set clipboard=exclude:.*
+" Clipboard
+vnoremap <silent> <C-c> "*y
+if empty($SSH_CONNECTION)
+    set clipboard=unnamed
+else
+    set clipboard=exclude:.*
+endif
 
 " Gui colors
 if has('termguicolors') && !filereadable(expand('~/.vim/.notermguicolors'))
