@@ -79,8 +79,7 @@ go - Toggle between source and header file.
 
 * Terminal commands:
 ```
-<leader>zb - Open small terminal window below.
-<leader>zB - Open large terminal window below.
+<leader>zb - Open a terminal window below.
 ```
 
 * Debugging commands:

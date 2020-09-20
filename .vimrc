@@ -354,11 +354,10 @@ nnoremap <silent> <leader>zf :call ZGenerateFlags()<CR>
 nnoremap <silent> <leader>zk :call ZGenerateOpengrok()<CR>
 
 " Terminal
-nnoremap <silent> <leader>zb :below terminal ++rows=10<CR>
-nnoremap <silent> <leader>zB :below terminal ++rows=20<CR>
+nnoremap <silent> <leader>zb :below terminal ++rows=10<CR><C-w>N:set ft=terminal<CR>a
 
 " Vim-better-whitespace
-let g:better_whitespace_filetypes_blacklist = ['diff', 'gitcommit', 'unite', 'qf', 'help', 'VimspectorPrompt']
+let g:better_whitespace_filetypes_blacklist = ['diff', 'gitcommit', 'unite', 'qf', 'help', 'VimspectorPrompt', 'terminal']
 nnoremap <silent> <leader>zw :StripWhitespace<CR>
 nnoremap <silent> <leader>zW :ToggleWhitespace<CR>
 
