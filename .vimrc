@@ -1215,7 +1215,7 @@ endfunction
 function! ZGenerateVimspectorPy()
     call inputsave()
     let program = input('Program: ')
-    let python = input('Python: ')
+    let python = 'python3'
     call inputrestore()
     exec ":AsyncRun
         \ echo '{' > .vimspector.json &&
