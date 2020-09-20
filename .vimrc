@@ -23,7 +23,7 @@ function! InstallVimrc()
         let lazygit_config_path = '~/.config/jesseduffield/lazygit'
     else
         call InstallCommand("sudo -u $SUDO_USER brew install curl ag ctags cscope global git
-            \ llvm make autoconf automake pkg-config python3 nodejs gnu-sed bat ripgrep lazygit golang || true")
+            \ llvm make autoconf automake pkg-config python3 nodejs gnu-sed bat ripgrep lazygit golang pandoc || true")
         call InstallCommand("sudo -u $SUDO_USER brew link python3")
         call InstallCommand("sudo -u $SUDO_USER brew tap AdoptOpenJDK/openjdk")
         call InstallCommand("sudo -u $SUDO_USER brew cask install adoptopenjdk8")
@@ -110,6 +110,11 @@ function! InstallVimrc()
         \ && echo '    selectedLineBgColor:' >> " . lazygit_config_path . "/config.yml
         \ && echo '      - reverse' >> " . lazygit_config_path . "/config.yml
     \ ")
+    if !executable('brew') && !filereadable(expand('~/.vim/tmp/pandoc.deb'))
+        call InstallCommand("curl -fLo ~/.vim/tmp/pandoc.deb --create-dirs
+            \ https://github.com/jgm/pandoc/releases/download/2.10.1/pandoc-2.10.1-1-amd64.deb")
+        call InstallCommand("dpkg -i ~/.vim/tmp/pandoc.deb")
+    endif
     call InstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim")
     call InstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim/tmp")
     call InstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.config")
@@ -1128,6 +1133,16 @@ nmap <leader>do <plug>VimspectorStepOut
 nmap <S-F11> <plug>VimspectorStepOut
 nnoremap <silent> <leader>dq :VimspectorReset<CR>
 nnoremap <silent> <leader>de i-exec<space>
+
+" Pandoc
+command! -complete=file -nargs=1 Pandoc
+    \ call system("pandoc -f " .  split(<f-args>, '\.')[-1] . " -t markdown " .
+    \ <f-args> . "> " . <f-args> . ".md")
+    \ | exec "edit " . <f-args> . ".md"
+command! -nargs=0 PandocWrite
+    \ exec ":w" |
+    \ call system("pandoc -f markdown -t " .  split(expand('%:p'), '\.')[-2] .
+    \ " " .  expand('%:p') . "> " . split(expand('%:p'), '\.md')[0])
 
 function! ZGenerateVimspectorCpp()
     call inputsave()
