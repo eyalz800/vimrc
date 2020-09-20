@@ -1133,8 +1133,16 @@ nmap <S-F11> <plug>VimspectorStepOut
 nnoremap <silent> <leader>dq :VimspectorReset<CR>
 nnoremap <silent> <leader>de i-exec<space>
 
+" Zip
+let g:zipPlugin_ext= '*.zip,*.jar,*.xpi,*.ja,*.war,*.ear,*.celzip,
+    \ *.oxt,*.kmz,*.wsz,*.xap,*.docm,*.dotx,*.dotm,*.potx,*.potm,
+    \ *.ppsx,*.ppsm,*.pptx,*.pptm,*.ppam,*.sldx,*.thmx,*.xlam,*.xlsx,*.xlsm,
+    \ *.xlsb,*.xltx,*.xltm,*.xlam,*.crtx,*.vdw,*.glox,*.gcsx,*.gqsx,*.epub'
+
 " Pandoc
-command! -complete=file -nargs=1 Pandoc
+autocmd BufReadPost *.doc,*.docx,*.rtf,*.odp,*.odt
+    \ silent exec "\%!pandoc \"%\" -tmarkdown -o /dev/stdout" | set ft=markdown | set ro
+command! -complete=file -nargs=1 PandocEdit
     \ call system("pandoc -f " .  split(<f-args>, '\.')[-1] . " -t markdown " .
     \ <f-args> . "> " . <f-args> . ".md")
     \ | exec "edit " . <f-args> . ".md"
