@@ -1151,6 +1151,19 @@ command! -nargs=0 PandocWrite
     \ call system("pandoc -f markdown -t " .  split(expand('%:p'), '\.')[-2] .
     \ " " .  expand('%:p') . "> " . split(expand('%:p'), '\.md')[0])
 
+" Fix function keys for tmux.
+if !empty($TMUX)
+    exec "set <S-F1>=\<ESC>[25~"
+    exec "set <S-F2>=\<ESC>[26~"
+    exec "set <S-F3>=\<ESC>[28~"
+    exec "set <S-F4>=\<ESC>[29~"
+    exec "set <S-F5>=\<ESC>[31~"
+    exec "set <S-F6>=\<ESC>[32~"
+    exec "set <S-F7>=\<ESC>[33~"
+    exec "set <S-F8>=\<ESC>[34~"
+endif
+
+" Vimspector functions.
 function! ZGenerateVimspectorCpp()
     call inputsave()
     let target = input('Target (Executable/IP): ')
