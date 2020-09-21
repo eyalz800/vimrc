@@ -1214,7 +1214,7 @@ endfunction
 
 function! ZGenerateVimspectorPy()
     call inputsave()
-    let program = input('Program: ')
+    let program = input('Python main file: ')
     let python = 'python3'
     call inputrestore()
     exec ":AsyncRun
@@ -1238,15 +1238,20 @@ function! ZGenerateVimspectorPy()
 endfunction
 
 function ZDebugLaunchSettings()
-    if empty(&filetype)
-        call ZSwitchToRoot()
-        exec ":Files"
+    let debug_type = &filetype
+    if debug_type != 'cpp' && debug_type != 'c' && debug_type != 'python'
+        call inputsave()
+        let debug_type = input('Debugger type (cpp/python): ')
+        call inputrestore()
     endif
 
-    if &filetype == 'cpp' || &filetype == 'c'
+    if debug_type == 'cpp' || debug_type == 'c'
         call ZGenerateVimspectorCpp()
-    elseif &filetype == 'python'
+    elseif debug_type == 'python'
         call ZGenerateVimspectorPy()
+    else
+        normal :<ESC>
+        echom 'Invalid debug type.'
     endif
 endfunction
 
