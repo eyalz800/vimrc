@@ -291,6 +291,15 @@ nnoremap <silent> <leader>zm :call ZToggleMouse()<CR>
 
 " Sign column
 set signcolumn=yes
+function! ZToggleSignColumn()
+    if !exists("b:signcolumn_on") || b:signcolumn_on
+        set signcolumn=no
+        let b:signcolumn_on = 0
+    else
+        set signcolumn=yes
+        let b:signcolumn_on = 1
+    endif
+endfunction
 
 " Updatetime
 set updatetime=300
@@ -309,16 +318,7 @@ endif
 set hidden
 
 " Copy / Paste Mode
-nnoremap <silent> <F7> :set number!<CR>:set paste!<CR>:call ZToggleSignColumn()<CR>
-function! ZToggleSignColumn()
-    if !exists("b:signcolumn_on") || b:signcolumn_on
-        set signcolumn=no
-        let b:signcolumn_on = 0
-    else
-        set signcolumn=yes
-        let b:signcolumn_on = 1
-    endif
-endfunction
+nnoremap <silent> <F7> :set paste!<CR>:set number!<CR>:call ZToggleSignColumn()<CR>:call ZToggleMouse()<CR>
 
 " Resize splits
 nnoremap <silent> L :vertical resize +1<CR>
