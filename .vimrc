@@ -229,8 +229,6 @@ set ignorecase
 set smartcase
 set shellslash
 set autoindent
-autocmd filetype cpp setlocal cindent
-autocmd filetype c setlocal cindent
 set cinoptions=g0N-s
 set backspace=indent,eol,start
 set ruler
@@ -248,10 +246,15 @@ set nowrap
 nnoremap <silent> <C-q> <C-v>
 set shellslash
 map <C-w>w :q<CR>
-autocmd filetype make setlocal noexpandtab autoindent
 noremap <F1> <C-w><C-p>
 noremap <F2> <C-w><C-w>
 set noerrorbells visualbell t_vb=
+augroup filetype_indentation
+    autocmd!
+    autocmd filetype cpp setlocal cindent
+    autocmd filetype c setlocal cindent
+    autocmd filetype make setlocal noexpandtab autoindent
+augroup end
 
 " Clipboard
 vnoremap <silent> <C-c> "*y
@@ -557,8 +560,11 @@ let g:VM_maps = {
 nmap <C-j> <plug>(VM-Add-Cursor-Down)
 nmap <C-k> <plug>(VM-Add-Cursor-Up)
 if g:lsp_choice == 'coc'
-    autocmd User visual_multi_before_cmd call ZVisualMultiCocBefore()
-    autocmd User visual_multi_after_cmd call ZVisualMultiCocAfter()
+    augroup visual_multi_coc
+        autocmd!
+        autocmd User visual_multi_before_cmd call ZVisualMultiCocBefore()
+        autocmd User visual_multi_after_cmd call ZVisualMultiCocAfter()
+    augroup end
 endif
 function! ZVisualMultiCocBefore()
     if g:coc_enabled
@@ -1008,7 +1014,7 @@ if g:lsp_choice == 'vim-lsp'
     inoremap <silent> <expr> <CR> pumvisible() ? asyncomplete#close_popup() . "\<CR>" : "\<CR>"
 
     augroup lsp_install
-        au!
+        autocmd!
         " call s:on_lsp_buffer_enabled only for languages that has the server registered.
         autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
     augroup end
@@ -1153,8 +1159,11 @@ let g:zipPlugin_ext= '*.zip,*.jar,*.xpi,*.ja,*.war,*.ear,*.celzip,
     \ *.xlsb,*.xltx,*.xltm,*.xlam,*.crtx,*.vdw,*.glox,*.gcsx,*.gqsx,*.epub'
 
 " Pandoc
-autocmd BufReadPost *.doc,*.docx,*.rtf,*.odp,*.odt
-    \ silent exec "\%!pandoc \"%\" -tmarkdown -o /dev/stdout" | set ft=markdown | set ro
+augroup pandoc_group
+    autocmd!
+    autocmd BufReadPost *.doc,*.docx,*.rtf,*.odp,*.odt
+        \ silent exec "\%!pandoc \"%\" -tmarkdown -o /dev/stdout" | set ft=markdown | set ro
+augroup end
 command! -complete=file -nargs=1 PandocEdit
     \ call system("pandoc -f " .  split(<f-args>, '\.')[-1] . " -t markdown " .
     \ <f-args> . "> " . <f-args> . ".md")
