@@ -357,10 +357,17 @@ nnoremap <silent> <leader>zf :call ZGenerateFlags()<CR>
 nnoremap <silent> <leader>zk :call ZGenerateOpengrok()<CR>
 
 " Terminal
-nnoremap <silent> <leader>zb :below terminal ++rows=10<CR><C-w>N:set ft=terminal<CR>a
-tnoremap <silent> <ScrollWheelUp> <C-w>:call TerminalEnterNormalMode()<CR>
+nnoremap <silent> <leader>zb :below terminal ++rows=10<CR>
+tnoremap <silent> <C-w>w <C-w>:q<CR>
+tnoremap <silent> <C-w>n <C-w>N
+tnoremap <silent> <C-w>m <C-w>:call TerminalToggleScrolling()<CR>
+augroup terminal_whitespace
+    autocmd!
+    autocmd TerminalOpen * DisableWhitespace
+    autocmd TerminalOpen * tnoremap <silent> <buffer> <ScrollWheelUp> <C-w>:call TerminalEnterNormalMode()<CR>
+augroup end
+
 function! TerminalExitNormalMode()
-    unmap <buffer> <silent> <RightMouse>
     call feedkeys("a")
 endfunction
 
@@ -368,12 +375,21 @@ function! TerminalEnterNormalMode()
     if &buftype == 'terminal' && mode('') == 't'
         call feedkeys("\<c-w>N")
         call feedkeys("\<c-y>")
-        map <buffer> <silent> <RightMouse> :call TerminalExitNormalMode()<CR>
+    endif
+endfunction
+
+function! TerminalToggleScrolling()
+    if !exists('b:terminal_scrolling_enabled') || b:terminal_scrolling_enabled == 1
+        tunmap <silent> <buffer> <ScrollWheelUp>
+        let b:terminal_scrolling_enabled = 0
+    else
+        tnoremap <silent> <buffer> <ScrollWheelUp> <C-w>:call TerminalEnterNormalMode()<CR>
+        let b:terminal_scrolling_enabled = 1
     endif
 endfunction
 
 " Vim-better-whitespace
-let g:better_whitespace_filetypes_blacklist = ['diff', 'gitcommit', 'unite', 'qf', 'help', 'VimspectorPrompt', 'terminal']
+let g:better_whitespace_filetypes_blacklist = ['diff', 'gitcommit', 'unite', 'qf', 'help', 'VimspectorPrompt']
 nnoremap <silent> <leader>zw :StripWhitespace<CR>
 nnoremap <silent> <leader>zW :ToggleWhitespace<CR>
 

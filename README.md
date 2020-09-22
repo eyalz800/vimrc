@@ -80,6 +80,8 @@ go - Toggle between source and header file.
 * Terminal commands:
 ```
 <leader>zb - Open a terminal window below.
+<C-w>n - Terminal normal mode.
+<C-w>m - Toggle terminal scrolling.
 ```
 
 * Debugging commands:
