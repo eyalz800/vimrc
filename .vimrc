@@ -358,6 +358,7 @@ nnoremap <silent> <leader>zk :call ZGenerateOpengrok()<CR>
 
 " Terminal
 nnoremap <silent> <leader>zb :below terminal ++rows=10<CR>
+nnoremap <silent> <leader>zv :vert rightb terminal<CR>
 tnoremap <silent> <C-w>w <C-w>:q<CR>
 tnoremap <silent> <C-w>n <C-w>N
 tnoremap <silent> <C-w>m <C-w>:call TerminalToggleScrolling()<CR>
