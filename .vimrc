@@ -355,6 +355,19 @@ nnoremap <silent> <leader>zk :call ZGenerateOpengrok()<CR>
 
 " Terminal
 nnoremap <silent> <leader>zb :below terminal ++rows=10<CR><C-w>N:set ft=terminal<CR>a
+tnoremap <silent> <ScrollWheelUp> <C-w>:call TerminalEnterNormalMode()<CR>
+function! TerminalExitNormalMode()
+    unmap <buffer> <silent> <RightMouse>
+    call feedkeys("a")
+endfunction
+
+function! TerminalEnterNormalMode()
+    if &buftype == 'terminal' && mode('') == 't'
+        call feedkeys("\<c-w>N")
+        call feedkeys("\<c-y>")
+        map <buffer> <silent> <RightMouse> :call TerminalExitNormalMode()<CR>
+    endif
+endfunction
 
 " Vim-better-whitespace
 let g:better_whitespace_filetypes_blacklist = ['diff', 'gitcommit', 'unite', 'qf', 'help', 'VimspectorPrompt', 'terminal']
