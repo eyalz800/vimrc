@@ -197,7 +197,9 @@ Plug 'tomasiser/vim-code-dark'
 Plug 'joeytwiddle/sexy_scroller.vim'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'troydm/zoomwintab.vim'
-Plug 'wincent/terminus'
+if !empty($INSTALL_VIMRC_PLUGINS) || empty($INSIDE_VIM)
+    Plug 'wincent/terminus'
+endif
 Plug 'jreybert/vimagit', { 'on': ['Magit', 'MagitOnly'] }
 Plug 'tpope/vim-obsession'
 Plug 'haya14busa/incsearch.vim'
@@ -205,6 +207,10 @@ Plug 'haya14busa/incsearch-fuzzy.vim'
 Plug 'joshdick/onedark.vim'
 Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 call plug#end()
+
+if empty($INSIDE_VIM)
+    let $INSIDE_VIM = 1
+endif
 
 if !empty($INSTALL_VIMRC_PLUGINS)
     let g:coc_disable_startup_warning = 1
