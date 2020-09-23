@@ -396,7 +396,7 @@ function! TerminalToggleScrolling()
 endfunction
 
 " Vim-better-whitespace
-let g:better_whitespace_filetypes_blacklist = ['diff', 'gitcommit', 'git', 'unite', 'qf', 'help', 'VimspectorPrompt']
+let g:better_whitespace_filetypes_blacklist = ['diff', 'gitcommit', 'git', 'unite', 'qf', 'help', 'VimspectorPrompt', 'xxd']
 nnoremap <silent> <leader>zw :StripWhitespace<CR>
 nnoremap <silent> <leader>zW :ToggleWhitespace<CR>
 
@@ -1175,6 +1175,14 @@ nmap <S-F11> <plug>VimspectorStepOut
 nnoremap <silent> <leader>dq :VimspectorReset<CR>
 nnoremap <silent> <leader>de i-exec<space>
 
+" Binary
+augroup binary_file
+    autocmd!
+    autocmd BufReadPost * if &bin | set ft=xxd | exec "%!xxd" | endif
+    autocmd BufWritePre * if &bin | set ft=xxd | exec "%!xxd -r" | endif
+    autocmd BufWritePost * if &bin | set ft=xxd | exec "%!xxd" | endif
+augroup end
+
 " Zip
 let g:zipPlugin_ext= '*.zip,*.jar,*.xpi,*.ja,*.war,*.ear,*.celzip,
     \ *.oxt,*.kmz,*.wsz,*.xap,*.docm,*.dotx,*.dotm,*.potx,*.potm,
@@ -1184,8 +1192,8 @@ let g:zipPlugin_ext= '*.zip,*.jar,*.xpi,*.ja,*.war,*.ear,*.celzip,
 " Pandoc
 augroup pandoc_group
     autocmd!
-    autocmd BufReadPost *.doc,*.docx,*.rtf,*.odp,*.odt
-        \ silent exec "\%!pandoc \"%\" -tmarkdown -o /dev/stdout" | set ft=markdown | set ro
+    autocmd BufReadPost *.doc,*.docx,*.rtf,*.odp,*.odt if !&bin |
+        \ silent exec "\%!pandoc \"%\" -tmarkdown -o /dev/stdout" | set ft=markdown | set ro | endif
 augroup end
 command! -complete=file -nargs=1 PandocEdit
     \ call system("pandoc -f " .  split(<f-args>, '\.')[-1] . " -t markdown " .

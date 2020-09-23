@@ -237,3 +237,9 @@ and invoke 'vim -S' to restore the session at the next time.
 :ZColor 'onedark' - using onedark.
 :ZColor 'gruvbox' - using gruvbox.
 ```
+
+* Edit in hex dump mode:
+```
+vim -b [binary_file]
+vimdiff -b [binary_file_1] [binary_file_2]
+```
