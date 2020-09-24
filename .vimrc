@@ -1156,7 +1156,7 @@ imap <BS> <Plug>(PearTreeBackspace)
 
 " Vimspector
 nnoremap <silent> <leader>dl :call ZDebugLaunchSettings()<CR>
-nmap <leader>dd :call vimspector#Launch()<CR>
+nnoremap <silent> <leader>dd :if !filereadable('.vimspector.json') \| call ZDebugLaunchSettings() \| endif \| call vimspector#Launch()<CR>
 nmap <leader>dc <plug>VimspectorContinue
 nmap <F5> <plug>VimspectorContinue
 nmap <leader>dr <plug>VimspectorRestart
