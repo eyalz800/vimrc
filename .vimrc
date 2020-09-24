@@ -1225,31 +1225,7 @@ function! ZGenerateVimspectorCpp()
     if !executable('gdb') && executable('lldb')
         let debugger = 'lldb'
     endif
-    if filereadable(target)
-        exec ":AsyncRun
-            \ echo '{' > .vimspector.json &&
-            \ echo '    \"configurations\": {' >> .vimspector.json &&
-            \ echo '        \"Launch\": {' >> .vimspector.json &&
-            \ echo '            \"adapter\": \"vscode-cpptools\",' >> .vimspector.json &&
-            \ echo '            \"configuration\": {' >> .vimspector.json &&
-            \ echo '                \"request\": \"launch\",' >> .vimspector.json &&
-            \ echo '                \"type\": \"cppdbg\",' >> .vimspector.json &&
-            \ echo '                \"program\": \"" . target . "\",' >> .vimspector.json &&
-            \ echo '                \"args\": [],' >> .vimspector.json &&
-            \ echo '                \"environment\": [],' >> .vimspector.json &&
-            \ echo '                \"cwd\": \"" . g:vimroot . "\",' >> .vimspector.json &&
-            \ echo '                \"externalConsole\": true,' >> .vimspector.json &&
-            \ echo '                \"stopAtEntry\": true,' >> .vimspector.json &&
-            \ echo '                \"setupCommands\": [' >> .vimspector.json &&
-            \ echo '                    { \"text\": \"set disassembly-flavor intel\", \"description\": \"\", \"ignoreFailures\": false },' >> .vimspector.json &&
-            \ echo '                    { \"text\": \"-enable-pretty-printing\", \"description\": \"\", \"ignoreFailures\": false }' >> .vimspector.json &&
-            \ echo '                ],' >> .vimspector.json &&
-            \ echo '                \"MIMode\": \"" . debugger . "\"' >> .vimspector.json &&
-            \ echo '            }' >> .vimspector.json &&
-            \ echo '        }' >> .vimspector.json &&
-            \ echo '    }' >> .vimspector.json &&
-            \ echo '}' >> .vimspector.json"
-    elseif stridx(target, ':') != -1
+    if stridx(target, ':') != -1 && !filereadable(target)
         call inputsave()
         let main_file = input('Main File: ')
         call inputrestore()
@@ -1270,6 +1246,30 @@ function! ZGenerateVimspectorCpp()
             \ echo '                \"externalConsole\": true,' >> .vimspector.json &&
             \ echo '                \"stopAtEntry\": true,' >> .vimspector.json &&
             \ echo '                \"miDebuggerPath\": \"" . debugger . "\",' >> .vimspector.json &&
+            \ echo '                \"MIMode\": \"" . debugger . "\"' >> .vimspector.json &&
+            \ echo '            }' >> .vimspector.json &&
+            \ echo '        }' >> .vimspector.json &&
+            \ echo '    }' >> .vimspector.json &&
+            \ echo '}' >> .vimspector.json"
+    else
+        exec ":AsyncRun
+            \ echo '{' > .vimspector.json &&
+            \ echo '    \"configurations\": {' >> .vimspector.json &&
+            \ echo '        \"Launch\": {' >> .vimspector.json &&
+            \ echo '            \"adapter\": \"vscode-cpptools\",' >> .vimspector.json &&
+            \ echo '            \"configuration\": {' >> .vimspector.json &&
+            \ echo '                \"request\": \"launch\",' >> .vimspector.json &&
+            \ echo '                \"type\": \"cppdbg\",' >> .vimspector.json &&
+            \ echo '                \"program\": \"" . target . "\",' >> .vimspector.json &&
+            \ echo '                \"args\": [],' >> .vimspector.json &&
+            \ echo '                \"environment\": [],' >> .vimspector.json &&
+            \ echo '                \"cwd\": \"" . g:vimroot . "\",' >> .vimspector.json &&
+            \ echo '                \"externalConsole\": true,' >> .vimspector.json &&
+            \ echo '                \"stopAtEntry\": true,' >> .vimspector.json &&
+            \ echo '                \"setupCommands\": [' >> .vimspector.json &&
+            \ echo '                    { \"text\": \"set disassembly-flavor intel\", \"description\": \"\", \"ignoreFailures\": false },' >> .vimspector.json &&
+            \ echo '                    { \"text\": \"-enable-pretty-printing\", \"description\": \"\", \"ignoreFailures\": false }' >> .vimspector.json &&
+            \ echo '                ],' >> .vimspector.json &&
             \ echo '                \"MIMode\": \"" . debugger . "\"' >> .vimspector.json &&
             \ echo '            }' >> .vimspector.json &&
             \ echo '        }' >> .vimspector.json &&
