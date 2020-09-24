@@ -461,6 +461,10 @@ let g:gruvbox_contrast_datk = 'medium'
 if !filereadable(expand('~/.vim/.color'))
     call system('echo codedark > ~/.vim/.color')
 endif
+" Onedark color overrides
+let g:onedark_color_overrides = {
+    \ "special_grey": { "gui": "#5C6370", "cterm": "59", "cterm16": "15" }
+\ }
 let s:vim_color = readfile(expand('~/.vim/.color'))[0]
 if s:vim_color == 'codedark'
     color onedark
@@ -1073,6 +1077,10 @@ if g:lsp_choice == 'coc'
     highlight link CocErrorFloat None
     highlight clear CocWarningFloat
     highlight link CocWarningFloat None
+    highlight clear CocInfoSign
+    highlight link CocInfoSign None
+    highlight clear CocInfoFloat
+    highlight link CocInfoFloat None
 
     function! s:show_documentation()
       if (index(['vim','help'], &filetype) >= 0)
@@ -1479,7 +1487,6 @@ function! ZSyntaxInfo()
 endfun
 
 if g:colors_name == 'codedark'
-
     " Terminal colors (base16):
     let s:cterm00 = "00"
     let s:cterm03 = "08"
@@ -1585,4 +1592,54 @@ if g:colors_name == 'codedark'
 
     " Cursor line
     highlight CursorLine ctermbg=235 guibg=#2b2b2b
+elseif g:colors_name == 'onedark'
+    let s:group_colors = {} " Cache of default highlight group settings, for later reference via `onedark#extend_highlight`
+    function! ZHighLight(group, style, ...)
+        if (a:0 > 0) " Will be true if we got here from onedark#extend_highlight
+            let s:highlight = s:group_colors[a:group]
+            for style_type in ["fg", "bg", "sp"]
+                if (has_key(a:style, style_type))
+                    let l:default_style = (has_key(s:highlight, style_type) ? s:highlight[style_type] : { "cterm16": "NONE", "cterm": "NONE", "gui": "NONE" })
+                    let s:highlight[style_type] = extend(l:default_style, a:style[style_type])
+                endif
+            endfor
+            if (has_key(a:style, "gui"))
+                let s:highlight.gui = a:style.gui
+            endif
+        else
+            let s:highlight = a:style
+            let s:group_colors[a:group] = s:highlight " Cache default highlight group settings
+        endif
+
+        if g:onedark_terminal_italics == 0
+            if has_key(s:highlight, "cterm") && s:highlight["cterm"] == "italic"
+                unlet s:highlight.cterm
+            endif
+            if has_key(s:highlight, "gui") && s:highlight["gui"] == "italic"
+                unlet s:highlight.gui
+            endif
+        endif
+
+        if g:onedark_termcolors == 16
+            let l:ctermfg = (has_key(s:highlight, "fg") ? s:highlight.fg.cterm16 : "NONE")
+            let l:ctermbg = (has_key(s:highlight, "bg") ? s:highlight.bg.cterm16 : "NONE")
+        else
+            let l:ctermfg = (has_key(s:highlight, "fg") ? s:highlight.fg.cterm : "NONE")
+            let l:ctermbg = (has_key(s:highlight, "bg") ? s:highlight.bg.cterm : "NONE")
+        endif
+
+        execute "highlight" a:group
+            \ "guifg="     (has_key(s:highlight, "fg")        ? s:highlight.fg.gui     : "NONE")
+            \ "guibg="     (has_key(s:highlight, "bg")        ? s:highlight.bg.gui     : "NONE")
+            \ "guisp="     (has_key(s:highlight, "sp")        ? s:highlight.sp.gui     : "NONE")
+            \ "gui="         (has_key(s:highlight, "gui")     ? s:highlight.gui            : "NONE")
+            \ "ctermfg=" . l:ctermfg
+            \ "ctermbg=" . l:ctermbg
+            \ "cterm="     (has_key(s:highlight, "cterm") ? s:highlight.cterm        : "NONE")
+    endfunction
+
+    let s:onedarkWhite = { "gui": "#ABB2BF", "cterm": "145", "cterm16": "7" }
+
+    " Tagbar Highlights
+    call ZHighLight('TagbarSignature', {"fg": s:onedarkWhite})
 endif
