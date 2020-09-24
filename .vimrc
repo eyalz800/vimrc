@@ -589,8 +589,8 @@ nmap <C-k> <plug>(VM-Add-Cursor-Up)
 if g:lsp_choice == 'coc'
     augroup visual_multi_coc
         autocmd!
-        autocmd User visual_multi_before_cmd call ZVisualMultiCocBefore()
-        autocmd User visual_multi_after_cmd call ZVisualMultiCocAfter()
+        autocmd User visual_multi_start call ZVisualMultiCocBefore()
+        autocmd User visual_multi_exit call ZVisualMultiCocAfter()
     augroup end
 endif
 function! ZVisualMultiCocBefore()
