@@ -1220,6 +1220,10 @@ function! VimspectorCommandHistoryDown()
     call feedkeys("\<C-o>A", 'tn')
     let b:vimspector_command_history_pos = b:vimspector_command_history_pos + 1
 endfunction
+augroup visual_multi_vimspector
+    autocmd!
+    autocmd User visual_multi_exit if &ft == 'VimspectorPrompt' | call InitializeVimspectorCommandHistoryMaps() | endif
+augroup end
 
 " Binary
 augroup binary_file
