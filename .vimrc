@@ -1182,18 +1182,22 @@ nmap <leader>do <plug>VimspectorStepOut
 nmap <S-F11> <plug>VimspectorStepOut
 nnoremap <silent> <leader>dq :VimspectorReset<CR>
 nnoremap <silent> <leader>de i-exec<space>
+nnoremap <silent> <leader>dm :call InitializeVimspectorCommandHistoryMaps()<CR>
 augroup vimspector_command_history
     autocmd!
     autocmd FileType VimspectorPrompt call InitializeVimspectorCommandHistory()
 augroup end
 function! InitializeVimspectorCommandHistory()
     if !exists('b:vimspector_command_history')
-        inoremap <silent> <buffer> <CR> <C-o>:call VimspectorCommandHistoryAdd()<CR>
-        inoremap <silent> <buffer> <Up> <C-o>:call VimspectorCommandHistoryUp()<CR>
-        inoremap <silent> <buffer> <Down> <C-o>:call VimspectorCommandHistoryDown()<CR>
+        call InitializeVimspectorCommandHistoryMaps()
         let b:vimspector_command_history = []
         let b:vimspector_command_history_pos = 0
     endif
+endfunction
+function! InitializeVimspectorCommandHistoryMaps()
+    inoremap <silent> <buffer> <CR> <C-o>:call VimspectorCommandHistoryAdd()<CR>
+    inoremap <silent> <buffer> <Up> <C-o>:call VimspectorCommandHistoryUp()<CR>
+    inoremap <silent> <buffer> <Down> <C-o>:call VimspectorCommandHistoryDown()<CR>
 endfunction
 function! VimspectorCommandHistoryAdd()
     call add(b:vimspector_command_history, getline('.'))
