@@ -1279,7 +1279,7 @@ function! ZGenerateVimspectorCpp()
         call inputsave()
         let main_file = input('Main File: ')
         call inputrestore()
-        exec ":AsyncRun
+        call system("
             \ echo '{' > .vimspector.json &&
             \ echo '    \"configurations\": {' >> .vimspector.json &&
             \ echo '        \"Launch\": {' >> .vimspector.json &&
@@ -1300,9 +1300,9 @@ function! ZGenerateVimspectorCpp()
             \ echo '            }' >> .vimspector.json &&
             \ echo '        }' >> .vimspector.json &&
             \ echo '    }' >> .vimspector.json &&
-            \ echo '}' >> .vimspector.json"
+            \ echo '}' >> .vimspector.json")
     else
-        exec ":AsyncRun
+        call system("
             \ echo '{' > .vimspector.json &&
             \ echo '    \"configurations\": {' >> .vimspector.json &&
             \ echo '        \"Launch\": {' >> .vimspector.json &&
@@ -1324,7 +1324,7 @@ function! ZGenerateVimspectorCpp()
             \ echo '            }' >> .vimspector.json &&
             \ echo '        }' >> .vimspector.json &&
             \ echo '    }' >> .vimspector.json &&
-            \ echo '}' >> .vimspector.json"
+            \ echo '}' >> .vimspector.json")
     endif
 endfunction
 
@@ -1333,7 +1333,7 @@ function! ZGenerateVimspectorPy()
     let program = input('Python main file: ')
     let python = 'python3'
     call inputrestore()
-    exec ":AsyncRun
+    call system("
         \ echo '{' > .vimspector.json &&
         \ echo '    \"configurations\": {' >> .vimspector.json &&
         \ echo '        \"Launch\": {' >> .vimspector.json &&
@@ -1350,7 +1350,7 @@ function! ZGenerateVimspectorPy()
         \ echo '            }' >> .vimspector.json &&
         \ echo '        }' >> .vimspector.json &&
         \ echo '    }' >> .vimspector.json &&
-        \ echo '}' >> .vimspector.json"
+        \ echo '}' >> .vimspector.json")
 endfunction
 
 function ZDebugLaunchSettings()
