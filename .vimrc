@@ -1182,6 +1182,40 @@ nmap <leader>do <plug>VimspectorStepOut
 nmap <S-F11> <plug>VimspectorStepOut
 nnoremap <silent> <leader>dq :VimspectorReset<CR>
 nnoremap <silent> <leader>de i-exec<space>
+augroup vimspector_command_history
+    autocmd!
+    autocmd FileType VimspectorPrompt call InitializeVimspectorCommandHistory()
+augroup end
+function! InitializeVimspectorCommandHistory()
+    if !exists('b:vimspector_command_history')
+        inoremap <silent> <buffer> <CR> <C-o>:call VimspectorCommandHistoryAdd()<CR>
+        inoremap <silent> <buffer> <Up> <C-o>:call VimspectorCommandHistoryUp()<CR>
+        inoremap <silent> <buffer> <Down> <C-o>:call VimspectorCommandHistoryDown()<CR>
+        let b:vimspector_command_history = []
+        let b:vimspector_command_history_pos = 0
+    endif
+endfunction
+function! VimspectorCommandHistoryAdd()
+    call add(b:vimspector_command_history, getline('.'))
+    let b:vimspector_command_history_pos = len(b:vimspector_command_history)
+    call feedkeys("\<CR>", 'tn')
+endfunction
+function! VimspectorCommandHistoryUp()
+    if len(b:vimspector_command_history) == 0 || b:vimspector_command_history_pos == 0
+        return
+    endif
+    call setline('.', b:vimspector_command_history[b:vimspector_command_history_pos - 1])
+    call feedkeys("\<C-o>A", 'tn')
+    let b:vimspector_command_history_pos = b:vimspector_command_history_pos - 1
+endfunction
+function! VimspectorCommandHistoryDown()
+    if b:vimspector_command_history_pos == len(b:vimspector_command_history)
+        return
+    endif
+    call setline('.', b:vimspector_command_history[b:vimspector_command_history_pos - 1])
+    call feedkeys("\<C-o>A", 'tn')
+    let b:vimspector_command_history_pos = b:vimspector_command_history_pos + 1
+endfunction
 
 " Binary
 augroup binary_file
