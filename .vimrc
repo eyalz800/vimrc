@@ -1111,7 +1111,7 @@ if g:lsp_choice == 'coc'
                 call TagstackPush(name, pos, buf)
                 return 1
             endif
-            if name != expand('<cword>')
+            if name != expand('<cword>') && &ft != 'python'
                 execute "normal \<C-o>"
                 call setpos('.', pos)
                 return 0
