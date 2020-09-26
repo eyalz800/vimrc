@@ -649,8 +649,9 @@ function! TagstackPush(name, pos, buf)
 endfunction
 
 " Go to definition
-nnoremap <silent> <leader>zd :call ZGoToDefinition()<CR>
+nnoremap <silent> <leader>zd :call ZGoToSymbol(expand('<cword>'), 'definition')<CR>
 nnoremap <silent> <leader>zD :call ZGoToSymbol(expand('<cword>'), 'declaration')<CR>
+nnoremap <silent> <leader>zg :call ZGoToDefinition()<CR>
 nnoremap <silent> <leader><leader>zd :call ZGoToSymbolInput('definition')<CR>
 nnoremap <silent> <leader><leader>zD :call ZGoToSymbolInput('declaration')<CR>
 
@@ -693,15 +694,18 @@ function! ZGoToSymbol(symbol, type)
         return 0
     endif
 
-    let limit = 100
+    let overall_limit = 2000
+    let limit = 200
     let ctags_tag_types = []
     let opengrok_query_type = 'f'
     let cscope_query_type = '0'
+    let cscope_file_line_separator = ': '
+    let opengrok_file_line_separator = '['
     if a:type == 'definition'
-        let ctags_tag_types = ['f', 'c', 's', 't']
+        let ctags_tag_types = ['f', 'c', 's', 't', 'd']
         let opengrok_query_type = 'd'
     elseif a:type == 'declaration'
-        let ctags_tag_types = ['p']
+        let ctags_tag_types = ['p', 'd']
         let opengrok_query_type = 'f'
     endif
 
@@ -715,20 +719,35 @@ function! ZGoToSymbol(symbol, type)
             \    " | awk '" . awk_program . "'"
         let results = split(system(cscope_command), '\n')
 
-        if len(results) > limit
+        if len(results) > overall_limit
+            return Cscope(cscope_query_type, a:symbol, 1)
+        endif
+
+        let files_to_results = {}
+
+        for result in results
+            let file_line = split(trim(split(result, cscope_file_line_separator)[0]), ':')
+            if has_key(files_to_results, file_line[0])
+                call add(files_to_results[file_line[0]][0], file_line[1])
+                call add(files_to_results[file_line[0]][1], result)
+            else
+                let files_to_results[file_line[0]] = [[file_line[1]], [result]]
+            endif
+        endfor
+
+        if len(files_to_results) > limit
             return Cscope(cscope_query_type, a:symbol, 1)
         endif
 
         let valid_results = []
         let valid_jumps = []
 
-        for result in results
-            let file_line = split(trim(split(result, '[')[0]), ':')
-            let target_symbol_jump = ZGetTargetSymbolJumpIfCtagType(a:symbol, file_line[0], file_line[1], ctags_tag_types)
-            if target_symbol_jump[0]
-                call add(valid_jumps, [file_line[0], file_line[1], target_symbol_jump[1]])
-                call add(valid_results, result)
-            endif
+        for [file_path, file_results] in items(files_to_results)
+            let [file_lines, results] = file_results
+            for [target_line, target_column] in ZGetTargetSymbolJumpIfCtagType(a:symbol, file_path, file_lines, ctags_tag_types)
+                call add(valid_jumps, [file_path, target_line, target_column])
+                call add(valid_results, results[index(file_lines, target_line)])
+            endfor
         endfor
 
         if len(valid_jumps) == 1
@@ -736,7 +755,7 @@ function! ZGoToSymbol(symbol, type)
             call ZJumpToLocation(valid_jumps[0][0], valid_jumps[0][1], valid_jumps[0][2])
             return 1
         elseif len(valid_jumps) > 1
-            return ZFzfStringPreview(join(valid_results, '\n'))
+            return ZFzfStringPreview(join(valid_results, '\r\n'))
         endif
     endif
 
@@ -746,20 +765,35 @@ function! ZGoToSymbol(symbol, type)
             \ org.opensolaris.opengrok.search.Search -R .opengrok/configuration.xml -" . opengrok_query_type
             \ . " ". shellescape(a:symbol) . "| grep \"^/.*\""), '\n')
 
-        if len(results) > limit
+        if len(results) > overall_limit
             return OgQuery(opengrok_query_type, a:symbol, 1)
+        endif
+
+        let files_to_results = {}
+
+        for result in results
+            let file_line = split(trim(split(result, opengrok_file_line_separator)[0]), ':')
+            if has_key(files_to_results, file_line[0])
+                call add(files_to_results[file_line[0]][0], file_line[1])
+                call add(files_to_results[file_line[0]][1], result)
+            else
+                let files_to_results[file_line[0]] = [[file_line[1]], [result]]
+            endif
+        endfor
+
+        if len(files_to_results) > limit
+            return Cscope(cscope_query_type, a:symbol, 1)
         endif
 
         let valid_results = []
         let valid_jumps = []
 
-        for result in results
-            let file_line = split(trim(split(result, '[')[0]), ':')
-            let target_symbol_jump = ZGetTargetSymbolJumpIfCtagType(a:symbol, file_line[0], file_line[1], ctags_tag_types)
-            if target_symbol_jump[0]
-                call add(valid_jumps, [file_line[0], file_line[1], target_symbol_jump[1]])
-                call add(valid_results, result)
-            endif
+        for [file_path, file_results] in items(files_to_results)
+            let [file_lines, results] = file_results
+            for [target_line, target_column] in ZGetTargetSymbolJumpIfCtagType(a:symbol, file_path, file_lines, ctags_tag_types)
+                call add(valid_jumps, [file_path, target_line, target_column])
+                call add(valid_results, results[index(file_lines, target_line)])
+            endfor
         endfor
 
         if len(valid_jumps) == 1
@@ -767,7 +801,7 @@ function! ZGoToSymbol(symbol, type)
             call ZJumpToLocation(valid_jumps[0][0], valid_jumps[0][1], valid_jumps[0][2])
             return 1
         elseif len(valid_jumps) > 1
-            return ZFzfStringPreview(join(valid_results, '\n'))
+            return ZFzfStringPreview(join(valid_results, '\r\n'))
         endif
     endif
 
@@ -775,9 +809,10 @@ function! ZGoToSymbol(symbol, type)
     return 0
 endfunction
 
-function! ZGetTargetSymbolJumpIfCtagType(symbol, file, line, ctags_tag_types)
+function! ZGetTargetSymbolJumpIfCtagType(symbol, file, lines, ctags_tag_types)
     let ctags = split(system("ctags -o - " . g:ctagsOptions . " " . shellescape(a:file)
         \ . " 2>/dev/null | grep " . shellescape(a:symbol)), '\n')
+    let lines_and_columns = []
     for ctag in ctags
         let ctag = split(ctag, '\t')
         let ctag_field_name = ctag[0]
@@ -797,11 +832,11 @@ function! ZGetTargetSymbolJumpIfCtagType(symbol, file, line, ctags_tag_types)
             endif
         endfor
 
-        if index(a:ctags_tag_types, ctag_field_type) != -1 && ctag_field_line != '' && ctag_field_line == a:line
-            return [1, ctag_field_column]
+        if index(a:ctags_tag_types, ctag_field_type) != -1 && ctag_field_line != '' && index(a:lines, ctag_field_line) != -1
+            call add(lines_and_columns, [ctag_field_line, ctag_field_column])
         endif
     endfor
-    return [0]
+    return lines_and_columns
 endfunction
 
 " Cscope

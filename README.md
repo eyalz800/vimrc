@@ -52,12 +52,13 @@ Useful Commands
 <leader><leader>cs - Search cscope for arbitrary input text.
 
 gd - Go to definition (fast) (current word).
+<leader>zg - Go to definition (current word), first use lsp, then fallback to cscope/opengrok.
 
-<leader>zd - Go to definition (current word).
-<leader><leader>zd - Go to definition - search arbitrary input text.
+<leader>zd - Go to definition (current word) using cscope/opengrok.
+<leader><leader>zd - Go to definition - search arbitrary input text using cscope/opengrok.
 
-<leader>zD - Go to declaration (current word)
-<leader><leader>zD - Go to declaration - search arbitrary input text.
+<leader>zD - Go to declaration (current word) using cscope/opengrok.
+<leader><leader>zD - Go to declaration - search arbitrary input text using cscope/opengrok.
 
 <C-n> - Search tags.
 
