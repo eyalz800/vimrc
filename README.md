@@ -103,7 +103,7 @@ a - Exit terminal normal mode.
 <leader>di / S-F10 / F11 - Step into
 <leader>do / S-F11 - Step out
 <leader>dq - Quit debugger
-<leader>de - Use within command window, a shortcut to immediately type '-exec '.
+x - Execute remote command - use within command window, a shortcut to immediately type '-exec '.
 ```
 
 * Undo tree commands:

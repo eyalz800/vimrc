@@ -1216,7 +1216,6 @@ nmap <F11> <plug>VimspectorStepInto
 nmap <leader>do <plug>VimspectorStepOut
 nmap <S-F11> <plug>VimspectorStepOut
 nnoremap <silent> <leader>dq :VimspectorReset<CR>
-nnoremap <silent> <leader>de i-exec<space>
 nnoremap <silent> <leader>dm :call InitializeVimspectorCommandHistoryMaps()<CR>
 let g:vimspector_sign_priority = {
   \    'vimspectorBP':         300,
@@ -1227,13 +1226,14 @@ let g:vimspector_sign_priority = {
   \ }
 augroup vimspector_custom_mappings
     autocmd!
-    autocmd FileType VimspectorPrompt call InitializeVimspectorCommandHistory()
+    autocmd FileType VimspectorPrompt call InitializeVimspectorPrompt()
     autocmd BufEnter *
         \   if index(['vimspector.StackTrace', 'vimspector.Watches', 'vimspector.Variables'], bufname()) != -1
         \ |     nnoremap <silent> <buffer> <2-LeftMouse> :call VimspectorSelectLine()<CR>
         \ | endif
 augroup end
-function! InitializeVimspectorCommandHistory()
+function! InitializeVimspectorPrompt()
+    nnoremap <silent> <buffer> x i-exec<space>
     if !exists('b:vimspector_command_history')
         call InitializeVimspectorCommandHistoryMaps()
         let b:vimspector_command_history = []
