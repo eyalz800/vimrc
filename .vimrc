@@ -1225,9 +1225,13 @@ let g:vimspector_sign_priority = {
   \    'vimspectorPC':         999,
   \    'vimspectorPCBP':       999,
   \ }
-augroup vimspector_command_history
+augroup vimspector_custom_mappings
     autocmd!
     autocmd FileType VimspectorPrompt call InitializeVimspectorCommandHistory()
+    autocmd BufEnter *
+        \   if index(['vimspector.StackTrace', 'vimspector.Watches', 'vimspector.Variables'], bufname()) != -1
+        \ |     nnoremap <silent> <buffer> <2-LeftMouse> :call VimspectorSelectLine()<CR>
+        \ | endif
 augroup end
 function! InitializeVimspectorCommandHistory()
     if !exists('b:vimspector_command_history')
@@ -1240,6 +1244,9 @@ function! InitializeVimspectorCommandHistoryMaps()
     inoremap <silent> <buffer> <CR> <C-o>:call VimspectorCommandHistoryAdd()<CR>
     inoremap <silent> <buffer> <Up> <C-o>:call VimspectorCommandHistoryUp()<CR>
     inoremap <silent> <buffer> <Down> <C-o>:call VimspectorCommandHistoryDown()<CR>
+endfunction
+function! VimspectorSelectLine()
+    call feedkeys("\<CR>", 't')
 endfunction
 function! VimspectorCommandHistoryAdd()
     call add(b:vimspector_command_history, getline('.'))
