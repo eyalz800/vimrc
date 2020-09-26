@@ -1379,6 +1379,7 @@ function! ZGenerateVimspectorPy()
         \ echo '    \"configurations\": {' >> .vimspector.json &&
         \ echo '        \"Launch\": {' >> .vimspector.json &&
         \ echo '            \"adapter\": \"debugpy\",' >> .vimspector.json &&
+        \ echo '            \"breakpoints\": {\"exception\": {\"raised\": \"N\", \"uncaught\": \"Y\"}},' >> .vimspector.json &&
         \ echo '            \"configuration\": {' >> .vimspector.json &&
         \ echo '                \"request\": \"launch\",' >> .vimspector.json &&
         \ echo '                \"type\": \"python\",' >> .vimspector.json &&
@@ -1386,7 +1387,6 @@ function! ZGenerateVimspectorPy()
         \ echo '                \"python\": \"" . python . "\",' >> .vimspector.json &&
         \ echo '                \"cwd\": \"" . g:vimroot . "\",' >> .vimspector.json &&
         \ echo '                \"externalConsole\": true,' >> .vimspector.json &&
-        \ echo '                \"breakpoints\": {\"exception\": {\"caught\": \"N\", \"uncaught\": \"Y\"}},' >> .vimspector.json &&
         \ echo '                \"stopAtEntry\": true' >> .vimspector.json &&
         \ echo '            }' >> .vimspector.json &&
         \ echo '        }' >> .vimspector.json &&
