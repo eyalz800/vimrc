@@ -1354,7 +1354,7 @@ function! ZGenerateVimspectorCpp()
             \ echo '                \"program\": \"" . target . "\",' >> .vimspector.json &&
             \ echo '                \"args\": [],' >> .vimspector.json &&
             \ echo '                \"environment\": [],' >> .vimspector.json &&
-            \ echo '                \"cwd\": \"" . g:vimroot . "\",' >> .vimspector.json &&
+            \ echo '                \"cwd\": \"${workspaceRoot}\",' >> .vimspector.json &&
             \ echo '                \"externalConsole\": true,' >> .vimspector.json &&
             \ echo '                \"stopAtEntry\": true,' >> .vimspector.json &&
             \ echo '                \"setupCommands\": [' >> .vimspector.json &&
@@ -1385,7 +1385,7 @@ function! ZGenerateVimspectorPy()
         \ echo '                \"type\": \"python\",' >> .vimspector.json &&
         \ echo '                \"program\": \"" . program . "\",' >> .vimspector.json &&
         \ echo '                \"python\": \"" . python . "\",' >> .vimspector.json &&
-        \ echo '                \"cwd\": \"" . g:vimroot . "\",' >> .vimspector.json &&
+        \ echo '                \"cwd\": \"${workspaceRoot}\",' >> .vimspector.json &&
         \ echo '                \"externalConsole\": true,' >> .vimspector.json &&
         \ echo '                \"stopAtEntry\": true' >> .vimspector.json &&
         \ echo '            }' >> .vimspector.json &&
