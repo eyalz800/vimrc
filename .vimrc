@@ -1218,6 +1218,12 @@ nmap <S-F11> <plug>VimspectorStepOut
 nnoremap <silent> <leader>dq :VimspectorReset<CR>
 nnoremap <silent> <leader>de i-exec<space>
 nnoremap <silent> <leader>dm :call InitializeVimspectorCommandHistoryMaps()<CR>
+let g:vimspector_sign_priority = {
+  \    'vimspectorBP':         300,
+  \    'vimspectorBPCond':     200,
+  \    'vimspectorBPDisabled': 100,
+  \    'vimspectorPC':         999,
+  \ }
 augroup vimspector_command_history
     autocmd!
     autocmd FileType VimspectorPrompt call InitializeVimspectorCommandHistory()
