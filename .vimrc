@@ -459,7 +459,7 @@ let g:gruvbox_contrast_datk = 'medium'
 
 " Color
 if !filereadable(expand('~/.vim/.color'))
-    call system('echo codedark > ~/.vim/.color')
+    call system('echo onedark > ~/.vim/.color')
 endif
 " Onedark color overrides
 let g:onedark_color_overrides = {

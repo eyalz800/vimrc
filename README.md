@@ -234,8 +234,8 @@ and invoke 'vim -S' to restore the session at the next time.
 
 * Setting persistant color:
 ```
-:ZColor 'codedark' - using codedark color (default)
 :ZColor 'onedark' - using onedark.
+:ZColor 'codedark' - using codedark.
 :ZColor 'gruvbox' - using gruvbox.
 ```
 
