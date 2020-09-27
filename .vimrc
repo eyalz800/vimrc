@@ -1154,17 +1154,25 @@ if g:lsp_choice == 'coc'
         let buf = bufnr()
         call setpos('.', [pos[0], pos[1], pos[2]+1, pos[3]])
         if CocAction('jump' . jump_type)
-            if jump_type == 'Definition'
-                let newpos = getcurpos()
-                if buf == bufnr() && pos[1] == newpos[1]
-                    if pos[2]+1 != newpos[2]
-                        return 0
-                    endif
-                    call setpos('.', pos)
-                    call TagstackPush(name, pos, buf)
-                    return 1
+            " If on the same buffer and line.
+            let newpos = getcurpos()
+            if buf == bufnr() && pos[1] == newpos[1]
+                " If the cursor was moved already, it means that the jump was
+                " finished, and that we landed on the same line, return
+                " failure.
+                if pos[2]+1 != newpos[2]
+                    return 0
                 endif
+
+                " The position has not changed, a popup is in front of the
+                " user, assume success.
+                call setpos('.', pos)
+                call TagstackPush(name, pos, buf)
+                return 1
             endif
+
+            " Jump already occurred as we are not in the same buffer or line,
+            " return success.
             call TagstackPush(name, pos, buf)
             return 1
         else
