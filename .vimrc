@@ -220,7 +220,7 @@ if !empty($INSTALL_VIMRC_PLUGINS)
         exec ":PlugInstall --sync"
         call InstallCommand("
             \ echo '{' > ~/.vim/coc-settings.json
-            \ && echo '    \"clangd.semanticHighlighting\": true,' >> ~/.vim/coc-settings.json
+            \ && echo '    \"clangd.semanticHighlighting\": false,' >> ~/.vim/coc-settings.json
             \ && echo '    \"python.jediEnabled\": true,' >> ~/.vim/coc-settings.json
             \ && echo '    \"coc.preferences.formatOnType\": true' >> ~/.vim/coc-settings.json
             \ && echo '}' >> ~/.vim/coc-settings.json")
