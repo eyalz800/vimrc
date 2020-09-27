@@ -51,8 +51,11 @@ function! InstallVimrc()
     if executable('pip3')
         call InstallCommand("pip3 install compiledb")
     endif
-    if executable('python3')
+    if executable(python3_command)
         call InstallCommand("sudo -u $SUDO_USER " . python3_command . " -m pip install python-language-server pylint compiledb setuptools jedi")
+    endif
+    if executable('python3') && python3_command != 'python3'
+        call InstallCommand("sudo -u $SUDO_USER python3 -m pip install python-language-server pylint compiledb setuptools jedi")
     endif
     if !filereadable(expand('~/.vim/autoload/plug.vim'))
         call InstallCommand("curl -fLo ~/.vim/autoload/plug.vim --create-dirs
