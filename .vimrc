@@ -169,7 +169,6 @@ Plug 'vim-airline/vim-airline'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'justinmk/vim-sneak'
 Plug 'mg979/vim-visual-multi'
-Plug 'gruvbox-community/gruvbox'
 Plug 'erig0/cscope_dynamic'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'airblade/vim-gitgutter'
@@ -468,9 +467,6 @@ endfunction
 
 " GutenTags
 let g:gutentags_modules = ['ctags']
-
-" Gruvbox
-let g:gruvbox_contrast_datk = 'medium'
 
 " Color
 if !filereadable(expand('~/.vim/.color'))
