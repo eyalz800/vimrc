@@ -496,6 +496,12 @@ map zg/ <Plug>(incsearch-fuzzy-stay)
 
 " Hexokinase
 let g:Hexokinase_highlighters = ['backgroundfull']
+let g:Hexokinase_optInPatterns = 'full_hex,rgb,rgba,hsl,hsla,colour_names'
+let g:Hexokinase_ftOptInPatterns = {
+\     'cpp': 'rgb,rgba,hsl,hsla,colour_names',
+\     'c': 'rgb,rgba,hsl,hsla,colour_names',
+\     'python': 'rgb,rgba,hsl,hsla,colour_names',
+\ }
 
 " Fzf
 let g:fzf_files_nocache_command = "rg --files --no-ignore-vcs --hidden"
