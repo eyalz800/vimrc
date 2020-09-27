@@ -472,7 +472,6 @@ let g:gutentags_modules = ['ctags']
 if !filereadable(expand('~/.vim/.color'))
     call system('echo onedark > ~/.vim/.color')
 endif
-" Onedark color overrides
 let g:onedark_color_overrides = {
     \ "special_grey": { "gui": "#5C6370", "cterm": "59", "cterm16": "15" }
 \ }
