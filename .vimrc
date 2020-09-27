@@ -1140,14 +1140,16 @@ if g:lsp_choice == 'coc'
         let buf = bufnr()
         call setpos('.', [pos[0], pos[1], pos[2]+1, pos[3]])
         if CocAction('jump' . jump_type)
-            let newpos = getcurpos()
-            if buf == bufnr() && pos[1] == newpos[1]
-                if pos[2]+1 != newpos[2]
-                    return 0
+            if jump_type == 'Definition'
+                let newpos = getcurpos()
+                if buf == bufnr() && pos[1] == newpos[1]
+                    if pos[2]+1 != newpos[2]
+                        return 0
+                    endif
+                    call setpos('.', pos)
+                    call TagstackPush(name, pos, buf)
+                    return 1
                 endif
-                call setpos('.', pos)
-                call TagstackPush(name, pos, buf)
-                return 1
             endif
             call TagstackPush(name, pos, buf)
             return 1
