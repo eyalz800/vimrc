@@ -435,15 +435,15 @@ else
     let g:opengrok_ctags = '~/.vim/bin/ctags-exuberant/ctags/ctags'
 endif
 
-" VimClang
-let g:clang_c_options = '-std=c11'
-let g:clang_cpp_options = '-std=c++17 -stdlib=libc++'
-
+" Root
 let g:vimroot=$PWD
+nnoremap <silent> cr :call ZSwitchToRoot()<CR>
 function! ZSwitchToRoot()
     execute "cd " . g:vimroot
 endfunction
-nnoremap <silent> <leader>zr :call ZSwitchToRoot()<CR>
+
+" Change directory
+nnoremap <silent> cd :execute "cd " . expand('%:p:h')<CR>
 
 " NERDTree and TagBar
 let g:NERDTreeWinSize = 23
@@ -467,6 +467,7 @@ endfunction
 
 " GutenTags
 let g:gutentags_modules = ['ctags']
+let g:gutentags_project_root = ['.git', '.hg', '.svn', '.repo', '.files']
 
 " Color
 if !filereadable(expand('~/.vim/.color'))

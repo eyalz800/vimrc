@@ -243,3 +243,9 @@ and invoke 'vim -S' to restore the session at the next time.
 vim -b [binary_file]
 vimdiff -b [binary_file_1] [binary_file_2]
 ```
+
+* Directory switching:
+```
+cd - Change to current file directory.
+cr - Change back to the root - the folder where vim was opened.
+```
