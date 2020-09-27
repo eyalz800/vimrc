@@ -13,36 +13,38 @@ function! InstallVimrc()
         echo "Please run as sudo."
         exec ":q"
     endif
+    call InstallCommand("mkdir -p ~/.vim")
+    call InstallCommand("mkdir -p ~/.vim/tmp")
+    call InstallCommand("mkdir -p ~/.vim/bin/python")
+    call InstallCommand("mkdir -p ~/.vim/bin/llvm")
+    call InstallCommand("mkdir -p ~/.config")
+    call InstallCommand("mkdir -p ~/.config/coc")
+    call InstallCommand("mkdir -p ~/.cache")
     if !executable('brew')
-        call InstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y curl silversearcher-ag exuberant-ctags cscope global git
-            \ clang-tools-8 make autoconf automake pkg-config libc++-8-dev openjdk-8-jre python3 python3-pip gdb golang")
-        call InstallCommand("add-apt-repository -y ppa:lazygit-team/release")
+        call InstallCommand("DEBIAN_FRONTEND=noninteractive add-apt-repository -y ppa:lazygit-team/release")
         call InstallCommand("curl -sL https://deb.nodesource.com/setup_10.x | bash -")
-        call InstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y nodejs lazygit")
-        call InstallCommand("update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-8 800")
+        call InstallCommand("curl -fLo ~/.vim/tmp/llvm-install/llvm.sh --create-dirs
+            \ https://apt.llvm.org/llvm.sh
+            \ ; cd ~/.vim/tmp/llvm-install; chmod +x ./llvm.sh; ./llvm.sh 11")
+        call InstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y curl silversearcher-ag exuberant-ctags cscope git
+            \ make autoconf automake pkg-config openjdk-8-jre python3 python3-pip gdb golang nodejs lazygit libc++-11-dev libc++abi-11-dev")
+        call InstallCommand("rm -rf ~/.vim/bin/llvm/clangd && ln -s $(command -v clangd-11) ~/.vim/bin/llvm/clangd")
         let lazygit_config_path = '~/.config/jesseduffield/lazygit'
     else
-        call InstallCommand("sudo -u $SUDO_USER brew install curl ag ctags cscope global git
+        call InstallCommand("sudo -u $SUDO_USER brew install curl ag ctags cscope git
             \ llvm make autoconf automake pkg-config python3 nodejs gnu-sed bat ripgrep lazygit golang pandoc || true")
         call InstallCommand("sudo -u $SUDO_USER brew link python3")
         call InstallCommand("sudo -u $SUDO_USER brew tap AdoptOpenJDK/openjdk")
         call InstallCommand("sudo -u $SUDO_USER brew cask install adoptopenjdk8")
         call InstallCommand("sudo -u $SUDO_USER curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py")
         call InstallCommand("sudo -u $SUDO_USER python3 get-pip.py")
-        if !executable('clangd')
+        if !executable('clangd') && executable('/usr/local/opt/llvm/bin/clangd')
             call InstallCommand("echo export PATH=\\$PATH:/usr/local/opt/llvm/bin >> ~/.bashrc")
         endif
         let lazygit_config_path = '~/Library/Application\ Support/jesseduffield/lazygit'
     endif
-    call InstallCommand("mkdir -p ~/.vim")
-    call InstallCommand("mkdir -p ~/.vim/tmp")
-    call InstallCommand("mkdir -p ~/.vim/bin/python")
-    call InstallCommand("mkdir -p ~/.config")
-    call InstallCommand("mkdir -p ~/.config/coc")
-    call InstallCommand("mkdir -p ~/.cache")
     if 0 == system('python3 -c "import sys; print(1 if sys.version_info.major >= 3 and sys.version_info.minor >= 6 else 0)"') && executable('python3.6')
-        call InstallCommand("rm -rf ~/.vim/bin/python/python3")
-        call InstallCommand("ln -s $(command -v python3.6) ~/.vim/bin/python/python3")
+        call InstallCommand("rm -rf ~/.vim/bin/python/python3 && ln -s $(command -v python3.6) ~/.vim/bin/python/python3")
         let $PATH = expand('~/.vim/bin/python') . ':' . $PATH
         let python3_command = 'python3.6'
     endif
@@ -314,11 +316,12 @@ endfunction
 set updatetime=300
 set shortmess+=c
 
-" Set path
-let $PATH .= ':' . expand('~/.vim/bin/lf')
-if executable(expand('~/.vim/bin/python/python3'))
-    let $PATH = expand('~/.vim/bin/python') . ':' . $PATH
-endif
+" Path
+let $PATH =
+    \ ':' . expand('~/.vim/bin/lf')
+    \ . ':' . expand('~/.vim/bin/llvm')
+    \ . ':' . expand('~/.vim/bin/python')
+    \ . ':' . $PATH
 if !executable('clangd') && filereadable('/usr/local/opt/llvm/bin/clangd')
     let $PATH .= ':/usr/local/opt/llvm/bin'
 endif
