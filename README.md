@@ -227,7 +227,7 @@ Toggle use of file cache - note - if either local or global is on, it will use t
 <leader>i - Go to newer tag.
 ```
 
-* Save / Restore Session
+* Save / Restore Session:
 ```
 Use the ':Obsession' command to start recording to a session file automatically
 and invoke 'vim -S' to restore the session at the next time.
