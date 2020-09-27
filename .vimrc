@@ -1426,6 +1426,7 @@ nmap <F11> <plug>VimspectorStepInto
 nmap <leader>do <plug>VimspectorStepOut
 nmap <S-F11> <plug>VimspectorStepOut
 nnoremap <silent> <leader>dq :VimspectorReset<CR>
+let g:vimspector_install_gadgets = ['debugpy', 'vscode-cpptools']
 let g:vimspector_sign_priority = {
   \    'vimspectorBP':         300,
   \    'vimspectorBPCond':     200,
