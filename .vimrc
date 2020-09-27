@@ -47,6 +47,8 @@ function! InstallVimrc()
         call InstallCommand("rm -rf ~/.vim/bin/python/python3 && ln -s $(command -v python3.6) ~/.vim/bin/python/python3")
         let $PATH = expand('~/.vim/bin/python') . ':' . $PATH
         let python3_command = 'python3.6'
+    else
+        let python3_command = 'python3'
     endif
     if executable('pip3')
         call InstallCommand("pip3 install compiledb")
