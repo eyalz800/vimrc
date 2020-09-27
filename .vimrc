@@ -1414,7 +1414,6 @@ nmap <F11> <plug>VimspectorStepInto
 nmap <leader>do <plug>VimspectorStepOut
 nmap <S-F11> <plug>VimspectorStepOut
 nnoremap <silent> <leader>dq :VimspectorReset<CR>
-nnoremap <silent> <leader>dm :call InitializeVimspectorCommandHistoryMaps()<CR>
 let g:vimspector_sign_priority = {
   \    'vimspectorBP':         300,
   \    'vimspectorBPCond':     200,
@@ -1424,27 +1423,34 @@ let g:vimspector_sign_priority = {
   \ }
 augroup vimspector_custom_mappings
     autocmd!
-    autocmd FileType VimspectorPrompt call InitializeVimspectorPrompt()
-    autocmd BufEnter *
-        \   if index(['vimspector.StackTrace', 'vimspector.Watches', 'vimspector.Variables'], bufname()) != -1
-        \ |     nnoremap <silent> <buffer> <2-LeftMouse> :call ZVimspectorSelectLine()<CR>
-        \ | endif
+    autocmd FileType VimspectorPrompt call ZVimspectorInitializePrompt()
+    autocmd User VimspectorUICreated call ZVimspectorSetupUi()
 augroup end
-function! InitializeVimspectorPrompt()
+function! ZVimspectorSetupUi()
+    call win_gotoid(g:vimspector_session_windows.watches)
+    nnoremap <silent> <buffer> <2-LeftMouse>
+        \ :<C-u>call vimspector#ExpandVariable()<CR>
+
+    call win_gotoid(g:vimspector_session_windows.variables)
+    nnoremap <silent> <buffer> <2-LeftMouse>
+        \ :<C-u>call vimspector#ExpandVariable()<CR>
+
+    call win_gotoid(g:vimspector_session_windows.stack_trace)
+    nnoremap <silent> <buffer> <2-LeftMouse>
+        \ :<C-u>call vimspector#GoToFrame()<CR>
+endfunction
+function! ZVimspectorInitializePrompt()
     nnoremap <silent> <buffer> x i-exec<space>
     if !exists('b:vimspector_command_history')
-        call InitializeVimspectorCommandHistoryMaps()
+        call ZVimspectorInitializeCommandHistoryMaps()
         let b:vimspector_command_history = []
         let b:vimspector_command_history_pos = 0
     endif
 endfunction
-function! InitializeVimspectorCommandHistoryMaps()
+function! ZVimspectorInitializeCommandHistoryMaps()
     inoremap <silent> <buffer> <CR> <C-o>:call ZVimspectorCommandHistoryAdd()<CR>
     inoremap <silent> <buffer> <Up> <C-o>:call ZVimspectorCommandHistoryUp()<CR>
     inoremap <silent> <buffer> <Down> <C-o>:call ZVimspectorCommandHistoryDown()<CR>
-endfunction
-function! ZVimspectorSelectLine()
-    call feedkeys("\<CR>", 't')
 endfunction
 function! ZVimspectorCommandHistoryAdd()
     call add(b:vimspector_command_history, getline('.'))
@@ -1469,7 +1475,7 @@ function! ZVimspectorCommandHistoryDown()
 endfunction
 augroup visual_multi_vimspector
     autocmd!
-    autocmd User visual_multi_exit if &ft == 'VimspectorPrompt' | call InitializeVimspectorCommandHistoryMaps() | endif
+    autocmd User visual_multi_exit if &ft == 'VimspectorPrompt' | call ZVimspectorInitializeCommandHistoryMaps() | endif
 augroup end
 function! ZVimspectorGenerateCpp()
     call inputsave()
