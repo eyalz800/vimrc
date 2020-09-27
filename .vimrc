@@ -1149,11 +1149,6 @@ if g:lsp_choice == 'coc'
                 call TagstackPush(name, pos, buf)
                 return 1
             endif
-            if name != expand('<cword>') && &ft != 'python'
-                execute "normal \<C-o>"
-                call setpos('.', pos)
-                return 0
-            endif
             call TagstackPush(name, pos, buf)
             return 1
         else
@@ -1444,7 +1439,7 @@ function! ZGenerateFlags()
 
     copen
     exec ":AsyncRun
-    \ echo -std=c++1z > compile_flags.txt
+    \ echo -std=c++20 > compile_flags.txt
     \ && echo -isystem >> compile_flags.txt
     \ && echo /usr/include >> compile_flags.txt
     \ && echo -isystem >> compile_flags.txt
@@ -1502,7 +1497,7 @@ function! ZGenerateCpp()
         copen
 
         exec ":AsyncRun
-        \ echo -std=c++1z > compile_flags.txt
+        \ echo -std=c++20 > compile_flags.txt
         \ && echo -isystem >> compile_flags.txt
         \ && echo /usr/include >> compile_flags.txt
         \ && echo -isystem >> compile_flags.txt
