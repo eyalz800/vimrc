@@ -299,6 +299,19 @@ else
     set ttymouse=xterm2
 endif
 nnoremap <silent> <leader>zm :call ZToggleMouse()<CR>
+function! ZToggleMouse()
+    if &mouse == 'a'
+        set mouse=
+        set ttymouse=xterm
+    else
+        set mouse=a
+        if has('mouse_sgr')
+            set ttymouse=sgr
+        else
+            set ttymouse=xterm2
+        endif
+    endif
+endfunction
 
 " Sign column
 set signcolumn=yes
@@ -1189,91 +1202,6 @@ let g:pear_tree_map_special_keys = 0
 " Peer tree mappings:
 imap <BS> <Plug>(PearTreeBackspace)
 
-" Vimspector
-nnoremap <silent> <leader>dl :call ZDebugLaunchSettings()<CR>
-nnoremap <silent> <leader>dd :if !filereadable('.vimspector.json') \| call ZDebugLaunchSettings() \| endif \| call vimspector#Launch()<CR>
-nmap <leader>dc <plug>VimspectorContinue
-nmap <F5> <plug>VimspectorContinue
-nmap <leader>dr <plug>VimspectorRestart
-nmap <S-F5> <plug>VimspectorRestart
-nmap <leader>dp <plug>VimspectorPause
-nmap <F6> <plug>VimspectorPause
-nmap <leader>ds <plug>VimspectorStop
-nmap <S-F6> <plug>VimspectorStop
-nmap <leader>db <plug>VimspectorToggleBreakpoint
-nmap <F9> <plug>VimspectorToggleBreakpoint
-nmap <leader><leader>db <plug>VimspectorToggleConditionalBreakpoint
-nmap <S-F9> <plug>VimspectorToggleConditionalBreakpoint
-nmap <leader>df <plug>VimspectorAddFunctionBreakpoint
-nmap <leader><F9> <plug>VimspectorAddFunctionBreakpoint
-nnoremap <silent> <leader>dB :call vimspector#ClearBreakpoints()<CR>
-nnoremap <silent> <leader><leader><F9> :call vimspector#ClearBreakpoints()<CR>
-nmap <leader>dn <plug>VimspectorStepOver
-nmap <F10> <plug>VimspectorStepOver
-nmap <leader>di <plug>VimspectorStepInto
-nmap <S-F10> <plug>VimspectorStepInto
-nmap <F11> <plug>VimspectorStepInto
-nmap <leader>do <plug>VimspectorStepOut
-nmap <S-F11> <plug>VimspectorStepOut
-nnoremap <silent> <leader>dq :VimspectorReset<CR>
-nnoremap <silent> <leader>dm :call InitializeVimspectorCommandHistoryMaps()<CR>
-let g:vimspector_sign_priority = {
-  \    'vimspectorBP':         300,
-  \    'vimspectorBPCond':     200,
-  \    'vimspectorBPDisabled': 100,
-  \    'vimspectorPC':         999,
-  \    'vimspectorPCBP':       999,
-  \ }
-augroup vimspector_custom_mappings
-    autocmd!
-    autocmd FileType VimspectorPrompt call InitializeVimspectorPrompt()
-    autocmd BufEnter *
-        \   if index(['vimspector.StackTrace', 'vimspector.Watches', 'vimspector.Variables'], bufname()) != -1
-        \ |     nnoremap <silent> <buffer> <2-LeftMouse> :call VimspectorSelectLine()<CR>
-        \ | endif
-augroup end
-function! InitializeVimspectorPrompt()
-    nnoremap <silent> <buffer> x i-exec<space>
-    if !exists('b:vimspector_command_history')
-        call InitializeVimspectorCommandHistoryMaps()
-        let b:vimspector_command_history = []
-        let b:vimspector_command_history_pos = 0
-    endif
-endfunction
-function! InitializeVimspectorCommandHistoryMaps()
-    inoremap <silent> <buffer> <CR> <C-o>:call VimspectorCommandHistoryAdd()<CR>
-    inoremap <silent> <buffer> <Up> <C-o>:call VimspectorCommandHistoryUp()<CR>
-    inoremap <silent> <buffer> <Down> <C-o>:call VimspectorCommandHistoryDown()<CR>
-endfunction
-function! VimspectorSelectLine()
-    call feedkeys("\<CR>", 't')
-endfunction
-function! VimspectorCommandHistoryAdd()
-    call add(b:vimspector_command_history, getline('.'))
-    let b:vimspector_command_history_pos = len(b:vimspector_command_history)
-    call feedkeys("\<CR>", 'tn')
-endfunction
-function! VimspectorCommandHistoryUp()
-    if len(b:vimspector_command_history) == 0 || b:vimspector_command_history_pos == 0
-        return
-    endif
-    call setline('.', b:vimspector_command_history[b:vimspector_command_history_pos - 1])
-    call feedkeys("\<C-o>A", 'tn')
-    let b:vimspector_command_history_pos = b:vimspector_command_history_pos - 1
-endfunction
-function! VimspectorCommandHistoryDown()
-    if b:vimspector_command_history_pos == len(b:vimspector_command_history)
-        return
-    endif
-    call setline('.', b:vimspector_command_history[b:vimspector_command_history_pos - 1])
-    call feedkeys("\<C-o>A", 'tn')
-    let b:vimspector_command_history_pos = b:vimspector_command_history_pos + 1
-endfunction
-augroup visual_multi_vimspector
-    autocmd!
-    autocmd User visual_multi_exit if &ft == 'VimspectorPrompt' | call InitializeVimspectorCommandHistoryMaps() | endif
-augroup end
-
 " Binary
 augroup binary_file
     autocmd!
@@ -1315,110 +1243,6 @@ if !empty($TMUX)
     exec "set <S-F8>=\<ESC>[34~"
 endif
 
-" Vimspector functions.
-function! ZGenerateVimspectorCpp()
-    call inputsave()
-    let target = input('Target (Executable/IP): ')
-    call inputrestore()
-    let debugger = 'gdb'
-    if !executable('gdb') && executable('lldb')
-        let debugger = 'lldb'
-    endif
-    if stridx(target, ':') != -1 && !filereadable(target)
-        call inputsave()
-        let main_file = input('Main File: ')
-        call inputrestore()
-        call system("
-            \ echo '{' > .vimspector.json &&
-            \ echo '    \"configurations\": {' >> .vimspector.json &&
-            \ echo '        \"Launch\": {' >> .vimspector.json &&
-            \ echo '            \"adapter\": \"vscode-cpptools\",' >> .vimspector.json &&
-            \ echo '            \"configuration\": {' >> .vimspector.json &&
-            \ echo '                \"request\": \"launch\",' >> .vimspector.json &&
-            \ echo '                \"program\": \"" . main_file . "\",' >> .vimspector.json &&
-            \ echo '                \"type\": \"cppdbg\",' >> .vimspector.json &&
-            \ echo '                \"setupCommands\": [' >> .vimspector.json &&
-            \ echo '                    { \"text\": \"set disassembly-flavor intel\", \"description\": \"\", \"ignoreFailures\": false },' >> .vimspector.json &&
-            \ echo '                    { \"text\": \"-enable-pretty-printing\", \"description\": \"\", \"ignoreFailures\": false }' >> .vimspector.json &&
-            \ echo '                ],' >> .vimspector.json &&
-            \ echo '                \"miDebuggerServerAddress\": \"" . target . "\",' >> .vimspector.json &&
-            \ echo '                \"externalConsole\": true,' >> .vimspector.json &&
-            \ echo '                \"stopAtEntry\": true,' >> .vimspector.json &&
-            \ echo '                \"miDebuggerPath\": \"" . debugger . "\",' >> .vimspector.json &&
-            \ echo '                \"MIMode\": \"" . debugger . "\"' >> .vimspector.json &&
-            \ echo '            }' >> .vimspector.json &&
-            \ echo '        }' >> .vimspector.json &&
-            \ echo '    }' >> .vimspector.json &&
-            \ echo '}' >> .vimspector.json")
-    else
-        call system("
-            \ echo '{' > .vimspector.json &&
-            \ echo '    \"configurations\": {' >> .vimspector.json &&
-            \ echo '        \"Launch\": {' >> .vimspector.json &&
-            \ echo '            \"adapter\": \"vscode-cpptools\",' >> .vimspector.json &&
-            \ echo '            \"configuration\": {' >> .vimspector.json &&
-            \ echo '                \"request\": \"launch\",' >> .vimspector.json &&
-            \ echo '                \"type\": \"cppdbg\",' >> .vimspector.json &&
-            \ echo '                \"program\": \"" . target . "\",' >> .vimspector.json &&
-            \ echo '                \"args\": [],' >> .vimspector.json &&
-            \ echo '                \"environment\": [],' >> .vimspector.json &&
-            \ echo '                \"cwd\": \"${workspaceRoot}\",' >> .vimspector.json &&
-            \ echo '                \"externalConsole\": true,' >> .vimspector.json &&
-            \ echo '                \"stopAtEntry\": true,' >> .vimspector.json &&
-            \ echo '                \"setupCommands\": [' >> .vimspector.json &&
-            \ echo '                    { \"text\": \"set disassembly-flavor intel\", \"description\": \"\", \"ignoreFailures\": false },' >> .vimspector.json &&
-            \ echo '                    { \"text\": \"-enable-pretty-printing\", \"description\": \"\", \"ignoreFailures\": false }' >> .vimspector.json &&
-            \ echo '                ],' >> .vimspector.json &&
-            \ echo '                \"MIMode\": \"" . debugger . "\"' >> .vimspector.json &&
-            \ echo '            }' >> .vimspector.json &&
-            \ echo '        }' >> .vimspector.json &&
-            \ echo '    }' >> .vimspector.json &&
-            \ echo '}' >> .vimspector.json")
-    endif
-endfunction
-
-function! ZGenerateVimspectorPy()
-    call inputsave()
-    let program = input('Python main file: ')
-    let python = 'python3'
-    call inputrestore()
-    call system("
-        \ echo '{' > .vimspector.json &&
-        \ echo '    \"configurations\": {' >> .vimspector.json &&
-        \ echo '        \"Launch\": {' >> .vimspector.json &&
-        \ echo '            \"adapter\": \"debugpy\",' >> .vimspector.json &&
-        \ echo '            \"breakpoints\": {\"exception\": {\"raised\": \"N\", \"uncaught\": \"Y\"}},' >> .vimspector.json &&
-        \ echo '            \"configuration\": {' >> .vimspector.json &&
-        \ echo '                \"request\": \"launch\",' >> .vimspector.json &&
-        \ echo '                \"type\": \"python\",' >> .vimspector.json &&
-        \ echo '                \"program\": \"" . program . "\",' >> .vimspector.json &&
-        \ echo '                \"python\": \"" . python . "\",' >> .vimspector.json &&
-        \ echo '                \"cwd\": \"${workspaceRoot}\",' >> .vimspector.json &&
-        \ echo '                \"externalConsole\": true,' >> .vimspector.json &&
-        \ echo '                \"stopAtEntry\": true' >> .vimspector.json &&
-        \ echo '            }' >> .vimspector.json &&
-        \ echo '        }' >> .vimspector.json &&
-        \ echo '    }' >> .vimspector.json &&
-        \ echo '}' >> .vimspector.json")
-endfunction
-
-function ZDebugLaunchSettings()
-    let debug_type = &filetype
-    if debug_type != 'cpp' && debug_type != 'c' && debug_type != 'python'
-        call inputsave()
-        let debug_type = input('Debugger type (cpp/python): ')
-        call inputrestore()
-    endif
-
-    if debug_type == 'cpp' || debug_type == 'c'
-        call ZGenerateVimspectorCpp()
-    elseif debug_type == 'python'
-        call ZGenerateVimspectorPy()
-    else
-        normal :<ESC>
-        echom 'Invalid debug type.'
-    endif
-endfunction
 
 " Generate Flags
 function! ZGenerateFlags()
@@ -1533,6 +1357,7 @@ function! ZGenerateOpengrok()
 endfunction
 
 " Generate compile_commands.json
+nnoremap <silent> <leader>zj :call ZGenerateCompileCommandsJson()<CR>
 function! ZGenerateCompileCommandsJson()
     call inputsave()
     let compile_command = input('Compile (make) command: ')
@@ -1542,22 +1367,6 @@ function! ZGenerateCompileCommandsJson()
         exec ":AsyncRun compiledb " . compile_command
     else
         exec ":AsyncRun python3 -m compiledb " . compile_command
-    endif
-endfunction
-nnoremap <silent> <leader>zj :call ZGenerateCompileCommandsJson()<CR>
-
-" Toggle mouse
-function! ZToggleMouse()
-    if &mouse == 'a'
-        set mouse=
-        set ttymouse=xterm
-    else
-        set mouse=a
-        if has('mouse_sgr')
-            set ttymouse=sgr
-        else
-            set ttymouse=xterm2
-        endif
     endif
 endfunction
 
@@ -1571,12 +1380,199 @@ function! ZJumpToLocation(file, line, column)
     normal! zz
 endfunction
 
-" Additional highlighting
+" Syntax Information
 function! ZSyntaxInfo()
     let l:s = synID(line('.'), col('.'), 1)
     echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
 endfun
 
+" Vimspector
+nnoremap <silent> <leader>dl :call ZVimspectorDebugLaunchSettings()<CR>
+nnoremap <silent> <leader>dd :if !filereadable('.vimspector.json') \| call ZVimspectorDebugLaunchSettings() \| endif \| call vimspector#Launch()<CR>
+nmap <leader>dc <plug>VimspectorContinue
+nmap <F5> <plug>VimspectorContinue
+nmap <leader>dr <plug>VimspectorRestart
+nmap <S-F5> <plug>VimspectorRestart
+nmap <leader>dp <plug>VimspectorPause
+nmap <F6> <plug>VimspectorPause
+nmap <leader>ds <plug>VimspectorStop
+nmap <S-F6> <plug>VimspectorStop
+nmap <leader>db <plug>VimspectorToggleBreakpoint
+nmap <F9> <plug>VimspectorToggleBreakpoint
+nmap <leader><leader>db <plug>VimspectorToggleConditionalBreakpoint
+nmap <S-F9> <plug>VimspectorToggleConditionalBreakpoint
+nmap <leader>df <plug>VimspectorAddFunctionBreakpoint
+nmap <leader><F9> <plug>VimspectorAddFunctionBreakpoint
+nnoremap <silent> <leader>dB :call vimspector#ClearBreakpoints()<CR>
+nnoremap <silent> <leader><leader><F9> :call vimspector#ClearBreakpoints()<CR>
+nmap <leader>dn <plug>VimspectorStepOver
+nmap <F10> <plug>VimspectorStepOver
+nmap <leader>di <plug>VimspectorStepInto
+nmap <S-F10> <plug>VimspectorStepInto
+nmap <F11> <plug>VimspectorStepInto
+nmap <leader>do <plug>VimspectorStepOut
+nmap <S-F11> <plug>VimspectorStepOut
+nnoremap <silent> <leader>dq :VimspectorReset<CR>
+nnoremap <silent> <leader>dm :call InitializeVimspectorCommandHistoryMaps()<CR>
+let g:vimspector_sign_priority = {
+  \    'vimspectorBP':         300,
+  \    'vimspectorBPCond':     200,
+  \    'vimspectorBPDisabled': 100,
+  \    'vimspectorPC':         999,
+  \    'vimspectorPCBP':       999,
+  \ }
+augroup vimspector_custom_mappings
+    autocmd!
+    autocmd FileType VimspectorPrompt call InitializeVimspectorPrompt()
+    autocmd BufEnter *
+        \   if index(['vimspector.StackTrace', 'vimspector.Watches', 'vimspector.Variables'], bufname()) != -1
+        \ |     nnoremap <silent> <buffer> <2-LeftMouse> :call ZVimspectorSelectLine()<CR>
+        \ | endif
+augroup end
+function! InitializeVimspectorPrompt()
+    nnoremap <silent> <buffer> x i-exec<space>
+    if !exists('b:vimspector_command_history')
+        call InitializeVimspectorCommandHistoryMaps()
+        let b:vimspector_command_history = []
+        let b:vimspector_command_history_pos = 0
+    endif
+endfunction
+function! InitializeVimspectorCommandHistoryMaps()
+    inoremap <silent> <buffer> <CR> <C-o>:call ZVimspectorCommandHistoryAdd()<CR>
+    inoremap <silent> <buffer> <Up> <C-o>:call ZVimspectorCommandHistoryUp()<CR>
+    inoremap <silent> <buffer> <Down> <C-o>:call ZVimspectorCommandHistoryDown()<CR>
+endfunction
+function! ZVimspectorSelectLine()
+    call feedkeys("\<CR>", 't')
+endfunction
+function! ZVimspectorCommandHistoryAdd()
+    call add(b:vimspector_command_history, getline('.'))
+    let b:vimspector_command_history_pos = len(b:vimspector_command_history)
+    call feedkeys("\<CR>", 'tn')
+endfunction
+function! ZVimspectorCommandHistoryUp()
+    if len(b:vimspector_command_history) == 0 || b:vimspector_command_history_pos == 0
+        return
+    endif
+    call setline('.', b:vimspector_command_history[b:vimspector_command_history_pos - 1])
+    call feedkeys("\<C-o>A", 'tn')
+    let b:vimspector_command_history_pos = b:vimspector_command_history_pos - 1
+endfunction
+function! ZVimspectorCommandHistoryDown()
+    if b:vimspector_command_history_pos == len(b:vimspector_command_history)
+        return
+    endif
+    call setline('.', b:vimspector_command_history[b:vimspector_command_history_pos - 1])
+    call feedkeys("\<C-o>A", 'tn')
+    let b:vimspector_command_history_pos = b:vimspector_command_history_pos + 1
+endfunction
+augroup visual_multi_vimspector
+    autocmd!
+    autocmd User visual_multi_exit if &ft == 'VimspectorPrompt' | call InitializeVimspectorCommandHistoryMaps() | endif
+augroup end
+function! ZVimspectorGenerateCpp()
+    call inputsave()
+    let target = input('Target (Executable/IP): ')
+    call inputrestore()
+    let debugger = 'gdb'
+    if !executable('gdb') && executable('lldb')
+        let debugger = 'lldb'
+    endif
+    if stridx(target, ':') != -1 && !filereadable(target)
+        call inputsave()
+        let main_file = input('Main File: ')
+        call inputrestore()
+        call system("
+            \ echo '{' > .vimspector.json &&
+            \ echo '    \"configurations\": {' >> .vimspector.json &&
+            \ echo '        \"Launch\": {' >> .vimspector.json &&
+            \ echo '            \"adapter\": \"vscode-cpptools\",' >> .vimspector.json &&
+            \ echo '            \"configuration\": {' >> .vimspector.json &&
+            \ echo '                \"request\": \"launch\",' >> .vimspector.json &&
+            \ echo '                \"program\": \"" . main_file . "\",' >> .vimspector.json &&
+            \ echo '                \"type\": \"cppdbg\",' >> .vimspector.json &&
+            \ echo '                \"setupCommands\": [' >> .vimspector.json &&
+            \ echo '                    { \"text\": \"set disassembly-flavor intel\", \"description\": \"\", \"ignoreFailures\": false },' >> .vimspector.json &&
+            \ echo '                    { \"text\": \"-enable-pretty-printing\", \"description\": \"\", \"ignoreFailures\": false }' >> .vimspector.json &&
+            \ echo '                ],' >> .vimspector.json &&
+            \ echo '                \"miDebuggerServerAddress\": \"" . target . "\",' >> .vimspector.json &&
+            \ echo '                \"externalConsole\": true,' >> .vimspector.json &&
+            \ echo '                \"stopAtEntry\": true,' >> .vimspector.json &&
+            \ echo '                \"miDebuggerPath\": \"" . debugger . "\",' >> .vimspector.json &&
+            \ echo '                \"MIMode\": \"" . debugger . "\"' >> .vimspector.json &&
+            \ echo '            }' >> .vimspector.json &&
+            \ echo '        }' >> .vimspector.json &&
+            \ echo '    }' >> .vimspector.json &&
+            \ echo '}' >> .vimspector.json")
+    else
+        call system("
+            \ echo '{' > .vimspector.json &&
+            \ echo '    \"configurations\": {' >> .vimspector.json &&
+            \ echo '        \"Launch\": {' >> .vimspector.json &&
+            \ echo '            \"adapter\": \"vscode-cpptools\",' >> .vimspector.json &&
+            \ echo '            \"configuration\": {' >> .vimspector.json &&
+            \ echo '                \"request\": \"launch\",' >> .vimspector.json &&
+            \ echo '                \"type\": \"cppdbg\",' >> .vimspector.json &&
+            \ echo '                \"program\": \"" . target . "\",' >> .vimspector.json &&
+            \ echo '                \"args\": [],' >> .vimspector.json &&
+            \ echo '                \"environment\": [],' >> .vimspector.json &&
+            \ echo '                \"cwd\": \"${workspaceRoot}\",' >> .vimspector.json &&
+            \ echo '                \"externalConsole\": true,' >> .vimspector.json &&
+            \ echo '                \"stopAtEntry\": true,' >> .vimspector.json &&
+            \ echo '                \"setupCommands\": [' >> .vimspector.json &&
+            \ echo '                    { \"text\": \"set disassembly-flavor intel\", \"description\": \"\", \"ignoreFailures\": false },' >> .vimspector.json &&
+            \ echo '                    { \"text\": \"-enable-pretty-printing\", \"description\": \"\", \"ignoreFailures\": false }' >> .vimspector.json &&
+            \ echo '                ],' >> .vimspector.json &&
+            \ echo '                \"MIMode\": \"" . debugger . "\"' >> .vimspector.json &&
+            \ echo '            }' >> .vimspector.json &&
+            \ echo '        }' >> .vimspector.json &&
+            \ echo '    }' >> .vimspector.json &&
+            \ echo '}' >> .vimspector.json")
+    endif
+endfunction
+function! ZVimspectorGeneratePy()
+    call inputsave()
+    let program = input('Python main file: ')
+    let python = 'python3'
+    call inputrestore()
+    call system("
+        \ echo '{' > .vimspector.json &&
+        \ echo '    \"configurations\": {' >> .vimspector.json &&
+        \ echo '        \"Launch\": {' >> .vimspector.json &&
+        \ echo '            \"adapter\": \"debugpy\",' >> .vimspector.json &&
+        \ echo '            \"breakpoints\": {\"exception\": {\"raised\": \"N\", \"uncaught\": \"Y\"}},' >> .vimspector.json &&
+        \ echo '            \"configuration\": {' >> .vimspector.json &&
+        \ echo '                \"request\": \"launch\",' >> .vimspector.json &&
+        \ echo '                \"type\": \"python\",' >> .vimspector.json &&
+        \ echo '                \"program\": \"" . program . "\",' >> .vimspector.json &&
+        \ echo '                \"python\": \"" . python . "\",' >> .vimspector.json &&
+        \ echo '                \"cwd\": \"${workspaceRoot}\",' >> .vimspector.json &&
+        \ echo '                \"externalConsole\": true,' >> .vimspector.json &&
+        \ echo '                \"stopAtEntry\": true' >> .vimspector.json &&
+        \ echo '            }' >> .vimspector.json &&
+        \ echo '        }' >> .vimspector.json &&
+        \ echo '    }' >> .vimspector.json &&
+        \ echo '}' >> .vimspector.json")
+endfunction
+function ZVimspectorDebugLaunchSettings()
+    let debug_type = &filetype
+    if debug_type != 'cpp' && debug_type != 'c' && debug_type != 'python'
+        call inputsave()
+        let debug_type = input('Debugger type (cpp/python): ')
+        call inputrestore()
+    endif
+
+    if debug_type == 'cpp' || debug_type == 'c'
+        call ZVimspectorGenerateCpp()
+    elseif debug_type == 'python'
+        call ZVimspectorGeneratePy()
+    else
+        normal :<ESC>
+        echom 'Invalid debug type.'
+    endif
+endfunction
+
+" Additional color settings
 if g:colors_name == 'codedark'
     " Terminal colors (base16):
     let s:cterm00 = "00"
