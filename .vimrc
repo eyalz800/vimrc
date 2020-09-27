@@ -190,7 +190,7 @@ if !empty($INSTALL_VIMRC_PLUGINS) || g:lsp_choice != 'coc'
     Plug 'vim-scripts/OmniCppComplete'
 endif
 Plug 'tmsvg/pear-tree'
-Plug 'jackguo380/vim-lsp-cxx-highlight', { 'for': 'cpp' }
+Plug 'jackguo380/vim-lsp-cxx-highlight', { 'for': ['c', 'cpp'] }
 Plug 'mbbill/undotree'
 Plug 'thezeroalpha/vim-lf'
 Plug 'tpope/vim-commentary'
