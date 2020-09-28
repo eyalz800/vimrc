@@ -645,6 +645,18 @@ set t_u7=
 " Undo Tree
 nnoremap <silent> <leader>zu :UndotreeToggle<cr>
 
+" Large files handling
+let g:large_file_size = 10 * 1024 * 1024
+augroup large_files
+    autocmd!
+    autocmd BufReadPre *
+        \   if getfsize(expand("<afile>")) > g:large_file_size
+        \ |     setlocal noswapfile
+        \ |     setlocal bufhidden=unload
+        \ |     exec ":HexokinaseTurnOff"
+        \ | endif
+augroup end
+
 " Tag stack
 nnoremap <silent> <leader>o :pop<CR>
 nnoremap <silent> <leader>i :tag<CR>
