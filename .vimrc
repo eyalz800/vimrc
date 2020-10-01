@@ -1,6 +1,6 @@
 set nocompatible
 
-function! InstallCommand(command)
+function! ZInstallCommand(command)
     silent exec "!" . a:command
     if v:shell_error
         silent exec "!echo Installation failed, error: " . string(v:shell_error)
@@ -8,107 +8,107 @@ function! InstallCommand(command)
     endif
 endfunction
 
-function! InstallVimrc()
+function! ZInstallVimrc()
     if empty($SUDO_USER)
         echo "Please run as sudo."
         exec ":q"
     endif
-    call InstallCommand("mkdir -p ~/.vim")
-    call InstallCommand("mkdir -p ~/.vim/tmp")
-    call InstallCommand("mkdir -p ~/.vim/bin/python")
-    call InstallCommand("mkdir -p ~/.vim/bin/llvm")
-    call InstallCommand("mkdir -p ~/.config")
-    call InstallCommand("mkdir -p ~/.config/coc")
-    call InstallCommand("mkdir -p ~/.cache")
+    call ZInstallCommand("mkdir -p ~/.vim")
+    call ZInstallCommand("mkdir -p ~/.vim/tmp")
+    call ZInstallCommand("mkdir -p ~/.vim/bin/python")
+    call ZInstallCommand("mkdir -p ~/.vim/bin/llvm")
+    call ZInstallCommand("mkdir -p ~/.config")
+    call ZInstallCommand("mkdir -p ~/.config/coc")
+    call ZInstallCommand("mkdir -p ~/.cache")
     if !executable('brew')
-        call InstallCommand("DEBIAN_FRONTEND=noninteractive add-apt-repository -y ppa:lazygit-team/release")
-        call InstallCommand("curl -sL https://deb.nodesource.com/setup_10.x | bash -")
-        call InstallCommand("curl -fLo ~/.vim/tmp/llvm-install/llvm.sh --create-dirs
+        call ZInstallCommand("DEBIAN_FRONTEND=noninteractive add-apt-repository -y ppa:lazygit-team/release")
+        call ZInstallCommand("curl -sL https://deb.nodesource.com/setup_10.x | bash -")
+        call ZInstallCommand("curl -fLo ~/.vim/tmp/llvm-install/llvm.sh --create-dirs
             \ https://apt.llvm.org/llvm.sh
             \ ; cd ~/.vim/tmp/llvm-install; chmod +x ./llvm.sh; ./llvm.sh 11")
-        call InstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y curl silversearcher-ag exuberant-ctags cscope git
+        call ZInstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y curl silversearcher-ag exuberant-ctags cscope git
             \ make autoconf automake pkg-config openjdk-8-jre python3 python3-pip gdb golang nodejs lazygit libc++-11-dev libc++abi-11-dev")
-        call InstallCommand("rm -rf ~/.vim/bin/llvm/clangd && ln -s $(command -v clangd-11) ~/.vim/bin/llvm/clangd")
+        call ZInstallCommand("rm -rf ~/.vim/bin/llvm/clangd && ln -s $(command -v clangd-11) ~/.vim/bin/llvm/clangd")
         let lazygit_config_path = '~/.config/jesseduffield/lazygit'
     else
-        call InstallCommand("sudo -u $SUDO_USER brew install curl ag ctags cscope git
+        call ZInstallCommand("sudo -u $SUDO_USER brew install curl ag ctags cscope git
             \ llvm make autoconf automake pkg-config python3 nodejs gnu-sed bat ripgrep lazygit golang pandoc || true")
-        call InstallCommand("sudo -u $SUDO_USER brew link python3")
-        call InstallCommand("sudo -u $SUDO_USER brew tap AdoptOpenJDK/openjdk")
-        call InstallCommand("sudo -u $SUDO_USER brew cask install adoptopenjdk8")
-        call InstallCommand("sudo -u $SUDO_USER curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py")
-        call InstallCommand("sudo -u $SUDO_USER python3 get-pip.py")
+        call ZInstallCommand("sudo -u $SUDO_USER brew link python3")
+        call ZInstallCommand("sudo -u $SUDO_USER brew tap AdoptOpenJDK/openjdk")
+        call ZInstallCommand("sudo -u $SUDO_USER brew cask install adoptopenjdk8")
+        call ZInstallCommand("sudo -u $SUDO_USER curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py")
+        call ZInstallCommand("sudo -u $SUDO_USER python3 get-pip.py")
         if !executable('clangd') && executable('/usr/local/opt/llvm/bin/clangd')
-            call InstallCommand("echo export PATH=\\$PATH:/usr/local/opt/llvm/bin >> ~/.bashrc")
+            call ZInstallCommand("echo export PATH=\\$PATH:/usr/local/opt/llvm/bin >> ~/.bashrc")
         endif
         let lazygit_config_path = '~/Library/Application\ Support/jesseduffield/lazygit'
     endif
     if 0 == system('python3 -c "import sys; print(1 if sys.version_info.major >= 3 and sys.version_info.minor >= 6 else 0)"') && executable('python3.6')
-        call InstallCommand("rm -rf ~/.vim/bin/python/python3 && ln -s $(command -v python3.6) ~/.vim/bin/python/python3")
+        call ZInstallCommand("rm -rf ~/.vim/bin/python/python3 && ln -s $(command -v python3.6) ~/.vim/bin/python/python3")
         let $PATH = expand('~/.vim/bin/python') . ':' . $PATH
         let python3_command = 'python3.6'
     else
         let python3_command = 'python3'
     endif
     if executable('pip3')
-        call InstallCommand("pip3 install compiledb")
+        call ZInstallCommand("pip3 install compiledb")
     endif
     if executable(python3_command)
-        call InstallCommand("sudo -u $SUDO_USER " . python3_command . " -m pip install python-language-server pylint compiledb setuptools jedi")
+        call ZInstallCommand("sudo -u $SUDO_USER " . python3_command . " -m pip install python-language-server pylint compiledb setuptools jedi")
     endif
     if executable('python3') && python3_command != 'python3'
-        call InstallCommand("sudo -u $SUDO_USER python3 -m pip install python-language-server pylint compiledb setuptools jedi")
+        call ZInstallCommand("sudo -u $SUDO_USER python3 -m pip install python-language-server pylint compiledb setuptools jedi")
     endif
     if !filereadable(expand('~/.vim/autoload/plug.vim'))
-        call InstallCommand("curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+        call ZInstallCommand("curl -fLo ~/.vim/autoload/plug.vim --create-dirs
           \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim")
     endif
     if !filereadable(expand('~/.vim/bin/opengrok/lib/opengrok.jar'))
-        call InstallCommand("curl -fLo ~/.vim/bin/opengrok.tar.gz --create-dirs
+        call ZInstallCommand("curl -fLo ~/.vim/bin/opengrok.tar.gz --create-dirs
           \ https://github.com/oracle/opengrok/releases/download/1.0/opengrok-1.0.tar.gz")
-        call InstallCommand("cd ~/.vim/bin; tar -xzvf opengrok.tar.gz")
-        call InstallCommand("rm ~/.vim/bin/opengrok.tar.gz")
-        call InstallCommand("mv ~/.vim/bin/opengrok* ~/.vim/bin/opengrok")
+        call ZInstallCommand("cd ~/.vim/bin; tar -xzvf opengrok.tar.gz")
+        call ZInstallCommand("rm ~/.vim/bin/opengrok.tar.gz")
+        call ZInstallCommand("mv ~/.vim/bin/opengrok* ~/.vim/bin/opengrok")
     endif
     if !filereadable(expand('~/.vim/tmp/ctags/Makefile'))
-        call InstallCommand("cd ~/.vim/tmp; git clone https://github.com/universal-ctags/ctags.git; cd ./ctags; ./autogen.sh; ./configure; make; make install")
+        call ZInstallCommand("cd ~/.vim/tmp; git clone https://github.com/universal-ctags/ctags.git; cd ./ctags; ./autogen.sh; ./configure; make; make install")
     endif
     if !executable('ctags-exuberant') && !filereadable(expand('~/.vim/bin/ctags-exuberant/ctags/ctags'))
-        call InstallCommand("curl -fLo ~/.vim/bin/ctags-exuberant/ctags.tar.gz --create-dirs
+        call ZInstallCommand("curl -fLo ~/.vim/bin/ctags-exuberant/ctags.tar.gz --create-dirs
           \ http://prdownloads.sourceforge.net/ctags/ctags-5.8.tar.gz")
-        call InstallCommand("cd ~/.vim/bin/ctags-exuberant; tar -xzvf ctags.tar.gz")
-        call InstallCommand("mv ~/.vim/bin/ctags-exuberant/ctags-5.8 ~/.vim/bin/ctags-exuberant/ctags")
-        call InstallCommand("cd ~/.vim/bin/ctags-exuberant/ctags; ./configure; make")
+        call ZInstallCommand("cd ~/.vim/bin/ctags-exuberant; tar -xzvf ctags.tar.gz")
+        call ZInstallCommand("mv ~/.vim/bin/ctags-exuberant/ctags-5.8 ~/.vim/bin/ctags-exuberant/ctags")
+        call ZInstallCommand("cd ~/.vim/bin/ctags-exuberant/ctags; ./configure; make")
     endif
     if !filereadable(expand('~/.vim/bin/lf/lf'))
         if !executable('brew')
-            call InstallCommand("curl -fLo ~/.vim/bin/lf/lf.tar.gz --create-dirs
+            call ZInstallCommand("curl -fLo ~/.vim/bin/lf/lf.tar.gz --create-dirs
               \ https://github.com/gokcehan/lf/releases/download/r16/lf-linux-amd64.tar.gz")
         else
-            call InstallCommand("curl -fLo ~/.vim/bin/lf/lf.tar.gz --create-dirs
+            call ZInstallCommand("curl -fLo ~/.vim/bin/lf/lf.tar.gz --create-dirs
               \ https://github.com/gokcehan/lf/releases/download/r16/lf-darwin-amd64.tar.gz")
         endif
-        call InstallCommand("cd ~/.vim/bin/lf; tar -xzvf lf.tar.gz")
+        call ZInstallCommand("cd ~/.vim/bin/lf; tar -xzvf lf.tar.gz")
     endif
     if !executable('bat') && !executable('brew')
         if !empty(system('apt-cache search --names-only ^bat\$'))
-            call InstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y bat")
+            call ZInstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y bat")
         else
-            call InstallCommand("curl -fLo ~/.vim/tmp/bat --create-dirs
+            call ZInstallCommand("curl -fLo ~/.vim/tmp/bat --create-dirs
                 \ https://github.com/sharkdp/bat/releases/download/v0.15.1/bat_0.15.1_amd64.deb")
-            call InstallCommand("dpkg -i ~/.vim/tmp/bat")
+            call ZInstallCommand("dpkg -i ~/.vim/tmp/bat")
         endif
     endif
     if !executable('rg') && !executable('brew')
         if !empty(system('apt-cache search --names-only ^ripgrep\$'))
-            call InstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y ripgrep")
+            call ZInstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y ripgrep")
         else
-            call InstallCommand("curl -fLo ~/.vim/tmp/ripgrep --create-dirs
+            call ZInstallCommand("curl -fLo ~/.vim/tmp/ripgrep --create-dirs
                 \ https://github.com/BurntSushi/ripgrep/releases/download/11.0.2/ripgrep_11.0.2_amd64.deb")
-            call InstallCommand("dpkg -i ~/.vim/tmp/ripgrep")
+            call ZInstallCommand("dpkg -i ~/.vim/tmp/ripgrep")
         endif
     endif
-    call InstallCommand("
+    call ZInstallCommand("
         \ sudo -u $SUDO_USER mkdir -p " . lazygit_config_path . "
         \ && sudo -u $SUDO_USER touch " . lazygit_config_path . "/config.yml
         \ && echo 'startuppopupversion: 1' > " . lazygit_config_path . "/config.yml
@@ -118,18 +118,18 @@ function! InstallVimrc()
         \ && echo '      - reverse' >> " . lazygit_config_path . "/config.yml
     \ ")
     if !executable('brew') && !filereadable(expand('~/.vim/tmp/pandoc.deb'))
-        call InstallCommand("curl -fLo ~/.vim/tmp/pandoc.deb --create-dirs
+        call ZInstallCommand("curl -fLo ~/.vim/tmp/pandoc.deb --create-dirs
             \ https://github.com/jgm/pandoc/releases/download/2.10.1/pandoc-2.10.1-1-amd64.deb")
-        call InstallCommand("dpkg -i ~/.vim/tmp/pandoc.deb")
+        call ZInstallCommand("dpkg -i ~/.vim/tmp/pandoc.deb")
     endif
-    call InstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim")
-    call InstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim/tmp")
-    call InstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.config")
-    call InstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.cache")
-    call InstallCommand("chown $SUDO_USER:$SUDO_GID ~/.vimrc")
-    call InstallCommand("sudo -u $SUDO_USER INSTALL_VIMRC_PLUGINS=1 INSTALL_VIMRC= vim +qa")
-    call InstallCommand("sudo -u $SUDO_USER " . python3_command . " ~/.vim/plugged/vimspector/install_gadget.py --sudo --enable-c --enable-python")
-    call CustomizePlugins()
+    call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim")
+    call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim/tmp")
+    call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.config")
+    call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.cache")
+    call ZInstallCommand("chown $SUDO_USER:$SUDO_GID ~/.vimrc")
+    call ZInstallCommand("sudo -u $SUDO_USER INSTALL_VIMRC_PLUGINS=1 INSTALL_VIMRC= vim +qa")
+    call ZInstallCommand("sudo -u $SUDO_USER " . python3_command . " ~/.vim/plugged/vimspector/install_gadget.py --sudo --enable-c --enable-python")
+    call ZCustomizePlugins()
 endfunction
 
 let s:sed = 'sed'
@@ -137,13 +137,13 @@ if executable('brew')
     let s:sed = 'gsed'
 endif
 
-function! CustomizePlugins()
-    call InstallCommand(s:sed . " -i 's@ . redraw\\!@ . \" > /dev/null\"@' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim")
-    call InstallCommand(s:sed . " -i 's@silent execute \"perl system.*@silent execute \"\\!\" . a:cmd . \" > /dev/null\"@' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim")
+function! ZCustomizePlugins()
+    call ZInstallCommand(s:sed . " -i 's@ . redraw\\!@ . \" > /dev/null\"@' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim")
+    call ZInstallCommand(s:sed . " -i 's@silent execute \"perl system.*@silent execute \"\\!\" . a:cmd . \" > /dev/null\"@' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim")
 endfunction
 
 if !empty($INSTALL_VIMRC)
-    call InstallVimrc()
+    call ZInstallVimrc()
     exec ":q"
 endif
 
@@ -152,8 +152,8 @@ if filereadable(expand('~/.vim/.nococ'))
     let g:lsp_choice = 'vim-lsp'
 endif
 
-nnoremap <silent> <leader>tl :call ToggleLspPersistent()<CR>:source ~/.vimrc<CR>
-function! ToggleLspPersistent()
+nnoremap <silent> <leader>tl :call ZToggleLspPersistent()<CR>:source ~/.vimrc<CR>
+function! ZToggleLspPersistent()
     if filereadable(expand('~/.vim/.nococ'))
         call system("rm ~/.vim/.nococ")
     else
@@ -221,13 +221,13 @@ if !empty($INSTALL_VIMRC_PLUGINS)
     let g:coc_disable_startup_warning = 1
     if $INSTALL_VIMRC_PLUGINS != 'post'
         exec ":PlugInstall --sync"
-        call InstallCommand("
+        call ZInstallCommand("
             \ echo '{' > ~/.vim/coc-settings.json
             \ && echo '    \"clangd.semanticHighlighting\": false,' >> ~/.vim/coc-settings.json
             \ && echo '    \"python.jediEnabled\": true,' >> ~/.vim/coc-settings.json
             \ && echo '    \"coc.preferences.formatOnType\": true' >> ~/.vim/coc-settings.json
             \ && echo '}' >> ~/.vim/coc-settings.json")
-        call InstallCommand("INSTALL_VIMRC_PLUGINS=post vim +'CocInstall -sync coc-json coc-clangd coc-python coc-vimlsp' +qa")
+        call ZInstallCommand("INSTALL_VIMRC_PLUGINS=post vim +'CocInstall -sync coc-json coc-clangd coc-python coc-vimlsp' +qa")
     endif
 endif
 
@@ -260,7 +260,7 @@ map <C-w>w :q<CR>
 noremap <F1> <C-w><C-p>
 noremap <F2> <C-w><C-w>
 set noerrorbells visualbell t_vb=
-augroup filetype_indentation
+augroup ZFileIndentation
     autocmd!
     autocmd filetype cpp setlocal cindent
     autocmd filetype c setlocal cindent
@@ -315,8 +315,8 @@ endfunction
 if has('termguicolors') && !filereadable(expand('~/.vim/.notermguicolors'))
     set termguicolors
 endif
-nnoremap <leader>tg :call ToggleGuiColorsPersistent()<CR>
-function! ToggleGuiColorsPersistent()
+nnoremap <leader>tg :call ZToggleGuiColorsPersistent()<CR>
+function! ZToggleGuiColorsPersistent()
     if has('termguicolors')
         if filereadable(expand('~/.vim/.notermguicolors'))
             call system("rm ~/.vim/.notermguicolors")
@@ -421,30 +421,26 @@ nnoremap <silent> <leader>zs :below terminal<CR>
 nnoremap <silent> <leader>zv :vert rightb terminal<CR>
 tnoremap <silent> <C-w>w <C-w>:q<CR>
 tnoremap <silent> <C-w>n <C-w>N
-tnoremap <silent> <C-w>m <C-w>:call TerminalToggleScrolling()<CR>
-augroup terminal_whitespace
+tnoremap <silent> <C-w>m <C-w>:call ZTerminalToggleScrolling()<CR>
+augroup ZTerminalWhitespace
     autocmd!
     autocmd TerminalOpen * DisableWhitespace
-    autocmd TerminalOpen * tnoremap <silent> <buffer> <ScrollWheelUp> <C-w>:call TerminalEnterNormalMode()<CR>
+    autocmd TerminalOpen * tnoremap <silent> <buffer> <ScrollWheelUp> <C-w>:call ZTerminalEnterNormalMode()<CR>
 augroup end
 
-function! TerminalExitNormalMode()
-    call feedkeys("a")
-endfunction
-
-function! TerminalEnterNormalMode()
+function! ZTerminalEnterNormalMode()
     if &buftype == 'terminal' && mode('') == 't'
         call feedkeys("\<c-w>N")
         call feedkeys("\<c-y>")
     endif
 endfunction
 
-function! TerminalToggleScrolling()
+function! ZTerminalToggleScrolling()
     if !exists('b:terminal_scrolling_enabled') || b:terminal_scrolling_enabled == 1
         tunmap <silent> <buffer> <ScrollWheelUp>
         let b:terminal_scrolling_enabled = 0
     else
-        tnoremap <silent> <buffer> <ScrollWheelUp> <C-w>:call TerminalEnterNormalMode()<CR>
+        tnoremap <silent> <buffer> <ScrollWheelUp> <C-w>:call ZTerminalEnterNormalMode()<CR>
         let b:terminal_scrolling_enabled = 1
     endif
 endfunction
@@ -520,10 +516,10 @@ nnoremap <silent> <leader>nf :NERDTreeFind<CR>
 nnoremap <silent> <leader>gb :Git blame<CR>
 nnoremap <silent> <leader>gm :MagitOnly<CR>
 nnoremap <silent> <leader>gc :BCommits!<CR>
-nnoremap <silent> <leader>gl :call PopTerminal('lazygit -p ' .  expand('%:p:h'))<CR>
+nnoremap <silent> <leader>gl :call ZPopTerminal('lazygit -p ' .  expand('%:p:h'))<CR>
 
 " Pop Terminal
-function! PopTerminal(command)
+function! ZPopTerminal(command)
     let buf = term_start(a:command, #{hidden: 1, term_finish: 'close'})
     let winid = popup_dialog(buf, #{minheight: 40, minwidth: 150})
     let bufn = winbufnr(winid)
@@ -647,7 +643,7 @@ let g:sneak#s_next = 0
 let g:sneak#label = 1
 let g:sneak#target_labels = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789?/'
 
-" Cscope
+" ZCscope
 let g:cscopedb_big_file = 'cscope.out'
 let g:cscopedb_small_file = 'cscope_small.out'
 let g:cscopedb_auto_files = 0
@@ -668,7 +664,7 @@ let g:VM_maps = {
 nmap <C-j> <plug>(VM-Add-Cursor-Down)
 nmap <C-k> <plug>(VM-Add-Cursor-Up)
 if g:lsp_choice == 'coc'
-    augroup visual_multi_coc
+    augroup ZVisualMultiCoc
         autocmd!
         autocmd User visual_multi_start call ZVisualMultiCocBefore()
         autocmd User visual_multi_exit call ZVisualMultiCocAfter()
@@ -705,7 +701,7 @@ nnoremap <silent> <leader>zu :UndotreeToggle<cr>
 
 " Large files handling
 let g:large_file_size = 10 * 1024 * 1024
-augroup large_files
+augroup ZLargeFiles
     autocmd!
     autocmd BufReadPre *
         \   if getfsize(expand("<afile>")) > g:large_file_size
@@ -719,11 +715,11 @@ augroup end
 nnoremap <silent> <leader>o :pop<CR>
 nnoremap <silent> <leader>i :tag<CR>
 
-function! TagstackPushCurrent(name)
-    return TagstackPush(a:name, getcurpos(), bufnr())
+function! ZTagstackPushCurrent(name)
+    return ZTagstackPush(a:name, getcurpos(), bufnr())
 endfunction
 
-function! TagstackPush(name, pos, buf)
+function! ZTagstackPush(name, pos, buf)
     let curpos = a:pos
     let curpos[0] = a:buf
     let item = {'tagname': a:name, 'from': curpos}
@@ -775,7 +771,7 @@ function! ZFzfStringPreview(string)
         if buf == bufnr() && pos[1] == getcurpos()[1]
             return 1
         endif
-        call TagstackPush(name, pos, buf)
+        call ZTagstackPush(name, pos, buf)
         return 1
     endif
     return 0
@@ -802,7 +798,7 @@ function! ZGoToSymbol(symbol, type)
         let opengrok_query_type = 'f'
     endif
 
-    " Cscope
+    " ZCscope
     if filereadable('cscope.out')
         let awk_program =
             \    '{ x = $1; $1 = ""; z = $3; $3 = ""; ' .
@@ -813,7 +809,7 @@ function! ZGoToSymbol(symbol, type)
         let results = split(system(cscope_command), '\n')
 
         if len(results) > overall_limit
-            return Cscope(cscope_query_type, a:symbol, 1)
+            return ZCscope(cscope_query_type, a:symbol, 1)
         endif
 
         let files_to_results = {}
@@ -829,7 +825,7 @@ function! ZGoToSymbol(symbol, type)
         endfor
 
         if len(files_to_results) > limit
-            return Cscope(cscope_query_type, a:symbol, 1)
+            return ZCscope(cscope_query_type, a:symbol, 1)
         endif
 
         let valid_results = []
@@ -844,7 +840,7 @@ function! ZGoToSymbol(symbol, type)
         endfor
 
         if len(valid_jumps) == 1
-            call TagstackPushCurrent(a:symbol)
+            call ZTagstackPushCurrent(a:symbol)
             call ZJumpToLocation(valid_jumps[0][0], valid_jumps[0][1], valid_jumps[0][2])
             return 1
         elseif len(valid_jumps) > 1
@@ -859,7 +855,7 @@ function! ZGoToSymbol(symbol, type)
             \ . " ". shellescape(a:symbol) . "| grep \"^/.*\""), '\n')
 
         if len(results) > overall_limit
-            return OgQuery(opengrok_query_type, a:symbol, 1)
+            return ZOgQuery(opengrok_query_type, a:symbol, 1)
         endif
 
         let files_to_results = {}
@@ -875,7 +871,7 @@ function! ZGoToSymbol(symbol, type)
         endfor
 
         if len(files_to_results) > limit
-            return Cscope(cscope_query_type, a:symbol, 1)
+            return ZCscope(cscope_query_type, a:symbol, 1)
         endif
 
         let valid_results = []
@@ -890,7 +886,7 @@ function! ZGoToSymbol(symbol, type)
         endfor
 
         if len(valid_jumps) == 1
-            call TagstackPushCurrent(a:symbol)
+            call ZTagstackPushCurrent(a:symbol)
             call ZJumpToLocation(valid_jumps[0][0], valid_jumps[0][1], valid_jumps[0][2])
             return 1
         elseif len(valid_jumps) > 1
@@ -932,64 +928,64 @@ function! ZGetTargetSymbolJumpIfCtagType(symbol, file, lines, ctags_tag_types)
     return lines_and_columns
 endfunction
 
-" Cscope
-nnoremap <silent> <leader>cA :call Cscope('9', expand('<cword>'), 0)<CR>
-nnoremap <silent> <leader>cC :call Cscope('3', expand('<cword>'), 0)<CR>
-nnoremap <silent> <leader>cD :call Cscope('2', expand('<cword>'), 0)<CR>
-nnoremap <silent> <leader>cE :call Cscope('6', expand('<cword>'), 0)<CR>
-nnoremap <silent> <leader>cF :call Cscope('7', expand('<cword>'), 0)<CR>
-nnoremap <silent> <leader>cG :call Cscope('1', expand('<cword>'), 0)<CR>
-nnoremap <silent> <leader>cI :call Cscope('8', expand('<cword>'), 0)<CR>
-nnoremap <silent> <leader>cS :call Cscope('0', expand('<cword>'), 0)<CR>
-nnoremap <silent> <leader>cT :call Cscope('4', expand('<cword>'), 0)<CR>
-nnoremap <silent> <leader><leader>fA :call CscopeQuery('9', 0)<CR>
-nnoremap <silent> <leader><leader>fC :call CscopeQuery('3', 0)<CR>
-nnoremap <silent> <leader><leader>fD :call CscopeQuery('2', 0)<CR>
-nnoremap <silent> <leader><leader>fE :call CscopeQuery('6', 0)<CR>
-nnoremap <silent> <leader><leader>fF :call CscopeQuery('7', 0)<CR>
-nnoremap <silent> <leader><leader>fG :call CscopeQuery('1', 0)<CR>
-nnoremap <silent> <leader><leader>fI :call CscopeQuery('8', 0)<CR>
-nnoremap <silent> <leader><leader>fS :call CscopeQuery('0', 0)<CR>
-nnoremap <silent> <leader><leader>cT :call CscopeQuery('4', 0)<CR>
-nnoremap <silent> <leader><leader>cA :call CscopeQuery('9', 0, 1)<CR>
-nnoremap <silent> <leader><leader>cC :call CscopeQuery('3', 0, 1)<CR>
-nnoremap <silent> <leader><leader>cD :call CscopeQuery('2', 0, 1)<CR>
-nnoremap <silent> <leader><leader>cE :call CscopeQuery('6', 0, 1)<CR>
-nnoremap <silent> <leader><leader>cF :call CscopeQuery('7', 0, 1)<CR>
-nnoremap <silent> <leader><leader>cG :call CscopeQuery('1', 0, 1)<CR>
-nnoremap <silent> <leader><leader>cI :call CscopeQuery('8', 0, 1)<CR>
-nnoremap <silent> <leader><leader>cS :call CscopeQuery('0', 0, 1)<CR>
-nnoremap <silent> <leader><leader>cT :call CscopeQuery('4', 0, 1)<CR>
+" ZCscope
+nnoremap <silent> <leader>cA :call ZCscope('9', expand('<cword>'), 0)<CR>
+nnoremap <silent> <leader>cC :call ZCscope('3', expand('<cword>'), 0)<CR>
+nnoremap <silent> <leader>cD :call ZCscope('2', expand('<cword>'), 0)<CR>
+nnoremap <silent> <leader>cE :call ZCscope('6', expand('<cword>'), 0)<CR>
+nnoremap <silent> <leader>cF :call ZCscope('7', expand('<cword>'), 0)<CR>
+nnoremap <silent> <leader>cG :call ZCscope('1', expand('<cword>'), 0)<CR>
+nnoremap <silent> <leader>cI :call ZCscope('8', expand('<cword>'), 0)<CR>
+nnoremap <silent> <leader>cS :call ZCscope('0', expand('<cword>'), 0)<CR>
+nnoremap <silent> <leader>cT :call ZCscope('4', expand('<cword>'), 0)<CR>
+nnoremap <silent> <leader><leader>fA :call ZCscopeQuery('9', 0)<CR>
+nnoremap <silent> <leader><leader>fC :call ZCscopeQuery('3', 0)<CR>
+nnoremap <silent> <leader><leader>fD :call ZCscopeQuery('2', 0)<CR>
+nnoremap <silent> <leader><leader>fE :call ZCscopeQuery('6', 0)<CR>
+nnoremap <silent> <leader><leader>fF :call ZCscopeQuery('7', 0)<CR>
+nnoremap <silent> <leader><leader>fG :call ZCscopeQuery('1', 0)<CR>
+nnoremap <silent> <leader><leader>fI :call ZCscopeQuery('8', 0)<CR>
+nnoremap <silent> <leader><leader>fS :call ZCscopeQuery('0', 0)<CR>
+nnoremap <silent> <leader><leader>cT :call ZCscopeQuery('4', 0)<CR>
+nnoremap <silent> <leader><leader>cA :call ZCscopeQuery('9', 0, 1)<CR>
+nnoremap <silent> <leader><leader>cC :call ZCscopeQuery('3', 0, 1)<CR>
+nnoremap <silent> <leader><leader>cD :call ZCscopeQuery('2', 0, 1)<CR>
+nnoremap <silent> <leader><leader>cE :call ZCscopeQuery('6', 0, 1)<CR>
+nnoremap <silent> <leader><leader>cF :call ZCscopeQuery('7', 0, 1)<CR>
+nnoremap <silent> <leader><leader>cG :call ZCscopeQuery('1', 0, 1)<CR>
+nnoremap <silent> <leader><leader>cI :call ZCscopeQuery('8', 0, 1)<CR>
+nnoremap <silent> <leader><leader>cS :call ZCscopeQuery('0', 0, 1)<CR>
+nnoremap <silent> <leader><leader>cT :call ZCscopeQuery('4', 0, 1)<CR>
 
-nnoremap <silent> <leader>ca :call Cscope('9', expand('<cword>'), 1)<CR>
-nnoremap <silent> <leader>cc :call Cscope('3', expand('<cword>'), 1)<CR>
-nnoremap <silent> <leader>cd :call Cscope('2', expand('<cword>'), 1)<CR>
-nnoremap <silent> <leader>ce :call Cscope('6', expand('<cword>'), 1)<CR>
-nnoremap <silent> <leader>cf :call Cscope('7', expand('<cword>'), 1)<CR>
-nnoremap <silent> <leader>cg :call Cscope('1', expand('<cword>'), 1)<CR>
-nnoremap <silent> <leader>ci :call Cscope('8', expand('<cword>'), 1)<CR>
-nnoremap <silent> <leader>cs :call Cscope('0', expand('<cword>'), 1)<CR>
-nnoremap <silent> <leader>ct :call Cscope('4', expand('<cword>'), 1)<CR>
-nnoremap <silent> <leader><leader>fa :call CscopeQuery('9', 1)<CR>
-nnoremap <silent> <leader><leader>fc :call CscopeQuery('3', 1)<CR>
-nnoremap <silent> <leader><leader>fd :call CscopeQuery('2', 1)<CR>
-nnoremap <silent> <leader><leader>fe :call CscopeQuery('6', 1)<CR>
-nnoremap <silent> <leader><leader>ff :call CscopeQuery('7', 1)<CR>
-nnoremap <silent> <leader><leader>fg :call CscopeQuery('1', 1)<CR>
-nnoremap <silent> <leader><leader>fi :call CscopeQuery('8', 1)<CR>
-nnoremap <silent> <leader><leader>fs :call CscopeQuery('0', 1)<CR>
-nnoremap <silent> <leader><leader>ct :call CscopeQuery('4', 1)<CR>
-nnoremap <silent> <leader><leader>ca :call CscopeQuery('9', 1, 1)<CR>
-nnoremap <silent> <leader><leader>cc :call CscopeQuery('3', 1, 1)<CR>
-nnoremap <silent> <leader><leader>cd :call CscopeQuery('2', 1, 1)<CR>
-nnoremap <silent> <leader><leader>ce :call CscopeQuery('6', 1, 1)<CR>
-nnoremap <silent> <leader><leader>cf :call CscopeQuery('7', 1, 1)<CR>
-nnoremap <silent> <leader><leader>cg :call CscopeQuery('1', 1, 1)<CR>
-nnoremap <silent> <leader><leader>ci :call CscopeQuery('8', 1, 1)<CR>
-nnoremap <silent> <leader><leader>cs :call CscopeQuery('0', 1, 1)<CR>
-nnoremap <silent> <leader><leader>ct :call CscopeQuery('4', 1, 1)<CR>
+nnoremap <silent> <leader>ca :call ZCscope('9', expand('<cword>'), 1)<CR>
+nnoremap <silent> <leader>cc :call ZCscope('3', expand('<cword>'), 1)<CR>
+nnoremap <silent> <leader>cd :call ZCscope('2', expand('<cword>'), 1)<CR>
+nnoremap <silent> <leader>ce :call ZCscope('6', expand('<cword>'), 1)<CR>
+nnoremap <silent> <leader>cf :call ZCscope('7', expand('<cword>'), 1)<CR>
+nnoremap <silent> <leader>cg :call ZCscope('1', expand('<cword>'), 1)<CR>
+nnoremap <silent> <leader>ci :call ZCscope('8', expand('<cword>'), 1)<CR>
+nnoremap <silent> <leader>cs :call ZCscope('0', expand('<cword>'), 1)<CR>
+nnoremap <silent> <leader>ct :call ZCscope('4', expand('<cword>'), 1)<CR>
+nnoremap <silent> <leader><leader>fa :call ZCscopeQuery('9', 1)<CR>
+nnoremap <silent> <leader><leader>fc :call ZCscopeQuery('3', 1)<CR>
+nnoremap <silent> <leader><leader>fd :call ZCscopeQuery('2', 1)<CR>
+nnoremap <silent> <leader><leader>fe :call ZCscopeQuery('6', 1)<CR>
+nnoremap <silent> <leader><leader>ff :call ZCscopeQuery('7', 1)<CR>
+nnoremap <silent> <leader><leader>fg :call ZCscopeQuery('1', 1)<CR>
+nnoremap <silent> <leader><leader>fi :call ZCscopeQuery('8', 1)<CR>
+nnoremap <silent> <leader><leader>fs :call ZCscopeQuery('0', 1)<CR>
+nnoremap <silent> <leader><leader>ct :call ZCscopeQuery('4', 1)<CR>
+nnoremap <silent> <leader><leader>ca :call ZCscopeQuery('9', 1, 1)<CR>
+nnoremap <silent> <leader><leader>cc :call ZCscopeQuery('3', 1, 1)<CR>
+nnoremap <silent> <leader><leader>cd :call ZCscopeQuery('2', 1, 1)<CR>
+nnoremap <silent> <leader><leader>ce :call ZCscopeQuery('6', 1, 1)<CR>
+nnoremap <silent> <leader><leader>cf :call ZCscopeQuery('7', 1, 1)<CR>
+nnoremap <silent> <leader><leader>cg :call ZCscopeQuery('1', 1, 1)<CR>
+nnoremap <silent> <leader><leader>ci :call ZCscopeQuery('8', 1, 1)<CR>
+nnoremap <silent> <leader><leader>cs :call ZCscopeQuery('0', 1, 1)<CR>
+nnoremap <silent> <leader><leader>ct :call ZCscopeQuery('4', 1, 1)<CR>
 
-function! Cscope(option, query, preview, ...)
+function! ZCscope(option, query, preview, ...)
     let l:ignorecase = get(a:, 2, 0)
     if l:ignorecase
       let realoption = "C" . a:option
@@ -1018,13 +1014,13 @@ function! Cscope(option, query, preview, ...)
         if buf == bufnr() && pos[1] == getcurpos()[1]
             return 1
         endif
-        call TagstackPush(name, pos, buf)
+        call ZTagstackPush(name, pos, buf)
         return 1
     endif
     return 0
 endfunction
 
-function! CscopeQuery(option, preview, ...)
+function! ZCscopeQuery(option, preview, ...)
   call inputsave()
   if a:option == '9'
     let query = input('Assignments to: ')
@@ -1052,9 +1048,9 @@ function! CscopeQuery(option, preview, ...)
   if query != ""
     let l:ignorecase = get(a:, 2, 0)
     if l:ignorecase
-      call Cscope(a:option, query, a:preview, 1)
+      call ZCscope(a:option, query, a:preview, 1)
     else
-      call Cscope(a:option, query, a:preview)
+      call ZCscope(a:option, query, a:preview)
     endif
   else
     echom "Cancelled Search!"
@@ -1062,12 +1058,12 @@ function! CscopeQuery(option, preview, ...)
 endfunction
 
 " Opengrok Search
-nnoremap <silent> <leader>zo :call OgQuery('f', expand('<cword>'), 1)<CR>
-nnoremap <silent> <leader><leader>zo :call OgQuery('f', input('Text: '), 1)<CR>
-nnoremap <silent> <leader>zO :call OgQuery('f', expand('<cword>'), 0)<CR>
-nnoremap <silent> <leader><leader>zO :call OgQuery('f', input('Text: '), 0)<CR>
+nnoremap <silent> <leader>zo :call ZOgQuery('f', expand('<cword>'), 1)<CR>
+nnoremap <silent> <leader><leader>zo :call ZOgQuery('f', input('Text: '), 1)<CR>
+nnoremap <silent> <leader>zO :call ZOgQuery('f', expand('<cword>'), 0)<CR>
+nnoremap <silent> <leader><leader>zO :call ZOgQuery('f', input('Text: '), 0)<CR>
 
-function! OgQuery(option, query, preview)
+function! ZOgQuery(option, query, preview)
     let awk_program =
         \    '{ x = $1; $1 = ""; z = $3; $3 = ""; ' .
         \    'printf "%s:%s:%s\n", x,z,$0; }'
@@ -1092,7 +1088,7 @@ function! OgQuery(option, query, preview)
         if buf == bufnr() && pos[1] == getcurpos()[1]
             return 1
         endif
-        call TagstackPush(name, pos, buf)
+        call ZTagstackPush(name, pos, buf)
         return 1
     endif
     return 0
@@ -1131,7 +1127,7 @@ if g:lsp_choice == 'vim-lsp'
 
     " clangd
     if g:use_clangd_lsp
-        augroup lsp_clangd
+        augroup ZLspClangd
             autocmd!
             autocmd User lsp_setup call lsp#register_server({
                         \ 'name': 'clangd',
@@ -1143,7 +1139,7 @@ if g:lsp_choice == 'vim-lsp'
 
     " pyls
     if g:use_pyls_lsp
-        augroup lsp_pyls
+        augroup ZLspPyls
             autocmd!
             autocmd User lsp_setup call lsp#register_server({
                         \ 'name': 'pyls',
@@ -1168,7 +1164,7 @@ if g:lsp_choice == 'vim-lsp'
     endfunction
     inoremap <silent> <expr> <CR> pumvisible() ? asyncomplete#close_popup() . "\<CR>" : "\<CR>"
 
-    augroup lsp_install
+    augroup ZLspInstall
         autocmd!
         " call s:on_lsp_buffer_enabled only for languages that has the server registered.
         autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
@@ -1243,13 +1239,13 @@ if g:lsp_choice == 'coc'
                 " The position has not changed, a popup is in front of the
                 " user, assume success.
                 call setpos('.', pos)
-                call TagstackPush(name, pos, buf)
+                call ZTagstackPush(name, pos, buf)
                 return 1
             endif
 
             " Jump already occurred as we are not in the same buffer or line,
             " return success.
-            call TagstackPush(name, pos, buf)
+            call ZTagstackPush(name, pos, buf)
             return 1
         else
             call setpos('.', pos)
@@ -1288,7 +1284,7 @@ let g:pear_tree_map_special_keys = 0
 imap <BS> <Plug>(PearTreeBackspace)
 
 " Binary
-augroup binary_file
+augroup ZBinaryFile
     autocmd!
     autocmd BufReadPost * if &bin | set ft=xxd | exec "%!xxd" | endif
     autocmd BufWritePre * if &bin | set ft=xxd | exec "%!xxd -r" | endif
@@ -1302,16 +1298,16 @@ let g:zipPlugin_ext= '*.zip,*.jar,*.xpi,*.ja,*.war,*.ear,*.celzip,
     \ *.xlsb,*.xltx,*.xltm,*.xlam,*.crtx,*.vdw,*.glox,*.gcsx,*.gqsx,*.epub'
 
 " Pandoc
-augroup pandoc_group
+augroup ZPandocGroup
     autocmd!
     autocmd BufReadPost *.doc,*.docx,*.rtf,*.odp,*.odt if !&bin |
         \ silent exec "\%!pandoc \"%\" -tmarkdown -o /dev/stdout" | set ft=markdown | set ro | endif
 augroup end
-command! -complete=file -nargs=1 PandocEdit
+command! -complete=file -nargs=1 ZPandocEdit
     \ call system("pandoc -f " .  split(<f-args>, '\.')[-1] . " -t markdown " .
     \ <f-args> . "> " . <f-args> . ".md")
     \ | exec "edit " . <f-args> . ".md"
-command! -nargs=0 PandocWrite
+command! -nargs=0 ZPandocWrite
     \ exec ":w" |
     \ call system("pandoc -f markdown -t " .  split(expand('%:p'), '\.')[-2] .
     \ " " .  expand('%:p') . "> " . split(expand('%:p'), '\.md')[0])
@@ -1506,7 +1502,7 @@ let g:vimspector_sign_priority = {
   \    'vimspectorPC':         999,
   \    'vimspectorPCBP':       999,
   \ }
-augroup vimspector_custom_mappings
+augroup ZVimspectorCustomMappings
     autocmd!
     autocmd FileType VimspectorPrompt call ZVimspectorInitializePrompt()
     " autocmd User VimspectorUICreated call ZVimspectorSetupUi()
@@ -1559,7 +1555,7 @@ function! ZVimspectorCommandHistoryDown()
     call feedkeys("\<C-o>A", 'tn')
     let b:vimspector_command_history_pos = b:vimspector_command_history_pos + 1
 endfunction
-augroup visual_multi_vimspector
+augroup ZVisualMultiVimspector
     autocmd!
     autocmd User visual_multi_exit if &ft == 'VimspectorPrompt' | call ZVimspectorInitializeCommandHistoryMaps() | endif
 augroup end
