@@ -247,6 +247,7 @@ vimdiff -b [binary_file_1] [binary_file_2]
 
 * Directory switching:
 ```
-cd - Change to current file directory.
-cr - Change back to the root - the folder where vim was opened.
+cd - Change directory to current file directory.
+cp - Change directory to project root of current file.
+cr - Change directory back to the root - the folder where vim was opened.
 ```

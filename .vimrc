@@ -444,8 +444,32 @@ endif
 " Root
 let g:vimroot=$PWD
 nnoremap <silent> cr :call ZSwitchToRoot()<CR>
+nnoremap <silent> cp :call ZSwitchToProjectRoot(expand('%:p:h'))<CR>
 function! ZSwitchToRoot()
     execute "cd " . g:vimroot
+endfunction
+function! ZSwitchToProjectRoot(start_path)
+    let available_roots = ['.git', '.hg', '.svn', '.repo', '.files']
+    let current_path = a:start_path
+    let limit = 100
+    let iteration = 0
+    while iteration < limit
+        if current_path == '/'
+            echom "Project root not found!"
+            return
+        endif
+        for available_root in available_roots
+            if !filereadable(current_path . '/' . available_root)
+                    \ && !isdirectory(current_path . '/' . available_root)
+                continue
+            endif
+            execute "cd " . current_path
+            return
+        endfor
+        let current_path = fnamemodify(current_path, ':h')
+        let iteration = iteration + 1
+    endwhile
+    echom "Project root not found!"
 endfunction
 
 " Change directory
