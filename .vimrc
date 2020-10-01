@@ -227,7 +227,7 @@ if !empty($INSTALL_VIMRC_PLUGINS)
             \ && echo '    \"python.jediEnabled\": true,' >> ~/.vim/coc-settings.json
             \ && echo '    \"coc.preferences.formatOnType\": true' >> ~/.vim/coc-settings.json
             \ && echo '}' >> ~/.vim/coc-settings.json")
-        call ZInstallCommand("INSTALL_VIMRC_PLUGINS=post vim +'CocInstall -sync coc-json coc-clangd coc-python coc-vimlsp' +qa")
+        call ZInstallCommand("INSTALL_VIMRC_PLUGINS=post vim +'CocInstall -sync coc-clangd coc-python coc-vimlsp' +qa")
     endif
 endif
 
@@ -1176,7 +1176,7 @@ endif
 
 " Coc
 if g:lsp_choice == 'coc'
-    let g:coc_global_extensions = ['coc-clangd', 'coc-python', 'coc-json', 'coc-vimlsp']
+    let g:coc_global_extensions = ['coc-clangd', 'coc-python', 'coc-vimlsp']
     let g:coc_fzf_preview = 'right:50%'
 
     "nmap <silent> gd <Plug>(coc-definition)
