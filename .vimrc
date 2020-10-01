@@ -275,7 +275,7 @@ else
 endif
 inoremap <silent> <C-v> <ESC>"*gpa
 nnoremap <silent> <C-v> "*p
-if empty($SSH_CONNECTION) || filereadable(expand('~/.forcexserver'))
+if empty($SSH_CONNECTION) || filereadable(expand('~/.vim/.forcexserver'))
     set clipboard=unnamed
 else
     set clipboard=exclude:.*
