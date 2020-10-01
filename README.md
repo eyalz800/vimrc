@@ -251,3 +251,11 @@ cd - Change directory to current file directory.
 cp - Change directory to project root of current file.
 cr - Change directory back to the root - the folder where vim was opened.
 ```
+
+* Clipboard
+```
+<C-c> - Copy to clipboard.
+<C-v> - Paste from unnamed register.
+:ZToggleOscCopy - persistently toggle osc copy (default on)
+:ZToggleForceXServer - persistently force / no force connect to x server on ssh (default off).
+```
