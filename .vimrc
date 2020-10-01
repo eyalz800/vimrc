@@ -311,6 +311,24 @@ function! ZToggleForceXServer()
     endif
 endfunction
 
+" Bracketed paste
+inoremap <special> <expr> <Esc>[200~ ZXTermPasteBegin()
+function! ZWrapPasteForTmux(s)
+  if !exists('$TMUX')
+    return a:s
+  endif
+  let tmux_start = "\<Esc>Ptmux;"
+  let tmux_end = "\<Esc>\\"
+  return tmux_start . substitute(a:s, "\<Esc>", "\<Esc>\<Esc>", 'g') . tmux_end
+endfunction
+let &t_SI .= ZWrapPasteForTmux("\<Esc>[?2004h")
+let &t_EI .= ZWrapPasteForTmux("\<Esc>[?2004l")
+function! ZXTermPasteBegin()
+  set pastetoggle=<Esc>[201~
+  set paste
+  return ""
+endfunction
+
 " Gui colors
 if has('termguicolors') && !filereadable(expand('~/.vim/.notermguicolors'))
     set termguicolors
