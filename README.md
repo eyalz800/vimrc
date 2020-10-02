@@ -273,3 +273,8 @@ cr - Change directory back to the root - the folder where vim was opened.
 = - Increment number.
 - - Decrement number.
 ```
+
+* Save file:
+```
+<C-s> - Save file.
+```

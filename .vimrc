@@ -273,7 +273,11 @@ nnoremap <silent> <C-q> <C-v>
 " Close window
 nnoremap <silent> <C-w>w :q<CR>
 
-" Increment and decrement.
+" Save file
+nnoremap <silent> <C-s> :w<CR>
+inoremap <silent> <C-s> <C-o>:w<CR>
+
+" Increment and decrement
 nnoremap <silent> = <C-a>
 vnoremap <silent> = <C-a>
 nnoremap <silent> - <C-x>
