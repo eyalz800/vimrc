@@ -273,7 +273,7 @@ if !filereadable(expand('~/.vim/.noosccopy'))
 else
     vnoremap <silent> <C-c> "*y
 endif
-inoremap <silent> <C-v> <ESC>"*gpa
+inoremap <silent> <C-v> <C-o>"*gpa
 nnoremap <silent> <C-v> "*p
 if empty($SSH_CONNECTION) || filereadable(expand('~/.vim/.forcexserver'))
     set clipboard=unnamed
