@@ -695,8 +695,8 @@ let g:cscopedb_auto_files = 0
 let g:VM_theme = 'iceblue'
 let g:VM_leader = '<leader>m'
 let g:VM_maps = {
-    \ 'Find Under': '<C-m>',
-    \ 'Find Subword Under': '<C-m>',
+    \ 'Find Under': '<leader>ms',
+    \ 'Find Subword Under': '<leader>ms',
     \ 'Add Cursor At Pos': '<leader>mm',
     \ 'Start Regex Search': 'm/',
     \ 'Merge Regions': '<leader>mM',

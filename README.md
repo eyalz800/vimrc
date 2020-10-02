@@ -202,7 +202,7 @@ Use the labels to select which location or ; to move forward to next option.
 
 * Multiple Cursors:
 ```
-<C-m> - Find word under cursor.
+<leader>ms - Find word under cursor.
     n - next word.
     q - skip word.
 <C-j> / <C-Down> - Add cursor below.
