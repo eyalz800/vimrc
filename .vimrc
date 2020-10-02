@@ -234,7 +234,6 @@ endif
 " Generic
 syntax on
 filetype plugin indent on
-nnoremap <silent> ` :noh<CR>
 set expandtab
 set ignorecase
 set smartcase
@@ -254,12 +253,10 @@ set wildmode=list:longest,full
 set wildmenu
 set completeopt=longest,menuone,preview
 set nowrap
-nnoremap <silent> <C-q> <C-v>
 set shellslash
-map <C-w>w :q<CR>
-noremap <F1> <C-w><C-p>
-noremap <F2> <C-w><C-w>
 set noerrorbells visualbell t_vb=
+
+" File indentation
 augroup ZFileIndentation
     autocmd!
     autocmd filetype cpp setlocal cindent
@@ -267,11 +264,33 @@ augroup ZFileIndentation
     autocmd filetype make setlocal noexpandtab autoindent
 augroup end
 
+" Turn off highlights
+nnoremap <silent> ` :noh<CR>
+
+" Visual block
+nnoremap <silent> <C-q> <C-v>
+
+" Close window
+nnoremap <silent> <C-w>w :q<CR>
+
+" Increment and decrement.
+nnoremap <silent> = <C-a>
+vnoremap <silent> = <C-a>
+nnoremap <silent> - <C-x>
+vnoremap <silent> - <C-x>
+
+" Select all
+nnoremap <silent> <C-a> ggVG
+vnoremap <silent> <C-a> <esc>ggVG
+inoremap <silent> <C-a> <esc>ggVG
+
 " Clipboard
 if !filereadable(expand('~/.vim/.noosccopy'))
     vnoremap <silent> <C-c> "*y:ZOscCopy<CR>
+    vnoremap <silent> <C-x> "*d:ZOscCopy<CR>
 else
     vnoremap <silent> <C-c> "*y
+    vnoremap <silent> <C-x> "*d
 endif
 inoremap <silent> <C-v> <C-o>"*gpa
 nnoremap <silent> <C-v> "*p
