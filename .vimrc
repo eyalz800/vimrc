@@ -624,6 +624,7 @@ endif
 set rtp+=~/.fzf
 nnoremap <silent> <C-p> :Files<CR>
 nnoremap <silent> <C-n> :Tags<CR>
+nnoremap <silent> <C-g> :Rg<CR>
 nnoremap <silent> <leader>b :Buf<CR>
 nnoremap <silent> <leader>fh :call ZFzfToggleFilesCache()<CR>
 nnoremap <silent> <leader>fH :call ZFzfToggleGlobalFilesCache()<CR>

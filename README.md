@@ -65,6 +65,8 @@ gd - Go to definition (fast) (current word).
 z/ or z? - Fuzzy search inside file.
 
 // - Fuzzy search the current file lines.
+
+<C-g> - Search recursively using rg.
 ```
 
 * Toggle between source and header file:
