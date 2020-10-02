@@ -1329,6 +1329,7 @@ let g:pear_tree_map_special_keys = 0
 imap <BS> <Plug>(PearTreeBackspace)
 
 " Binary
+command! -nargs=0 ZBinary let &bin=1 | set ft=xxd | exec "%!xxd"
 augroup ZBinaryFile
     autocmd!
     autocmd BufReadPost * if &bin | set ft=xxd | exec "%!xxd" | endif
@@ -1348,6 +1349,8 @@ augroup ZPandocGroup
     autocmd BufReadPost *.doc,*.docx,*.rtf,*.odp,*.odt if !&bin |
         \ silent exec "\%!pandoc \"%\" -tmarkdown -o /dev/stdout" | set ft=markdown | set ro | endif
 augroup end
+command! -nargs=0 ZPandoc
+    \ silent exec "\%!pandoc \"%\" -tmarkdown -o /dev/stdout" | set ft=markdown | set ro
 command! -complete=file -nargs=1 ZPandocEdit
     \ call system("pandoc -f " .  split(<f-args>, '\.')[-1] . " -t markdown " .
     \ <f-args> . "> " . <f-args> . ".md")
