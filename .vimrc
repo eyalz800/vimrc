@@ -1899,3 +1899,20 @@ elseif g:colors_name == 'onedark'
     " Tagbar Highlights
     call ZHighLight('TagbarSignature', {"fg": s:onedarkWhite})
 endif
+
+" Transparent background
+nnoremap <silent> tb :ZToggleTransparentBackground<CR>
+let s:is_transparent = 0
+if filereadable(expand('~/.vim/.transparent'))
+    let s:is_transparent = 1
+    hi Normal guibg=NONE ctermbg=NONE
+    hi CursorLine ctermbg=NONE guibg=NONE
+endif
+command! ZToggleTransparentBackground call ZToggleTransparentBackground() | source ~/.vimrc
+function! ZToggleTransparentBackground()
+    if filereadable(expand('~/.vim/.transparent'))
+        call system("rm ~/.vim/.transparent")
+    else
+        call system("touch ~/.vim/.transparent")
+    endif
+endfunction

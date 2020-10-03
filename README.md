@@ -239,6 +239,7 @@ and invoke 'vim -S' to restore the session at the next time.
 ```
 :ZColor 'onedark' - using onedark.
 :ZColor 'codedark' - using codedark.
+tb - transparent background.
 ```
 
 * Edit in hex dump mode:
