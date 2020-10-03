@@ -320,17 +320,17 @@ command! ZOscCopy call ZOscCopy()
 command! ZToggleOscCopy call ZToggleOscCopy() | source ~/.vimrc
 command! ZToggleForceXServer call ZToggleForceXServer()
 function! ZOscCopy()
-  let encodedText=@"
-  let encodedText=substitute(encodedText, '\', '\\\\', "g")
-  let encodedText=substitute(encodedText, "'", "'\\\\''", "g")
-  let executeCmd="echo -n '".encodedText."' | base64 | tr -d '\\n'"
-  let encodedText=system(executeCmd)
-  if !empty($TMUX)
-    let executeCmd='echo -en "\x1bPtmux;\x1b\x1b]52;;'.encodedText.'\x1b\x1b\\\\\x1b\\" > /dev/tty'
-  else
-    let executeCmd='echo -en "\x1b]52;;'.encodedText.'\x1b\\" > /dev/tty'
-  endif
-  call system(executeCmd)
+    let encodedText=@"
+    let encodedText=substitute(encodedText, '\', '\\\\', "g")
+    let encodedText=substitute(encodedText, "'", "'\\\\''", "g")
+    let executeCmd="echo -n '".encodedText."' | base64 | tr -d '\\n'"
+    let encodedText=system(executeCmd)
+    if !empty($TMUX)
+        let executeCmd='echo -en "\x1bPtmux;\x1b\x1b]52;;'.encodedText.'\x1b\x1b\\\\\x1b\\" > /dev/tty'
+    else
+        let executeCmd='echo -en "\x1b]52;;'.encodedText.'\x1b\\" > /dev/tty'
+    endif
+    call system(executeCmd)
 endfunction
 function! ZToggleOscCopy()
     if filereadable(expand('~/.vim/.noosccopy'))
