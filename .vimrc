@@ -335,22 +335,37 @@ function! ZToggleForceXServer()
 endfunction
 
 " Bracketed paste
-inoremap <special> <expr> <Esc>[200~ ZXTermPasteBegin()
+exec "set <f22>=\<Esc>[200~"
+exec "set <f23>=\<Esc>[201~"
+inoremap <special> <expr> <f22> ZXTermPasteBegin('')
+nnoremap <special> <expr> <f22> ZXTermPasteBegin('i')
+vnoremap <special> <expr> <f22> ZXTermPasteBegin('c')
+cnoremap <f22> <nop>
+cnoremap <f23> <nop>
 function! ZWrapPasteForTmux(s)
-  if !exists('$TMUX')
-    return a:s
-  endif
-  let tmux_start = "\<Esc>Ptmux;"
-  let tmux_end = "\<Esc>\\"
-  return tmux_start . substitute(a:s, "\<Esc>", "\<Esc>\<Esc>", 'g') . tmux_end
+    if !exists('$TMUX')
+        return a:s
+    endif
+    let tmux_start = "\<Esc>Ptmux;"
+    let tmux_end = "\<Esc>\\"
+    return tmux_start . substitute(a:s, "\<Esc>", "\<Esc>\<Esc>", 'g') . tmux_end
 endfunction
 let &t_SI .= ZWrapPasteForTmux("\<Esc>[?2004h")
 let &t_EI .= ZWrapPasteForTmux("\<Esc>[?2004l")
-function! ZXTermPasteBegin()
-  set pastetoggle=<Esc>[201~
-  set paste
-  return ""
+let &t_ti .= ZWrapPasteForTmux("\<Esc>[?2004h")
+let &t_te = ZWrapPasteForTmux("\<Esc>[?2004l") . &t_te
+function! ZXTermPasteBegin(ret)
+    setlocal pastetoggle=<f23>
+    set paste
+    return a:ret
 endfunction
+augroup ZTerminalBracketedPaste
+    autocmd!
+    autocmd TerminalOpen * exec "setlocal <f22>= | setlocal <f23>= "
+augroup end
+
+" Disable terminus bracketed paste
+let g:TerminusBracketedPaste = 0
 
 " Gui colors
 if has('termguicolors') && !filereadable(expand('~/.vim/.notermguicolors'))
