@@ -1618,21 +1618,16 @@ let g:vimspector_sign_priority = {
 augroup ZVimspectorCustomMappings
     autocmd!
     autocmd FileType VimspectorPrompt call ZVimspectorInitializePrompt()
-    " autocmd User VimspectorUICreated call ZVimspectorSetupUi()
+    autocmd User VimspectorUICreated call ZVimspectorSetupUi()
 augroup end
 function! ZVimspectorSetupUi()
-    " Vimspector now supports double click to expand by default.
-    " call win_gotoid(g:vimspector_session_windows.watches)
-    " nnoremap <silent> <buffer> <2-LeftMouse>
-    "     \ :<C-u>call vimspector#ExpandVariable()<CR>
-
-    " call win_gotoid(g:vimspector_session_windows.variables)
-    " nnoremap <silent> <buffer> <2-LeftMouse>
-    "     \ :<C-u>call vimspector#ExpandVariable()<CR>
-
-    " call win_gotoid(g:vimspector_session_windows.stack_trace)
-    " nnoremap <silent> <buffer> <2-LeftMouse>
-    "     \ :<C-u>call vimspector#GoToFrame()<CR>
+    call win_gotoid(g:vimspector_session_windows.output)
+    set ft=asm
+    vert rightb copen
+    exec ":vert resize " . winwidth(g:vimspector_session_windows.output)/3
+    nnoremenu <silent> WinBar.ListBreakpoints :call vimspector#ListBreakpoints()<CR>
+    call vimspector#ListBreakpoints()
+    call win_gotoid(g:vimspector_session_windows.code)
 endfunction
 function! ZVimspectorInitializePrompt()
     nnoremap <silent> <buffer> x i-exec<space>
