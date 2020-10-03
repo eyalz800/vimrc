@@ -279,3 +279,8 @@ cr - Change directory back to the root - the folder where vim was opened.
 ```
 <C-s> - Save file.
 ```
+
+* Toggle seamless tmux/vim navigation:
+```
+<C-w>t - Toggle seamless tmux/vim navigation (default enabled if inside tmux).
+```

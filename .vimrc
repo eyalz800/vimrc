@@ -213,7 +213,7 @@ Plug 'tomasiser/vim-code-dark'
 Plug 'joeytwiddle/sexy_scroller.vim'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'troydm/zoomwintab.vim'
-if !empty($INSTALL_VIMRC_PLUGINS) || empty($INSIDE_VIM)
+if !empty($INSTALL_VIMRC_PLUGINS) || exists('g:not_inside_vim') || empty($INSIDE_VIM)
     Plug 'wincent/terminus'
 endif
 Plug 'jreybert/vimagit', { 'on': ['Magit', 'MagitOnly'] }
@@ -227,6 +227,7 @@ call plug#end()
 
 if empty($INSIDE_VIM)
     let $INSIDE_VIM = 1
+    let g:not_inside_vim = 1
 endif
 
 if !empty($INSTALL_VIMRC_PLUGINS)
@@ -779,14 +780,35 @@ nnoremap <silent> <leader>zu :UndotreeToggle<cr>
 
 " Tmux navigator
 let g:tmux_navigator_no_mappings = 1
-nnoremap <silent> <C-w>h :TmuxNavigateLeft<cr>
-nnoremap <silent> <C-w>j :TmuxNavigateDown<cr>
-nnoremap <silent> <C-w>k :TmuxNavigateUp<cr>
-nnoremap <silent> <C-w>l :TmuxNavigateRight<cr>
-tnoremap <silent> <C-w>h <C-w>:TmuxNavigateLeft<cr>
-tnoremap <silent> <C-w>j <C-w>:TmuxNavigateDown<cr>
-tnoremap <silent> <C-w>k <C-w>:TmuxNavigateUp<cr>
-tnoremap <silent> <C-w>l <C-w>:TmuxNavigateRight<cr>
+let s:tmux_navigation_enabled = 0
+nnoremap <silent> <C-w>t :call ZToggleTmuxNavitaion()<cr>
+tnoremap <silent> <C-w>t <C-w>:call ZToggleTmuxNavitaion()<cr>
+function! ZToggleTmuxNavitaion()
+    if s:tmux_navigation_enabled == 0
+        nnoremap <silent> <C-w>h :TmuxNavigateLeft<cr>
+        nnoremap <silent> <C-w>j :TmuxNavigateDown<cr>
+        nnoremap <silent> <C-w>k :TmuxNavigateUp<cr>
+        nnoremap <silent> <C-w>l :TmuxNavigateRight<cr>
+        tnoremap <silent> <C-w>h <C-w>:TmuxNavigateLeft<cr>
+        tnoremap <silent> <C-w>j <C-w>:TmuxNavigateDown<cr>
+        tnoremap <silent> <C-w>k <C-w>:TmuxNavigateUp<cr>
+        tnoremap <silent> <C-w>l <C-w>:TmuxNavigateRight<cr>
+        let s:tmux_navigation_enabled = 1
+    else
+        nunmap <C-w>h
+        nunmap <C-w>j
+        nunmap <C-w>k
+        nunmap <C-w>l
+        tunmap <C-w>h
+        tunmap <C-w>j
+        tunmap <C-w>k
+        tunmap <C-w>l
+        let s:tmux_navigation_enabled = 0
+    endif
+endfunction
+if exists('g:not_inside_vim') && !empty($TMUX)
+    call ZToggleTmuxNavitaion()
+endif
 
 " Large files handling
 let g:large_file_size = 10 * 1024 * 1024
@@ -1415,7 +1437,6 @@ if !empty($TMUX)
     exec "set <S-F7>=\<ESC>[33~"
     exec "set <S-F8>=\<ESC>[34~"
 endif
-
 
 " Generate Flags
 function! ZGenerateFlags()
