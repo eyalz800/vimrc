@@ -667,7 +667,7 @@ nnoremap <silent> <leader>b :Buf<CR>
 nnoremap <silent> <leader>fh :call ZFzfToggleFilesCache()<CR>
 nnoremap <silent> <leader>fH :call ZFzfToggleGlobalFilesCache()<CR>
 nnoremap <silent> // :BLines!<CR>
-
+let $BAT_THEME = 'Monokai Extended Origin'
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
