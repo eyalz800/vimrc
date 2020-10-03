@@ -1936,7 +1936,7 @@ endif
 " Transparent background
 nnoremap <silent> tb :ZToggleTransparentBackground<CR>
 let s:is_transparent = 0
-if filereadable(expand('~/.vim/.transparent'))
+if filereadable(expand('~/.vim/.transparent')) && g:colors_name != 'codedark'
     let s:is_transparent = 1
     hi Normal guibg=NONE ctermbg=NONE
     hi CursorLine ctermbg=NONE guibg=NONE
