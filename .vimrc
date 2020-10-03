@@ -222,6 +222,7 @@ Plug 'haya14busa/incsearch.vim'
 Plug 'haya14busa/incsearch-fuzzy.vim'
 Plug 'joshdick/onedark.vim'
 Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
+Plug 'christoomey/vim-tmux-navigator'
 call plug#end()
 
 if empty($INSIDE_VIM)
@@ -775,6 +776,17 @@ set t_u7=
 
 " Undo Tree
 nnoremap <silent> <leader>zu :UndotreeToggle<cr>
+
+" Tmux navigator
+let g:tmux_navigator_no_mappings = 1
+nnoremap <silent> <C-w>h :TmuxNavigateLeft<cr>
+nnoremap <silent> <C-w>j :TmuxNavigateDown<cr>
+nnoremap <silent> <C-w>k :TmuxNavigateUp<cr>
+nnoremap <silent> <C-w>l :TmuxNavigateRight<cr>
+tnoremap <silent> <C-w>h <C-w>:TmuxNavigateLeft<cr>
+tnoremap <silent> <C-w>j <C-w>:TmuxNavigateDown<cr>
+tnoremap <silent> <C-w>k <C-w>:TmuxNavigateUp<cr>
+tnoremap <silent> <C-w>l <C-w>:TmuxNavigateRight<cr>
 
 " Large files handling
 let g:large_file_size = 10 * 1024 * 1024
