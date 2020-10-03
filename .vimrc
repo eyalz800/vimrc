@@ -584,6 +584,7 @@ let g:tagbar_width = 23
 nnoremap <silent> <C-l> :NERDTreeToggle<CR>:wincmd w<CR>:TagbarToggle<CR>
 nnoremap <silent> <leader>nf :NERDTreeFind<CR>
 augroup ZNerdTree
+    autocmd!
     autocmd FileType nerdtree setlocal signcolumn=no
 augroup end
 
