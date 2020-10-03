@@ -334,6 +334,16 @@ function! ZToggleForceXServer()
     endif
 endfunction
 
+" Tmux wrap function
+function! ZWrapIfTmux(s)
+    if !exists('$TMUX')
+        return a:s
+    endif
+    let tmux_start = "\<Esc>Ptmux;"
+    let tmux_end = "\<Esc>\\"
+    return tmux_start . substitute(a:s, "\<Esc>", "\<Esc>\<Esc>", 'g') . tmux_end
+endfunction
+
 " Bracketed paste
 exec "set <f22>=\<Esc>[200~"
 exec "set <f23>=\<Esc>[201~"
@@ -342,18 +352,10 @@ nnoremap <special> <expr> <f22> ZXTermPasteBegin('i')
 vnoremap <special> <expr> <f22> ZXTermPasteBegin('c')
 cnoremap <f22> <nop>
 cnoremap <f23> <nop>
-function! ZWrapPasteForTmux(s)
-    if !exists('$TMUX')
-        return a:s
-    endif
-    let tmux_start = "\<Esc>Ptmux;"
-    let tmux_end = "\<Esc>\\"
-    return tmux_start . substitute(a:s, "\<Esc>", "\<Esc>\<Esc>", 'g') . tmux_end
-endfunction
-let &t_SI .= ZWrapPasteForTmux("\<Esc>[?2004h")
-let &t_EI .= ZWrapPasteForTmux("\<Esc>[?2004l")
-let &t_ti .= ZWrapPasteForTmux("\<Esc>[?2004h")
-let &t_te = ZWrapPasteForTmux("\<Esc>[?2004l") . &t_te
+let &t_SI .= ZWrapIfTmux("\<Esc>[?2004h")
+let &t_EI .= ZWrapIfTmux("\<Esc>[?2004l")
+let &t_ti .= ZWrapIfTmux("\<Esc>[?2004h")
+let &t_te = ZWrapIfTmux("\<Esc>[?2004l") . &t_te
 function! ZXTermPasteBegin(ret)
     setlocal pastetoggle=<f23>
     set paste
