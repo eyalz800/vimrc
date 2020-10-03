@@ -1600,10 +1600,10 @@ nmap <leader><F9> <plug>VimspectorAddFunctionBreakpoint
 nnoremap <silent> <leader>dB :call vimspector#ClearBreakpoints()<CR>
 nnoremap <silent> <leader><leader><F9> :call vimspector#ClearBreakpoints()<CR>
 nmap <leader>dn <plug>VimspectorStepOver
-nmap <F10> <plug>VimspectorStepOver
+nnoremap <silent> <F10> :exec "normal \<plug>VimspectorStepOver"<CR>:call vimspector#ListBreakpoints()<CR>:wincmd p<CR>
 nmap <leader>di <plug>VimspectorStepInto
-nmap <S-F10> <plug>VimspectorStepInto
-nmap <F11> <plug>VimspectorStepInto
+nnoremap <silent> <S-F10> :exec "normal \<plug>VimspectorStepInto"<CR>:call vimspector#ListBreakpoints()<CR>:wincmd p<CR>
+nnoremap <silent> <F11> :exec "normal \<plug>VimspectorStepInto"<CR>:call vimspector#ListBreakpoints()<CR>:wincmd p<CR>
 nmap <leader>do <plug>VimspectorStepOut
 nmap <S-F11> <plug>VimspectorStepOut
 nnoremap <silent> <leader>dq :VimspectorReset<CR>
