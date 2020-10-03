@@ -1,5 +1,15 @@
 set nocompatible
 
+" Detect os
+if !exists('s:os')
+    if has("win64") || has("win32") || has("win16")
+        let s:os = "Windows"
+    else
+        let s:os = substitute(system('uname'), '\n', '', '')
+    endif
+endif
+
+" Install command
 function! ZInstallCommand(command)
     silent exec "!" . a:command
     if v:shell_error
@@ -8,6 +18,7 @@ function! ZInstallCommand(command)
     endif
 endfunction
 
+" Install vimrc
 function! ZInstallVimrc()
     if empty($SUDO_USER)
         echo "Please run as sudo."
@@ -133,7 +144,7 @@ function! ZInstallVimrc()
 endfunction
 
 let s:sed = 'sed'
-if executable('brew')
+if s:os == 'Darwin'
     let s:sed = 'gsed'
 endif
 
@@ -352,8 +363,6 @@ nnoremap <special> <expr> <f22> ZXTermPasteBegin('i')
 vnoremap <special> <expr> <f22> ZXTermPasteBegin('c')
 cnoremap <f22> <nop>
 cnoremap <f23> <nop>
-let &t_SI .= ZWrapIfTmux("\<Esc>[?2004h")
-let &t_EI .= ZWrapIfTmux("\<Esc>[?2004l")
 let &t_ti .= ZWrapIfTmux("\<Esc>[?2004h")
 let &t_te = ZWrapIfTmux("\<Esc>[?2004l") . &t_te
 function! ZXTermPasteBegin(ret)
@@ -368,6 +377,11 @@ augroup end
 
 " Disable terminus bracketed paste
 let g:TerminusBracketedPaste = 0
+
+" Cursor shape on entry
+if s:os == 'Linux'
+    let &t_ti .= ZWrapIfTmux("\<Esc>[2 q")
+endif
 
 " Gui colors
 if has('termguicolors') && !filereadable(expand('~/.vim/.notermguicolors'))
