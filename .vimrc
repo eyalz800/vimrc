@@ -291,10 +291,10 @@ nnoremap <silent> <C-s> :w<CR>
 inoremap <silent> <C-s> <C-o>:w<CR>
 
 " Increment and decrement
-nnoremap <silent> = <C-a>
-vnoremap <silent> = <C-a>
-nnoremap <silent> - <C-x>
-vnoremap <silent> - <C-x>
+nnoremap <silent> <leader>= <C-a>
+vnoremap <silent> <leader>= <C-a>
+nnoremap <silent> <leader>- <C-x>
+vnoremap <silent> <leader>- <C-x>
 
 " Select all
 nnoremap <silent> <C-a> ggVG

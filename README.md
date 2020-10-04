@@ -271,8 +271,8 @@ cr - Change directory back to the root - the folder where vim was opened.
 
 * Increment and decrement numbers:
 ```
-= - Increment number.
-- - Decrement number.
+<leader>= - Increment number.
+<leader>- - Decrement number.
 ```
 
 * Save file:
