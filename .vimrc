@@ -1742,6 +1742,7 @@ function! ZVimspectorGeneratePy()
         \ echo '                \"request\": \"launch\",' >> .vimspector.json &&
         \ echo '                \"type\": \"python\",' >> .vimspector.json &&
         \ echo '                \"program\": \"" . program . "\",' >> .vimspector.json &&
+        \ echo '                \"args\": [],' >> .vimspector.json &&
         \ echo '                \"python\": \"" . python . "\",' >> .vimspector.json &&
         \ echo '                \"cwd\": \"${workspaceRoot}\",' >> .vimspector.json &&
         \ echo '                \"externalConsole\": true,' >> .vimspector.json &&
