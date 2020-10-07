@@ -62,9 +62,6 @@ function! ZInstallVimrc()
         else
             let python3_command = 'python3'
         endif
-        if executable('pip3')
-            call ZInstallCommand("pip3 install compiledb")
-        endif
         if executable(python3_command)
             call ZInstallCommand("sudo -u $SUDO_USER " . python3_command . " -m pip install python-language-server pylint compiledb setuptools jedi")
         endif
