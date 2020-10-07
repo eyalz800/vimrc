@@ -23,5 +23,5 @@ pool:
   vmImage: $(VM_IMAGE)
 
 steps:
-- script: sudo ./install.sh
+- script: ./install.sh
   displayName: 'Install'
