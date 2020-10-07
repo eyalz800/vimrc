@@ -12,7 +12,6 @@ endif
 " Install command
 function! ZInstallCommand(command)
     silent exec "! echo ============================================ && echo Install command: " . shellescape(a:command)
-    silent exec "! echo Home dir: $HOME"
     silent exec "!" . a:command
     if v:shell_error
         silent exec "!echo Installation failed, error: " . string(v:shell_error)
