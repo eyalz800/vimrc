@@ -96,7 +96,7 @@ function! ZInstallVimrc()
               \ http://prdownloads.sourceforge.net/ctags/ctags-5.8.tar.gz")
             call ZInstallCommand("cd ~/.vim/bin/ctags-exuberant; tar -xzvf ctags.tar.gz")
             call ZInstallCommand("mv ~/.vim/bin/ctags-exuberant/ctags-5.8 ~/.vim/bin/ctags-exuberant/ctags")
-            call ZInstallCommand("cd ~/.vim/bin/ctags-exuberant/ctags; " . s:sed . " -i 's@\\# define __unused__  _@//@g' ./general.h; ./configure; make -j")
+            call ZInstallCommand("cd ~/.vim/bin/ctags-exuberant/ctags; " . s:sed . " -i 's@\\# define __unused__  _.*@/\\#define __unused__/@g' ./general.h; ./configure; make -j")
         endif
         if !filereadable(expand('~/.vim/bin/lf/lf'))
             if !executable('brew')
