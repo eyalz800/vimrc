@@ -32,13 +32,7 @@ function! ZInstallVimrc()
         exec ":q"
     endif
     try
-        call ZInstallCommand("mkdir -p ~/.vim")
-        call ZInstallCommand("mkdir -p ~/.vim/tmp")
-        call ZInstallCommand("mkdir -p ~/.vim/bin/python")
-        call ZInstallCommand("mkdir -p ~/.vim/bin/llvm")
-        call ZInstallCommand("mkdir -p ~/.config")
-        call ZInstallCommand("mkdir -p ~/.config/coc")
-        call ZInstallCommand("mkdir -p ~/.cache")
+        call ZInstallCommand("mkdir -p ~/.vim/tmp ~/.vim/bin/python ~/.vim/bin/llvm ~/.config/coc ~/.cache")
         if !executable('brew')
             call ZInstallCommand("DEBIAN_FRONTEND=noninteractive add-apt-repository -y ppa:lazygit-team/release")
             call ZInstallCommand("curl -sL https://deb.nodesource.com/setup_10.x | bash -")
@@ -137,7 +131,6 @@ function! ZInstallVimrc()
             call ZInstallCommand("dpkg -i ~/.vim/tmp/pandoc.deb")
         endif
         call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim")
-        call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim/tmp")
         call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.config")
         call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.cache")
         call ZInstallCommand("chown $SUDO_USER:$SUDO_GID ~/.vimrc")
