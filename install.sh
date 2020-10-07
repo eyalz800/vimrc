@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+if [ -e $SUDO_USER ]; then
+    sudo -E ./install.sh
+    exit
+fi
+
 if [ -x "$(command -v brew)" ]; then
     sudo -u $SUDO_USER brew install vim || true
 else

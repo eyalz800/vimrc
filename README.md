@@ -6,7 +6,7 @@ Installation
 ------------
 This is the only thing you need to do to install, it will replace any existing vimrc and perform necessary installations:
 ```sh
-$ sudo ./install.sh
+$ ./install.sh
 ```
 
 Highlights
