@@ -1,5 +1,6 @@
 vimrc
 =====
+[![Build Status](https://dev.azure.com/eyalz800/vimrc/_apis/build/status/eyalz800.vimrc?branchName=master)](https://dev.azure.com/eyalz800/vimrc/_build/latest?definitionId=6&branchName=master)
 
 Installation
 ------------
