@@ -11,7 +11,7 @@ endif
 
 " Install command
 function! ZInstallCommand(command)
-    silent exec "! echo Install command: '" . shellescape(a:command) . "'"
+    silent exec "! echo ========================== && echo Install command: '" . shellescape(a:command) . "'"
     silent exec "!" . a:command
     if v:shell_error
         silent exec "!echo Installation failed, error: " . string(v:shell_error)
@@ -112,13 +112,9 @@ function! ZInstallVimrc()
             endif
         endif
         if !executable('rg') && !executable('brew')
-            if !empty(system('apt-cache search --names-only ^ripgrep\$'))
-                call ZInstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y ripgrep")
-            else
-                call ZInstallCommand("curl -fLo ~/.vim/tmp/ripgrep --create-dirs
-                    \ https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep_12.1.1_amd64.deb")
-                call ZInstallCommand("dpkg -i ~/.vim/tmp/ripgrep")
-            endif
+            call ZInstallCommand("curl -fLo ~/.vim/tmp/ripgrep --create-dirs
+                \ https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep_12.1.1_amd64.deb")
+            call ZInstallCommand("dpkg -i ~/.vim/tmp/ripgrep")
         endif
         call ZInstallCommand("
             \ sudo -u $SUDO_USER mkdir -p " . lazygit_config_path . "
