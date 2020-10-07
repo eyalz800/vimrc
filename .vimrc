@@ -139,7 +139,7 @@ function! ZInstallVimrc()
         call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.config")
         call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.cache")
         call ZInstallCommand("chown $SUDO_USER:$SUDO_GID ~/.vimrc")
-        call ZInstallCommand("sudo -u $SUDO_USER INSTALL_VIMRC_PLUGINS=1 INSTALL_VIMRC= vim +qa")
+        call ZInstallCommand("sudo -u $SUDO_USER INSTALL_VIMRC_PLUGINS=1 INSTALL_VIMRC= vim -s -u ~/.vimrc +qa")
         call ZInstallCommand("sudo -u $SUDO_USER " . python3_command . " ~/.vim/plugged/vimspector/install_gadget.py --sudo --enable-c --enable-python")
         call ZCustomizePlugins()
     catch
@@ -245,7 +245,7 @@ if !empty($INSTALL_VIMRC_PLUGINS)
             \ && echo '    \"python.jediEnabled\": true,' >> ~/.vim/coc-settings.json
             \ && echo '    \"coc.preferences.formatOnType\": true' >> ~/.vim/coc-settings.json
             \ && echo '}' >> ~/.vim/coc-settings.json")
-        call ZInstallCommand("INSTALL_VIMRC_PLUGINS=post vim +'CocInstall -sync coc-clangd coc-python coc-vimlsp' +qa")
+        call ZInstallCommand("INSTALL_VIMRC_PLUGINS=post vim -s -u ~/.vimrc +'CocInstall -sync coc-clangd coc-python coc-vimlsp' +qa")
     endif
 endif
 

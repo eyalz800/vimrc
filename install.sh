@@ -48,4 +48,4 @@ else
     cd $INSTALL_VIMRC_CURDIR
 fi
 cp .vimrc ~/.vimrc
-INSTALL_VIMRC=1 vim
+INSTALL_VIMRC=1 vim -s -u ~/.vimrc
