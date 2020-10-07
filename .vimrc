@@ -24,123 +24,127 @@ function! ZInstallVimrc()
         echo "Please run as sudo."
         exec ":q"
     endif
-    call ZInstallCommand("mkdir -p ~/.vim")
-    call ZInstallCommand("mkdir -p ~/.vim/tmp")
-    call ZInstallCommand("mkdir -p ~/.vim/bin/python")
-    call ZInstallCommand("mkdir -p ~/.vim/bin/llvm")
-    call ZInstallCommand("mkdir -p ~/.config")
-    call ZInstallCommand("mkdir -p ~/.config/coc")
-    call ZInstallCommand("mkdir -p ~/.cache")
-    if !executable('brew')
-        call ZInstallCommand("DEBIAN_FRONTEND=noninteractive add-apt-repository -y ppa:lazygit-team/release")
-        call ZInstallCommand("curl -sL https://deb.nodesource.com/setup_10.x | bash -")
-        call ZInstallCommand("curl -fLo ~/.vim/tmp/llvm-install/llvm.sh --create-dirs
-            \ https://apt.llvm.org/llvm.sh
-            \ ; cd ~/.vim/tmp/llvm-install; chmod +x ./llvm.sh; ./llvm.sh 11")
-        call ZInstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y curl silversearcher-ag exuberant-ctags cscope git
-            \ make autoconf automake pkg-config openjdk-8-jre python3 python3-pip gdb golang nodejs lazygit libc++-11-dev libc++abi-11-dev")
-        call ZInstallCommand("rm -rf ~/.vim/bin/llvm/clangd && ln -s $(command -v clangd-11) ~/.vim/bin/llvm/clangd")
-        let lazygit_config_path = '~/.config/jesseduffield/lazygit'
-    else
-        call ZInstallCommand("sudo -u $SUDO_USER brew install curl ag ctags cscope git
-            \ llvm make autoconf automake pkg-config python3 nodejs gnu-sed bat ripgrep lazygit golang pandoc || true")
-        call ZInstallCommand("sudo -u $SUDO_USER brew link python3")
-        call ZInstallCommand("sudo -u $SUDO_USER brew tap AdoptOpenJDK/openjdk")
-        call ZInstallCommand("sudo -u $SUDO_USER brew cask install adoptopenjdk8")
-        call ZInstallCommand("sudo -u $SUDO_USER curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py")
-        call ZInstallCommand("sudo -u $SUDO_USER python3 get-pip.py")
-        if !executable('clangd') && executable('/usr/local/opt/llvm/bin/clangd')
-            call ZInstallCommand("echo export PATH=\\$PATH:/usr/local/opt/llvm/bin >> ~/.bashrc")
-        endif
-        let lazygit_config_path = '~/Library/Application\ Support/jesseduffield/lazygit'
-    endif
-    if 0 == system('python3 -c "import sys; print(1 if sys.version_info.major >= 3 and sys.version_info.minor >= 6 else 0)"') && executable('python3.6')
-        call ZInstallCommand("rm -rf ~/.vim/bin/python/python3 && ln -s $(command -v python3.6) ~/.vim/bin/python/python3")
-        let $PATH = expand('~/.vim/bin/python') . ':' . $PATH
-        let python3_command = 'python3.6'
-    else
-        let python3_command = 'python3'
-    endif
-    if executable('pip3')
-        call ZInstallCommand("pip3 install compiledb")
-    endif
-    if executable(python3_command)
-        call ZInstallCommand("sudo -u $SUDO_USER " . python3_command . " -m pip install python-language-server pylint compiledb setuptools jedi")
-    endif
-    if executable('python3') && python3_command != 'python3'
-        call ZInstallCommand("sudo -u $SUDO_USER python3 -m pip install python-language-server pylint compiledb setuptools jedi")
-    endif
-    if !filereadable(expand('~/.vim/autoload/plug.vim'))
-        call ZInstallCommand("curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-          \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim")
-    endif
-    if !filereadable(expand('~/.vim/bin/opengrok/lib/opengrok.jar'))
-        call ZInstallCommand("curl -fLo ~/.vim/bin/opengrok.tar.gz --create-dirs
-          \ https://github.com/oracle/opengrok/releases/download/1.0/opengrok-1.0.tar.gz")
-        call ZInstallCommand("cd ~/.vim/bin; tar -xzvf opengrok.tar.gz")
-        call ZInstallCommand("rm ~/.vim/bin/opengrok.tar.gz")
-        call ZInstallCommand("mv ~/.vim/bin/opengrok* ~/.vim/bin/opengrok")
-    endif
-    if !filereadable(expand('~/.vim/tmp/ctags/Makefile'))
-        call ZInstallCommand("cd ~/.vim/tmp; git clone https://github.com/universal-ctags/ctags.git; cd ./ctags; ./autogen.sh; ./configure; make; make install")
-    endif
-    if !executable('ctags-exuberant') && !filereadable(expand('~/.vim/bin/ctags-exuberant/ctags/ctags'))
-        call ZInstallCommand("curl -fLo ~/.vim/bin/ctags-exuberant/ctags.tar.gz --create-dirs
-          \ http://prdownloads.sourceforge.net/ctags/ctags-5.8.tar.gz")
-        call ZInstallCommand("cd ~/.vim/bin/ctags-exuberant; tar -xzvf ctags.tar.gz")
-        call ZInstallCommand("mv ~/.vim/bin/ctags-exuberant/ctags-5.8 ~/.vim/bin/ctags-exuberant/ctags")
-        call ZInstallCommand("cd ~/.vim/bin/ctags-exuberant/ctags; ./configure; make")
-    endif
-    if !filereadable(expand('~/.vim/bin/lf/lf'))
+    try
+        call ZInstallCommand("mkdir -p ~/.vim")
+        call ZInstallCommand("mkdir -p ~/.vim/tmp")
+        call ZInstallCommand("mkdir -p ~/.vim/bin/python")
+        call ZInstallCommand("mkdir -p ~/.vim/bin/llvm")
+        call ZInstallCommand("mkdir -p ~/.config")
+        call ZInstallCommand("mkdir -p ~/.config/coc")
+        call ZInstallCommand("mkdir -p ~/.cache")
         if !executable('brew')
-            call ZInstallCommand("curl -fLo ~/.vim/bin/lf/lf.tar.gz --create-dirs
-              \ https://github.com/gokcehan/lf/releases/download/r16/lf-linux-amd64.tar.gz")
+            call ZInstallCommand("DEBIAN_FRONTEND=noninteractive add-apt-repository -y ppa:lazygit-team/release")
+            call ZInstallCommand("curl -sL https://deb.nodesource.com/setup_10.x | bash -")
+            call ZInstallCommand("curl -fLo ~/.vim/tmp/llvm-install/llvm.sh --create-dirs
+                \ https://apt.llvm.org/llvm.sh
+                \ ; cd ~/.vim/tmp/llvm-install; chmod +x ./llvm.sh; ./llvm.sh 11")
+            call ZInstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y curl silversearcher-ag exuberant-ctags cscope git
+                \ make autoconf automake pkg-config openjdk-8-jre python3 python3-pip gdb golang nodejs lazygit libc++-11-dev libc++abi-11-dev")
+            call ZInstallCommand("rm -rf ~/.vim/bin/llvm/clangd && ln -s $(command -v clangd-11) ~/.vim/bin/llvm/clangd")
+            let lazygit_config_path = '~/.config/jesseduffield/lazygit'
         else
-            call ZInstallCommand("curl -fLo ~/.vim/bin/lf/lf.tar.gz --create-dirs
-              \ https://github.com/gokcehan/lf/releases/download/r16/lf-darwin-amd64.tar.gz")
+            call ZInstallCommand("sudo -u $SUDO_USER brew install curl ag ctags cscope git
+                \ llvm make autoconf automake pkg-config python3 nodejs gnu-sed bat ripgrep lazygit golang pandoc || true")
+            call ZInstallCommand("sudo -u $SUDO_USER brew link python3")
+            call ZInstallCommand("sudo -u $SUDO_USER brew tap AdoptOpenJDK/openjdk")
+            call ZInstallCommand("sudo -u $SUDO_USER brew cask install adoptopenjdk8")
+            call ZInstallCommand("sudo -u $SUDO_USER curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py")
+            call ZInstallCommand("sudo -u $SUDO_USER python3 get-pip.py")
+            if !executable('clangd') && executable('/usr/local/opt/llvm/bin/clangd')
+                call ZInstallCommand("echo export PATH=\\$PATH:/usr/local/opt/llvm/bin >> ~/.bashrc")
+            endif
+            let lazygit_config_path = '~/Library/Application\ Support/jesseduffield/lazygit'
         endif
-        call ZInstallCommand("cd ~/.vim/bin/lf; tar -xzvf lf.tar.gz")
-    endif
-    if !executable('bat') && !executable('brew')
-        if !empty(system('apt-cache search --names-only ^bat\$'))
-            call ZInstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y bat")
+        if 0 == system('python3 -c "import sys; print(1 if sys.version_info.major >= 3 and sys.version_info.minor >= 6 else 0)"') && executable('python3.6')
+            call ZInstallCommand("rm -rf ~/.vim/bin/python/python3 && ln -s $(command -v python3.6) ~/.vim/bin/python/python3")
+            let $PATH = expand('~/.vim/bin/python') . ':' . $PATH
+            let python3_command = 'python3.6'
         else
-            call ZInstallCommand("curl -fLo ~/.vim/tmp/bat --create-dirs
-                \ https://github.com/sharkdp/bat/releases/download/v0.15.1/bat_0.15.1_amd64.deb")
-            call ZInstallCommand("dpkg -i ~/.vim/tmp/bat")
+            let python3_command = 'python3'
         endif
-    endif
-    if !executable('rg') && !executable('brew')
-        if !empty(system('apt-cache search --names-only ^ripgrep\$'))
-            call ZInstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y ripgrep")
-        else
-            call ZInstallCommand("curl -fLo ~/.vim/tmp/ripgrep --create-dirs
-                \ https://github.com/BurntSushi/ripgrep/releases/download/11.0.2/ripgrep_11.0.2_amd64.deb")
-            call ZInstallCommand("dpkg -i ~/.vim/tmp/ripgrep")
+        if executable('pip3')
+            call ZInstallCommand("pip3 install compiledb")
         endif
-    endif
-    call ZInstallCommand("
-        \ sudo -u $SUDO_USER mkdir -p " . lazygit_config_path . "
-        \ && sudo -u $SUDO_USER touch " . lazygit_config_path . "/config.yml
-        \ && echo 'startuppopupversion: 1' > " . lazygit_config_path . "/config.yml
-        \ && echo 'gui:' >> " . lazygit_config_path . "/config.yml
-        \ && echo '  theme:' >> " . lazygit_config_path . "/config.yml
-        \ && echo '    selectedLineBgColor:' >> " . lazygit_config_path . "/config.yml
-        \ && echo '      - reverse' >> " . lazygit_config_path . "/config.yml
-    \ ")
-    if !executable('brew') && !filereadable(expand('~/.vim/tmp/pandoc.deb'))
-        call ZInstallCommand("curl -fLo ~/.vim/tmp/pandoc.deb --create-dirs
-            \ https://github.com/jgm/pandoc/releases/download/2.10.1/pandoc-2.10.1-1-amd64.deb")
-        call ZInstallCommand("dpkg -i ~/.vim/tmp/pandoc.deb")
-    endif
-    call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim")
-    call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim/tmp")
-    call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.config")
-    call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.cache")
-    call ZInstallCommand("chown $SUDO_USER:$SUDO_GID ~/.vimrc")
-    call ZInstallCommand("sudo -u $SUDO_USER INSTALL_VIMRC_PLUGINS=1 INSTALL_VIMRC= vim +qa")
-    call ZInstallCommand("sudo -u $SUDO_USER " . python3_command . " ~/.vim/plugged/vimspector/install_gadget.py --sudo --enable-c --enable-python")
-    call ZCustomizePlugins()
+        if executable(python3_command)
+            call ZInstallCommand("sudo -u $SUDO_USER " . python3_command . " -m pip install python-language-server pylint compiledb setuptools jedi")
+        endif
+        if executable('python3') && python3_command != 'python3'
+            call ZInstallCommand("sudo -u $SUDO_USER python3 -m pip install python-language-server pylint compiledb setuptools jedi")
+        endif
+        if !filereadable(expand('~/.vim/autoload/plug.vim'))
+            call ZInstallCommand("curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+              \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim")
+        endif
+        if !filereadable(expand('~/.vim/bin/opengrok/lib/opengrok.jar'))
+            call ZInstallCommand("curl -fLo ~/.vim/bin/opengrok.tar.gz --create-dirs
+              \ https://github.com/oracle/opengrok/releases/download/1.0/opengrok-1.0.tar.gz")
+            call ZInstallCommand("cd ~/.vim/bin; tar -xzvf opengrok.tar.gz")
+            call ZInstallCommand("rm ~/.vim/bin/opengrok.tar.gz")
+            call ZInstallCommand("mv ~/.vim/bin/opengrok* ~/.vim/bin/opengrok")
+        endif
+        if !filereadable(expand('~/.vim/tmp/ctags/Makefile'))
+            call ZInstallCommand("cd ~/.vim/tmp; git clone https://github.com/universal-ctags/ctags.git; cd ./ctags; ./autogen.sh; ./configure; make; make install")
+        endif
+        if !executable('ctags-exuberant') && !filereadable(expand('~/.vim/bin/ctags-exuberant/ctags/ctags'))
+            call ZInstallCommand("curl -fLo ~/.vim/bin/ctags-exuberant/ctags.tar.gz --create-dirs
+              \ http://prdownloads.sourceforge.net/ctags/ctags-5.8.tar.gz")
+            call ZInstallCommand("cd ~/.vim/bin/ctags-exuberant; tar -xzvf ctags.tar.gz")
+            call ZInstallCommand("mv ~/.vim/bin/ctags-exuberant/ctags-5.8 ~/.vim/bin/ctags-exuberant/ctags")
+            call ZInstallCommand("cd ~/.vim/bin/ctags-exuberant/ctags; ./configure; make")
+        endif
+        if !filereadable(expand('~/.vim/bin/lf/lf'))
+            if !executable('brew')
+                call ZInstallCommand("curl -fLo ~/.vim/bin/lf/lf.tar.gz --create-dirs
+                  \ https://github.com/gokcehan/lf/releases/download/r16/lf-linux-amd64.tar.gz")
+            else
+                call ZInstallCommand("curl -fLo ~/.vim/bin/lf/lf.tar.gz --create-dirs
+                  \ https://github.com/gokcehan/lf/releases/download/r16/lf-darwin-amd64.tar.gz")
+            endif
+            call ZInstallCommand("cd ~/.vim/bin/lf; tar -xzvf lf.tar.gz")
+        endif
+        if !executable('bat') && !executable('brew')
+            if !empty(system('apt-cache search --names-only ^bat\$'))
+                call ZInstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y bat")
+            else
+                call ZInstallCommand("curl -fLo ~/.vim/tmp/bat --create-dirs
+                    \ https://github.com/sharkdp/bat/releases/download/v0.15.1/bat_0.15.1_amd64.deb")
+                call ZInstallCommand("dpkg -i ~/.vim/tmp/bat")
+            endif
+        endif
+        if !executable('rg') && !executable('brew')
+            if !empty(system('apt-cache search --names-only ^ripgrep\$'))
+                call ZInstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y ripgrep")
+            else
+                call ZInstallCommand("curl -fLo ~/.vim/tmp/ripgrep --create-dirs
+                    \ https://github.com/BurntSushi/ripgrep/releases/download/11.0.2/ripgrep_11.0.2_amd64.deb")
+                call ZInstallCommand("dpkg -i ~/.vim/tmp/ripgrep")
+            endif
+        endif
+        call ZInstallCommand("
+            \ sudo -u $SUDO_USER mkdir -p " . lazygit_config_path . "
+            \ && sudo -u $SUDO_USER touch " . lazygit_config_path . "/config.yml
+            \ && echo 'startuppopupversion: 1' > " . lazygit_config_path . "/config.yml
+            \ && echo 'gui:' >> " . lazygit_config_path . "/config.yml
+            \ && echo '  theme:' >> " . lazygit_config_path . "/config.yml
+            \ && echo '    selectedLineBgColor:' >> " . lazygit_config_path . "/config.yml
+            \ && echo '      - reverse' >> " . lazygit_config_path . "/config.yml
+        \ ")
+        if !executable('brew') && !filereadable(expand('~/.vim/tmp/pandoc.deb'))
+            call ZInstallCommand("curl -fLo ~/.vim/tmp/pandoc.deb --create-dirs
+                \ https://github.com/jgm/pandoc/releases/download/2.10.1/pandoc-2.10.1-1-amd64.deb")
+            call ZInstallCommand("dpkg -i ~/.vim/tmp/pandoc.deb")
+        endif
+        call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim")
+        call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim/tmp")
+        call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.config")
+        call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.cache")
+        call ZInstallCommand("chown $SUDO_USER:$SUDO_GID ~/.vimrc")
+        call ZInstallCommand("sudo -u $SUDO_USER INSTALL_VIMRC_PLUGINS=1 INSTALL_VIMRC= vim +qa")
+        call ZInstallCommand("sudo -u $SUDO_USER " . python3_command . " ~/.vim/plugged/vimspector/install_gadget.py --sudo --enable-c --enable-python")
+        call ZCustomizePlugins()
+    catch
+        echo v:exception
+    endtry
 endfunction
 
 let s:sed = 'sed'
