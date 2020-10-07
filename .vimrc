@@ -144,6 +144,7 @@ function! ZInstallVimrc()
         call ZCustomizePlugins()
     catch
         echo v:exception
+        exec ":cq"
     endtry
 endfunction
 
