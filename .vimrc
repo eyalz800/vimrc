@@ -1747,7 +1747,7 @@ function! ZVimspectorGeneratePy()
         \ echo '    }' >> .vimspector.json &&
         \ echo '}' >> .vimspector.json")
 endfunction
-function ZVimspectorDebugLaunchSettings()
+function! ZVimspectorDebugLaunchSettings()
     let debug_type = &filetype
     if debug_type != 'cpp' && debug_type != 'c' && debug_type != 'python'
         call inputsave()
