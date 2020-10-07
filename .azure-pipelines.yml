@@ -1,0 +1,26 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+strategy:
+  matrix:
+    ubuntu-1604:
+      VM_IMAGE: 'ubuntu-16.04'
+      OPERATING_SYSTEM: 'linux'
+    ubuntu-1804:
+      VM_IMAGE: 'ubuntu-18.04'
+      OPERATING_SYSTEM: 'linux'
+    ubuntu-2004:
+      VM_IMAGE: 'ubuntu-20.04'
+      OPERATING_SYSTEM: 'linux'
+
+pool:
+  vmImage: $(VM_IMAGE)
+
+steps:
+- script: sudo ./install.sh
+  displayName: 'Install'
