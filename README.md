@@ -1,11 +1,12 @@
 vimrc
 =====
+[![Build Status](https://dev.azure.com/eyalz800/vimrc/_apis/build/status/eyalz800.vimrc?branchName=master)](https://dev.azure.com/eyalz800/vimrc/_build/latest?definitionId=6&branchName=master)
 
 Installation
 ------------
 This is the only thing you need to do to install, it will replace any existing vimrc and perform necessary installations:
 ```sh
-$ sudo ./install.sh
+$ ./install.sh
 ```
 
 Highlights

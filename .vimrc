@@ -9,8 +9,15 @@ if !exists('s:os')
     endif
 endif
 
+" Sed program to use
+let s:sed = 'sed'
+if s:os == 'Darwin'
+    let s:sed = 'gsed'
+endif
+
 " Install command
 function! ZInstallCommand(command)
+    silent exec "! echo ============================================ && echo Install command: " . shellescape(a:command)
     silent exec "!" . a:command
     if v:shell_error
         silent exec "!echo Installation failed, error: " . string(v:shell_error)
@@ -25,13 +32,7 @@ function! ZInstallVimrc()
         exec ":q"
     endif
     try
-        call ZInstallCommand("mkdir -p ~/.vim")
-        call ZInstallCommand("mkdir -p ~/.vim/tmp")
-        call ZInstallCommand("mkdir -p ~/.vim/bin/python")
-        call ZInstallCommand("mkdir -p ~/.vim/bin/llvm")
-        call ZInstallCommand("mkdir -p ~/.config")
-        call ZInstallCommand("mkdir -p ~/.config/coc")
-        call ZInstallCommand("mkdir -p ~/.cache")
+        call ZInstallCommand("mkdir -p ~/.vim/tmp ~/.vim/bin/python ~/.vim/bin/llvm ~/.config/coc ~/.cache")
         if !executable('brew')
             call ZInstallCommand("DEBIAN_FRONTEND=noninteractive add-apt-repository -y ppa:lazygit-team/release")
             call ZInstallCommand("curl -sL https://deb.nodesource.com/setup_10.x | bash -")
@@ -47,7 +48,7 @@ function! ZInstallVimrc()
                 \ llvm make autoconf automake pkg-config python3 nodejs gnu-sed bat ripgrep lazygit golang pandoc || true")
             call ZInstallCommand("sudo -u $SUDO_USER brew link python3")
             call ZInstallCommand("sudo -u $SUDO_USER brew tap AdoptOpenJDK/openjdk")
-            call ZInstallCommand("sudo -u $SUDO_USER brew cask install adoptopenjdk8")
+            call ZInstallCommand("sudo -u $SUDO_USER brew cask install adoptopenjdk/openjdk/adoptopenjdk8")
             call ZInstallCommand("sudo -u $SUDO_USER curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py")
             call ZInstallCommand("sudo -u $SUDO_USER python3 get-pip.py")
             if !executable('clangd') && executable('/usr/local/opt/llvm/bin/clangd')
@@ -62,14 +63,13 @@ function! ZInstallVimrc()
         else
             let python3_command = 'python3'
         endif
-        if executable('pip3')
-            call ZInstallCommand("pip3 install compiledb")
-        endif
         if executable(python3_command)
-            call ZInstallCommand("sudo -u $SUDO_USER " . python3_command . " -m pip install python-language-server pylint compiledb setuptools jedi")
+            call ZInstallCommand("sudo -u $SUDO_USER " . python3_command . " -m pip install setuptools")
+            call ZInstallCommand("sudo -u $SUDO_USER " . python3_command . " -m pip install python-language-server pylint compiledb jedi")
         endif
         if executable('python3') && python3_command != 'python3'
-            call ZInstallCommand("sudo -u $SUDO_USER python3 -m pip install python-language-server pylint compiledb setuptools jedi")
+            call ZInstallCommand("sudo -u $SUDO_USER python3 -m pip install setuptools")
+            call ZInstallCommand("sudo -u $SUDO_USER python3 -m pip install python-language-server pylint compiledb jedi")
         endif
         if !filereadable(expand('~/.vim/autoload/plug.vim'))
             call ZInstallCommand("curl -fLo ~/.vim/autoload/plug.vim --create-dirs
@@ -83,14 +83,14 @@ function! ZInstallVimrc()
             call ZInstallCommand("mv ~/.vim/bin/opengrok* ~/.vim/bin/opengrok")
         endif
         if !filereadable(expand('~/.vim/tmp/ctags/Makefile'))
-            call ZInstallCommand("cd ~/.vim/tmp; git clone https://github.com/universal-ctags/ctags.git; cd ./ctags; ./autogen.sh; ./configure; make; make install")
+            call ZInstallCommand("cd ~/.vim/tmp; git clone https://github.com/universal-ctags/ctags.git; cd ./ctags; ./autogen.sh; ./configure; make -j; make install")
         endif
         if !executable('ctags-exuberant') && !filereadable(expand('~/.vim/bin/ctags-exuberant/ctags/ctags'))
             call ZInstallCommand("curl -fLo ~/.vim/bin/ctags-exuberant/ctags.tar.gz --create-dirs
               \ http://prdownloads.sourceforge.net/ctags/ctags-5.8.tar.gz")
             call ZInstallCommand("cd ~/.vim/bin/ctags-exuberant; tar -xzvf ctags.tar.gz")
             call ZInstallCommand("mv ~/.vim/bin/ctags-exuberant/ctags-5.8 ~/.vim/bin/ctags-exuberant/ctags")
-            call ZInstallCommand("cd ~/.vim/bin/ctags-exuberant/ctags; ./configure; make")
+            call ZInstallCommand("cd ~/.vim/bin/ctags-exuberant/ctags; " . s:sed . " -i 's@\\# define __unused__  _.*@\\#define __unused__@g' ./general.h; ./configure; make -j")
         endif
         if !filereadable(expand('~/.vim/bin/lf/lf'))
             if !executable('brew')
@@ -112,14 +112,19 @@ function! ZInstallVimrc()
             endif
         endif
         if !executable('rg') && !executable('brew')
-            if !empty(system('apt-cache search --names-only ^ripgrep\$'))
-                call ZInstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y ripgrep")
-            else
-                call ZInstallCommand("curl -fLo ~/.vim/tmp/ripgrep --create-dirs
-                    \ https://github.com/BurntSushi/ripgrep/releases/download/11.0.2/ripgrep_11.0.2_amd64.deb")
-                call ZInstallCommand("dpkg -i ~/.vim/tmp/ripgrep")
-            endif
+            call ZInstallCommand("curl -fLo ~/.vim/tmp/ripgrep --create-dirs
+                \ https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep_12.1.1_amd64.deb")
+            call ZInstallCommand("dpkg -i ~/.vim/tmp/ripgrep")
         endif
+        if !executable('brew') && !filereadable(expand('~/.vim/tmp/pandoc.deb'))
+            call ZInstallCommand("curl -fLo ~/.vim/tmp/pandoc.deb --create-dirs
+                \ https://github.com/jgm/pandoc/releases/download/2.10.1/pandoc-2.10.1-1-amd64.deb")
+            call ZInstallCommand("dpkg -i ~/.vim/tmp/pandoc.deb")
+        endif
+        call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim")
+        call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.config")
+        call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.cache")
+        call ZInstallCommand("chown $SUDO_USER:$SUDO_GID ~/.vimrc")
         call ZInstallCommand("
             \ sudo -u $SUDO_USER mkdir -p " . lazygit_config_path . "
             \ && sudo -u $SUDO_USER touch " . lazygit_config_path . "/config.yml
@@ -129,28 +134,14 @@ function! ZInstallVimrc()
             \ && echo '    selectedLineBgColor:' >> " . lazygit_config_path . "/config.yml
             \ && echo '      - reverse' >> " . lazygit_config_path . "/config.yml
         \ ")
-        if !executable('brew') && !filereadable(expand('~/.vim/tmp/pandoc.deb'))
-            call ZInstallCommand("curl -fLo ~/.vim/tmp/pandoc.deb --create-dirs
-                \ https://github.com/jgm/pandoc/releases/download/2.10.1/pandoc-2.10.1-1-amd64.deb")
-            call ZInstallCommand("dpkg -i ~/.vim/tmp/pandoc.deb")
-        endif
-        call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim")
-        call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim/tmp")
-        call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.config")
-        call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.cache")
-        call ZInstallCommand("chown $SUDO_USER:$SUDO_GID ~/.vimrc")
-        call ZInstallCommand("sudo -u $SUDO_USER INSTALL_VIMRC_PLUGINS=1 INSTALL_VIMRC= vim +qa")
+        call ZInstallCommand("sudo -u $SUDO_USER INSTALL_VIMRC_PLUGINS=1 INSTALL_VIMRC= vim -E -s -u ~/.vimrc +qa")
         call ZInstallCommand("sudo -u $SUDO_USER " . python3_command . " ~/.vim/plugged/vimspector/install_gadget.py --sudo --enable-c --enable-python")
         call ZCustomizePlugins()
     catch
         echo v:exception
+        exec ":cq"
     endtry
 endfunction
-
-let s:sed = 'sed'
-if s:os == 'Darwin'
-    let s:sed = 'gsed'
-endif
 
 function! ZCustomizePlugins()
     call ZInstallCommand(s:sed . " -i 's@ . redraw\\!@ . \" > /dev/null\"@' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim")
@@ -237,14 +228,14 @@ endif
 if !empty($INSTALL_VIMRC_PLUGINS)
     let g:coc_disable_startup_warning = 1
     if $INSTALL_VIMRC_PLUGINS != 'post'
-        exec ":PlugInstall --sync"
+        exec ":PlugUpdate"
         call ZInstallCommand("
             \ echo '{' > ~/.vim/coc-settings.json
             \ && echo '    \"clangd.semanticHighlighting\": false,' >> ~/.vim/coc-settings.json
             \ && echo '    \"python.jediEnabled\": true,' >> ~/.vim/coc-settings.json
             \ && echo '    \"coc.preferences.formatOnType\": true' >> ~/.vim/coc-settings.json
             \ && echo '}' >> ~/.vim/coc-settings.json")
-        call ZInstallCommand("INSTALL_VIMRC_PLUGINS=post vim +'CocInstall -sync coc-clangd coc-python coc-vimlsp' +qa")
+        call ZInstallCommand("INSTALL_VIMRC_PLUGINS=post vim -E -s -u ~/.vimrc +'CocInstall -sync coc-clangd coc-python coc-vimlsp' +qa")
     endif
 endif
 

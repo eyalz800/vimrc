@@ -1,0 +1,27 @@
+trigger:
+- master
+
+strategy:
+  matrix:
+    ubuntu-16.04:
+      VM_IMAGE: 'ubuntu-16.04'
+      OPERATING_SYSTEM: 'linux'
+    ubuntu-18.04:
+      VM_IMAGE: 'ubuntu-18.04'
+      OPERATING_SYSTEM: 'linux'
+    ubuntu-20.04:
+      VM_IMAGE: 'ubuntu-20.04'
+      OPERATING_SYSTEM: 'linux'
+    macOS-10.14:
+      VM_IMAGE: 'macOS-10.14'
+      OPERATING_SYSTEM: 'mac-os'
+    macOS-10.15:
+      VM_IMAGE: 'macOS-10.15'
+      OPERATING_SYSTEM: 'mac-os'
+
+pool:
+  vmImage: $(VM_IMAGE)
+
+steps:
+- script: ./install.sh
+  displayName: 'Install'

@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+if [ -e $SUDO_USER ]; then
+    sudo -E ./install.sh
+    exit
+fi
+
 if [ -x "$(command -v brew)" ]; then
     sudo -u $SUDO_USER brew install vim || true
 else
@@ -48,4 +53,4 @@ else
     cd $INSTALL_VIMRC_CURDIR
 fi
 cp .vimrc ~/.vimrc
-INSTALL_VIMRC=1 vim
+INSTALL_VIMRC=1 vim -E -s -u ~/.vimrc
