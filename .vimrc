@@ -116,7 +116,7 @@ function! ZInstallVimrc()
                 call ZInstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y ripgrep")
             else
                 call ZInstallCommand("curl -fLo ~/.vim/tmp/ripgrep --create-dirs
-                    \ https://github.com/BurntSushi/ripgrep/releases/download/11.0.2/ripgrep_11.0.2_amd64.deb")
+                    \ https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep_12.1.1_amd64.deb")
                 call ZInstallCommand("dpkg -i ~/.vim/tmp/ripgrep")
             endif
         endif
