@@ -63,10 +63,12 @@ function! ZInstallVimrc()
             let python3_command = 'python3'
         endif
         if executable(python3_command)
-            call ZInstallCommand("sudo -u $SUDO_USER " . python3_command . " -m pip install python-language-server pylint compiledb setuptools jedi")
+            call ZInstallCommand("sudo -u $SUDO_USER " . python3_command . " -m pip install setuptools")
+            call ZInstallCommand("sudo -u $SUDO_USER " . python3_command . " -m pip install python-language-server pylint compiledb jedi")
         endif
         if executable('python3') && python3_command != 'python3'
-            call ZInstallCommand("sudo -u $SUDO_USER python3 -m pip install python-language-server pylint compiledb setuptools jedi")
+            call ZInstallCommand("sudo -u $SUDO_USER python3 -m pip install setuptools")
+            call ZInstallCommand("sudo -u $SUDO_USER python3 -m pip install python-language-server pylint compiledb jedi")
         endif
         if !filereadable(expand('~/.vim/autoload/plug.vim'))
             call ZInstallCommand("curl -fLo ~/.vim/autoload/plug.vim --create-dirs
