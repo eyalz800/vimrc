@@ -9,6 +9,12 @@ if !exists('s:os')
     endif
 endif
 
+" Sed program to use
+let s:sed = 'sed'
+if s:os == 'Darwin'
+    let s:sed = 'gsed'
+endif
+
 " Install command
 function! ZInstallCommand(command)
     silent exec "! echo ============================================ && echo Install command: " . shellescape(a:command)
@@ -83,14 +89,18 @@ function! ZInstallVimrc()
             call ZInstallCommand("mv ~/.vim/bin/opengrok* ~/.vim/bin/opengrok")
         endif
         if !filereadable(expand('~/.vim/tmp/ctags/Makefile'))
-            call ZInstallCommand("cd ~/.vim/tmp; git clone https://github.com/universal-ctags/ctags.git; cd ./ctags; ./autogen.sh; ./configure; make; make install")
+            call ZInstallCommand("cd ~/.vim/tmp; git clone https://github.com/universal-ctags/ctags.git; cd ./ctags; ./autogen.sh; ./configure; make -j; make install")
         endif
         if !executable('ctags-exuberant') && !filereadable(expand('~/.vim/bin/ctags-exuberant/ctags/ctags'))
             call ZInstallCommand("curl -fLo ~/.vim/bin/ctags-exuberant/ctags.tar.gz --create-dirs
               \ http://prdownloads.sourceforge.net/ctags/ctags-5.8.tar.gz")
             call ZInstallCommand("cd ~/.vim/bin/ctags-exuberant; tar -xzvf ctags.tar.gz")
             call ZInstallCommand("mv ~/.vim/bin/ctags-exuberant/ctags-5.8 ~/.vim/bin/ctags-exuberant/ctags")
-            call ZInstallCommand("cd ~/.vim/bin/ctags-exuberant/ctags; ./configure; make")
+            try
+                call ZInstallCommand("cd ~/.vim/bin/ctags-exuberant/ctags; ./configure; make -j")
+            catch
+                call ZInstallCommand("cd ~/.vim/bin/ctags-exuberant/ctags; " . s:sed . " -i 's@#define __unused__  _@//@g' ./general.h; ./configure; make -j")
+            endtry
         endif
         if !filereadable(expand('~/.vim/bin/lf/lf'))
             if !executable('brew')
@@ -143,11 +153,6 @@ function! ZInstallVimrc()
         exec ":cq"
     endtry
 endfunction
-
-let s:sed = 'sed'
-if s:os == 'Darwin'
-    let s:sed = 'gsed'
-endif
 
 function! ZCustomizePlugins()
     call ZInstallCommand(s:sed . " -i 's@ . redraw\\!@ . \" > /dev/null\"@' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim")
