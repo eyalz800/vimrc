@@ -716,7 +716,10 @@ endfunction
 let g:sneak#use_ic_scs = 1
 let g:sneak#s_next = 0
 let g:sneak#label = 1
-let g:sneak#target_labels = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789?/'
+nmap f <Plug>Sneak_f
+nmap F <Plug>Sneak_F
+vmap t <Plug>Sneak_t
+vmap T <Plug>Sneak_T
 
 " ZCscope
 let g:cscopedb_big_file = 'cscope.out'
