@@ -219,6 +219,7 @@ Plug 'joshdick/onedark.vim'
 Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'tpope/vim-surround'
+Plug 'j5shi/CommandlineComplete.vim'
 call plug#end()
 
 if empty($INSIDE_VIM)
@@ -1592,6 +1593,10 @@ function! ZSyntaxInfo()
     let l:s = synID(line('.'), col('.'), 1)
     echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
 endfun
+
+" Command line complete
+cmap <c-k> <Plug>CmdlineCompleteBackward
+cmap <c-j> <Plug>CmdlineCompleteForward
 
 " Vimspector
 nnoremap <silent> <leader>dl :call ZVimspectorDebugLaunchSettings()<CR>
