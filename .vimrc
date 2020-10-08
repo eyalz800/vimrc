@@ -218,6 +218,7 @@ Plug 'haya14busa/incsearch-fuzzy.vim'
 Plug 'joshdick/onedark.vim'
 Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'tpope/vim-surround'
 call plug#end()
 
 if empty($INSIDE_VIM)
@@ -1925,7 +1926,7 @@ elseif g:colors_name == 'onedark'
 endif
 
 " Transparent background
-nnoremap <silent> tb :ZToggleTransparentBackground<CR>
+nnoremap <silent> <leader>tb :ZToggleTransparentBackground<CR>
 let s:is_transparent = 0
 if filereadable(expand('~/.vim/.transparent')) && g:colors_name != 'codedark'
     let s:is_transparent = 1
