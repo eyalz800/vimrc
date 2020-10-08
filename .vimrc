@@ -2080,9 +2080,14 @@ elseif g:colors_name == 'onedark'
     endfunction
 
     let s:onedarkWhite = { "gui": "#ABB2BF", "cterm": "145", "cterm16": "7" }
+    let s:onedarkCyan = { "gui": "#56B6C2", "cterm": "38", "cterm16": "6" }
 
     " Tagbar Highlights
     call ZHighLight('TagbarSignature', {"fg": s:onedarkWhite})
+
+    " Cpp
+    call ZHighLight('cCompundObject', {"fg": s:onedarkWhite})
+    call ZHighLight('cIntegerType', {"fg": s:onedarkCyan})
 endif
 " }}}
 
