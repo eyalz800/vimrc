@@ -179,6 +179,7 @@ Plug 'ervandew/supertab'
 Plug 'vim-airline/vim-airline'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'justinmk/vim-sneak'
+Plug 'easymotion/vim-easymotion'
 Plug 'mg979/vim-visual-multi'
 Plug 'erig0/cscope_dynamic'
 Plug 'octol/vim-cpp-enhanced-highlight'
@@ -711,10 +712,19 @@ function! ZFzfToggleGlobalFilesCache()
     endif
 endfunction
 
+" Easymotion
+let g:EasyMotion_do_mapping = 0
+let g:EasyMotion_smartcase = 1
+nmap <silent> s <Plug>(easymotion-s2)
+
 " Sneak
 let g:sneak#use_ic_scs = 1
 let g:sneak#s_next = 0
 let g:sneak#label = 1
+nmap <leader>s <Plug>Sneak_s
+nmap <leader>S <Plug>Sneak_S
+vmap <leader>s <Plug>Sneak_s
+vmap <leader>S <Plug>Sneak_S
 nmap f <Plug>Sneak_f
 nmap F <Plug>Sneak_F
 vmap t <Plug>Sneak_t
