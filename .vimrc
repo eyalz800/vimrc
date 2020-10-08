@@ -374,7 +374,7 @@ endfunction
 
 " Tmux wrap function {{{
 function! ZWrapIfTmux(s)
-    if !exists('$TMUX')
+    if empty($TMUX)
         return a:s
     endif
     let tmux_start = "\<Esc>Ptmux;"
@@ -785,7 +785,13 @@ if s:vim_color == 'codedark'
     color onedark
 endif
 exec ':color ' . s:vim_color
-command! -nargs=1 ZColor call system('echo ' . <f-args> . ' > ~/.vim/.color') | source ~/.vimrc
+command! -nargs=1 ZColor call ZColor(<f-args>) | source ~/.vimrc
+function! ZColor(color)
+    call system('echo ' . a:color . ' > ~/.vim/.color')
+    if !empty($TMUX)
+        call system('tmux source ~/.tmux-conf')
+    endif
+endfunction
 " }}}
 
 " Supertab {{{
@@ -2094,6 +2100,9 @@ function! ZToggleTransparentBackground()
         call system("rm ~/.vim/.transparent")
     else
         call system("touch ~/.vim/.transparent")
+    endif
+    if !empty($TMUX)
+        call system('tmux source ~/.tmux.conf')
     endif
 endfunction
 " }}}
