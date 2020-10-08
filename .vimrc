@@ -976,9 +976,10 @@ function! ZApplyCppSyntax()
     syntax match cCustomDot "\." contained
     syntax match cCustomPtr "->" contained
     syntax match cCustomParen "(" contained contains=cParen contains=cCppParen
+    syntax match cCustomBracket "\[" contained contains=cBracket
+
     syntax match cCustomFunc "\h\w*(" contains=cCustomParen
     hi def link cCustomFunc Function
-
     syntax keyword cIntegerType uint8_t
     syntax keyword cIntegerType uint16_t
     syntax keyword cIntegerType uint32_t
@@ -1000,6 +1001,8 @@ function! ZApplyCppSyntax()
     hi def link cCharType cType
     syntax match cCompundObject "\h\w*\(\.\|\->\)" contains=cCustomDot,cCustomPtr
     hi def link cCompundObject cCustomMemVar
+    syntax match cArrayObject "\h\w*\(\[\)" contains=cCustomBracket
+    hi def link cArrayObject cCompundObject
     syntax match cCustomMemVar "\(\.\|->\)\h\w*" containedin=cCompundObject contains=cCustomDot,cCustomPtr
     hi def link cCustomMemVar Function
 
