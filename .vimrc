@@ -774,23 +774,37 @@ let g:gutentags_project_root = ['.git', '.hg', '.svn', '.repo', '.files']
 " }}}
 
 " Color {{{
+command! -nargs=1 ZColor call ZColor(<f-args>) | source ~/.vimrc | silent exec ":e!"
+nnoremap <silent> <leader>nc :call ZNextColor()<CR>:source ~/.vimrc<CR>:e!<CR>
 if !filereadable(expand('~/.vim/.color'))
     call system('echo onedark > ~/.vim/.color')
 endif
 let g:onedark_color_overrides = {
     \ "special_grey": { "gui": "#5C6370", "cterm": "59", "cterm16": "15" }
 \ }
+let s:available_colors = ['onedark', 'codedark']
 let s:vim_color = readfile(expand('~/.vim/.color'))[0]
 if s:vim_color == 'codedark'
     color onedark
 endif
 exec ':color ' . s:vim_color
-command! -nargs=1 ZColor call ZColor(<f-args>) | source ~/.vimrc
 function! ZColor(color)
     call system('echo ' . a:color . ' > ~/.vim/.color')
     if !empty($TMUX)
         call system('tmux source ~/.tmux.conf')
     endif
+endfunction
+function ZNextColor()
+    let current_color = index(s:available_colors, s:vim_color)
+    if current_color == -1
+        echom "Color not found!"
+        return
+    endif
+    let current_color += 1
+    if current_color == len(s:available_colors)
+        let current_color = 0
+    endif
+    call ZColor(s:available_colors[current_color])
 endfunction
 " }}}
 
