@@ -1,6 +1,10 @@
-set nocompatible
+" vim:fdm=marker
 
-" Detect os
+" Be Improved {{{
+set nocompatible
+" }}}
+
+" OS Detection {{{
 if !exists('s:os')
     if has("win64") || has("win32") || has("win16")
         let s:os = "Windows"
@@ -8,7 +12,9 @@ if !exists('s:os')
         let s:os = substitute(system('uname'), '\n', '', '')
     endif
 endif
+" }}}
 
+" Installation {{{
 " Sed program to use
 let s:sed = 'sed'
 if s:os == 'Darwin'
@@ -166,7 +172,9 @@ function! ZToggleLspPersistent()
         call system("touch ~/.vim/.nococ")
     endif
 endfunction
+" }}}
 
+" Plugins {{{
 call plug#begin()
 Plug 'puremourning/vimspector'
 Plug 'preservim/nerdtree', {'on': 'NERDTreeToggle'}
@@ -222,7 +230,9 @@ Plug 'tpope/vim-surround'
 Plug 'j5shi/CommandlineComplete.vim'
 Plug 'kshenoy/vim-signature'
 call plug#end()
+" }}}
 
+" Install plugins {{{
 if empty($INSIDE_VIM)
     let $INSIDE_VIM = 1
     let g:not_inside_vim = 1
@@ -241,65 +251,78 @@ if !empty($INSTALL_VIMRC_PLUGINS)
         call ZInstallCommand("INSTALL_VIMRC_PLUGINS=post vim -E -s -u ~/.vimrc +'CocInstall -sync coc-clangd coc-python coc-vimlsp' +qa")
     endif
 endif
+" }}}
 
-" Generic
-syntax on
-filetype plugin indent on
-set expandtab
-set ignorecase
-set smartcase
-set shellslash
-set autoindent
-set cinoptions=g0N-s
-set backspace=indent,eol,start
-set ruler
-set showcmd
-set incsearch
-set hlsearch
-set shiftwidth=4
-set tabstop=4
-set cmdheight=1
-set number
-set wildmode=list:longest,full
-set wildmenu
-set completeopt=longest,menuone,preview
-set nowrap
-set shellslash
-set noerrorbells visualbell t_vb=
+" General configuration {{{
+syntax on " Activate syntax
+filetype plugin indent on " Activates filetype plugins
+set expandtab " Expands tabs to spaces
+set ignorecase " Ignore case
+set smartcase " Smart case
+set shellslash " Use forward slash for directories
+set autoindent " Automatic indentation
+set cinoptions=g0N-s " Do not indent namespaces in cindent
+set backspace=indent,eol,start " Make backspace work like in most programs
+set ruler " Show line and column of cursor position
+set showcmd " Show command line in the last line of the screen
+set incsearch " Incrementally search words
+set hlsearch " Highlight searches
+set shiftwidth=4 " Shift adds 4 spaces.
+set tabstop=4 " Tab is 4 columns
+set cmdheight=1 " Command line height is 1.
+set number " Shows line numbers
+set wildmode=list:longest,full " Enhanced completion menu
+set wildmenu " Enhanced completion menu
+set completeopt=longest,menuone,preview " Enhanced completion menu
+set nowrap " Do not wrap text
+set updatetime=300 " Write swp file and trigger cursor hold events every 300ms
+set shortmess+=c " Short message when entering vim
+set hidden " Allow hidden buffers with writes
+set cursorline " Activate cursor line
+set noerrorbells visualbell t_vb= " Do not play bell sounds
+set t_u7= " Workaround for some terminals that make vim launch in relace mode
+" }}}
 
-" File indentation
+" File indentation {{{
 augroup ZFileIndentation
     autocmd!
     autocmd filetype cpp setlocal cindent
     autocmd filetype c setlocal cindent
     autocmd filetype make setlocal noexpandtab autoindent
 augroup end
+" }}}
 
-" Turn off highlights
+" Turn off highlights {{{
 nnoremap <silent> ` :noh<CR>
+" }}}
 
-" Visual block
+" Visual block {{{
 nnoremap <silent> <C-q> <C-v>
+" }}}
 
-" Close window
+" Close window {{{
 nnoremap <silent> <C-w>w :q<CR>
+" }}}
 
-" Save file
+" Save file {{{
 nnoremap <silent> <C-s> :w<CR>
 inoremap <silent> <C-s> <C-o>:w<CR>
+" }}}
 
-" Increment and decrement
+" Increment and decrement {{{
 nnoremap <silent> <leader>= <C-a>
 vnoremap <silent> <leader>= <C-a>
 nnoremap <silent> <leader>- <C-x>
 vnoremap <silent> <leader>- <C-x>
+" }}}
 
-" Select all
+" Select all {{{
 nnoremap <silent> <C-a> ggVG
 vnoremap <silent> <C-a> <esc>ggVG
 inoremap <silent> <C-a> <esc>ggVG
+" }}}
 
-" Clipboard
+" Clipboard {{{
 if !filereadable(expand('~/.vim/.noosccopy'))
     vnoremap <silent> <C-c> "*y:ZOscCopy<CR>
     vnoremap <silent> <C-x> "*d:ZOscCopy<CR>
@@ -344,8 +367,9 @@ function! ZToggleForceXServer()
         call system("touch ~/.vim/.forcexserver")
     endif
 endfunction
+" }}}
 
-" Tmux wrap function
+" Tmux wrap function {{{
 function! ZWrapIfTmux(s)
     if !exists('$TMUX')
         return a:s
@@ -354,8 +378,9 @@ function! ZWrapIfTmux(s)
     let tmux_end = "\<Esc>\\"
     return tmux_start . substitute(a:s, "\<Esc>", "\<Esc>\<Esc>", 'g') . tmux_end
 endfunction
+" }}}
 
-" Bracketed paste
+" Bracketed paste {{{
 exec "set <f22>=\<Esc>[200~"
 exec "set <f23>=\<Esc>[201~"
 inoremap <special> <expr> <f22> ZXTermPasteBegin('')
@@ -374,16 +399,20 @@ augroup ZTerminalBracketedPaste
     autocmd!
     autocmd TerminalOpen * exec "setlocal <f22>= | setlocal <f23>= "
 augroup end
+" }}}
 
+" Terminus {{{
 " Disable terminus bracketed paste
 let g:TerminusBracketedPaste = 0
+" }}}
 
-" Cursor shape on entry
+" Cursor shape on entry {{{
 if s:os == 'Linux'
     let &t_ti .= ZWrapIfTmux("\<Esc>[2 q")
 endif
+" }}}
 
-" Gui colors
+" Gui colors {{{
 if has('termguicolors') && !filereadable(expand('~/.vim/.notermguicolors'))
     set termguicolors
 endif
@@ -399,8 +428,9 @@ function! ZToggleGuiColorsPersistent()
         endif
     endif
 endfunction
+" }}}
 
-" Mouse
+" Mouse {{{
 set mouse=a
 if has('mouse_sgr')
     set ttymouse=sgr
@@ -421,8 +451,9 @@ function! ZToggleMouse()
         endif
     endif
 endfunction
+" }}}
 
-" Sign column
+" Sign column {{{
 set signcolumn=yes
 function! ZToggleSignColumn()
     if !exists("b:signcolumn_on") || b:signcolumn_on
@@ -433,12 +464,9 @@ function! ZToggleSignColumn()
         let b:signcolumn_on = 1
     endif
 endfunction
+" }}}
 
-" Updatetime
-set updatetime=300
-set shortmess+=c
-
-" Path
+" Path {{{
 let $PATH =
     \ ':' . expand('~/.vim/bin/lf')
     \ . ':' . expand('~/.vim/bin/llvm')
@@ -447,20 +475,23 @@ let $PATH =
 if !executable('clangd') && filereadable('/usr/local/opt/llvm/bin/clangd')
     let $PATH .= ':/usr/local/opt/llvm/bin'
 endif
+" }}}
 
-" Ignore no write since last change errors
-set hidden
-
-" Copy / Paste Mode
+" Copy / Paste Mode {{{
 nnoremap <silent> <F7> :set paste!<CR>:set number!<CR>:call ZToggleSignColumn()<CR>:call ZToggleMouse()<CR>
+" }}}
 
-" Resize splits
+" Resize splits {{{
 nnoremap <silent> L :vertical resize +1<CR>
 nnoremap <silent> H :vertical resize -1<CR>
 nnoremap <silent> <C-w>= :resize +1<CR>
+" }}}
 
-" Zoom
+" Zoom {{{
 noremap <silent> <C-w>z :ZoomWinTabToggle<CR>
+" }}}
+
+" Special files generation {{{
 
 " Generation Parameters
 let g:ctagsFilePatterns = '-g "*.c" -g "*.cc" -g "*.cpp" -g "*.cxx" -g "*.h" -g "*.hh" -g "*.hpp"'
@@ -517,36 +548,168 @@ function! ZTerminalToggleScrolling()
     endif
 endfunction
 
-" Vim-better-whitespace
+" Generate Flags
+function! ZGenerateFlags()
+    let cpp_include_1 = system("rg --files -g string_view /usr/lib 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+    if empty(cpp_include_1)
+        let cpp_include_1 = system("rg --files -g string_view /usr/local 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+    endif
+    if empty(cpp_include_1)
+        let cpp_include_1 = '/usr/include'
+    else
+        let cpp_include_1 = system("dirname " . cpp_include_1)
+    endif
+
+    let cpp_include_2 = system("rg --files -g cstdlib /usr/include/c++ 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+    if empty(cpp_include_2)
+        let cpp_include_2 = '/usr/include'
+    else
+        let cpp_include_2 = system("dirname " . cpp_include_2)
+    endif
+
+    copen
+    exec ":AsyncRun
+    \ echo -std=c++20 > compile_flags.txt
+    \ && echo -isystem >> compile_flags.txt
+    \ && echo /usr/include >> compile_flags.txt
+    \ && echo -isystem >> compile_flags.txt
+    \ && echo " . trim(cpp_include_1) . " >> compile_flags.txt
+    \ && echo -isystem >> compile_flags.txt
+    \ && echo " . trim(cpp_include_2) . " >> compile_flags.txt
+    \ && set +e ; find . -type d -name inc -or -name include -or -name Include | grep -v \"/\\.\" | " . s:sed . " s@^@-isystem\\\\n@g >> compile_flags.txt ; set -e
+    \ && echo -x >> compile_flags.txt
+    \ && echo c++ >> compile_flags.txt"
+endfunction
+
+" Generate Tags
+function! ZGenerateTags()
+    copen
+    exec ":AsyncRun echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && ctags " . g:ctagsOptions
+endfunction
+
+function! ZGenerateEveryTags()
+    copen
+    exec ":AsyncRun echo '" . g:ctagsEverythingOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && ctags " . g:ctagsEverythingOptions
+endfunction
+
+" Generate Files
+function! ZGenerateSourceFilesCache()
+    copen
+    exec ":AsyncRun rg --files " . g:sourceFilePatterns . " > .files"
+endfunction
+
+function! ZGenerateFilesCache()
+    copen
+    exec ":AsyncRun " . g:fzf_files_nocache_command . " > .files"
+endfunction
+
+" Generate C++
+function! ZGenerateCpp()
+    copen
+    if !filereadable('compile_commands.json')
+        let cpp_include_1 = system("rg --files -g string_view /usr/lib 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+        if empty(cpp_include_1)
+            let cpp_include_1 = system("rg --files -g string_view /usr/local 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+        endif
+        if empty(cpp_include_1)
+            let cpp_include_1 = '/usr/include'
+        else
+            let cpp_include_1 = system("dirname " . cpp_include_1)
+        endif
+
+        let cpp_include_2 = system("rg --files -g cstdlib /usr/include/c++ 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+        if empty(cpp_include_2)
+            let cpp_include_2 = '/usr/include'
+        else
+            let cpp_include_2 = system("dirname " . cpp_include_2)
+        endif
+
+        copen
+
+        exec ":AsyncRun
+        \ echo -std=c++20 > compile_flags.txt
+        \ && echo -isystem >> compile_flags.txt
+        \ && echo /usr/include >> compile_flags.txt
+        \ && echo -isystem >> compile_flags.txt
+        \ && echo " . trim(cpp_include_1) . " >> compile_flags.txt
+        \ && echo -isystem >> compile_flags.txt
+        \ && echo " . trim(cpp_include_2) . " >> compile_flags.txt
+        \ && set +e ; find . -type d -name inc -or -name include -or -name Include | grep -v \"/\\.\" | " . s:sed . " s@^@-isystem\\\\n@g >> compile_flags.txt ; set -e
+        \ && echo -x >> compile_flags.txt
+        \ && echo c++ >> compile_flags.txt
+        \ && echo '" . g:ctagsOptions . "' > .gutctags
+        \ && " . s:sed . " -i 's/ /\\n/g' .gutctags
+        \ && rg --files " . g:ctagsFilePatterns . " > cscope.files
+        \ && if ! [ -f .files ]; then cp cscope.files .files; rg --files " . g:otherFilePatterns . " >> .files; fi
+        \ && cscope -bq"
+    else
+        exec ":AsyncRun
+        \ echo '" . g:ctagsOptions . "' > .gutctags
+        \ && " . s:sed . " -i 's/ /\\n/g' .gutctags
+        \ && rg --files " . g:ctagsFilePatterns . " > cscope.files
+        \ && if ! [ -f .files ]; then cp cscope.files .files; rg --files " . g:otherFilePatterns . " >> .files; fi
+        \ && cscope -bq"
+    endif
+endfunction
+
+" Generate Opengrok
+function! ZGenerateOpengrok()
+    copen
+    exec ":AsyncRun java -Xmx2048m -jar ~/.vim/bin/opengrok/lib/opengrok.jar -q -c " . g:opengrok_ctags . " -s . -d .opengrok
+         \ " . g:opengrokFilePatterns . "
+         \ -P -S -G -W .opengrok/configuration.xml"
+endfunction
+
+" Generate compile_commands.json
+nnoremap <silent> <leader>zj :call ZGenerateCompileCommandsJson()<CR>
+function! ZGenerateCompileCommandsJson()
+    call inputsave()
+    let compile_command = input('Compile (make) command: ')
+    call inputrestore()
+    copen
+    if executable('compiledb')
+        exec ":AsyncRun compiledb " . compile_command
+    else
+        exec ":AsyncRun python3 -m compiledb " . compile_command
+    endif
+endfunction
+" }}}
+
+" Vim-better-whitespace {{{
 let g:better_whitespace_filetypes_blacklist = ['diff', 'gitcommit', 'git', 'unite', 'qf', 'help', 'VimspectorPrompt', 'xxd']
 nnoremap <silent> <leader>zw :StripWhitespace<CR>
 nnoremap <silent> <leader>zW :ToggleWhitespace<CR>
+" }}}
 
-" Sexy Scroller
+" Sexy Scroller {{{
 let g:SexyScroller_MaxTime = 250
 let g:SexyScroller_EasingStyle = 2
 let g:SexyScroller_ScrollTime = 5
 let g:SexyScroller_CursorTime = 5
 nnoremap <silent> <leader>zx :SexyScrollerToggle<CR>
+" }}}
 
-" Lf
+" Lf {{{
 " The use of timer_start is a workaround that the lsp does not detect the file
 " after open.
 nmap <silent> <leader>fe :LF %:p call\ timer_start(0,{tid->execute('e!')})\|n<CR>
 nmap <silent> <leader>fs :LF %:p call\ timer_start(0,{tid->execute('e!')})\|vs<CR>
+" }}}
 
-" Opengrok
+" Opengrok binaries {{{
 let g:opengrok_jar = expand('~/.vim/bin/opengrok/lib/opengrok.jar')
 if executable('ctags-exuberant')
     let g:opengrok_ctags = '/usr/bin/ctags-exuberant'
 else
     let g:opengrok_ctags = '~/.vim/bin/ctags-exuberant/ctags/ctags'
 endif
+" }}}
 
-" Root
+" Root / project / file folder switching {{{
 let g:vimroot=$PWD
 nnoremap <silent> cr :call ZSwitchToRoot()<CR>
 nnoremap <silent> cp :call ZSwitchToProjectRoot(expand('%:p:h'))<CR>
+nnoremap <silent> cd :execute "cd " . expand('%:p:h')<CR>
 function! ZSwitchToRoot()
     execute "cd " . g:vimroot
 endfunction
@@ -573,11 +736,9 @@ function! ZSwitchToProjectRoot(start_path)
     endwhile
     echom "Project root not found!"
 endfunction
+" }}}
 
-" Change directory
-nnoremap <silent> cd :execute "cd " . expand('%:p:h')<CR>
-
-" NERDTree and TagBar
+" NERDTree and TagBar {{{
 let g:NERDTreeWinSize = 23
 let g:NERDTreeAutoCenter = 0
 let g:tagbar_width = 23
@@ -587,25 +748,29 @@ augroup ZNerdTree
     autocmd!
     autocmd FileType nerdtree setlocal signcolumn=no
 augroup end
+" }}}
 
-" Git
+" Git {{{
 nnoremap <silent> <leader>gb :Git blame<CR>
 nnoremap <silent> <leader>gm :MagitOnly<CR>
 nnoremap <silent> <leader>gc :BCommits!<CR>
 nnoremap <silent> <leader>gl :call ZPopTerminal('lazygit -p ' .  expand('%:p:h'))<CR>
+" }}}
 
-" Pop Terminal
+" Pop Terminal {{{
 function! ZPopTerminal(command)
     let buf = term_start(a:command, #{hidden: 1, term_finish: 'close'})
     let winid = popup_dialog(buf, #{minheight: 40, minwidth: 150})
     let bufn = winbufnr(winid)
 endfunction
+" }}}
 
-" GutenTags
+" GutenTags {{{
 let g:gutentags_modules = ['ctags']
 let g:gutentags_project_root = ['.git', '.hg', '.svn', '.repo', '.files']
+" }}}
 
-" Color
+" Color {{{
 if !filereadable(expand('~/.vim/.color'))
     call system('echo onedark > ~/.vim/.color')
 endif
@@ -618,19 +783,22 @@ if s:vim_color == 'codedark'
 endif
 exec ':color ' . s:vim_color
 command! -nargs=1 ZColor call system('echo ' . <f-args> . ' > ~/.vim/.color') | source ~/.vimrc
+" }}}
 
-" Supertab
+" Supertab {{{
 let g:SuperTabDefaultCompletionType = "<c-n>"
+" }}}
 
-" Incsearch
+" Incsearch {{{
 map / <Plug>(incsearch-forward)
 map ? <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
 map z/ <Plug>(incsearch-fuzzy-/)
 map z? <Plug>(incsearch-fuzzy-?)
 map zg/ <Plug>(incsearch-fuzzy-stay)
+" }}}
 
-" Hexokinase
+" Hexokinase {{{
 let g:Hexokinase_highlighters = ['backgroundfull']
 let g:Hexokinase_optInPatterns = 'full_hex,rgb,rgba,hsl,hsla,colour_names'
 let g:Hexokinase_ftOptInPatterns = {
@@ -648,7 +816,9 @@ let g:fzf_files_cache_command = "
     \     rg --files --no-ignore-vcs --hidden;
     \ fi
 \ "
+" }}}
 
+" Fzf {{{
 if filereadable(expand('~/.vim/.fzf-files-cache')) || filereadable('.fzf-files-cache')
     let $FZF_DEFAULT_COMMAND = g:fzf_files_cache_command
     let g:fzf_files_cache = 1
@@ -713,16 +883,18 @@ function! ZFzfToggleGlobalFilesCache()
         let $FZF_DEFAULT_COMMAND = g:fzf_files_cache_command
     endif
 endfunction
+" }}}
 
-" Easymotion
+" Easymotion {{{
 let g:EasyMotion_do_mapping = 0
 let g:EasyMotion_smartcase = 1
 nmap <silent> s <Plug>(easymotion-overwin-f2)
 vmap <silent> s <Plug>(easymotion-f2)
 nmap <silent> S <Plug>(easymotion-overwin-f2)
 vmap <silent> S <Plug>(easymotion-f2)
+" }}}
 
-" Sneak
+" Sneak {{{
 let g:sneak#use_ic_scs = 1
 let g:sneak#s_next = 0
 let g:sneak#label = 1
@@ -734,13 +906,15 @@ nmap f <Plug>Sneak_f
 nmap F <Plug>Sneak_F
 vmap t <Plug>Sneak_t
 vmap T <Plug>Sneak_T
+" }}}
 
-" ZCscope
+" Cscope config {{{
 let g:cscopedb_big_file = 'cscope.out'
 let g:cscopedb_small_file = 'cscope_small.out'
 let g:cscopedb_auto_files = 0
+" }}}
 
-" Visual Multi
+" Visual Multi {{{
 " Mappings - (See https://github.com/mg979/vim-visual-multi/wiki/Mappings)
 " Tutorial - ~/.vim/plugged/vim-visual-multi/doc/vm-tutorial
 let g:VM_theme = 'iceblue'
@@ -775,24 +949,24 @@ function! ZVisualMultiCocAfter()
         silent exec ":CocEnable"
     endif
 endfunction
+" }}}
 
-" Cpp Highlight
+" Cpp Highlight {{{
 let g:cpp_class_scope_highlight = 1
 let g:cpp_member_variable_highlight = 1
 let g:cpp_class_decl_highlight = 1
-let g:cpp_experimental_simple_template_highlight = 1
 let g:cpp_concepts_highlight = 1
+" }}}
 
-" QuickFix
+" QuickFix {{{
 nnoremap <C-w>p :copen<CR>
+" }}}
 
-" In some windows machines this prevents launching in REPLACE mode.
-set t_u7=
-
-" Undo Tree
+" Undo Tree {{{
 nnoremap <silent> <leader>zu :UndotreeToggle<cr>
+" }}}
 
-" Tmux navigator
+" Tmux navigator {{{
 let g:tmux_navigator_no_mappings = 1
 let s:tmux_navigation_enabled = 0
 nnoremap <silent> <C-w>t :call ZToggleTmuxNavitaion()<cr>
@@ -823,8 +997,9 @@ endfunction
 if exists('g:not_inside_vim') && !empty($TMUX)
     call ZToggleTmuxNavitaion()
 endif
+" }}}
 
-" Large files handling
+" Large files {{{
 let g:large_file_size = 10 * 1024 * 1024
 augroup ZLargeFiles
     autocmd!
@@ -835,8 +1010,9 @@ augroup ZLargeFiles
         \ |     exec ":HexokinaseTurnOff"
         \ | endif
 augroup end
+" }}}
 
-" Tag stack
+" Tag stack {{{
 nnoremap <silent> <leader>o :pop<CR>
 nnoremap <silent> <leader>i :tag<CR>
 
@@ -861,8 +1037,9 @@ function! ZTagstackPush(name, pos, buf)
 
     call settagstack(winnr(), tagstack, 'r')
 endfunction
+" }}}
 
-" Go to definition
+" Go to definition {{{
 nnoremap <silent> <leader>zd :call ZGoToSymbol(expand('<cword>'), 'definition')<CR>
 nnoremap <silent> <leader>zD :call ZGoToSymbol(expand('<cword>'), 'declaration')<CR>
 nnoremap <silent> <leader>zg :call ZGoToDefinition()<CR>
@@ -1052,8 +1229,9 @@ function! ZGetTargetSymbolJumpIfCtagType(symbol, file, lines, ctags_tag_types)
     endfor
     return lines_and_columns
 endfunction
+" }}}
 
-" ZCscope
+" Cscope {{{
 nnoremap <silent> <leader>cA :call ZCscope('9', expand('<cword>'), 0)<CR>
 nnoremap <silent> <leader>cC :call ZCscope('3', expand('<cword>'), 0)<CR>
 nnoremap <silent> <leader>cD :call ZCscope('2', expand('<cword>'), 0)<CR>
@@ -1181,8 +1359,9 @@ function! ZCscopeQuery(option, preview, ...)
     echom "Cancelled Search!"
   endif
 endfunction
+" }}}
 
-" Opengrok Search
+" Opengrok {{{
 nnoremap <silent> <leader>zo :call ZOgQuery('f', expand('<cword>'), 1)<CR>
 nnoremap <silent> <leader><leader>zo :call ZOgQuery('f', input('Text: '), 1)<CR>
 nnoremap <silent> <leader>zO :call ZOgQuery('f', expand('<cword>'), 0)<CR>
@@ -1218,28 +1397,13 @@ function! ZOgQuery(option, query, preview)
     endif
     return 0
 endfunction
+" }}}
 
-" Cursor Line
-set cursorline
-
-" Lsp usage
-let g:use_clangd_lsp = 1
-if !executable('clangd')
-    let g:use_clangd_lsp = 0
-endif
-
-let g:use_pyls_lsp = 1
-if !executable('pyls')
-    let g:use_pyls_lsp = 0
-endif
-
-" Lsp Jump
-let g:lsp_jump_function = 0
-
-" vim-lsp configuration
+" vim-lsp {{{
 if g:lsp_choice == 'vim-lsp'
     let g:asyncomplete_remove_duplicates = 1
     let g:asyncomplete_smart_completion = 1
+    let g:lsp_jump_function = 0
 
     inoremap <silent> <C-@> <plug>(asyncomplete_force_refresh)
 
@@ -1249,6 +1413,16 @@ if g:lsp_choice == 'vim-lsp'
     nnoremap <silent> <leader>ld :LspDocumentDiagnostics<CR>
     nnoremap <silent> <leader>lh :highlight link LspErrorHighlight Error<CR>
     nnoremap <silent> <leader>ln :highlight link LspErrorHighlight None<CR>
+
+    let g:use_clangd_lsp = 1
+    if !executable('clangd')
+        let g:use_clangd_lsp = 0
+    endif
+
+    let g:use_pyls_lsp = 1
+    if !executable('pyls')
+        let g:use_pyls_lsp = 0
+    endif
 
     " clangd
     if g:use_clangd_lsp
@@ -1270,7 +1444,7 @@ if g:lsp_choice == 'vim-lsp'
                         \ 'name': 'pyls',
                         \ 'cmd': {server_info->['pyls']},
                         \ 'whitelist': ['python'],
-                        \ 'workspace_config': {'pyls': {'plugins': {'pydocstyle': {'enabled': v:true}}}}
+                        \ 'workspace_config': {'pyls': {'plugins': {'pydocstyle': {'enabled': v:true} } }}
                         \ })
         augroup end
     endif
@@ -1295,8 +1469,9 @@ if g:lsp_choice == 'vim-lsp'
         autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
     augroup end
 endif
+" }}}
 
-" Coc
+" Coc {{{
 if g:lsp_choice == 'coc'
     let g:coc_global_extensions = ['coc-clangd', 'coc-python', 'coc-vimlsp']
     let g:coc_fzf_preview = 'right:50%'
@@ -1378,8 +1553,9 @@ if g:lsp_choice == 'coc'
         return 0
     endfunction
 endif
+" }}}
 
-" Pear-tree
+" Pear-tree {{{
 let g:pear_tree_pairs = {
             \ '(': {'closer': ')'},
             \ '[': {'closer': ']'},
@@ -1407,8 +1583,9 @@ let g:pear_tree_map_special_keys = 0
 
 " Peer tree mappings:
 imap <BS> <Plug>(PearTreeBackspace)
+" }}}
 
-" Binary
+" Binary {{{
 command! -nargs=0 ZBinary let &bin=1 | set ft=xxd | exec "%!xxd"
 augroup ZBinaryFile
     autocmd!
@@ -1416,14 +1593,16 @@ augroup ZBinaryFile
     autocmd BufWritePre * if &bin | set ft=xxd | exec "%!xxd -r" | endif
     autocmd BufWritePost * if &bin | set ft=xxd | exec "%!xxd" | endif
 augroup end
+" }}}
 
-" Zip
+" Zip {{{
 let g:zipPlugin_ext= '*.zip,*.jar,*.xpi,*.ja,*.war,*.ear,*.celzip,
     \ *.oxt,*.kmz,*.wsz,*.xap,*.docm,*.dotx,*.dotm,*.potx,*.potm,
     \ *.ppsx,*.ppsm,*.pptx,*.pptm,*.ppam,*.sldx,*.thmx,*.xlam,*.xlsx,*.xlsm,
     \ *.xlsb,*.xltx,*.xltm,*.xlam,*.crtx,*.vdw,*.glox,*.gcsx,*.gqsx,*.epub'
+" }}}
 
-" Pandoc
+" Pandoc {{{
 augroup ZPandocGroup
     autocmd!
     autocmd BufReadPost *.doc,*.docx,*.rtf,*.odp,*.odt if !&bin |
@@ -1439,8 +1618,9 @@ command! -nargs=0 ZPandocWrite
     \ exec ":w" |
     \ call system("pandoc -f markdown -t " .  split(expand('%:p'), '\.')[-2] .
     \ " " .  expand('%:p') . "> " . split(expand('%:p'), '\.md')[0])
+" }}}
 
-" Fix function keys for tmux.
+" Tmux function keys workaround {{{
 if !empty($TMUX)
     exec "set <S-F1>=\<ESC>[25~"
     exec "set <S-F2>=\<ESC>[26~"
@@ -1451,134 +1631,9 @@ if !empty($TMUX)
     exec "set <S-F7>=\<ESC>[33~"
     exec "set <S-F8>=\<ESC>[34~"
 endif
+" }}}
 
-" Generate Flags
-function! ZGenerateFlags()
-    let cpp_include_1 = system("rg --files -g string_view /usr/lib 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
-    if empty(cpp_include_1)
-        let cpp_include_1 = system("rg --files -g string_view /usr/local 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
-    endif
-    if empty(cpp_include_1)
-        let cpp_include_1 = '/usr/include'
-    else
-        let cpp_include_1 = system("dirname " . cpp_include_1)
-    endif
-
-    let cpp_include_2 = system("rg --files -g cstdlib /usr/include/c++ 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
-    if empty(cpp_include_2)
-        let cpp_include_2 = '/usr/include'
-    else
-        let cpp_include_2 = system("dirname " . cpp_include_2)
-    endif
-
-    copen
-    exec ":AsyncRun
-    \ echo -std=c++20 > compile_flags.txt
-    \ && echo -isystem >> compile_flags.txt
-    \ && echo /usr/include >> compile_flags.txt
-    \ && echo -isystem >> compile_flags.txt
-    \ && echo " . trim(cpp_include_1) . " >> compile_flags.txt
-    \ && echo -isystem >> compile_flags.txt
-    \ && echo " . trim(cpp_include_2) . " >> compile_flags.txt
-    \ && set +e ; find . -type d -name inc -or -name include -or -name Include | grep -v \"/\\.\" | " . s:sed . " s@^@-isystem\\\\n@g >> compile_flags.txt ; set -e
-    \ && echo -x >> compile_flags.txt
-    \ && echo c++ >> compile_flags.txt"
-endfunction
-
-" Generate Tags
-function! ZGenerateTags()
-    copen
-    exec ":AsyncRun echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && ctags " . g:ctagsOptions
-endfunction
-
-function! ZGenerateEveryTags()
-    copen
-    exec ":AsyncRun echo '" . g:ctagsEverythingOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && ctags " . g:ctagsEverythingOptions
-endfunction
-
-" Generate Files
-function! ZGenerateSourceFilesCache()
-    copen
-    exec ":AsyncRun rg --files " . g:sourceFilePatterns . " > .files"
-endfunction
-
-function! ZGenerateFilesCache()
-    copen
-    exec ":AsyncRun " . g:fzf_files_nocache_command . " > .files"
-endfunction
-
-" Generate C++
-function! ZGenerateCpp()
-    copen
-    if !filereadable('compile_commands.json')
-        let cpp_include_1 = system("rg --files -g string_view /usr/lib 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
-        if empty(cpp_include_1)
-            let cpp_include_1 = system("rg --files -g string_view /usr/local 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
-        endif
-        if empty(cpp_include_1)
-            let cpp_include_1 = '/usr/include'
-        else
-            let cpp_include_1 = system("dirname " . cpp_include_1)
-        endif
-
-        let cpp_include_2 = system("rg --files -g cstdlib /usr/include/c++ 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
-        if empty(cpp_include_2)
-            let cpp_include_2 = '/usr/include'
-        else
-            let cpp_include_2 = system("dirname " . cpp_include_2)
-        endif
-
-        copen
-
-        exec ":AsyncRun
-        \ echo -std=c++20 > compile_flags.txt
-        \ && echo -isystem >> compile_flags.txt
-        \ && echo /usr/include >> compile_flags.txt
-        \ && echo -isystem >> compile_flags.txt
-        \ && echo " . trim(cpp_include_1) . " >> compile_flags.txt
-        \ && echo -isystem >> compile_flags.txt
-        \ && echo " . trim(cpp_include_2) . " >> compile_flags.txt
-        \ && set +e ; find . -type d -name inc -or -name include -or -name Include | grep -v \"/\\.\" | " . s:sed . " s@^@-isystem\\\\n@g >> compile_flags.txt ; set -e
-        \ && echo -x >> compile_flags.txt
-        \ && echo c++ >> compile_flags.txt
-        \ && echo '" . g:ctagsOptions . "' > .gutctags
-        \ && " . s:sed . " -i 's/ /\\n/g' .gutctags
-        \ && rg --files " . g:ctagsFilePatterns . " > cscope.files
-        \ && if ! [ -f .files ]; then cp cscope.files .files; rg --files " . g:otherFilePatterns . " >> .files; fi
-        \ && cscope -bq"
-    else
-        exec ":AsyncRun
-        \ echo '" . g:ctagsOptions . "' > .gutctags
-        \ && " . s:sed . " -i 's/ /\\n/g' .gutctags
-        \ && rg --files " . g:ctagsFilePatterns . " > cscope.files
-        \ && if ! [ -f .files ]; then cp cscope.files .files; rg --files " . g:otherFilePatterns . " >> .files; fi
-        \ && cscope -bq"
-    endif
-endfunction
-
-" Generate Opengrok
-function! ZGenerateOpengrok()
-    copen
-    exec ":AsyncRun java -Xmx2048m -jar ~/.vim/bin/opengrok/lib/opengrok.jar -q -c " . g:opengrok_ctags . " -s . -d .opengrok
-         \ " . g:opengrokFilePatterns . "
-         \ -P -S -G -W .opengrok/configuration.xml"
-endfunction
-
-" Generate compile_commands.json
-nnoremap <silent> <leader>zj :call ZGenerateCompileCommandsJson()<CR>
-function! ZGenerateCompileCommandsJson()
-    call inputsave()
-    let compile_command = input('Compile (make) command: ')
-    call inputrestore()
-    copen
-    if executable('compiledb')
-        exec ":AsyncRun compiledb " . compile_command
-    else
-        exec ":AsyncRun python3 -m compiledb " . compile_command
-    endif
-endfunction
-
-" Jump to location
+" Jump to location {{{
 function! ZJumpToLocation(file, line, column)
     silent exec ":edit " . fnameescape(a:file) . ""
     silent exec ":" . a:line
@@ -1587,22 +1642,26 @@ function! ZJumpToLocation(file, line, column)
     endif
     normal! zz
 endfunction
+" }}}
 
-" Syntax Information
+" Syntax Information {{{
 command! ZSyntaxInfo call ZSyntaxInfo()
 function! ZSyntaxInfo()
     let l:s = synID(line('.'), col('.'), 1)
     echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
 endfun
+" }}}
 
-" Command line complete
+" Command line complete {{{
 cmap <c-k> <Plug>CmdlineCompleteBackward
 cmap <c-j> <Plug>CmdlineCompleteForward
+" }}}
 
-" Signature
+" vim-signature {{{
 let g:SignatureMarkTextHL = 'Normal'
+" }}}
 
-" Vimspector
+" Vimspector {{{
 nnoremap <silent> <leader>dl :call ZVimspectorDebugLaunchSettings()<CR>
 nnoremap <silent> <leader>dd :if !filereadable('.vimspector.json') \| call ZVimspectorDebugLaunchSettings() \| endif \| call vimspector#Launch()<CR>
 nmap <leader>dc <plug>VimspectorContinue
@@ -1791,8 +1850,9 @@ function! ZVimspectorDebugLaunchSettings()
         echom 'Invalid debug type.'
     endif
 endfunction
+" }}}
 
-" Additional color settings
+" Additional color settings {{{
 if g:colors_name == 'codedark'
     " Terminal colors (base16):
     let s:cterm00 = "00"
@@ -1864,6 +1924,8 @@ if g:colors_name == 'codedark'
     call ZHighLight('cppSTLfunction', s:cdYellow, {}, 'none', {})
     call ZHighLight('cCustomOperator', s:cdYellow, {}, 'none', {})
     call ZHighLight('cConstant', s:cdPink, {}, 'none', {})
+    call ZHighLight('cppNew', s:cdPink, {}, 'none', {})
+    call ZHighLight('cppDelete', s:cdPink, {}, 'none', {})
     "call ZHighLight('cRepeat', s:cdPink, {}, 'none', {})
     "call ZHighLight('cConditional', s:cdPink, {}, 'none', {})
     "call ZHighLight('cStatement', s:cdPink, {}, 'none', {})
@@ -1961,8 +2023,9 @@ elseif g:colors_name == 'onedark'
     " Tagbar Highlights
     call ZHighLight('TagbarSignature', {"fg": s:onedarkWhite})
 endif
+" }}}
 
-" Transparent background
+" Transparent background support {{{
 nnoremap <silent> <leader>tb :ZToggleTransparentBackground<CR>
 let s:is_transparent = 0
 if filereadable(expand('~/.vim/.transparent')) && g:colors_name != 'codedark'
@@ -1978,3 +2041,4 @@ function! ZToggleTransparentBackground()
         call system("touch ~/.vim/.transparent")
     endif
 endfunction
+" }}}
