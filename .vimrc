@@ -203,7 +203,6 @@ Plug 'tmsvg/pear-tree'
 Plug 'mbbill/undotree'
 Plug 'thezeroalpha/vim-lf'
 Plug 'tpope/vim-commentary'
-Plug 'bfrg/vim-cpp-modern'
 Plug 'tomasiser/vim-code-dark'
 Plug 'joeytwiddle/sexy_scroller.vim'
 Plug 'ntpeters/vim-better-whitespace'
@@ -766,7 +765,8 @@ endfunction
 let g:cpp_class_scope_highlight = 1
 let g:cpp_member_variable_highlight = 1
 let g:cpp_class_decl_highlight = 1
-let g:cpp_experimental_template_highlight = 1
+let g:cpp_experimental_simple_template_highlight = 1
+let g:cpp_concepts_highlight = 1
 
 " QuickFix
 nnoremap <C-w>p :copen<CR>
@@ -1574,6 +1574,7 @@ function! ZJumpToLocation(file, line, column)
 endfunction
 
 " Syntax Information
+command! ZSyntaxInfo call ZSyntaxInfo()
 function! ZSyntaxInfo()
     let l:s = synID(line('.'), col('.'), 1)
     echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
@@ -1819,6 +1820,8 @@ if g:colors_name == 'codedark'
     let s:cdPink = {'gui': '#C586C0', 'cterm': s:cterm0E, 'cterm256': '176'}
     let s:cdBlueGreen = {'gui': '#4EC9B0', 'cterm': s:cterm0F, 'cterm256': '43'}
     let s:cdGreen = {'gui': '#6A9955', 'cterm': s:cterm0B, 'cterm256': '65'}
+    let s:cdLightGreen = {'gui': '#B5CEA8', 'cterm': s:cterm09, 'cterm256': '151'}
+    let s:cdOrange = {'gui': '#CE9178', 'cterm': s:cterm0F, 'cterm256': '173'}
     let s:cdRed = {'gui': '#F44747', 'cterm': s:cterm08, 'cterm256': '203'}
     let s:cdFront = {'gui': '#D4D4D4', 'cterm': s:cterm05, 'cterm256': '188'}
 
@@ -1826,19 +1829,22 @@ if g:colors_name == 'codedark'
     call ZHighLight('cCustomAccessKey', s:cdBlue, {}, 'none', {})
     call ZHighLight('cppModifier', s:cdBlue, {}, 'none', {})
     call ZHighLight('cppExceptions', s:cdBlue, {}, 'none', {})
+    call ZHighLight('cOperator', s:cdBlue, {}, 'none', {})
+    call ZHighLight('cppStatement', s:cdBlue, {}, 'none', {})
     call ZHighLight('cppSTLType', s:cdBlueGreen, {}, 'none', {})
     call ZHighLight('cppSTLnamespace', s:cdBlueGreen, {}, 'none', {})
     call ZHighLight('cCustomClassName', s:cdBlueGreen, {}, 'none', {})
+    call ZHighLight('cCustomClass', s:cdBlueGreen, {}, 'none', {})
     call ZHighLight('cppSTLexception', s:cdBlueGreen, {}, 'none', {})
     call ZHighLight('cppSTLconstant', s:cdLightBlue, {}, 'none', {})
     call ZHighLight('cppSTLvariable', s:cdLightBlue, {}, 'none', {})
+    call ZHighLight('cCustomMemVar', s:cdLightBlue, {}, 'none', {})
     call ZHighLight('cppSTLfunction', s:cdYellow, {}, 'none', {})
     call ZHighLight('cCustomOperator', s:cdYellow, {}, 'none', {})
     call ZHighLight('cConstant', s:cdPink, {}, 'none', {})
     "call ZHighLight('cRepeat', s:cdPink, {}, 'none', {})
     "call ZHighLight('cConditional', s:cdPink, {}, 'none', {})
     "call ZHighLight('cStatement', s:cdPink, {}, 'none', {})
-    "call ZHighLight('cppStatement', s:cdPink, {}, 'none', {})
 
     " Python
     call ZHighLight('pythonBuiltin', s:cdLightBlue, {}, 'none', {})
@@ -1873,6 +1879,12 @@ if g:colors_name == 'codedark'
 
     " Vim
     call ZHighLight('VimOperError', s:cdRed, {}, 'none', {})
+    call ZHighLight('vimFunction', s:cdYellow, {}, 'none', {})
+
+    " Json
+    call ZHighLight('jsonCommentError', s:cdGreen, {}, 'none', {})
+    call ZHighLight('jsonString', s:cdOrange, {}, 'none', {})
+    call ZHighLight('jsonNumber', s:cdLightGreen, {}, 'none', {})
 
     " Cursor line
     highlight CursorLine ctermbg=235 guibg=#2b2b2b
