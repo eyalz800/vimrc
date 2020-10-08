@@ -281,6 +281,9 @@ set hidden " Allow hidden buffers with writes
 set cursorline " Activate cursor line
 set noerrorbells visualbell t_vb= " Do not play bell sounds
 set t_u7= " Workaround for some terminals that make vim launch in relace mode
+set ttyfast " Fast terminal
+set lazyredraw " Redraw screen lazily
+set re=1 " Newer regex engine
 " }}}
 
 " File indentation {{{
@@ -956,6 +959,57 @@ let g:cpp_class_scope_highlight = 1
 let g:cpp_member_variable_highlight = 1
 let g:cpp_class_decl_highlight = 1
 let g:cpp_concepts_highlight = 1
+let g:cpp_member_variable_highlight = 0
+let g:cpp_no_function_highlight = 1
+augroup ZCustomCppSyntax
+    autocmd!
+    autocmd Syntax cpp call ZApplyCppSyntax()
+    autocmd Syntax c call ZApplyCppSyntax()
+augroup end
+function! ZApplyCppSyntax()
+    syntax match cCustomDot "\." contained
+    syntax match cCustomPtr "->" contained
+    syntax match cCustomParen "(" contained contains=cParen contains=cCppParen
+    syntax match cCustomFunc "\h\w*(" contains=cCustomParen
+    hi def link cCustomFunc Function
+
+    syntax keyword cIntegerType uint8_t
+    syntax keyword cIntegerType uint16_t
+    syntax keyword cIntegerType uint32_t
+    syntax keyword cIntegerType uint64_t
+    syntax keyword cIntegerType uintmax_t
+    syntax keyword cIntegerType uintptr_t
+    syntax keyword cIntegerType int8_t
+    syntax keyword cIntegerType int16_t
+    syntax keyword cIntegerType int32_t
+    syntax keyword cIntegerType int64_t
+    syntax keyword cIntegerType intmax_t
+    syntax keyword cIntegerType intptr_t
+    syntax keyword cIntegerType ptrdiff_t
+    syntax keyword cIntegerType size_t
+    hi def link cIntegerType cCustomClass
+    syntax keyword cCharType char8_t
+    syntax keyword cCharType char16_t
+    syntax keyword cCharType char32_t
+    hi def link cCharType cType
+    syntax match cCompundObject "\h\w*\(\.\|\->\)" contains=cCustomDot,cCustomPtr
+    hi def link cCompundObject cCustomMemVar
+    syntax match cCustomMemVar "\(\.\|->\)\h\w*" containedin=cCompundObject contains=cCustomDot,cCustomPtr
+    hi def link cCustomMemVar Function
+
+    if &ft == 'cpp'
+        syntax keyword cppNew new
+        hi def link cppNew cppStatement
+        syntax keyword cppDelete delete
+        hi def link cppDelete cppStatement
+        syntax keyword cppThis this
+        hi def link cppThis cppStatement
+        syntax keyword cppUsing using
+        hi def link cppUsing cppStatement
+        syntax match cppMemberFunction "\(\.\|\->\)\h\w*(" containedin=cCustomMemVar contains=cCustomDot,cCustomPtr,cCustomParen
+        hi def link cppMemberFunction cCustomFunc
+    endif
+endfunction
 " }}}
 
 " QuickFix {{{
@@ -1926,6 +1980,7 @@ if g:colors_name == 'codedark'
     call ZHighLight('cConstant', s:cdPink, {}, 'none', {})
     call ZHighLight('cppNew', s:cdPink, {}, 'none', {})
     call ZHighLight('cppDelete', s:cdPink, {}, 'none', {})
+    call ZHighLight('cppUsing', s:cdPink, {}, 'none', {})
     "call ZHighLight('cRepeat', s:cdPink, {}, 'none', {})
     "call ZHighLight('cConditional', s:cdPink, {}, 'none', {})
     "call ZHighLight('cStatement', s:cdPink, {}, 'none', {})
