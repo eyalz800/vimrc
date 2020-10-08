@@ -789,7 +789,7 @@ command! -nargs=1 ZColor call ZColor(<f-args>) | source ~/.vimrc
 function! ZColor(color)
     call system('echo ' . a:color . ' > ~/.vim/.color')
     if !empty($TMUX)
-        call system('tmux source ~/.tmux-conf')
+        call system('tmux source ~/.tmux.conf')
     endif
 endfunction
 " }}}
