@@ -715,7 +715,7 @@ endfunction
 " Easymotion
 let g:EasyMotion_do_mapping = 0
 let g:EasyMotion_smartcase = 1
-nmap <silent> s <Plug>(easymotion-s2)
+nmap <silent> s <Plug>(easymotion-overwin-f2)
 
 " Sneak
 let g:sneak#use_ic_scs = 1
