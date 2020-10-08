@@ -220,6 +220,7 @@ Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'tpope/vim-surround'
 Plug 'j5shi/CommandlineComplete.vim'
+Plug 'kshenoy/vim-signature'
 call plug#end()
 
 if empty($INSIDE_VIM)
@@ -1597,6 +1598,9 @@ endfun
 " Command line complete
 cmap <c-k> <Plug>CmdlineCompleteBackward
 cmap <c-j> <Plug>CmdlineCompleteForward
+
+" Signature
+let g:SignatureMarkTextHL = 'Normal'
 
 " Vimspector
 nnoremap <silent> <leader>dl :call ZVimspectorDebugLaunchSettings()<CR>
