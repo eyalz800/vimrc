@@ -177,7 +177,7 @@ endfunction
 " Plugins {{{
 call plug#begin()
 Plug 'puremourning/vimspector'
-Plug 'preservim/nerdtree', {'on': ['NERDTreeToggle', 'NERDTreeFind']}
+Plug 'preservim/nerdtree', {'on': ['NERDTreeToggle', 'NERDTree', 'NERDTreeFind']}
 Plug 'majutsushi/tagbar', {'on': ['TagbarToggle', 'TagbarOpen']}
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -762,14 +762,20 @@ function! ZNerdTreeFind()
     let s:nerdtree_open = 1
 endfunction
 function! ZNerdTreeToggle()
-    NERDTreeToggle
-    let s:nerdtree_open = !s:nerdtree_open
-    if s:nerdtree_open
+    if s:nerdtree_open == 0
+        NERDTree
         wincmd w
+    else
+        NERDTreeClose
     endif
+    let s:nerdtree_open = !s:nerdtree_open
 endfunction
 function! ZTagbarToggle()
-    TagbarToggle
+    if s:tagbar_open == 0
+        TagbarOpen
+    else
+        TagbarClose
+    endif
     let s:tagbar_open = !s:tagbar_open
 endfunction
 function! ZToggleNerdTreeAndTagbar()
