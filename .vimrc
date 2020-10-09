@@ -2227,7 +2227,12 @@ elseif g:colors_name == 'onedark'
 endif
 " }}}
 
-" Airline patch {{{
+" Airline {{{
+let g:airline#extensions#whitespace#checks = ['indent', 'trailing', 'mixed-indent-file', 'conflicts']
+let g:airline#extensions#whitespace#trailing_format = 'tr[%s]'
+let g:airline#extensions#whitespace#mixed_indent_file_format = 'mi[%s]'
+let g:airline#extensions#whitespace#mixed_indent_format = 'mi[%s]'
+let g:airline#extensions#whitespace#conflicts_format = 'conflict[%s]'
 let g:airline_theme_patch_func = 'ZAirlineThemePatch'
 function! ZAirlineThemePatch(palette)
     if g:airline_theme == 'codedark'
