@@ -714,6 +714,7 @@ let g:vimroot=$PWD
 nnoremap <silent> cr :call ZSwitchToRoot()<CR>
 nnoremap <silent> cp :call ZSwitchToProjectRoot(expand('%:p:h'))<CR>
 nnoremap <silent> cd :execute "cd " . expand('%:p:h')<CR>
+nnoremap <silent> cf :echo @%<CR>
 function! ZSwitchToRoot()
     execute "cd " . g:vimroot
 endfunction

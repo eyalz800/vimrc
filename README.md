@@ -277,9 +277,10 @@ cr - Change directory back to the root - the folder where vim was opened.
 <leader>- - Decrement number.
 ```
 
-* Save file:
+* File operations:
 ```
 <C-s> - Save file.
+cf - Print current file path.
 ```
 
 * Toggle seamless tmux/vim navigation:
