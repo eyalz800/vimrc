@@ -229,6 +229,7 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'tpope/vim-surround'
 Plug 'j5shi/CommandlineComplete.vim'
 Plug 'kshenoy/vim-signature'
+Plug 'vim-python/python-syntax'
 call plug#end()
 " }}}
 
@@ -1032,6 +1033,23 @@ function! ZApplyCppSyntax()
         syntax match cppMemberFunction "\(\.\|\->\)\h\w*(" containedin=cCustomMemVar contains=cCustomDot,cCustomPtr,cCustomParen
         hi def link cppMemberFunction cCustomFunc
     endif
+endfunction
+" }}}
+
+" Python Highlight {{{
+let g:python_highlight_all = 1
+let g:python_highlight_operators = 0
+augroup ZCustomPySyntax
+    autocmd!
+    autocmd Syntax python call ZApplyPythonSyntax()
+augroup end
+function! ZApplyPythonSyntax()
+    syntax keyword pythonLambda lambda
+    hi def link pythonLambda pythonStatement
+    syntax keyword pythonDef def
+    hi def link pythonDef pythonStatement
+    syntax keyword pythonBuiltinType type
+    hi link pythonRun pythonComment
 endfunction
 " }}}
 
@@ -2032,18 +2050,21 @@ if g:colors_name == 'codedark'
     "call ZHighLight('cStatement', s:cdPink, {}, 'none', {})
 
     " Python
-    call ZHighLight('pythonBuiltin', s:cdLightBlue, {}, 'none', {})
-    call ZHighLight('pythonBuiltinFunc', s:cdLightBlue, {}, 'none', {})
+    call ZHighLight('pythonBuiltin', s:cdBlueGreen, {}, 'none', {})
+    call ZHighLight('pythonExceptions', s:cdBlueGreen, {}, 'none', {})
     call ZHighLight('pythonBuiltinObj', s:cdLightBlue, {}, 'none', {})
     call ZHighLight('pythonRepeat', s:cdPink, {}, 'none', {})
     call ZHighLight('pythonConditional', s:cdPink, {}, 'none', {})
-    call ZHighLight('pythonOperator', s:cdPink, {}, 'none', {})
     call ZHighLight('pythonException', s:cdPink, {}, 'none', {})
-    call ZHighLight('pythonExceptions', s:cdLightBlue, {}, 'none', {})
-    call ZHighLight('pythonImport', s:cdBlue, {}, 'none', {})
-    call ZHighLight('pythonInclude', s:cdBlue, {}, 'none', {})
+    call ZHighLight('pythonInclude', s:cdPink, {}, 'none', {})
+    call ZHighLight('pythonImport', s:cdPink, {}, 'none', {})
+    call ZHighLight('pythonStatement', s:cdPink, {}, 'none', {})
+    call ZHighLight('pythonOperator', s:cdBlue, {}, 'none', {})
+    call ZHighLight('pythonDef', s:cdBlue, {}, 'none', {})
+    call ZHighLight('pythonLambda', s:cdBlue, {}, 'none', {})
     call ZHighLight('pythonFunction', s:cdYellow, {}, 'none', {})
     call ZHighLight('pythonDecorator', s:cdYellow, {}, 'none', {})
+    call ZHighLight('pythonBuiltinFunc', s:cdYellow, {}, 'none', {})
 
     " Gitgutter
     call ZHighLight('GitGutterAdd', s:cdGreen, {}, 'none', {})
