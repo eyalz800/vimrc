@@ -743,15 +743,16 @@ endfunction
 " }}}
 
 " NERDTree and TagBar {{{
-let g:NERDTreeWinSize = 30
-let g:NERDTreeAutoCenter = 0
-let g:tagbar_width = 30
-let s:tagbar_open = 0
-let s:nerdtree_open = 0
 nnoremap <silent> <C-l> :call ZToggleNerdTreeAndTagbar()<CR>
 nnoremap <silent> <leader>nf :call ZNerdTreeFind()<CR>
 nnoremap <silent> <leader>nt :call ZNerdTreeToggle()<CR>
 nnoremap <silent> <leader>tt :call ZTagbarToggle()<CR>
+let g:NERDTreeWinSize = 30
+let g:NERDTreeAutoCenter = 0
+let s:nerdtree_open = 0
+let g:tagbar_width = 30
+let g:tagbar_indent = 0
+let s:tagbar_open = 0
 augroup ZNerdTree
     autocmd!
     autocmd FileType nerdtree setlocal signcolumn=no
