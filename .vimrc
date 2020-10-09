@@ -1026,6 +1026,7 @@ function! ZApplyCppSyntax()
     syntax match cCustomPtr "->" contained
     syntax match cCustomParen "(" contained contains=cParen contains=cCppParen
     syntax match cCustomBracket "\[" contained contains=cBracket
+    syntax match cCurlyBrace "{" contained
 
     syntax match cCustomFunc "\h\w*(" contains=cCustomParen
     hi def link cCustomFunc Function
@@ -1066,6 +1067,8 @@ function! ZApplyCppSyntax()
         hi def link cppUsing cppStatement
         syntax match cppMemberFunction "\(\.\|\->\)\h\w*(" containedin=cCustomMemVar contains=cCustomDot,cCustomPtr,cCustomParen
         hi def link cppMemberFunction cCustomFunc
+        syntax match cppVariable "\h\w*\({\)" contains=cCurlyBrace
+        hi def link cppVariable cCustomMemVar
     endif
 endfunction
 " }}}
