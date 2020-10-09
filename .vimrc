@@ -2028,7 +2028,6 @@ if g:colors_name == 'codedark'
     \ '#56B6C2',
     \ '#5C6370']
 
-    " Terminal colors (base16):
     let s:cterm00 = "00"
     let s:cterm03 = "08"
     let s:cterm05 = "07"
@@ -2070,20 +2069,24 @@ if g:colors_name == 'codedark'
         endif
     endfunction
 
+    let s:cdBack = {'gui': '#1E1E1E', 'cterm': s:cterm00, 'cterm265': '234'}
     let s:cdLightBlue = {'gui': '#9CDCFE', 'cterm': s:cterm0C, 'cterm256': '117'}
     let s:cdBlue = {'gui': '#569CD6', 'cterm': s:cterm0D, 'cterm256': '75'}
     let s:cdDarkBlue = {'gui': '#223E55', 'cterm': s:cterm0D, 'cterm256': '73'}
     let s:cdYellow = {'gui': '#DCDCAA', 'cterm': s:cterm0A, 'cterm256': '187'}
+    let s:cdYellowOrange = {'gui': '#D7BA7D', 'cterm': s:cterm0A, 'cterm256': '179'}
     let s:cdPink = {'gui': '#C586C0', 'cterm': s:cterm0E, 'cterm256': '176'}
     let s:cdBlueGreen = {'gui': '#4EC9B0', 'cterm': s:cterm0F, 'cterm256': '43'}
     let s:cdGreen = {'gui': '#6A9955', 'cterm': s:cterm0B, 'cterm256': '65'}
     let s:cdLightGreen = {'gui': '#B5CEA8', 'cterm': s:cterm09, 'cterm256': '151'}
     let s:cdOrange = {'gui': '#CE9178', 'cterm': s:cterm0F, 'cterm256': '173'}
+    let s:cdVividOrange = {'gui': '#FFAF00', 'cterm': s:cterm0A, 'cterm256': '214'}
     let s:cdLightRed = {'gui': '#D16969', 'cterm': s:cterm08, 'cterm256': '167'}
-    let s:cdYellowOrange = {'gui': '#D7BA7D', 'cterm': s:cterm0A, 'cterm256': '179'}
     let s:cdRed = {'gui': '#F44747', 'cterm': s:cterm08, 'cterm256': '203'}
-    let s:cdFront = {'gui': '#D4D4D4', 'cterm': s:cterm05, 'cterm256': '188'}
     let s:cdViolet = {'gui': '#646695', 'cterm': s:cterm04, 'cterm256': '60'}
+    let s:cdVividBlue = {'gui': '#0A7ACA', 'cterm': s:cterm0D, 'cterm256': '32'}
+    let s:cdFront = {'gui': '#D4D4D4', 'cterm': s:cterm05, 'cterm256': '188'}
+    let s:cdWhite = {'gui': '#FFFFFF', 'cterm':  s:cterm07, 'cterm256': '15'}
 
     " C++
     call ZHighLight('cCustomAccessKey', s:cdBlue, {}, 'none', {})
@@ -2222,6 +2225,37 @@ elseif g:colors_name == 'onedark'
     call ZHighLight('cCompundObject', {"fg": s:onedarkWhite})
     call ZHighLight('cIntegerType', {"fg": s:onedarkCyan})
 endif
+" }}}
+
+" Airline patch {{{
+let g:airline_theme_patch_func = 'ZAirlineThemePatch'
+function! ZAirlineThemePatch(palette)
+    if g:airline_theme == 'codedark'
+        let airline_error = [ s:cdWhite.gui, s:cdRed.gui, s:cdWhite.cterm, s:cdRed.cterm]
+        let airline_warning = [ s:cdWhite.gui, s:cdRed.gui, s:cdWhite.cterm, s:cdRed.cterm]
+
+        let a:palette.normal.airline_warning = airline_warning
+        let a:palette.normal.airline_error = airline_error
+        let a:palette.normal_modified.airline_warning = airline_warning
+        let a:palette.normal_modified.airline_error = airline_error
+        let a:palette.insert.airline_warning = airline_warning
+        let a:palette.insert.airline_error = airline_error
+        let a:palette.insert_modified.airline_warning = airline_warning
+        let a:palette.insert_modified.airline_error = airline_error
+        let a:palette.replace.airline_warning = airline_warning
+        let a:palette.replace.airline_error = airline_error
+        let a:palette.replace_modified.airline_warning = airline_warning
+        let a:palette.replace_modified.airline_error = airline_error
+        let a:palette.visual.airline_warning = airline_warning
+        let a:palette.visual.airline_error = airline_error
+        let a:palette.visual_modified.airline_warning = airline_warning
+        let a:palette.visual_modified.airline_error = airline_error
+        let a:palette.inactive.airline_warning = airline_warning
+        let a:palette.inactive.airline_error = airline_error
+        let a:palette.inactive_modified.airline_warning = airline_warning
+        let a:palette.inactive_modified.airline_error = airline_error
+    endif
+endfunction
 " }}}
 
 " Transparent background support {{{
