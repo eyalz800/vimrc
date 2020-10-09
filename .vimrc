@@ -2072,14 +2072,18 @@ if g:colors_name == 'codedark'
 
     let s:cdLightBlue = {'gui': '#9CDCFE', 'cterm': s:cterm0C, 'cterm256': '117'}
     let s:cdBlue = {'gui': '#569CD6', 'cterm': s:cterm0D, 'cterm256': '75'}
+    let s:cdDarkBlue = {'gui': '#223E55', 'cterm': s:cterm0D, 'cterm256': '73'}
     let s:cdYellow = {'gui': '#DCDCAA', 'cterm': s:cterm0A, 'cterm256': '187'}
     let s:cdPink = {'gui': '#C586C0', 'cterm': s:cterm0E, 'cterm256': '176'}
     let s:cdBlueGreen = {'gui': '#4EC9B0', 'cterm': s:cterm0F, 'cterm256': '43'}
     let s:cdGreen = {'gui': '#6A9955', 'cterm': s:cterm0B, 'cterm256': '65'}
     let s:cdLightGreen = {'gui': '#B5CEA8', 'cterm': s:cterm09, 'cterm256': '151'}
     let s:cdOrange = {'gui': '#CE9178', 'cterm': s:cterm0F, 'cterm256': '173'}
+    let s:cdLightRed = {'gui': '#D16969', 'cterm': s:cterm08, 'cterm256': '167'}
+    let s:cdYellowOrange = {'gui': '#D7BA7D', 'cterm': s:cterm0A, 'cterm256': '179'}
     let s:cdRed = {'gui': '#F44747', 'cterm': s:cterm08, 'cterm256': '203'}
     let s:cdFront = {'gui': '#D4D4D4', 'cterm': s:cterm05, 'cterm256': '188'}
+    let s:cdViolet = {'gui': '#646695', 'cterm': s:cterm04, 'cterm256': '60'}
 
     " C++
     call ZHighLight('cCustomAccessKey', s:cdBlue, {}, 'none', {})
@@ -2127,17 +2131,23 @@ if g:colors_name == 'codedark'
     call ZHighLight('GitGutterChange', s:cdFront, {}, 'none', {})
     call ZHighLight('GitGutterDelete', s:cdRed, {}, 'none', {})
 
-    " NERD Tree
-    call ZHighLight('NERDTreeOpenable', s:cdPink, {}, 'none', {})
-    call ZHighLight('NERDTreeClosable', s:cdPink, {}, 'none', {})
-    call ZHighLight('NERDTreeHelp', s:cdPink, {}, 'none', {})
-    call ZHighLight('NERDTreeDir', s:cdLightBlue, {}, 'none', {})
-    call ZHighLight('NERDTreeDirSlash', s:cdBlue, {}, 'none', {})
-    call ZHighLight('NERDTreeCWD', s:cdYellow, {}, 'none', {})
+    " NERDTree
+    call ZHighLight('NERDTreeOpenable', s:cdBlue, {}, 'none', {})
+    call ZHighLight('NERDTreeClosable', s:cdBlue, {}, 'none', {})
+    call ZHighLight('NERDTreeHelp', s:cdGreen, {}, 'none', {})
+    call ZHighLight('NERDTreeDir', s:cdBlue, {}, 'none', {})
     call ZHighLight('NERDTreeUp', s:cdBlue, {}, 'none', {})
+    call ZHighLight('NERDTreeDirSlash', s:cdLightRed, {}, 'none', {})
     call ZHighLight('NERDTreeFile', s:cdFront, {}, 'none', {})
-    call ZHighLight('NERDTreeExecFile', s:cdFront, {}, 'none', {})
+    call ZHighLight('NERDTreeExecFile', s:cdBlueGreen, {}, 'none', {})
     call ZHighLight('NERDTreeLinkFile', s:cdBlueGreen, {}, 'none', {})
+    call ZHighLight('NERDTreeCWD', s:cdPink, {}, 'none', {})
+
+    " Tagbar
+    call ZHighLight('TagbarFoldIcon', s:cdLightBlue, {}, 'none', {})
+    call ZHighLight('TagbarKind', s:cdLightBlue, {}, 'none', {})
+    call ZHighLight('TagbarScope', s:cdLightBlue, {}, 'none', {})
+    call ZHighLight('TagbarSignature', s:cdFront, {}, 'none', {})
 
     " Vim
     call ZHighLight('VimOperError', s:cdRed, {}, 'none', {})
