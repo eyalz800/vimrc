@@ -2108,6 +2108,12 @@ if g:colors_name == 'codedark'
     call ZHighLight('jsonString', s:cdOrange, {}, 'none', {})
     call ZHighLight('jsonNumber', s:cdLightGreen, {}, 'none', {})
 
+    " Yaml
+    call ZHighLight('yamlBlockCollectionItemStart', s:cdFront, {}, 'none', {})
+    call ZHighLight('yamlKeyValueDelimiter', s:cdFront, {}, 'none', {})
+    call ZHighLight('yamlPlainScalar', s:cdOrange, {}, 'none', {})
+    call ZHighLight('yamlBlockMappingKey', s:cdLightBlue, {}, 'none', {})
+
     " Cursor line
     highlight CursorLine ctermbg=235 guibg=#2b2b2b
 elseif g:colors_name == 'onedark'
