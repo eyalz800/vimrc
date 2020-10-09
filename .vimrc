@@ -749,6 +749,7 @@ nnoremap <silent> <leader>nt :call ZNerdTreeToggle()<CR>
 nnoremap <silent> <leader>tt :call ZTagbarToggle()<CR>
 let g:NERDTreeWinSize = 30
 let g:NERDTreeAutoCenter = 0
+let g:NERDTreeMinimalUI = 0
 let s:nerdtree_open = 0
 let g:tagbar_width = 30
 let g:tagbar_indent = 0
