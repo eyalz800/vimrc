@@ -775,8 +775,8 @@ let g:gutentags_project_root = ['.git', '.hg', '.svn', '.repo', '.files']
 " }}}
 
 " Color {{{
-command! -nargs=1 ZColor call ZColor(<f-args>) | source ~/.vimrc | silent exec ":e!"
-nnoremap <silent> <leader>nc :call ZNextColor()<CR>:source ~/.vimrc<CR>:e!<CR>
+command! -nargs=1 ZColor call ZColor(<f-args>) | source ~/.vimrc | silent exec ":silent! e!"
+nnoremap <silent> <leader>nc :call ZNextColor()<CR>:source ~/.vimrc<CR>:silent! e!<CR>
 if !filereadable(expand('~/.vim/.color'))
     call system('echo onedark > ~/.vim/.color')
 endif
