@@ -284,7 +284,7 @@ set noerrorbells visualbell t_vb= " Do not play bell sounds
 set t_u7= " Workaround for some terminals that make vim launch in relace mode
 set ttyfast " Fast terminal
 set lazyredraw " Redraw screen lazily
-set re=1 " Newer regex engine
+set re=1 " Regex engine 1 feels smoother most of the times
 " }}}
 
 " File indentation {{{
