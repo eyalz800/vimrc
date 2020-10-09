@@ -785,9 +785,6 @@ let g:onedark_color_overrides = {
 \ }
 let s:available_colors = ['onedark', 'codedark']
 let s:vim_color = readfile(expand('~/.vim/.color'))[0]
-if s:vim_color == 'codedark'
-    color onedark
-endif
 exec ':color ' . s:vim_color
 function! ZColor(color)
     call system('echo ' . a:color . ' > ~/.vim/.color')
@@ -1972,6 +1969,25 @@ endfunction
 
 " Additional color settings {{{
 if g:colors_name == 'codedark'
+    " Terminal ansi colors
+    let g:terminal_ansi_colors =
+    \ ['#282C34',
+    \ '#E06C75',
+    \ '#98C379',
+    \ '#E5C07B',
+    \ '#61AFEF',
+    \ '#C678DD',
+    \ '#56B6C2',
+    \ '#ABB2BF',
+    \ '#3E4452',
+    \ '#BE5046',
+    \ '#98C379',
+    \ '#D19A66',
+    \ '#61AFEF',
+    \ '#C678DD',
+    \ '#56B6C2',
+    \ '#5C6370']
+
     " Terminal colors (base16):
     let s:cterm00 = "00"
     let s:cterm03 = "08"
