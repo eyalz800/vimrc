@@ -714,7 +714,6 @@ let g:vimroot=$PWD
 nnoremap <silent> cr :call ZSwitchToRoot()<CR>
 nnoremap <silent> cp :call ZSwitchToProjectRoot(expand('%:p:h'))<CR>
 nnoremap <silent> cd :execute "cd " . expand('%:p:h')<CR>
-nnoremap <silent> cf :echo @%<CR>
 function! ZSwitchToRoot()
     execute "cd " . g:vimroot
 endfunction
@@ -748,10 +747,10 @@ nnoremap <silent> <C-l> :call ZToggleNerdTreeAndTagbar()<CR>
 nnoremap <silent> <leader>nf :call ZNerdTreeFind()<CR>
 nnoremap <silent> <leader>nt :call ZNerdTreeToggle()<CR>
 nnoremap <silent> <leader>tt :call ZTagbarToggle()<CR>
+nnoremap <silent> cf :call ZShowCurrentFile()<CR>
 let g:NERDTreeWinSize = 30
 let g:NERDTreeAutoCenter = 0
 let g:NERDTreeMinimalUI = 0
-let s:nerdtree_open = 0
 let g:tagbar_width = 30
 let g:tagbar_indent = 0
 let s:tagbar_open = 0
@@ -759,18 +758,13 @@ augroup ZNerdTree
     autocmd!
     autocmd FileType nerdtree setlocal signcolumn=no
 augroup end
-function! ZNerdTreeFind()
-    NERDTreeFind
-    let s:nerdtree_open = 1
-endfunction
 function! ZNerdTreeToggle()
-    if s:nerdtree_open == 0
+    if exists("g:NERDTree") && g:NERDTree.IsOpen()
+        NERDTreeClose
+    else
         NERDTree
         wincmd w
-    else
-        NERDTreeClose
     endif
-    let s:nerdtree_open = !s:nerdtree_open
 endfunction
 function! ZTagbarToggle()
     if s:tagbar_open == 0
@@ -781,14 +775,22 @@ function! ZTagbarToggle()
     let s:tagbar_open = !s:tagbar_open
 endfunction
 function! ZToggleNerdTreeAndTagbar()
-    if (s:nerdtree_open == 1 && s:tagbar_open == 1) || (s:nerdtree_open == 0 && s:tagbar_open == 0)
+    let nerdtree_open = exists("g:NERDTree") && g:NERDTree.IsOpen()
+    if (nerdtree_open == 1 && s:tagbar_open == 1) || (nerdtree_open == 0 && s:tagbar_open == 0)
         call ZNerdTreeToggle()
         call ZTagbarToggle()
-    elseif s:nerdtree_open == 0
+    elseif !nerdtree_open
         call ZNerdTreeToggle()
     elseif s:tagbar_open == 0
         call ZTagbarToggle()
     endif
+endfunction
+function! ZShowCurrentFile()
+    if exists("g:NERDTree") && g:NERDTree.IsOpen()
+        NERDTreeFind
+        wincmd w
+    endif
+    echo @%
 endfunction
 " }}}
 

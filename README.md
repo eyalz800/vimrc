@@ -280,7 +280,7 @@ cr - Change directory back to the root - the folder where vim was opened.
 * File operations:
 ```
 <C-s> - Save file.
-cf - Print current file path.
+cf - Print current file path, if nerd tree is open, show it there as well.
 ```
 
 * Toggle seamless tmux/vim navigation:
