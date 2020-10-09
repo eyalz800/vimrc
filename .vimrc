@@ -786,7 +786,7 @@ function! ZToggleNerdTreeAndTagbar()
     endif
 endfunction
 function! ZShowCurrentFile()
-    if exists("g:NERDTree") && g:NERDTree.IsOpen()
+    if exists("g:NERDTree") && g:NERDTree.IsOpen() && !empty(expand('%:h'))
         NERDTreeFind
         wincmd w
     endif
