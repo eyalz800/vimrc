@@ -177,8 +177,8 @@ endfunction
 " Plugins {{{
 call plug#begin()
 Plug 'puremourning/vimspector'
-Plug 'preservim/nerdtree', {'on': 'NERDTreeToggle'}
-Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
+Plug 'preservim/nerdtree', {'on': ['NERDTreeToggle', 'NERDTreeFind']}
+Plug 'majutsushi/tagbar', {'on': ['TagbarToggle', 'TagbarOpen']}
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -746,12 +746,41 @@ endfunction
 let g:NERDTreeWinSize = 30
 let g:NERDTreeAutoCenter = 0
 let g:tagbar_width = 30
-nnoremap <silent> <C-l> :NERDTreeToggle<CR>:wincmd w<CR>:TagbarToggle<CR>
-nnoremap <silent> <leader>nf :NERDTreeFind<CR>
+let s:tagbar_open = 0
+let s:nerdtree_open = 0
+nnoremap <silent> <C-l> :call ZToggleNerdTreeAndTagbar()<CR>
+nnoremap <silent> <leader>nf :call ZNerdTreeFind()<CR>
+nnoremap <silent> <leader>nt :call ZNerdTreeToggle()<CR>
+nnoremap <silent> <leader>tt :call ZTagbarToggle()<CR>
 augroup ZNerdTree
     autocmd!
     autocmd FileType nerdtree setlocal signcolumn=no
 augroup end
+function! ZNerdTreeFind()
+    NERDTreeFind
+    let s:nerdtree_open = 1
+endfunction
+function! ZNerdTreeToggle()
+    NERDTreeToggle
+    let s:nerdtree_open = !s:nerdtree_open
+    if s:nerdtree_open
+        wincmd w
+    endif
+endfunction
+function! ZTagbarToggle()
+    TagbarToggle
+    let s:tagbar_open = !s:tagbar_open
+endfunction
+function! ZToggleNerdTreeAndTagbar()
+    if (s:nerdtree_open == 1 && s:tagbar_open == 1) || (s:nerdtree_open == 0 && s:tagbar_open == 0)
+        call ZNerdTreeToggle()
+        call ZTagbarToggle()
+    elseif s:nerdtree_open == 0
+        call ZNerdTreeToggle()
+    elseif s:tagbar_open == 0
+        call ZTagbarToggle()
+    endif
+endfunction
 " }}}
 
 " Git {{{
