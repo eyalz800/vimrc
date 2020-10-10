@@ -296,3 +296,8 @@ cf - Print current file path, if nerd tree is open, show it there as well.
 ```
 <C-w>t - Toggle seamless tmux/vim navigation (default enabled if inside tmux).
 ```
+
+* Toggle text wrap:
+```
+- - Toggle text wrap.
+```

@@ -1834,6 +1834,10 @@ cmap <c-k> <Plug>CmdlineCompleteBackward
 cmap <c-j> <Plug>CmdlineCompleteForward
 " }}}
 
+" Wrap {{{
+nnoremap <silent> - :setlocal wrap!<CR>
+"
+
 " vim-signature {{{
 let g:SignatureMarkTextHL = 'Normal'
 let g:SignatureMap = {
