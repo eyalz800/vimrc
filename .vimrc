@@ -1721,13 +1721,27 @@ imap <BS> <Plug>(PearTreeBackspace)
 " }}}
 
 " Binary {{{
-command! -nargs=0 ZBinary let &bin=1 | set ft=xxd | exec "%!xxd"
+nnoremap <silent> <leader>bf :call ZBinaryFile()<CR>
+command! -nargs=0 ZBinaryFile call ZBinaryFile()
 augroup ZBinaryFile
     autocmd!
-    autocmd BufReadPost * if &bin | set ft=xxd | exec "%!xxd" | endif
-    autocmd BufWritePre * if &bin | set ft=xxd | exec "%!xxd -r" | endif
-    autocmd BufWritePost * if &bin | set ft=xxd | exec "%!xxd" | endif
+    autocmd BufReadPost * if &bin | set ft=xxd | silent exec "%!xxd" | endif
+    autocmd BufWritePre * if &bin | set ft=xxd | silent exec "%!xxd -r" | endif
+    autocmd BufWritePost * if &bin | set ft=xxd | silent exec "%!xxd" | endif
 augroup end
+function ZBinaryFile()
+    if &mod
+        echomsg "Buffer has changes, please save or undo before proceeding."
+        return
+    endif
+    if &bin == 0
+        let &bin=1
+        silent exec "e"
+    else
+        let &bin=0
+        silent exec "e"
+    endif
+endfunction
 " }}}
 
 " Zip {{{

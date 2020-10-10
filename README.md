@@ -246,8 +246,12 @@ and invoke 'vim -S' to restore the session at the next time.
 
 * Edit in hex dump mode:
 ```
+// Before the file is open:
 vim -b [binary_file]
 vimdiff -b [binary_file_1] [binary_file_2]
+
+// After the file is open:
+<leader>bf - Switch to/from binary file editting.
 ```
 
 * Directory switching:
