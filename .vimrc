@@ -1140,11 +1140,15 @@ augroup ZLargeFiles
     autocmd!
     autocmd BufReadPre *
         \   if getfsize(expand("<afile>")) > g:large_file_size
-        \ |     setlocal noswapfile
-        \ |     setlocal bufhidden=unload
-        \ |     exec ":HexokinaseTurnOff"
+        \ |     call ZLargeFileEnable()
         \ | endif
 augroup end
+
+function! ZLargeFileEnable()
+    setlocal noswapfile
+    setlocal bufhidden=unload
+    exec ":HexokinaseTurnOff"
+endfunction
 " }}}
 
 " Tag stack {{{
