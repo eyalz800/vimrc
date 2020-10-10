@@ -385,15 +385,15 @@ endfunction
 " }}}
 
 " Bracketed paste {{{
-exec "set <f22>=\<Esc>[200~"
-exec "set <f23>=\<Esc>[201~"
+exec "set <f22>=\<Esc>[200~" | " ]
+exec "set <f23>=\<Esc>[201~" | " ]
 inoremap <special> <expr> <f22> ZXTermPasteBegin('')
 nnoremap <special> <expr> <f22> ZXTermPasteBegin('i')
 vnoremap <special> <expr> <f22> ZXTermPasteBegin('c')
 cnoremap <f22> <nop>
 cnoremap <f23> <nop>
-let &t_ti .= ZWrapIfTmux("\<Esc>[?2004h")
-let &t_te = ZWrapIfTmux("\<Esc>[?2004l") . &t_te
+let &t_ti .= ZWrapIfTmux("\<Esc>[?2004h") " ]
+let &t_te = ZWrapIfTmux("\<Esc>[?2004l") . &t_te " ]
 function! ZXTermPasteBegin(ret)
     setlocal pastetoggle=<f23>
     set paste
@@ -412,7 +412,7 @@ let g:TerminusBracketedPaste = 0
 
 " Cursor shape on entry {{{
 if s:os == 'Linux'
-    let &t_ti .= ZWrapIfTmux("\<Esc>[2 q")
+    let &t_ti .= ZWrapIfTmux("\<Esc>[2 q") " ]
 endif
 " }}}
 
@@ -1028,11 +1028,11 @@ augroup end
 function! ZApplyCppSyntax()
     syntax match cCustomDot "\." contained
     syntax match cCustomPtr "->" contained
-    syntax match cCustomParen "(" contained contains=cParen contains=cCppParen
-    syntax match cCustomBracket "\[" contained contains=cBracket
-    syntax match cCurlyBrace "{" contained
+    syntax match cCustomParen "(" contained contains=cParen contains=cCppParen " )
+    syntax match cCustomBracket "\[" contained contains=cBracket " ]
+    syntax match cCurlyBrace "{" contained " }
 
-    syntax match cCustomFunc "\h\w*(" contains=cCustomParen
+    syntax match cCustomFunc "\h\w*(" contains=cCustomParen " )
     hi def link cCustomFunc Function
     syntax keyword cIntegerType uint8_t
     syntax keyword cIntegerType uint16_t
@@ -1055,7 +1055,7 @@ function! ZApplyCppSyntax()
     hi def link cCharType cType
     syntax match cCompundObject "\h\w*\(\.\|\->\)" contains=cCustomDot,cCustomPtr
     hi def link cCompundObject cCustomMemVar
-    syntax match cArrayObject "\h\w*\(\[\)" contains=cCustomBracket
+    syntax match cArrayObject "\h\w*\(\[\)" contains=cCustomBracket " ]
     hi def link cArrayObject cCompundObject
     syntax match cCustomMemVar "\(\.\|->\)\h\w*" containedin=cCompundObject contains=cCustomDot,cCustomPtr
     hi def link cCustomMemVar Function
@@ -1069,9 +1069,9 @@ function! ZApplyCppSyntax()
         hi def link cppThis cppStatement
         syntax keyword cppUsing using
         hi def link cppUsing cppStatement
-        syntax match cppMemberFunction "\(\.\|\->\)\h\w*(" containedin=cCustomMemVar contains=cCustomDot,cCustomPtr,cCustomParen
+        syntax match cppMemberFunction "\(\.\|\->\)\h\w*(" containedin=cCustomMemVar contains=cCustomDot,cCustomPtr,cCustomParen " )
         hi def link cppMemberFunction cCustomFunc
-        syntax match cppVariable "\h\w*\({\)" contains=cCurlyBrace
+        syntax match cppVariable "\h\w*\({\)" contains=cCurlyBrace " }
         hi def link cppVariable cCustomMemVar
     endif
 endfunction
