@@ -2279,6 +2279,8 @@ let g:airline#extensions#whitespace#mixed_indent_file_format = 'mi[%s]'
 let g:airline#extensions#whitespace#mixed_indent_format = 'mi[%s]'
 let g:airline#extensions#whitespace#conflicts_format = 'conflict[%s]'
 let g:airline_theme_patch_func = 'ZAirlineThemePatch'
+let g:airline#extensions#zoomwintab#enabled = 1
+let g:airline#extensions#zoomwintab#status_zoomed_in = '(zoom)'
 function! ZAirlineThemePatch(palette)
     if g:airline_theme == 'codedark'
         let airline_error = [ s:cdWhite.gui, s:cdRed.gui, s:cdWhite.cterm, s:cdRed.cterm]
