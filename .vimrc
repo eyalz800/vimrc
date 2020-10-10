@@ -862,6 +862,7 @@ map zg/ <Plug>(incsearch-fuzzy-stay)
 " Hexokinase {{{
 let g:Hexokinase_highlighters = ['backgroundfull']
 let g:Hexokinase_optInPatterns = 'full_hex,rgb,rgba,hsl,hsla,colour_names'
+let g:Hexokinase_refreshEvents = ['BufRead', 'BufWrite', 'TextChanged', 'InsertLeave']
 let g:Hexokinase_ftOptInPatterns = {
 \     'cpp': 'rgb,rgba,hsl,hsla,colour_names',
 \     'c': 'rgb,rgba,hsl,hsla,colour_names',
