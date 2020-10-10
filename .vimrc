@@ -832,7 +832,7 @@ function! ZColor(color)
         call system('tmux source ~/.tmux.conf')
     endif
 endfunction
-function ZNextColor()
+function! ZNextColor()
     let current_color = index(s:available_colors, s:vim_color)
     if current_color == -1
         echom "Color not found!"
@@ -1723,13 +1723,13 @@ imap <BS> <Plug>(PearTreeBackspace)
 " Binary {{{
 nnoremap <silent> <leader>bf :call ZBinaryFile()<CR>
 command! -nargs=0 ZBinaryFile call ZBinaryFile()
-augroup ZBinaryFile
+augroup ZBinaryFileAutoCommands
     autocmd!
     autocmd BufReadPost * if &bin | set ft=xxd | silent exec "%!xxd" | endif
     autocmd BufWritePre * if &bin | set ft=xxd | silent exec "%!xxd -r" | endif
     autocmd BufWritePost * if &bin | set ft=xxd | silent exec "%!xxd" | endif
 augroup end
-function ZBinaryFile()
+function! ZBinaryFile()
     if &mod
         echomsg "Buffer has changes, please save or undo before proceeding."
         return
