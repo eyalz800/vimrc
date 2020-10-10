@@ -862,7 +862,7 @@ map zg/ <Plug>(incsearch-fuzzy-stay)
 " Hexokinase {{{
 let g:Hexokinase_highlighters = ['backgroundfull']
 let g:Hexokinase_optInPatterns = 'full_hex,rgb,rgba,hsl,hsla,colour_names'
-let g:Hexokinase_refreshEvents = ['BufRead', 'BufWrite', 'TextChanged', 'InsertLeave']
+let g:Hexokinase_refreshEvents = ['BufRead', 'BufWrite', 'TextChanged', 'InsertLeave', 'InsertEnter']
 let g:Hexokinase_ftOptInPatterns = {
 \     'cpp': 'rgb,rgba,hsl,hsla,colour_names',
 \     'c': 'rgb,rgba,hsl,hsla,colour_names',
@@ -1836,7 +1836,7 @@ cmap <c-j> <Plug>CmdlineCompleteForward
 
 " Wrap {{{
 nnoremap <silent> - :setlocal wrap!<CR>
-"
+" }}}
 
 " vim-signature {{{
 let g:SignatureMarkTextHL = 'Normal'
@@ -2137,6 +2137,9 @@ if g:colors_name == 'codedark'
     let s:cdFront = {'gui': '#D4D4D4', 'cterm': s:cterm05, 'cterm256': '188'}
     let s:cdWhite = {'gui': '#FFFFFF', 'cterm':  s:cterm07, 'cterm256': '15'}
 
+    " Codedark colors defined
+    let s:codedark_colors_defined = 1
+
     " C++
     call ZHighLight('cCustomAccessKey', s:cdBlue, {}, 'none', {})
     call ZHighLight('cppModifier', s:cdBlue, {}, 'none', {})
@@ -2286,7 +2289,7 @@ let g:airline_theme_patch_func = 'ZAirlineThemePatch'
 let g:airline#extensions#zoomwintab#enabled = 1
 let g:airline#extensions#zoomwintab#status_zoomed_in = '(zoom)'
 function! ZAirlineThemePatch(palette)
-    if g:airline_theme == 'codedark'
+    if g:airline_theme == 'codedark' && exists('s:codedark_colors_defined') && s:codedark_colors_defined
         let airline_error = [ s:cdWhite.gui, s:cdRed.gui, s:cdWhite.cterm, s:cdRed.cterm]
         let airline_warning = [ s:cdWhite.gui, s:cdRed.gui, s:cdWhite.cterm, s:cdRed.cterm]
 
