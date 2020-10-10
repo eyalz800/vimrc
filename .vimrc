@@ -1744,6 +1744,29 @@ function! ZBinaryFile()
 endfunction
 " }}}
 
+" Objdump {{{
+nnoremap <silent> <leader>od :call ZObjdump()<CR>
+command! -nargs=0 ZObjdump call ZObjdump()
+function! ZObjdump()
+    if exists('b:objdump_view') && b:objdump_view == 1
+        set ro!
+        silent exec "e!"
+        let b:objdump_view = 0
+    else
+        if &mod
+            echomsg "Buffer has changes, please save or undo before proceeding."
+            return
+        endif
+        silent exec "%!objdump -M intel -s -C -D " . expand('%')
+        set ro!
+        DisableWhitespace
+        set ft=asm
+        let &mod = 0
+        let b:objdump_view = 1
+    endif
+endfunction
+" }}}
+
 " Zip {{{
 let g:zipPlugin_ext= '*.zip,*.jar,*.xpi,*.ja,*.war,*.ear,*.celzip,
     \ *.oxt,*.kmz,*.wsz,*.xap,*.docm,*.dotx,*.dotm,*.potx,*.potm,
