@@ -2219,7 +2219,7 @@ if g:colors_name == 'codedark'
     call ZHighLight('yamlBlockMappingKey', s:cdLightBlue, {}, 'none', {})
 
     " Cursor line
-    highlight CursorLine ctermbg=235 guibg=#2b2b2b
+    highlight CursorLine ctermbg=235 guibg=#262626
 elseif g:colors_name == 'onedark'
     let s:group_colors = {} " Cache of default highlight group settings, for later reference via `onedark#extend_highlight`
     function! ZHighLight(group, style, ...)
