@@ -182,7 +182,6 @@ Plug 'majutsushi/tagbar', {'on': ['TagbarToggle', 'TagbarOpen']}
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'vim-scripts/a.vim'
 Plug 'ervandew/supertab'
 Plug 'vim-airline/vim-airline'
 Plug 'skywind3000/asyncrun.vim'
