@@ -229,6 +229,8 @@ Plug 'tpope/vim-surround'
 Plug 'j5shi/CommandlineComplete.vim'
 Plug 'kshenoy/vim-signature'
 Plug 'vim-python/python-syntax'
+Plug 'scrooloose/vim-slumlord'
+Plug 'aklt/plantuml-syntax'
 call plug#end()
 " }}}
 
@@ -2217,6 +2219,10 @@ if g:colors_name == 'codedark'
     call ZHighLight('yamlKeyValueDelimiter', s:cdFront, {}, 'none', {})
     call ZHighLight('yamlPlainScalar', s:cdOrange, {}, 'none', {})
     call ZHighLight('yamlBlockMappingKey', s:cdLightBlue, {}, 'none', {})
+
+    " Plant Uml
+    call ZHighLight('plantumlPreviewMethodCallParen', s:cdFront, {}, 'none', {})
+    call ZHighLight('plantumlPreviewMethodCall', s:cdYellow, {}, 'none', {})
 
     " Cursor line
     highlight CursorLine ctermbg=235 guibg=#262626
