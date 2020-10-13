@@ -680,6 +680,13 @@ function! ZTerminalToggleScrolling()
 endfunction
 " }}}
 
+" Sidways scrolling {{{
+nnoremap <silent> <C-l> 20zl
+vnoremap <silent> <C-l> 20zl
+nnoremap <silent> <C-h> 20zh
+vnoremap <silent> <C-h> 20zh
+" }}}
+
 " Vim-better-whitespace {{{
 let g:better_whitespace_filetypes_blacklist = ['diff', 'gitcommit', 'git', 'unite', 'qf', 'help', 'VimspectorPrompt', 'xxd']
 nnoremap <silent> <leader>zw :StripWhitespace<CR>
@@ -736,7 +743,7 @@ endfunction
 " }}}
 
 " NERDTree and TagBar {{{
-nnoremap <silent> <C-l> :call ZToggleNerdTreeAndTagbar()<CR>
+nnoremap <silent> <leader>ll :call ZToggleNerdTreeAndTagbar()<CR>
 nnoremap <silent> <leader>nf :call ZNerdTreeFind()<CR>
 nnoremap <silent> <leader>nt :call ZNerdTreeToggle()<CR>
 nnoremap <silent> <leader>tt :call ZTagbarToggle()<CR>

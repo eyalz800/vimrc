@@ -77,7 +77,7 @@ go - Toggle between source and header file.
 
 * Commands to view directory tree and source code function pane on each side of the screen:
 ```
-<C-l> - Turn on / off the directory tree and source code function panes using nerd tree and tagbar.
+<leader>ll - Turn on / off the directory tree and source code function panes using nerd tree and tagbar.
 <leader>nf - Show current file in the directory tree using nerd tree.
 <leader>nt - Toggle nerd tree on/off.
 <leader>tt - Toggle tagbar on/off.
@@ -300,4 +300,10 @@ cf - Print current file path, if nerd tree is open, show it there as well.
 * Toggle text wrap:
 ```
 - - Toggle text wrap.
+```
+
+* Sidways scrolling:
+```
+<C-l> - scroll right.
+<C-h> - scroll left.
 ```
