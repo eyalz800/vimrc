@@ -212,7 +212,6 @@ Plug 'mbbill/undotree'
 Plug 'thezeroalpha/vim-lf'
 Plug 'tpope/vim-commentary'
 Plug 'tomasiser/vim-code-dark'
-Plug 'joeytwiddle/sexy_scroller.vim'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'troydm/zoomwintab.vim'
 if !empty($INSTALL_VIMRC_PLUGINS) || exists('g:not_inside_vim') || empty($INSIDE_VIM)
@@ -684,14 +683,6 @@ endfunction
 let g:better_whitespace_filetypes_blacklist = ['diff', 'gitcommit', 'git', 'unite', 'qf', 'help', 'VimspectorPrompt', 'xxd']
 nnoremap <silent> <leader>zw :StripWhitespace<CR>
 nnoremap <silent> <leader>zW :ToggleWhitespace<CR>
-" }}}
-
-" Sexy Scroller {{{
-let g:SexyScroller_MaxTime = 250
-let g:SexyScroller_EasingStyle = 2
-let g:SexyScroller_ScrollTime = 5
-let g:SexyScroller_CursorTime = 5
-nnoremap <silent> <leader>zx :SexyScrollerToggle<CR>
 " }}}
 
 " Lf {{{
