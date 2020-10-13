@@ -38,7 +38,7 @@ function! ZInstallVimrc()
         exec ":q"
     endif
     try
-        call ZInstallCommand("mkdir -p ~/.vim/tmp ~/.vim/bin/python ~/.vim/bin/llvm ~/.config/coc ~/.cache")
+        call ZInstallCommand("mkdir -p ~/.vim/tmp ~/.vim/bin/python ~/.vim/bin/llvm ~/.vim/undo ~/.config/coc ~/.cache")
         if !executable('brew')
             call ZInstallCommand("DEBIAN_FRONTEND=noninteractive add-apt-repository -y ppa:lazygit-team/release")
             call ZInstallCommand("curl -sL https://deb.nodesource.com/setup_10.x | bash -")
@@ -1148,6 +1148,7 @@ augroup end
 function! ZLargeFileEnable()
     setlocal noswapfile
     setlocal bufhidden=unload
+    setlocal noundofile
     exec ":HexokinaseTurnOff"
 endfunction
 " }}}
@@ -1860,6 +1861,17 @@ let g:SignatureMap = {
     \ 'ListBufferMarks'    :  "m/",
     \ 'ListBufferMarkers'  :  "m?"
     \ }
+" }}}
+
+" Undo file {{{
+set undodir=~/.vim/undo
+set undolevels=10000
+set undofile
+command! -nargs=0 ZUndoCleanup call ZUndoCleanup()
+function! ZUndoCleanup()
+    copen
+    AsyncRun find ~/.vim/undo -type f -mtime +90 -delete
+endfunction
 " }}}
 
 " Vimspector {{{
