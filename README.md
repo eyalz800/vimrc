@@ -308,10 +308,12 @@ cf - Print current file path, if nerd tree is open, show it there as well.
 <C-h> - scroll left.
 ```
 
-* Start build:
+* Build and run:
 ```
-<F7> - Start build, for first time it will ask the build command.
-<S-F7> - Config build.
+<F7> - Build project.
+<S-F7> - Clean project.
+<C-F5> - Run project.
+<C-F7> - Reconfigure build.
 ```
 
 * Quickfix window:

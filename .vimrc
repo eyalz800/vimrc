@@ -1882,24 +1882,56 @@ let g:asyncrun_rootmarks = ['.git', '.svn', '.root', '.project', '.hg', '.files'
 let g:asynctasks_term_pos = 'bottom'
 let g:asynctasks_term_rows = 10
 let g:asynctasks_term_reuse = 1
-noremap <silent> <F7> :call ZBuild()<CR>
-noremap <silent> <S-F7> :call ZBuildConfig()<CR>
-function! ZBuild()
+noremap <silent> <F7> :call ZBuildProject()<CR>
+noremap <silent> <S-F7> :call ZCleanProject()<CR>
+noremap <silent> <C-F7> :call ZBuildConfig()<CR>
+noremap <silent> <C-F5> :call ZRunProject()<CR>
+function! ZBuildProject()
     if !filereadable('.tasks')
         call ZBuildConfig()
     endif
     AsyncTask project-build
+endfunction
+function! ZCleanProject()
+    if !filereadable('.tasks')
+        call ZBuildConfig()
+    endif
+    AsyncTask project-clean
+endfunction
+function! ZRunProject()
+    if !filereadable('.tasks')
+        call ZBuildConfig()
+    endif
+    AsyncTask project-run
 endfunction
 function! ZBuildConfig()
     call inputsave()
     let command = input('Build command: ')
     call inputrestore()
     normal :<ESC>
-    if empty(command)
-        echom 'Empty build command!'
-        return
+    if !empty(command)
+        call system("echo -e [project-build] > .tmptasks; echo 'command=" . command . "\n' >> .tmptasks")
     endif
-    call system("echo [project-build] > .tasks; echo 'command=" . command . "' >> .tasks")
+
+    call inputsave()
+    let command = input('Clean command: ')
+    call inputrestore()
+    normal :<ESC>
+    if !empty(command)
+        call system("echo -e [project-clean] >> .tmptasks; echo 'command=" . command . "\n' >> .tmptasks")
+    endif
+
+    call inputsave()
+    let command = input('Run command: ')
+    call inputrestore()
+    normal :<ESC>
+    if !empty(command)
+        call system("echo -e [project-run] >> .tmptasks; echo 'command=" . command . "\n' >> .tmptasks; echo output=terminal >> .tmptasks")
+    endif
+
+    if filereadable('.tmptasks')
+        call system("mv .tmptasks .tasks")
+    endif
 endfunction
 " }}}
 
