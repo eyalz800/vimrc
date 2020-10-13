@@ -522,36 +522,6 @@ nnoremap <silent> <leader>zf :call ZGenerateFlags()<CR>
 " Generate Opengrok
 nnoremap <silent> <leader>zk :call ZGenerateOpengrok()<CR>
 
-" Terminal
-nnoremap <silent> <leader>zb :below terminal ++rows=10<CR>
-nnoremap <silent> <leader>zs :below terminal<CR>
-nnoremap <silent> <leader>zv :vert rightb terminal<CR>
-tnoremap <silent> <C-w>w <C-w>:q<CR>
-tnoremap <silent> <C-w>n <C-w>N
-tnoremap <silent> <C-w>m <C-w>:call ZTerminalToggleScrolling()<CR>
-augroup ZTerminalWhitespace
-    autocmd!
-    autocmd TerminalOpen * DisableWhitespace
-    autocmd TerminalOpen * tnoremap <silent> <buffer> <ScrollWheelUp> <C-w>:call ZTerminalEnterNormalMode()<CR>
-augroup end
-
-function! ZTerminalEnterNormalMode()
-    if &buftype == 'terminal' && mode('') == 't'
-        call feedkeys("\<c-w>N")
-        call feedkeys("\<c-y>")
-    endif
-endfunction
-
-function! ZTerminalToggleScrolling()
-    if !exists('b:terminal_scrolling_enabled') || b:terminal_scrolling_enabled == 1
-        tunmap <silent> <buffer> <ScrollWheelUp>
-        let b:terminal_scrolling_enabled = 0
-    else
-        tnoremap <silent> <buffer> <ScrollWheelUp> <C-w>:call ZTerminalEnterNormalMode()<CR>
-        let b:terminal_scrolling_enabled = 1
-    endif
-endfunction
-
 " Generate Flags
 function! ZGenerateFlags()
     let cpp_include_1 = system("rg --files -g string_view /usr/lib 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
@@ -675,6 +645,37 @@ function! ZGenerateCompileCommandsJson()
         exec ":AsyncRun compiledb " . compile_command
     else
         exec ":AsyncRun python3 -m compiledb " . compile_command
+    endif
+endfunction
+" }}}
+
+" Terminal {{{
+nnoremap <silent> <leader>zb :below terminal ++rows=10<CR>
+nnoremap <silent> <leader>zs :below terminal<CR>
+nnoremap <silent> <leader>zv :vert rightb terminal<CR>
+tnoremap <silent> <C-w>w <C-w>:q<CR>
+tnoremap <silent> <C-w>n <C-w>N
+tnoremap <silent> <C-w>m <C-w>:call ZTerminalToggleScrolling()<CR>
+augroup ZTerminalWhitespace
+    autocmd!
+    autocmd TerminalOpen * DisableWhitespace
+    autocmd TerminalOpen * tnoremap <silent> <buffer> <ScrollWheelUp> <C-w>:call ZTerminalEnterNormalMode()<CR>
+augroup end
+
+function! ZTerminalEnterNormalMode()
+    if &buftype == 'terminal' && mode('') == 't'
+        call feedkeys("\<c-w>N")
+        call feedkeys("\<c-y>")
+    endif
+endfunction
+
+function! ZTerminalToggleScrolling()
+    if !exists('b:terminal_scrolling_enabled') || b:terminal_scrolling_enabled == 1
+        tunmap <silent> <buffer> <ScrollWheelUp>
+        let b:terminal_scrolling_enabled = 0
+    else
+        tnoremap <silent> <buffer> <ScrollWheelUp> <C-w>:call ZTerminalEnterNormalMode()<CR>
+        let b:terminal_scrolling_enabled = 1
     endif
 endfunction
 " }}}
