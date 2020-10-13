@@ -230,6 +230,7 @@ Plug 'kshenoy/vim-signature'
 Plug 'vim-python/python-syntax'
 Plug 'scrooloose/vim-slumlord'
 Plug 'aklt/plantuml-syntax'
+Plug 'skywind3000/asynctasks.vim'
 call plug#end()
 " }}}
 
@@ -482,7 +483,7 @@ endif
 " }}}
 
 " Copy / Paste Mode {{{
-nnoremap <silent> <F7> :set paste!<CR>:set number!<CR>:call ZToggleSignColumn()<CR>:call ZToggleMouse()<CR>
+nnoremap <silent> <F8> :set paste!<CR>:set number!<CR>:call ZToggleSignColumn()<CR>:call ZToggleMouse()<CR>
 " }}}
 
 " Resize splits {{{
@@ -1095,7 +1096,8 @@ endfunction
 " }}}
 
 " QuickFix {{{
-nnoremap <C-w>p :copen<CR>
+nnoremap <silent> <C-w>p :copen<CR>
+nnoremap <silent> <C-w>q :cclose<CR>
 " }}}
 
 " Undo Tree {{{
@@ -1871,6 +1873,30 @@ command! -nargs=0 ZUndoCleanup call ZUndoCleanup()
 function! ZUndoCleanup()
     copen
     AsyncRun find ~/.vim/undo -type f -mtime +90 -delete
+endfunction
+" }}}
+
+" Async tasks {{{
+let g:asyncrun_open = 6
+let g:asyncrun_rootmarks = ['.git', '.svn', '.root', '.project', '.hg', '.files', '.repo']
+noremap <silent> <F7> :call ZBuild()<CR>
+noremap <silent> <S-F7> :call ZBuildConfig()<CR>
+function! ZBuild()
+    if !filereadable('.tasks')
+        call ZBuildConfig()
+    endif
+    AsyncTask project-build
+endfunction
+function! ZBuildConfig()
+    call inputsave()
+    let command = input('Build command: ')
+    call inputrestore()
+    normal :<ESC>
+    if empty(command)
+        echom 'Empty build command!'
+        return
+    endif
+    call system("echo [project-build] > .tasks; echo 'command=" . command . "' >> .tasks")
 endfunction
 " }}}
 

@@ -149,7 +149,7 @@ H - Modify width - 1
 
 * Paste mode:
 ```
-<F7> - Toggle paste mode.
+<F8> - Toggle paste mode.
 ```
 
 * Git:
@@ -306,4 +306,16 @@ cf - Print current file path, if nerd tree is open, show it there as well.
 ```
 <C-l> - scroll right.
 <C-h> - scroll left.
+```
+
+* Start build:
+```
+<F7> - Start build, for first time it will ask the build command.
+<S-F7> - Config build.
+```
+
+* Quickfix window:
+```
+<C-w>p - Open quickfix.
+<C-w>q - Close quickfix.
 ```
