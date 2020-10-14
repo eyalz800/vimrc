@@ -321,3 +321,8 @@ cf - Print current file path, if nerd tree is open, show it there as well.
 <C-w>p - Open quickfix.
 <C-w>q - Close quickfix.
 ```
+
+* Toggle fold / unfold:
+```
+<leader>u - Toggle fold / unfold.
+```

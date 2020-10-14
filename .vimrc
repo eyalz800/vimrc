@@ -287,6 +287,7 @@ set t_u7= " Workaround for some terminals that make vim launch in relace mode
 set ttyfast " Fast terminal
 set lazyredraw " Redraw screen lazily
 set re=1 " Regex engine 1 feels smoother most of the times
+set foldmethod=marker " Marker based fold method
 " }}}
 
 " File indentation {{{
@@ -1932,6 +1933,17 @@ function! ZBuildConfig()
 
     if filereadable('.tmptasks')
         call system("mv .tmptasks .tasks")
+    endif
+endfunction
+" }}}
+
+" Toggle fold / unfold {{{
+nnoremap <silent> <leader>u :call ZToggleFold()<CR>
+function! ZToggleFold()
+    if &foldlevel == 0
+        set foldlevel=100
+    else
+        set foldlevel=0
     endif
 endfunction
 " }}}
