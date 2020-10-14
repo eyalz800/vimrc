@@ -277,7 +277,8 @@ set wildmode=list:longest,full " Enhanced completion menu
 set wildmenu " Enhanced completion menu
 set completeopt=longest,menuone,preview " Enhanced completion menu
 set nowrap " Do not wrap text
-set updatetime=300 " Write swp file and trigger cursor hold events every 300ms
+set updatetime=250 " Write swp file and trigger cursor hold events every X ms
+set balloondelay=250 " Fast balloon popup.
 set shortmess+=c " Short message when entering vim
 set hidden " Allow hidden buffers with writes
 set cursorline " Activate cursor line
