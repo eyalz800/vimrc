@@ -746,7 +746,7 @@ endfunction
 
 " NERDTree and TagBar {{{
 nnoremap <silent> <leader>ll :call ZToggleNerdTreeAndTagbar()<CR>
-nnoremap <silent> <leader>nf :call ZNerdTreeFind()<CR>
+nnoremap <silent> <leader>nf :NERDTreeFind<CR>
 nnoremap <silent> <leader>nt :call ZNerdTreeToggle()<CR>
 nnoremap <silent> <leader>tt :call ZTagbarToggle()<CR>
 nnoremap <silent> cf :call ZShowCurrentFile()<CR>
