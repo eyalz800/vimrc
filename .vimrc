@@ -256,7 +256,7 @@ endif
 " }}}
 
 " General configuration {{{
-syntax on " Activate syntax
+syntax enable " Activate syntax
 filetype plugin indent on " Activates filetype plugins
 set expandtab " Expands tabs to spaces
 set ignorecase " Ignore case
