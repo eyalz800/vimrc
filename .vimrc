@@ -288,6 +288,7 @@ set ttyfast " Fast terminal
 set lazyredraw " Redraw screen lazily
 set re=1 " Regex engine 1 feels smoother most of the times
 set foldmethod=marker " Marker based fold method
+set keymodel=startsel " Shifted special key starts selection
 " }}}
 
 " File indentation {{{
@@ -982,6 +983,7 @@ let g:cscopedb_auto_files = 0
 " Visual Multi {{{
 " Mappings - (See https://github.com/mg979/vim-visual-multi/wiki/Mappings)
 " Tutorial - ~/.vim/plugged/vim-visual-multi/doc/vm-tutorial
+let g:VM_default_mappings = 0
 let g:VM_theme = 'iceblue'
 let g:VM_leader = '<leader>m'
 let g:VM_maps = {
@@ -991,6 +993,12 @@ let g:VM_maps = {
     \ 'Start Regex Search': 'm/',
     \ 'Merge Regions': '<leader>mM',
     \ 'Toggle Multiline': '<leader>mL',
+    \ 'Select All': '<leader>mA',
+    \ 'Visual All': '<leader>mA',
+    \ 'Visual Add': '<leader>ma',
+    \ 'Visual Cursors': '<leader>mc',
+    \ 'Visual Find': '<leader>mf',
+    \ 'Visual Regex': '<leader>m/',
 \ }
 nmap <C-j> <plug>(VM-Add-Cursor-Down)
 nmap <C-k> <plug>(VM-Add-Cursor-Up)
