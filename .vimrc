@@ -231,6 +231,7 @@ Plug 'vim-python/python-syntax'
 Plug 'scrooloose/vim-slumlord'
 Plug 'aklt/plantuml-syntax'
 Plug 'skywind3000/asynctasks.vim'
+Plug 'yaronkh/vim-winmanip'
 call plug#end()
 " }}}
 
@@ -2412,6 +2413,43 @@ function! ZAirlineThemePatch(palette)
         let a:palette.inactive_modified.airline_error = airline_error
     endif
 endfunction
+" }}}
+
+" vim-winmanip {{{
+let g:winmanip_disable_key_mapping = 1
+nmap <silent> 1<Right> <Plug>(JumpRight)
+nmap <silent> 1<Left> <Plug>(JumpLeft)
+nmap <silent> 1<Down> <Plug>(JumpDown)
+nmap <silent> 1<Up> <Plug>(JumpUp)
+
+nmap <silent> <C-w><C-l> <Plug>(MoveBufRight)
+nmap <silent> <C-w><C-h> <Plug>(MoveBufLeft)
+nmap <silent> <C-w><C-j> <Plug>(MoveBufDown)
+nmap <silent> <C-w><C-k> <Plug>(MoveBufUp)
+
+nmap <silent> 2<Right> <Plug>(MoveBufRight)
+nmap <silent> 2<Left> <Plug>(MoveBufLeft)
+nmap <silent> 2<Down> <Plug>(MoveBufDown)
+nmap <silent> 2<Up> <Plug>(MoveBufUp)
+
+nmap <silent> 3<Right> <Plug>(MoveJumpBufRight)
+nmap <silent> 3<Left> <Plug>(MoveJumpBufLeft)
+nmap <silent> 3<Down> <Plug>(MoveJumpBufDown)
+nmap <silent> 3<Up> <Plug>(MoveJumpBufUp)
+
+nmap 4<Right> <Plug>(MoveWinToNextTab)
+nmap 4<Left> <Plug>(MoveWinToPrevTab)
+
+nmap <silent> 5<Right> <Plug>(CopyBufRight)
+nmap <silent> 5<Left> <Plug>(CopyBufLeft)
+nmap <silent> 5<Down> <Plug>(CopyBufDown)
+nmap <silent> 5<Up> <Plug>(CopyBufUp)
+
+nmap <silent> 6<Right> <Plug>(CopyJumpBufRight)
+nmap <silent> 6<Left> <Plug>(CopyJumpBufLeft)
+nmap <silent> 6<Down> <Plug>(CopyJumpBufDown)
+nmap <silent> 6<Up> <Plug>(CopyJumpBufUp)
+nmap <silent> <C-w>C <Plug>(ClearAllWindows)
 " }}}
 
 " Transparent background support {{{
