@@ -127,6 +127,12 @@ function! ZInstallVimrc()
                 \ https://github.com/jgm/pandoc/releases/download/2.10.1/pandoc-2.10.1-1-amd64.deb")
             call ZInstallCommand("dpkg -i ~/.vim/tmp/pandoc.deb")
         endif
+        call ZInstallCommand("
+            \ mkdir -p ~/.config/nvim
+            \ && echo 'set untimepath^=~/.vim runtimepath+=~/.vim/after' > ~/.config/nvim/init.vim
+            \ && echo 'let &packpath=&runtimepath' >> ~/.config/nvim/init.vim
+            \ && echo 'source ~/.vimrc' >> ~/.config/nvim/init.vim
+        \ ")
         call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim")
         call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.config")
         call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.cache")
@@ -232,6 +238,9 @@ Plug 'scrooloose/vim-slumlord'
 Plug 'aklt/plantuml-syntax'
 Plug 'skywind3000/asynctasks.vim'
 Plug 'yaronkh/vim-winmanip'
+if !empty($INSTALL_VIMRC_PLUGINS) || has('nvim')
+    Plug 'rbgrouleff/bclose.vim'
+endif
 call plug#end()
 " }}}
 
@@ -279,7 +288,6 @@ set wildmenu " Enhanced completion menu
 set completeopt=longest,menuone,preview " Enhanced completion menu
 set nowrap " Do not wrap text
 set updatetime=250 " Write swp file and trigger cursor hold events every X ms
-set balloondelay=250 " Fast balloon popup.
 set shortmess+=c " Short message when entering vim
 set hidden " Allow hidden buffers with writes
 set cursorline " Activate cursor line
@@ -292,6 +300,9 @@ set foldmethod=marker " Marker based fold method
 set keymodel=startsel,stopsel " Shifted special key starts selection
 set laststatus=2 " Add status line
 set noshowmode " Do not show command/insert/normal status
+if !has('nvim')
+    set balloondelay=250 " Fast balloon popup.
+endif
 " }}}
 
 " File indentation {{{
@@ -335,17 +346,28 @@ inoremap <silent> <C-a> <esc>ggVG
 
 " Clipboard {{{
 if !filereadable(expand('~/.vim/.noosccopy'))
-    vnoremap <silent> <C-c> "*y:ZOscCopy<CR>
-    vnoremap <silent> <C-x> "*d:ZOscCopy<CR>
+    let s:osc_clipboard = 1
+    if !has('nvim')
+        vnoremap <silent> <C-c> "*y:ZOscCopy<CR>
+        vnoremap <silent> <C-x> "*d:ZOscCopy<CR>
+        inoremap <silent> <C-v> <C-o>"*gpa
+        nnoremap <silent> <C-v> "*p
+    else
+        vnoremap <silent> <C-c> ""y:ZOscCopy<CR>
+        vnoremap <silent> <C-x> ""d:ZOscCopy<CR>
+        inoremap <silent> <C-v> <C-o>""gpa
+        nnoremap <silent> <C-v> ""p
+    endif
 else
+    let s:osc_clipboard = 0
     vnoremap <silent> <C-c> "*y
     vnoremap <silent> <C-x> "*d
+    inoremap <silent> <C-v> <C-o>"*gpa
+    nnoremap <silent> <C-v> "*p
 endif
-inoremap <silent> <C-v> <C-o>"*gpa
-nnoremap <silent> <C-v> "*p
-if empty($SSH_CONNECTION) || filereadable(expand('~/.vim/.forcexserver'))
+if s:osc_clipboard && (empty($SSH_CONNECTION) || filereadable(expand('~/.vim/.forcexserver')))
     set clipboard=unnamed
-else
+elseif !has('nvim')
     set clipboard=exclude:.*
 endif
 command! ZOscCopy call ZOscCopy()
@@ -357,10 +379,21 @@ function! ZOscCopy()
     let encodedText=substitute(encodedText, "'", "'\\\\''", "g")
     let executeCmd="echo -n '".encodedText."' | base64 | tr -d '\\n'"
     let encodedText=system(executeCmd)
-    if !empty($TMUX)
-        let executeCmd='echo -en "\x1bPtmux;\x1b\x1b]52;;'.encodedText.'\x1b\x1b\\\\\x1b\\" > /dev/tty'
+    if !has('nvim')
+        if !empty($TMUX)
+            let executeCmd='echo -en "\x1bPtmux;\x1b\x1b]52;;'.encodedText.'\x1b\x1b\\\\\x1b\\" > /dev/tty'
+        else
+            let executeCmd='echo -en "\x1b]52;;'.encodedText.'\x1b\\" > /dev/tty'
+        endif
     else
-        let executeCmd='echo -en "\x1b]52;;'.encodedText.'\x1b\\" > /dev/tty'
+        if !exists('g:nvim_tty')
+            let g:nvim_tty = system('(tty || tty </proc/$PPID/fd/0) 2>/dev/null | grep /dev/')
+        endif
+        if !empty($TMUX)
+            let executeCmd='echo -en "\x1bPtmux;\x1b\x1b]52;;'.encodedText.'\x1b\x1b\\\\\x1b\\" > ' . g:nvim_tty
+        else
+            let executeCmd='echo -en "\x1b]52;;'.encodedText.'\x1b\\" > ' . g:nvim_tty
+        endif
     endif
     call system(executeCmd)
 endfunction
@@ -408,7 +441,11 @@ function! ZXTermPasteBegin(ret)
 endfunction
 augroup ZTerminalBracketedPaste
     autocmd!
-    autocmd TerminalOpen * exec "setlocal <f22>= | setlocal <f23>= "
+    if !has('nvim')
+        autocmd TerminalOpen * exec "setlocal <f22>= | setlocal <f23>= "
+    else
+        autocmd TermOpen * exec "setlocal <f22>= | setlocal <f23>= "
+    endif
 augroup end
 " }}}
 
@@ -445,7 +482,7 @@ endfunction
 set mouse=a
 if has('mouse_sgr')
     set ttymouse=sgr
-else
+elseif !has('nvim')
     set ttymouse=xterm2
 endif
 nnoremap <silent> <leader>zm :call ZToggleMouse()<CR>
@@ -457,7 +494,7 @@ function! ZToggleMouse()
         set mouse=a
         if has('mouse_sgr')
             set ttymouse=sgr
-        else
+        elseif !has('nvim')
             set ttymouse=xterm2
         endif
     endif
@@ -657,16 +694,30 @@ endfunction
 " }}}
 
 " Terminal {{{
-nnoremap <silent> <leader>zb :below terminal ++rows=10<CR>
-nnoremap <silent> <leader>zs :below terminal<CR>
-nnoremap <silent> <leader>zv :vert rightb terminal<CR>
-tnoremap <silent> <C-w>w <C-w>:q<CR>
-tnoremap <silent> <C-w>n <C-w>N
-tnoremap <silent> <C-w>m <C-w>:call ZTerminalToggleScrolling()<CR>
+if !has('nvim')
+    nnoremap <silent> <leader>zb :below terminal ++rows=10<CR>
+    nnoremap <silent> <leader>zs :below terminal<CR>
+    nnoremap <silent> <leader>zv :vert rightb terminal<CR>
+    tnoremap <silent> <C-w>w <C-w>:q<CR>
+    tnoremap <silent> <C-w>n <C-w>N
+    tnoremap <silent> <C-w>m <C-w>:call ZTerminalToggleScrolling()<CR>
+else
+    nnoremap <silent> <leader>zb :below 10new +terminal<CR>a
+    nnoremap <silent> <leader>zs :below new +terminal<CR>a
+    nnoremap <silent> <leader>zv :vert rightb new +terminal<CR>a
+    tnoremap <silent> <C-w>w <C-\><C-n>:q<CR>
+    tnoremap <silent> <C-w>n <C-\><C-n>
+    tnoremap <silent> <C-w>m <C-\><C-n>:call ZTerminalToggleScrolling()<CR>a
+endif
 augroup ZTerminalWhitespace
     autocmd!
-    autocmd TerminalOpen * DisableWhitespace
-    autocmd TerminalOpen * tnoremap <silent> <buffer> <ScrollWheelUp> <C-w>:call ZTerminalEnterNormalMode()<CR>
+    if !has('nvim')
+        autocmd TerminalOpen * DisableWhitespace
+        autocmd TerminalOpen * tnoremap <silent> <buffer> <ScrollWheelUp> <C-w>:call ZTerminalEnterNormalMode()<CR>
+    else
+        autocmd TermOpen * DisableWhitespace
+        autocmd TermOpen * tnoremap <silent> <buffer> <ScrollWheelUp> <C-\><C-n>:call ZTerminalEnterNormalMode()<CR>
+    endif
 augroup end
 
 function! ZTerminalEnterNormalMode()
@@ -681,7 +732,7 @@ function! ZTerminalToggleScrolling()
         tunmap <silent> <buffer> <ScrollWheelUp>
         let b:terminal_scrolling_enabled = 0
     else
-        tnoremap <silent> <buffer> <ScrollWheelUp> <C-w>:call ZTerminalEnterNormalMode()<CR>
+        tnoremap <silent> <buffer> <ScrollWheelUp> <C-\><C-n>:call ZTerminalEnterNormalMode()<CR>
         let b:terminal_scrolling_enabled = 1
     endif
 endfunction
@@ -810,9 +861,25 @@ nnoremap <silent> <leader>gl :call ZPopTerminal('lazygit -p ' .  expand('%:p:h')
 
 " Pop Terminal {{{
 function! ZPopTerminal(command)
-    let buf = term_start(a:command, #{hidden: 1, term_finish: 'close'})
-    let winid = popup_dialog(buf, #{minheight: 40, minwidth: 150})
-    let bufn = winbufnr(winid)
+    if !has('nvim')
+        let buf = term_start(a:command, #{hidden: 1, term_finish: 'close'})
+        let winid = popup_dialog(buf, #{minheight: 40, minwidth: 150})
+        let bufn = winbufnr(winid)
+    else
+        let termopen_opts = {}
+        function! termopen_opts.on_exit(job_id, code, event)
+            for buf in getbufinfo()
+                if has_key(buf.variables, 'terminal_job_id') && buf.variables.terminal_job_id == a:job_id
+                    let bufnr = buf.bufnr
+                    break
+                endif
+            endfor
+            call execute('Bclose! ' . bufnr)
+        endfunction
+        call termopen(a:command, termopen_opts)
+        tunmap <silent> <buffer> <ScrollWheelUp>
+        startinsert
+    endif
 endfunction
 " }}}
 
@@ -2153,23 +2220,42 @@ endfunction
 " Additional color settings {{{
 if g:colors_name == 'codedark'
     " Terminal ansi colors
-    let g:terminal_ansi_colors =
-    \ ['#282C34',
-    \ '#E06C75',
-    \ '#98C379',
-    \ '#E5C07B',
-    \ '#61AFEF',
-    \ '#C678DD',
-    \ '#56B6C2',
-    \ '#ABB2BF',
-    \ '#3E4452',
-    \ '#BE5046',
-    \ '#98C379',
-    \ '#D19A66',
-    \ '#61AFEF',
-    \ '#C678DD',
-    \ '#56B6C2',
-    \ '#5C6370']
+    if !has('nvim')
+        let g:terminal_ansi_colors =
+        \ ['#282C34',
+        \ '#E06C75',
+        \ '#98C379',
+        \ '#E5C07B',
+        \ '#61AFEF',
+        \ '#C678DD',
+        \ '#56B6C2',
+        \ '#ABB2BF',
+        \ '#3E4452',
+        \ '#BE5046',
+        \ '#98C379',
+        \ '#D19A66',
+        \ '#61AFEF',
+        \ '#C678DD',
+        \ '#56B6C2',
+        \ '#5C6370']
+    else
+        let g:terminal_color_0 = '#282C34'
+        let g:terminal_color_1 = '#E06C75'
+        let g:terminal_color_2 = '#98C379'
+        let g:terminal_color_3 = '#E5C07B'
+        let g:terminal_color_4 = '#61AFEF'
+        let g:terminal_color_5 = '#C678DD'
+        let g:terminal_color_6 = '#56B6C2'
+        let g:terminal_color_7 = '#ABB2BF'
+        let g:terminal_color_8 = '#3E4452'
+        let g:terminal_color_9 = '#BE5046'
+        let g:terminal_color_10 = '#98C379'
+        let g:terminal_color_11 = '#D19A66'
+        let g:terminal_color_12 = '#61AFEF'
+        let g:terminal_color_13 = '#C678DD'
+        let g:terminal_color_14 = '#56B6C2'
+        let g:terminal_color_15 = '#5C6370'
+    endif
 
     let s:cterm00 = "00"
     let s:cterm03 = "08"
