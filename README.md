@@ -254,9 +254,9 @@ vimdiff -b [binary_file_1] [binary_file_2]
 <leader>bf - Switch to/from binary file editting.
 ```
 
-* Objdump:
+* Disassembly view (objdump):
 ```
-<leader>od - Switch to/from objdump view of the file.
+<leader>dv - Switch to/from disassembly view of the file.
 ```
 
 * Directory switching:

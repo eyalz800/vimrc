@@ -1766,7 +1766,7 @@ endfunction
 " }}}
 
 " Objdump {{{
-nnoremap <silent> <leader>od :call ZObjdump()<CR>
+nnoremap <silent> <leader>dv :call ZObjdump()<CR>
 command! -nargs=0 ZObjdump call ZObjdump()
 function! ZObjdump()
     if exists('b:objdump_view') && b:objdump_view == 1
