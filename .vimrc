@@ -348,13 +348,13 @@ inoremap <silent> <C-a> <esc>ggVG
 if !filereadable(expand('~/.vim/.noosccopy'))
     let s:osc_clipboard = 1
     if !has('nvim')
-        vnoremap <silent> <C-c> "*y:ZOscCopy<CR>
-        vnoremap <silent> <C-x> "*d:ZOscCopy<CR>
+        vnoremap <silent> <C-c> "*y:call ZOscCopy()<CR>
+        vnoremap <silent> <C-x> "*d:call ZOscCopy()<CR>
         inoremap <silent> <C-v> <C-o>"*gpa
         nnoremap <silent> <C-v> "*p
     else
-        vnoremap <silent> <C-c> ""y:ZOscCopy<CR>
-        vnoremap <silent> <C-x> ""d:ZOscCopy<CR>
+        vnoremap <silent> <C-c> ""y:call ZOscCopyPtty()<CR>
+        vnoremap <silent> <C-x> ""d:call ZOscCopyPtty()<CR>
         inoremap <silent> <C-v> <C-o>""gpa
         nnoremap <silent> <C-v> ""p
     endif
@@ -370,7 +370,6 @@ if s:osc_clipboard && (empty($SSH_CONNECTION) || filereadable(expand('~/.vim/.fo
 elseif !has('nvim')
     set clipboard=exclude:.*
 endif
-command! ZOscCopy call ZOscCopy()
 command! ZToggleOscCopy call ZToggleOscCopy() | source ~/.vimrc
 command! ZToggleForceXServer call ZToggleForceXServer()
 function! ZOscCopy()
@@ -379,21 +378,26 @@ function! ZOscCopy()
     let encodedText=substitute(encodedText, "'", "'\\\\''", "g")
     let executeCmd="echo -n '".encodedText."' | base64 | tr -d '\\n'"
     let encodedText=system(executeCmd)
-    if !has('nvim')
-        if !empty($TMUX)
-            let executeCmd='echo -en "\x1bPtmux;\x1b\x1b]52;;'.encodedText.'\x1b\x1b\\\\\x1b\\" > /dev/tty'
-        else
-            let executeCmd='echo -en "\x1b]52;;'.encodedText.'\x1b\\" > /dev/tty'
-        endif
+    if !empty($TMUX)
+        let executeCmd='echo -en "\x1bPtmux;\x1b\x1b]52;;'.encodedText.'\x1b\x1b\\\\\x1b\\" > /dev/tty'
     else
-        if !exists('g:nvim_tty')
-            let g:nvim_tty = system('(tty || tty </proc/$PPID/fd/0) 2>/dev/null | grep /dev/')
-        endif
-        if !empty($TMUX)
-            let executeCmd='echo -en "\x1bPtmux;\x1b\x1b]52;;'.encodedText.'\x1b\x1b\\\\\x1b\\" > ' . g:nvim_tty
-        else
-            let executeCmd='echo -en "\x1b]52;;'.encodedText.'\x1b\\" > ' . g:nvim_tty
-        endif
+        let executeCmd='echo -en "\x1b]52;;'.encodedText.'\x1b\\" > /dev/tty'
+    endif
+    call system(executeCmd)
+endfunction
+function! ZOscCopyPtty()
+    let encodedText=@"
+    let encodedText=substitute(encodedText, '\', '\\', "g")
+    let encodedText=substitute(encodedText, "'", "'\\\\''", "g")
+    let executeCmd="echo -n '".encodedText."' | base64 | tr -d '\\n'"
+    let encodedText=system(executeCmd)
+    if !exists('g:vim_tty')
+        let g:vim_tty = system('(tty || tty </proc/$PPID/fd/0) 2>/dev/null | grep /dev/')
+    endif
+    if !empty($TMUX)
+        let executeCmd='echo -en "\x1bPtmux;\x1b\x1b]52;;'.encodedText.'\x1b\x1b\\\\\x1b\\" > ' . g:vim_tty
+    else
+        let executeCmd='echo -en "\x1b]52;;'.encodedText.'\x1b\\" > ' . g:vim_tty
     endif
     call system(executeCmd)
 endfunction
