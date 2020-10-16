@@ -350,19 +350,19 @@ if !filereadable(expand('~/.vim/.noosccopy'))
     if !has('nvim')
         vnoremap <silent> <C-c> "*y:call ZOscCopy()<CR>
         vnoremap <silent> <C-x> "*d:call ZOscCopy()<CR>
-        inoremap <silent> <C-v> <C-o>"*gpa
+        inoremap <silent> <C-v> <C-o>"*gp
         nnoremap <silent> <C-v> "*p
     else
         vnoremap <silent> <C-c> ""y:call ZOscCopyPtty()<CR>
         vnoremap <silent> <C-x> ""d:call ZOscCopyPtty()<CR>
-        inoremap <silent> <C-v> <C-o>""gpa
+        inoremap <silent> <C-v> <C-o>""gp
         nnoremap <silent> <C-v> ""p
     endif
 else
     let s:osc_clipboard = 0
     vnoremap <silent> <C-c> "*y
     vnoremap <silent> <C-x> "*d
-    inoremap <silent> <C-v> <C-o>"*gpa
+    inoremap <silent> <C-v> <C-o>"*gp
     nnoremap <silent> <C-v> "*p
 endif
 if s:osc_clipboard && (empty($SSH_CONNECTION) || filereadable(expand('~/.vim/.forcexserver')))
