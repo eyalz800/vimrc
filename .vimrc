@@ -1965,7 +1965,11 @@ let g:asynctasks_term_reuse = 1
 noremap <silent> <F7> :call ZBuildProject()<CR>
 noremap <silent> <S-F7> :call ZCleanProject()<CR>
 noremap <silent> <C-F7> :call ZBuildConfig()<CR>
-noremap <silent> <C-F5> :call ZRunProject()<CR>
+if !has('nvim')
+    noremap <silent> <C-F5> :call ZRunProject()<CR>
+else
+    noremap <silent> <F29> :call ZRunProject()<CR>
+endif
 function! ZBuildProject()
     if !filereadable('.tasks')
         call ZBuildConfig()
