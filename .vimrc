@@ -713,14 +713,16 @@ else
     tnoremap <silent> <C-w>n <C-\><C-n>
     tnoremap <silent> <C-w>m <C-\><C-n>:call ZTerminalToggleScrolling()<CR>a
 endif
-augroup ZTerminalWhitespace
+augroup ZTerminalAutoCommands
     autocmd!
     if !has('nvim')
         autocmd TerminalOpen * DisableWhitespace
         autocmd TerminalOpen * tnoremap <silent> <buffer> <ScrollWheelUp> <C-w>:call ZTerminalEnterNormalMode()<CR>
+        autocmd TerminalOpen * setlocal nonumber signcolumn=no
     else
         autocmd TermOpen * DisableWhitespace
         autocmd TermOpen * tnoremap <silent> <buffer> <ScrollWheelUp> <C-\><C-n>:call ZTerminalEnterNormalMode()<CR>
+        autocmd TermOpen * setlocal nonumber signcolumn=no
     endif
 augroup end
 
