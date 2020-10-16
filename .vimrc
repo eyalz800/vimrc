@@ -127,12 +127,14 @@ function! ZInstallVimrc()
                 \ https://github.com/jgm/pandoc/releases/download/2.10.1/pandoc-2.10.1-1-amd64.deb")
             call ZInstallCommand("dpkg -i ~/.vim/tmp/pandoc.deb")
         endif
-        call ZInstallCommand("
-            \ mkdir -p ~/.config/nvim
-            \ && echo 'set untimepath^=~/.vim runtimepath+=~/.vim/after' > ~/.config/nvim/init.vim
-            \ && echo 'let &packpath=&runtimepath' >> ~/.config/nvim/init.vim
-            \ && echo 'source ~/.vimrc' >> ~/.config/nvim/init.vim
-        \ ")
+        if !filereadable(expand('~/.config/nvim/init.vim'))
+            call ZInstallCommand("
+                \ mkdir -p ~/.config/nvim
+                \ && echo 'set untimepath^=~/.vim runtimepath+=~/.vim/after' > ~/.config/nvim/init.vim
+                \ && echo 'let &packpath=&runtimepath' >> ~/.config/nvim/init.vim
+                \ && echo 'source ~/.vimrc' >> ~/.config/nvim/init.vim
+            \ ")
+        endif
         call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim")
         call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.config")
         call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.cache")
