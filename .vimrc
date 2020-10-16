@@ -365,7 +365,7 @@ else
     inoremap <silent> <C-v> <C-o>"*gp
     nnoremap <silent> <C-v> "*p
 endif
-if s:osc_clipboard && (empty($SSH_CONNECTION) || filereadable(expand('~/.vim/.forcexserver')))
+if !s:osc_clipboard && (empty($SSH_CONNECTION) || filereadable(expand('~/.vim/.forcexserver')))
     set clipboard=unnamed
 elseif !has('nvim')
     set clipboard=exclude:.*
