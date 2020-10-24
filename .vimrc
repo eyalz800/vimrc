@@ -720,7 +720,6 @@ augroup ZTerminalAutoCommands
     if !has('nvim')
         autocmd TerminalOpen * DisableWhitespace
         autocmd TerminalOpen * tnoremap <silent> <buffer> <ScrollWheelUp> <C-w>:call ZTerminalEnterNormalMode()<CR>
-        autocmd TerminalOpen * setlocal nonumber signcolumn=no
     else
         autocmd TermOpen * DisableWhitespace
         autocmd TermOpen * tnoremap <silent> <buffer> <ScrollWheelUp> <C-\><C-n>:call ZTerminalEnterNormalMode()<CR>
