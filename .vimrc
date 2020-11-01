@@ -181,66 +181,93 @@ function! ZToggleLspPersistent()
 endfunction
 " }}}
 
+" Async Plug Load {{{
+function! ZLoadPlugin(plugin, ...) abort
+    call plug#load(a:plugin)
+    if a:0
+        silent execute a:1
+    endif
+endfunction
+
+function! ZAsyncLoadPlugin(github_ref, ...) abort
+    let plug_args = a:0 ? a:1 : {}
+    if !has('vim_starting') || !empty($INSTALL_VIMRC_PLUGINS)
+        call plug#(a:github_ref, plug_args)
+        return
+    endif
+    call extend(plug_args, { 'on': [] })
+    call plug#(a:github_ref, plug_args)
+    let plugin = a:github_ref[stridx(a:github_ref, '/') + 1:]
+    let args = '"'.plugin.'"'
+    if a:0 > 1
+        let args .= ', "'.a:2.'"'
+    endif
+    call timer_start(0, {tid->execute('call ZLoadPlugin('.args.')')})
+endfunction
+
+command! -nargs=+ ZAsyncPlug call ZAsyncLoadPlugin(<args>)
+" }}}
+
 " Plugins {{{
 call plug#begin()
-Plug 'puremourning/vimspector'
-Plug 'preservim/nerdtree', {'on': ['NERDTreeToggle', 'NERDTree', 'NERDTreeFind']}
-Plug 'majutsushi/tagbar', {'on': ['TagbarToggle', 'TagbarOpen']}
-Plug 'ludovicchabant/vim-gutentags'
+ZAsyncPlug 'puremourning/vimspector'
+ZAsyncPlug 'preservim/nerdtree'
+ZAsyncPlug 'majutsushi/tagbar'
+ZAsyncPlug 'ludovicchabant/vim-gutentags'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-Plug 'ervandew/supertab'
-Plug 'vim-airline/vim-airline'
-Plug 'skywind3000/asyncrun.vim'
-Plug 'justinmk/vim-sneak'
-Plug 'easymotion/vim-easymotion'
-Plug 'mg979/vim-visual-multi'
-Plug 'erig0/cscope_dynamic'
-Plug 'octol/vim-cpp-enhanced-highlight'
-Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-fugitive'
+ZAsyncPlug 'junegunn/fzf.vim'
+ZAsyncPlug 'ervandew/supertab'
+ZAsyncPlug 'vim-airline/vim-airline'
+ZAsyncPlug 'skywind3000/asyncrun.vim'
+ZAsyncPlug 'justinmk/vim-sneak'
+ZAsyncPlug 'easymotion/vim-easymotion'
+ZAsyncPlug 'mg979/vim-visual-multi'
+ZAsyncPlug 'erig0/cscope_dynamic'
+ZAsyncPlug 'octol/vim-cpp-enhanced-highlight'
+ZAsyncPlug 'airblade/vim-gitgutter'
+ZAsyncPlug 'tpope/vim-fugitive'
 if !empty($INSTALL_VIMRC_PLUGINS) || g:lsp_choice == 'vim-lsp'
-    Plug 'prabirshrestha/async.vim'
-    Plug 'prabirshrestha/vim-lsp'
-    Plug 'prabirshrestha/asyncomplete.vim'
-    Plug 'prabirshrestha/asyncomplete-lsp.vim'
-    Plug 'prabirshrestha/asyncomplete-tags.vim'
+    ZAsyncPlug 'prabirshrestha/async.vim'
+    ZAsyncPlug 'prabirshrestha/vim-lsp'
+    ZAsyncPlug 'prabirshrestha/asyncomplete.vim'
+    ZAsyncPlug 'prabirshrestha/asyncomplete-lsp.vim'
+    ZAsyncPlug 'prabirshrestha/asyncomplete-tags.vim'
 endif
 if !empty($INSTALL_VIMRC_PLUGINS) || g:lsp_choice == 'coc'
-    Plug 'neoclide/coc.nvim', { 'branch': 'release' }
-    Plug 'antoinemadec/coc-fzf', { 'branch': 'release' }
+    ZAsyncPlug 'neoclide/coc.nvim', { 'branch': 'release' }
+    ZAsyncPlug 'antoinemadec/coc-fzf', { 'branch': 'release' }
 endif
 if !empty($INSTALL_VIMRC_PLUGINS) || g:lsp_choice != 'coc'
-    Plug 'vim-scripts/AutoComplPop'
-    Plug 'vim-scripts/OmniCppComplete'
+    ZAsyncPlug 'vim-scripts/AutoComplPop'
+    ZAsyncPlug 'vim-scripts/OmniCppComplete'
 endif
 Plug 'tmsvg/pear-tree'
-Plug 'mbbill/undotree'
-Plug 'thezeroalpha/vim-lf'
-Plug 'tpope/vim-commentary'
+ZAsyncPlug 'mbbill/undotree'
+ZAsyncPlug 'thezeroalpha/vim-lf'
+ZAsyncPlug 'tpope/vim-commentary'
 Plug 'tomasiser/vim-code-dark'
-Plug 'ntpeters/vim-better-whitespace'
-Plug 'troydm/zoomwintab.vim'
+ZAsyncPlug 'ntpeters/vim-better-whitespace'
+ZAsyncPlug 'troydm/zoomwintab.vim'
 if !empty($INSTALL_VIMRC_PLUGINS) || exists('g:not_inside_vim') || empty($INSIDE_VIM)
     Plug 'wincent/terminus'
 endif
-Plug 'jreybert/vimagit', { 'on': ['Magit', 'MagitOnly'] }
-Plug 'tpope/vim-obsession'
+ZAsyncPlug 'jreybert/vimagit'
+ZAsyncPlug 'tpope/vim-obsession'
 Plug 'haya14busa/incsearch.vim'
-Plug 'haya14busa/incsearch-fuzzy.vim'
+ZAsyncPlug 'haya14busa/incsearch-fuzzy.vim'
 Plug 'joshdick/onedark.vim'
 Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'tpope/vim-surround'
-Plug 'j5shi/CommandlineComplete.vim'
-Plug 'kshenoy/vim-signature'
-Plug 'vim-python/python-syntax'
-Plug 'scrooloose/vim-slumlord'
-Plug 'aklt/plantuml-syntax'
-Plug 'skywind3000/asynctasks.vim'
+ZAsyncPlug 'christoomey/vim-tmux-navigator'
+ZAsyncPlug 'tpope/vim-surround'
+ZAsyncPlug 'j5shi/CommandlineComplete.vim'
+ZAsyncPlug 'kshenoy/vim-signature'
+ZAsyncPlug 'vim-python/python-syntax'
+ZAsyncPlug 'scrooloose/vim-slumlord'
+ZAsyncPlug 'aklt/plantuml-syntax'
+ZAsyncPlug 'skywind3000/asynctasks.vim'
 Plug 'yaronkh/vim-winmanip'
 if !empty($INSTALL_VIMRC_PLUGINS) || has('nvim')
-    Plug 'rbgrouleff/bclose.vim'
+    ZAsyncPlug 'rbgrouleff/bclose.vim'
 endif
 call plug#end()
 " }}}
