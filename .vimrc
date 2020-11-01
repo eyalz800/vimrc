@@ -150,15 +150,10 @@ function! ZInstallVimrc()
         \ ")
         call ZInstallCommand("sudo -u $SUDO_USER INSTALL_VIMRC_PLUGINS=1 INSTALL_VIMRC= vim -E -s -u ~/.vimrc +qa")
         call ZInstallCommand("sudo -u $SUDO_USER " . python3_command . " ~/.vim/plugged/vimspector/install_gadget.py --sudo --enable-c --enable-python")
-        call ZCustomizePlugins()
     catch
         echo v:exception
         exec ":cq"
     endtry
-endfunction
-
-function! ZCustomizePlugins()
-    call ZInstallCommand(s:sed . " -i 's/call s:runShellCommand/call system/g' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim")
 endfunction
 
 if !empty($INSTALL_VIMRC)
@@ -222,7 +217,7 @@ ZAsyncPlug 'skywind3000/asyncrun.vim'
 ZAsyncPlug 'justinmk/vim-sneak'
 ZAsyncPlug 'easymotion/vim-easymotion'
 ZAsyncPlug 'mg979/vim-visual-multi'
-ZAsyncPlug 'erig0/cscope_dynamic'
+ZAsyncPlug 'erig0/cscope_dynamic', { 'do': s:sed . " -i 's/call s:runShellCommand/call system/g' ./plugin/cscope_dynamic.vim" }
 ZAsyncPlug 'octol/vim-cpp-enhanced-highlight'
 ZAsyncPlug 'airblade/vim-gitgutter'
 ZAsyncPlug 'tpope/vim-fugitive'
