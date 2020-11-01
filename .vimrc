@@ -158,8 +158,7 @@ function! ZInstallVimrc()
 endfunction
 
 function! ZCustomizePlugins()
-    call ZInstallCommand(s:sed . " -i 's@ . redraw\\!@ . \" > /dev/null\"@' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim")
-    call ZInstallCommand(s:sed . " -i 's@silent execute \"perl system.*@silent execute \"\\!\" . a:cmd . \" > /dev/null\"@' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim")
+    call ZInstallCommand(s:sed . " -i 's/call s:runShellCommand/call system/g' ~/.vim/plugged/cscope_dynamic/plugin/cscope_dynamic.vim")
 endfunction
 
 if !empty($INSTALL_VIMRC)
