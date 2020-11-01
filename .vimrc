@@ -260,7 +260,7 @@ ZAsyncPlug 'vim-python/python-syntax'
 ZAsyncPlug 'scrooloose/vim-slumlord'
 ZAsyncPlug 'aklt/plantuml-syntax'
 ZAsyncPlug 'skywind3000/asynctasks.vim'
-Plug 'yaronkh/vim-winmanip'
+ZAsyncPlug 'yaronkh/vim-winmanip'
 if !empty($INSTALL_VIMRC_PLUGINS) || has('nvim')
     ZAsyncPlug 'rbgrouleff/bclose.vim'
 endif
