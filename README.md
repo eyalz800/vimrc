@@ -165,6 +165,7 @@ H - Modify width - 1
     - Shift-A to commit ammend.
     - Shift-P to push.
     - ? for help.
+<leader>gL - Lazy git launch in current dir instead of file dir.
 ```
 
 * Comment in/out:
