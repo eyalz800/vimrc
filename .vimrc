@@ -52,6 +52,7 @@ function! ZInstallVimrc()
         else
             call ZInstallCommand("sudo -u $SUDO_USER brew install curl ag ctags cscope git
                 \ llvm make autoconf automake pkg-config python3 nodejs gnu-sed bat ripgrep lazygit golang pandoc || true")
+            call ZInstallCommand("rm -rf /usr/local/bin/2to3")
             call ZInstallCommand("sudo -u $SUDO_USER brew link python3")
             call ZInstallCommand("sudo -u $SUDO_USER brew tap AdoptOpenJDK/openjdk")
             call ZInstallCommand("sudo -u $SUDO_USER brew cask install adoptopenjdk/openjdk/adoptopenjdk8")
