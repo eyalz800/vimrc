@@ -2026,7 +2026,7 @@ function! ZBuildConfig()
     call inputrestore()
     normal :<ESC>
     if !empty(command)
-        call system("echo -e [project-build] > .tmptasks; echo 'command=" . command . "\n' >> .tmptasks")
+        call system("echo '[project-build]' > .tmptasks; echo -e 'command=" . command . "\n' >> .tmptasks")
     endif
 
     call inputsave()
@@ -2034,7 +2034,7 @@ function! ZBuildConfig()
     call inputrestore()
     normal :<ESC>
     if !empty(command)
-        call system("echo -e [project-clean] >> .tmptasks; echo 'command=" . command . "\n' >> .tmptasks")
+        call system("echo '[project-clean]' >> .tmptasks; echo -e 'command=" . command . "\n' >> .tmptasks")
     endif
 
     call inputsave()
@@ -2042,7 +2042,7 @@ function! ZBuildConfig()
     call inputrestore()
     normal :<ESC>
     if !empty(command)
-        call system("echo -e [project-run] >> .tmptasks; echo 'command=" . command . "\n' >> .tmptasks; echo output=terminal >> .tmptasks")
+        call system("echo '[project-run]' >> .tmptasks; echo -e 'command=" . command . "\n' >> .tmptasks; echo output=terminal >> .tmptasks")
     endif
 
     if filereadable('.tmptasks')
