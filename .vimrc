@@ -244,7 +244,7 @@ ZAsyncPlug 'tpope/vim-commentary'
 Plug 'tomasiser/vim-code-dark'
 ZAsyncPlug 'ntpeters/vim-better-whitespace'
 ZAsyncPlug 'troydm/zoomwintab.vim'
-if !empty($INSTALL_VIMRC_PLUGINS) || exists('g:not_inside_vim') || empty($INSIDE_VIM)
+if !empty($INSTALL_VIMRC_PLUGINS) || ((exists('g:not_inside_vim') || empty($INSIDE_VIM)) && !filereadable(expand('~/.vim/.terminus_off')))
     Plug 'wincent/terminus'
 endif
 ZAsyncPlug 'jreybert/vimagit'
@@ -480,6 +480,15 @@ augroup end
 " Terminus {{{
 " Disable terminus bracketed paste
 let g:TerminusBracketedPaste = 0
+
+function! ZToggleTerminus()
+    if filereadable(expand('~/.vim/.terminus_off'))
+        call system("rm ~/.vim/.terminus_off")
+    else
+        call system("touch ~/.vim/.terminus_off")
+    endif
+endfunction
+command! ZToggleTerminus call ZToggleTerminus()
 " }}}
 
 " Cursor shape on entry {{{
