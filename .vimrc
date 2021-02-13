@@ -2178,6 +2178,7 @@ function! ZVimspectorGenerateCpp()
             \ echo '            \"configuration\": {' >> .vimspector.json &&
             \ echo '                \"request\": \"launch\",' >> .vimspector.json &&
             \ echo '                \"program\": \"" . main_file . "\",' >> .vimspector.json &&
+            \ echo '                \"cwd\": \"${workspaceRoot}\",' >> .vimspector.json &&
             \ echo '                \"type\": \"cppdbg\",' >> .vimspector.json &&
             \ echo '                \"setupCommands\": [' >> .vimspector.json &&
             \ echo '                    { \"text\": \"set disassembly-flavor intel\", \"description\": \"\", \"ignoreFailures\": false },' >> .vimspector.json &&
