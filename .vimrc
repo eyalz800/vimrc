@@ -244,7 +244,7 @@ ZAsyncPlug 'tpope/vim-commentary'
 Plug 'tomasiser/vim-code-dark'
 ZAsyncPlug 'ntpeters/vim-better-whitespace'
 ZAsyncPlug 'troydm/zoomwintab.vim'
-if !empty($INSTALL_VIMRC_PLUGINS) || ((exists('g:not_inside_vim') || empty($INSIDE_VIM)) && !filereadable(expand('~/.vim/.terminus_off')))
+if !empty($INSTALL_VIMRC_PLUGINS) || ((exists('g:not_inside_vim') || empty($INSIDE_VIM)) && filereadable(expand('~/.vim/.terminus_on')))
     Plug 'wincent/terminus'
 endif
 ZAsyncPlug 'jreybert/vimagit'
@@ -482,10 +482,10 @@ augroup end
 let g:TerminusBracketedPaste = 0
 
 function! ZToggleTerminus()
-    if filereadable(expand('~/.vim/.terminus_off'))
-        call system("rm ~/.vim/.terminus_off")
+    if filereadable(expand('~/.vim/.terminus_on'))
+        call system("rm ~/.vim/.terminus_on")
     else
-        call system("touch ~/.vim/.terminus_off")
+        call system("touch ~/.vim/.terminus_on")
     endif
 endfunction
 command! ZToggleTerminus call ZToggleTerminus()
