@@ -282,7 +282,7 @@ if !empty($INSTALL_VIMRC_PLUGINS)
             \ echo '{' > ~/.vim/coc-settings.json
             \ && echo '    \"clangd.semanticHighlighting\": false,' >> ~/.vim/coc-settings.json
             \ && echo '    \"python.jediEnabled\": true,' >> ~/.vim/coc-settings.json
-            \ && echo '    \"coc.preferences.formatOnType\": true' >> ~/.vim/coc-settings.json
+            \ && echo '    \"coc.preferences.formatOnType\": false' >> ~/.vim/coc-settings.json
             \ && echo '}' >> ~/.vim/coc-settings.json")
         call ZInstallCommand("INSTALL_VIMRC_PLUGINS=post vim -E -s -u ~/.vimrc +'CocInstall -sync coc-clangd coc-python coc-vimlsp' +qa")
     endif
