@@ -1874,6 +1874,7 @@ endfunction
 " }}}
 
 " Objdump {{{
+let g:objdump = 'objdump'
 nnoremap <silent> <leader>dv :call ZObjdump()<CR>
 command! -nargs=0 ZObjdump call ZObjdump()
 function! ZObjdump()
@@ -1886,7 +1887,7 @@ function! ZObjdump()
             echomsg "Buffer has changes, please save or undo before proceeding."
             return
         endif
-        silent exec "%!objdump -M intel -s -C -D " . expand('%')
+        silent exec "%!" . g:objdump . " -M intel -s -C -D " . expand('%')
         set ro!
         DisableWhitespace
         set ft=asm
