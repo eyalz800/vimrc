@@ -338,6 +338,14 @@ augroup ZFileIndentation
 augroup end
 " }}}
 
+" CPP Modules {{{
+augroup ZCppModuleFileTypes
+    autocmd!
+    autocmd BufRead,BufNewFile *.cppm setlocal filetype=cpp
+    autocmd BufRead,BufNewFile *.ixx setlocal filetype=cpp
+augroup end
+" }}}
+
 " Turn off highlights {{{
 nnoremap <silent> ` :noh<CR>
 " }}}
