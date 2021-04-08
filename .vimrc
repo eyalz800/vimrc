@@ -15,6 +15,10 @@ endif
 " }}}
 
 " Installation {{{
+
+" Clang Version
+let s:clang_version = 11
+
 " Sed program to use
 let s:sed = 'sed'
 if s:os == 'Darwin'
@@ -44,10 +48,10 @@ function! ZInstallVimrc()
             call ZInstallCommand("curl -sL https://deb.nodesource.com/setup_14.x | bash -")
             call ZInstallCommand("curl -fLo ~/.vim/tmp/llvm-install/llvm.sh --create-dirs
                 \ https://apt.llvm.org/llvm.sh
-                \ ; cd ~/.vim/tmp/llvm-install; chmod +x ./llvm.sh; ./llvm.sh 11")
+                \ ; cd ~/.vim/tmp/llvm-install; chmod +x ./llvm.sh; ./llvm.sh " . s:clang_version)
             call ZInstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y curl silversearcher-ag exuberant-ctags cscope git
-                \ make autoconf automake pkg-config openjdk-8-jre python3 python3-pip gdb golang nodejs lazygit libc++-11-dev libc++abi-11-dev")
-            call ZInstallCommand("rm -rf ~/.vim/bin/llvm/clangd && ln -s $(command -v clangd-11) ~/.vim/bin/llvm/clangd")
+                \ make autoconf automake pkg-config openjdk-8-jre python3 python3-pip gdb golang nodejs lazygit libc++-" . s:clang_version . "-dev libc++abi-" . s:clang_version . "-dev")
+            call ZInstallCommand("rm -rf ~/.vim/bin/llvm/clangd && ln -s $(command -v clangd-" . s:clang_version . ") ~/.vim/bin/llvm/clangd")
             let lazygit_config_path = '~/.config/jesseduffield/lazygit'
         else
             call ZInstallCommand("sudo -u $SUDO_USER brew install curl ag ctags cscope git
@@ -151,6 +155,7 @@ function! ZInstallVimrc()
         \ ")
         call ZInstallCommand("sudo -u $SUDO_USER INSTALL_VIMRC_PLUGINS=1 INSTALL_VIMRC= vim -E -s -u ~/.vimrc +qa")
         call ZInstallCommand("sudo -u $SUDO_USER " . python3_command . " ~/.vim/plugged/vimspector/install_gadget.py --sudo --enable-c --enable-python")
+        call ZInstallCommand("echo Done!")
     catch
         echo v:exception
         exec ":cq"
