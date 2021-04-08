@@ -76,7 +76,7 @@ function! ZInstallVimrc()
         endif
         if executable('python3') && python3_command != 'python3'
             call ZInstallCommand("sudo -u $SUDO_USER python3 -m pip install --upgrade 'setuptools; python_version >= \"3.6\"' 'setuptools<51.3.0; python_version < \"3.6\" and python_version >= \"3.0\"'")
-            call ZInstallCommand("sudo -u $SUDO_USER python3 -m pip install python-language-server pylint compiledb jedi")
+            call ZInstallCommand("sudo -u $SUDO_USER python3 -m pip install --upgrade 'setuptools; python_version >= \"3.6\"' 'setuptools<51.3.0; python_version < \"3.6\" and python_version >= \"3.0\"' python-language-server pylint compiledb jedi")
         endif
         if !filereadable(expand('~/.vim/autoload/plug.vim'))
             call ZInstallCommand("curl -fLo ~/.vim/autoload/plug.vim --create-dirs
