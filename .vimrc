@@ -324,6 +324,7 @@ set foldmethod=marker " Marker based fold method
 set keymodel=startsel,stopsel " Shifted special key starts selection
 set laststatus=2 " Add status line
 set noshowmode " Do not show command/insert/normal status
+set ttimeoutlen=10 " Responsive escape
 if !has('nvim')
     set balloondelay=250 " Fast balloon popup.
 endif
