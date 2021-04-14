@@ -1019,10 +1019,12 @@ else
 endif
 
 set rtp+=~/.fzf
-nnoremap <silent> <C-p> :Files<CR>
+nnoremap <silent> <C-p> :call ZFiles()<CR>
+nnoremap <silent> <C-]> :call ZSourceFiles()<CR>
+nnoremap <silent> <C-\> :Buf<CR>
+nnoremap <silent> <leader>gf :GFiles<CR>
 nnoremap <silent> <C-n> :Tags<CR>
 nnoremap <silent> <C-g> :Rg<CR>
-nnoremap <silent> <leader>b :Buf<CR>
 nnoremap <silent> <leader>fh :call ZFzfToggleFilesCache()<CR>
 nnoremap <silent> <leader>fH :call ZFzfToggleGlobalFilesCache()<CR>
 nnoremap <silent> // :BLines!<CR>
@@ -1041,6 +1043,20 @@ let g:fzf_colors =
   \ 'marker':  ['fg', 'Keyword'],
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
+
+function! ZFiles()
+    if g:fzf_files_cache
+        let $FZF_DEFAULT_COMMAND = g:fzf_files_cache_command
+    else
+        let $FZF_DEFAULT_COMMAND = g:fzf_files_nocache_command
+    endif
+    silent exec "Files"
+endfunction
+
+function! ZSourceFiles()
+    let $FZF_DEFAULT_COMMAND = 'rg --files ' . g:sourceFilePatterns
+    silent exec "Files"
+endfunction
 
 function! ZFzfToggleFilesCache()
     if filereadable(expand('~/.vim/.fzf-files-cache'))

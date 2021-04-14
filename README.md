@@ -42,6 +42,7 @@ Useful Commands
 * Commands to search for files:
 ```
 <C-p> - Search for a file name.
+<C-]> - Search for a file name, filter common source files as determined in `.vimrc`.
 ```
 
 * Commands to search for code:
@@ -157,6 +158,7 @@ H - Modify width - 1
 <leader>gm - Vimagit staging plugin.
 <leader>gb - View blame.
 <leader>gc - View commits.
+<leader>gf - View git files.
 <leader>gl - Lazy git staging plugin.
     - up/down to move between files.
     - space to stage/unstage.
@@ -185,7 +187,7 @@ s{char1}{char2} - Jump to a location with the following two characters {char1}{c
 
 * View / select from open buffers:
 ```
-<leader>b - View / select from open buffers.
+<C-\> - View / select from open buffers.
 ```
 
 * Toggle on/off term gui colors persistently, by default it is on but may cause problems:
