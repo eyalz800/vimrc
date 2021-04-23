@@ -217,7 +217,6 @@ ZAsyncPlug 'majutsushi/tagbar'
 ZAsyncPlug 'ludovicchabant/vim-gutentags'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 ZAsyncPlug 'junegunn/fzf.vim'
-ZAsyncPlug 'ervandew/supertab'
 ZAsyncPlug 'vim-airline/vim-airline'
 ZAsyncPlug 'skywind3000/asyncrun.vim'
 ZAsyncPlug 'justinmk/vim-sneak'
@@ -241,6 +240,7 @@ endif
 if !empty($INSTALL_VIMRC_PLUGINS) || g:lsp_choice != 'coc'
     ZAsyncPlug 'vim-scripts/AutoComplPop'
     ZAsyncPlug 'vim-scripts/OmniCppComplete'
+    ZAsyncPlug 'ervandew/supertab'
 endif
 Plug 'tmsvg/pear-tree'
 ZAsyncPlug 'mbbill/undotree'
@@ -1787,6 +1787,17 @@ if g:lsp_choice == 'coc'
     xmap <silent> <leader>lf <Plug>(coc-format-selected)
     nnoremap <silent> <leader>ld :CocDiagnostics<CR>
     inoremap <silent> <expr> <CR> "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"")"))
+
+    function! s:check_back_space() abort
+        let col = col('.') - 1
+        return !col || getline('.')[col - 1]  =~ '\s'
+    endfunction
+
+    inoremap <silent><expr> <Tab>
+                \ pumvisible() ? "\<C-n>" :
+                \ <SID>check_back_space() ? "\<Tab>" :
+                \ coc#refresh()
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
     highlight clear CocErrorSign
     highlight link CocErrorSign None
