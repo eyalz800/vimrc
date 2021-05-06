@@ -257,6 +257,7 @@ ZAsyncPlug 'tpope/vim-obsession'
 Plug 'haya14busa/incsearch.vim'
 ZAsyncPlug 'haya14busa/incsearch-fuzzy.vim'
 Plug 'joshdick/onedark.vim'
+Plug 'arcticicestudio/nord-vim'
 Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 ZAsyncPlug 'christoomey/vim-tmux-navigator'
 ZAsyncPlug 'tpope/vim-surround'
