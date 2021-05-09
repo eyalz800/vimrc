@@ -2549,6 +2549,34 @@ elseif g:colors_name == 'onedark'
     " Cpp
     call ZHighLight('cCompundObject', {"fg": s:onedarkWhite})
     call ZHighLight('cIntegerType', {"fg": s:onedarkCyan})
+elseif g:colors_name == 'nord'
+    function! ZHighLight(group, guifg, guibg, ctermfg, ctermbg, attr, guisp)
+      if a:guifg != ""
+        exec "hi " . a:group . " guifg=" . a:guifg
+      endif
+      if a:guibg != ""
+        exec "hi " . a:group . " guibg=" . a:guibg
+      endif
+      if a:ctermfg != ""
+        exec "hi " . a:group . " ctermfg=" . a:ctermfg
+      endif
+      if a:ctermbg != ""
+        exec "hi " . a:group . " ctermbg=" . a:ctermbg
+      endif
+      if a:attr != ""
+        exec "hi " . a:group . " gui=" . a:attr . " cterm=" . substitute(a:attr, "undercurl", s:underline, "")
+      endif
+      if a:guisp != ""
+        exec "hi " . a:group . " guisp=" . a:guisp
+      endif
+    endfunction
+
+    " Colors
+    let s:nord8_gui = "#88C0D0"
+    let s:nord8_term = "6"
+
+    " Makefile
+    call ZHighLight("makeIdent", s:nord8_gui, "", s:nord8_term, "", "", "")
 endif
 " }}}
 
