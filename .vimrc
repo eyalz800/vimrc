@@ -240,7 +240,6 @@ endif
 if !empty($INSTALL_VIMRC_PLUGINS) || g:lsp_choice != 'coc'
     ZAsyncPlug 'vim-scripts/AutoComplPop'
     ZAsyncPlug 'vim-scripts/OmniCppComplete'
-    ZAsyncPlug 'ervandew/supertab'
 endif
 Plug 'tmsvg/pear-tree'
 ZAsyncPlug 'mbbill/undotree'
