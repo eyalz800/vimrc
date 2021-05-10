@@ -29,6 +29,8 @@ Useful Commands
 ---------------
 * Commands to generate source index, run in the root directory - you need to run both of them.
 ```
+<leader>zz - Generate/update C++ and opengrok database.
+
 <leader>zp - Generate/update C++ databases - optimized to work for large repositories.
 <leader>zk - Generate/update opengrok database for common source files (see ZGenerateOpengrok)
 ```

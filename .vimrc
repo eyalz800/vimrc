@@ -617,6 +617,9 @@ nnoremap <silent> <leader>zf :call ZGenerateFlags()<CR>
 " Generate Opengrok
 nnoremap <silent> <leader>zk :call ZGenerateOpengrok()<CR>
 
+" Generate C++ and Opengrok
+nnoremap <silent> <leader>zz :call ZGenerateCppAndOpengrok()<CR>
+
 " Generate Flags
 function! ZGenerateFlags()
     let cpp_include_1 = system("rg --files -g string_view /usr/lib 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
@@ -693,8 +696,6 @@ function! ZGenerateCpp()
             let cpp_include_2 = system("dirname " . cpp_include_2)
         endif
 
-        copen
-
         exec ":AsyncRun
         \ echo -std=c++20 > compile_flags.txt
         \ && echo -isystem >> compile_flags.txt
@@ -727,6 +728,59 @@ function! ZGenerateOpengrok()
     exec ":AsyncRun java -Xmx2048m -jar ~/.vim/bin/opengrok/lib/opengrok.jar -q -c " . g:opengrok_ctags . " -s . -d .opengrok
          \ " . g:opengrokFilePatterns . "
          \ -P -S -G -W .opengrok/configuration.xml"
+endfunction
+
+" Generate Cpp and Opengrok
+function! ZGenerateCppAndOpengrok()
+    copen
+    if !filereadable('compile_commands.json')
+        let cpp_include_1 = system("rg --files -g string_view /usr/lib 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+        if empty(cpp_include_1)
+            let cpp_include_1 = system("rg --files -g string_view /usr/local 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+        endif
+        if empty(cpp_include_1)
+            let cpp_include_1 = '/usr/include'
+        else
+            let cpp_include_1 = system("dirname " . cpp_include_1)
+        endif
+
+        let cpp_include_2 = system("rg --files -g cstdlib /usr/include/c++ 2> /dev/null | grep -v tr1 | grep -v experimental | sort | tail -n 1")
+        if empty(cpp_include_2)
+            let cpp_include_2 = '/usr/include'
+        else
+            let cpp_include_2 = system("dirname " . cpp_include_2)
+        endif
+
+        exec ":AsyncRun
+        \ echo -std=c++20 > compile_flags.txt
+        \ && echo -isystem >> compile_flags.txt
+        \ && echo /usr/include >> compile_flags.txt
+        \ && echo -isystem >> compile_flags.txt
+        \ && echo " . trim(cpp_include_1) . " >> compile_flags.txt
+        \ && echo -isystem >> compile_flags.txt
+        \ && echo " . trim(cpp_include_2) . " >> compile_flags.txt
+        \ && set +e ; find . -type d -name inc -or -name include -or -name Include | grep -v \"/\\.\" | " . s:sed . " s@^@-isystem\\\\n@g >> compile_flags.txt ; set -e
+        \ && echo -x >> compile_flags.txt
+        \ && echo c++ >> compile_flags.txt
+        \ && echo '" . g:ctagsOptions . "' > .gutctags
+        \ && " . s:sed . " -i 's/ /\\n/g' .gutctags
+        \ && rg --files " . g:ctagsFilePatterns . " > cscope.files
+        \ && if ! [ -f .files ]; then cp cscope.files .files; rg --files " . g:otherFilePatterns . " >> .files; fi
+        \ && cscope -bq
+        \ && java -Xmx2048m -jar ~/.vim/bin/opengrok/lib/opengrok.jar -q -c " . g:opengrok_ctags . " -s . -d .opengrok
+             \ " . g:opengrokFilePatterns . "
+             \ -P -S -G -W .opengrok/configuration.xml"
+    else
+        exec ":AsyncRun
+        \ echo '" . g:ctagsOptions . "' > .gutctags
+        \ && " . s:sed . " -i 's/ /\\n/g' .gutctags
+        \ && rg --files " . g:ctagsFilePatterns . " > cscope.files
+        \ && if ! [ -f .files ]; then cp cscope.files .files; rg --files " . g:otherFilePatterns . " >> .files; fi
+        \ && cscope -bq
+        \ && java -Xmx2048m -jar ~/.vim/bin/opengrok/lib/opengrok.jar -q -c " . g:opengrok_ctags . " -s . -d .opengrok
+             \ " . g:opengrokFilePatterns . "
+             \ -P -S -G -W .opengrok/configuration.xml"
+    endif
 endfunction
 
 " Generate compile_commands.json
