@@ -12,7 +12,7 @@ else
     vim_version=8.2.1837
     python3_command=python3
 
-    DEBIAN_FRONEND=noninteractive apt update
+    DEBIAN_FRONTEND=noninteractive apt update
     DEBIAN_FRONTEND=noninteractive apt install -y \
         python3-dev curl build-essential make libncurses5-dev libncursesw5-dev gcc \
         libx11-dev libxtst-dev libxt-dev libsm-dev libxpm-dev
@@ -21,7 +21,7 @@ else
         if ! [ -x "$(command -v python3.6)" ] || \
            ! [ $(dpkg-query -W -f='${Status}' python3.6-dev 2>/dev/null | grep -c "ok installed") == 1 ]; then
             DEBIAN_FRONTEND=noninteractive add-apt-repository -y ppa:deadsnakes/ppa
-            DEBIAN_FRONEND=noninteractive apt update
+            DEBIAN_FRONTEND=noninteractive apt update
             DEBIAN_FRONTEND=noninteractive apt install -y python3.6-dev
         fi
         python3_command=python3.6
