@@ -1004,7 +1004,7 @@ endif
 let g:onedark_color_overrides = {
     \ "special_grey": { "gui": "#5C6370", "cterm": "59", "cterm16": "15" }
 \ }
-let s:available_colors = ['onedark', 'codedark']
+let s:available_colors = ['onedark', 'codedark', 'nord']
 let s:vim_color = readfile(expand('~/.vim/.color'))[0]
 exec ':color ' . s:vim_color
 function! ZColor(color)
@@ -2359,6 +2359,20 @@ function! ZVimspectorDebugLaunchSettings()
 endfunction
 " }}}
 
+" Toggle Powerline {{{
+command! ZTogglePowerline call ZTogglePowerline()
+function! ZTogglePowerline()
+    if filereadable(expand('~/.vim/.powerline'))
+        call system("rm ~/.vim/.powerline")
+    else
+        call system("touch ~/.vim/.powerline")
+    endif
+    if !empty($TMUX)
+        call system('tmux source ~/.tmux.conf')
+    endif
+endfunction
+" }}}
+
 " Additional color settings {{{
 if g:colors_name == 'codedark'
     " Terminal ansi colors
@@ -2642,6 +2656,11 @@ let g:airline#extensions#whitespace#conflicts_format = 'conflict[%s]'
 let g:airline_theme_patch_func = 'ZAirlineThemePatch'
 let g:airline#extensions#zoomwintab#enabled = 1
 let g:airline#extensions#zoomwintab#status_zoomed_in = '(zoom)'
+if filereadable(expand('~/.vim/.powerline'))
+    let g:airline_powerline_fonts = 1
+else
+    let g:airline_powerline_fonts = 0
+endif
 function! ZAirlineThemePatch(palette)
     if g:airline_theme == 'codedark' && exists('s:codedark_colors_defined') && s:codedark_colors_defined
         let airline_error = [ s:cdWhite.gui, s:cdRed.gui, s:cdWhite.cterm, s:cdRed.cterm]
