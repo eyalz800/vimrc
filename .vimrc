@@ -962,7 +962,7 @@ endfunction
 nnoremap <silent> <leader>gb :Git blame<CR>
 nnoremap <silent> <leader>gm :MagitOnly<CR>
 nnoremap <silent> <leader>gc :BCommits!<CR>
-nnoremap <silent> <leader>gl :call ZPopTerminal('bash -c "cd ' .  expand('%:p:h') . ' ; lazygit"')<CR>
+nnoremap <silent> <leader>gl :call ZPopTerminal($SHELL . ' -c "cd ' .  expand('%:p:h') . ' ; lazygit"')<CR>
 nnoremap <silent> <leader>gL :call ZPopTerminal('lazygit')<CR>
 " }}}
 
