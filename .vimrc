@@ -2378,39 +2378,39 @@ if g:colors_name == 'codedark'
     " Terminal ansi colors
     if !has('nvim')
         let g:terminal_ansi_colors =
-        \ ['#282C34',
-        \ '#E06C75',
-        \ '#98C379',
-        \ '#E5C07B',
-        \ '#61AFEF',
-        \ '#C678DD',
-        \ '#56B6C2',
-        \ '#ABB2BF',
-        \ '#3E4452',
-        \ '#BE5046',
-        \ '#98C379',
-        \ '#D19A66',
-        \ '#61AFEF',
-        \ '#C678DD',
-        \ '#56B6C2',
-        \ '#5C6370']
+        \ ['#1e1e1e',
+        \ '#f44747',
+        \ '#6a9955',
+        \ '#ffaf00',
+        \ '#0a7aca',
+        \ '#c586c0',
+        \ '#4ec9b0',
+        \ '#d4d4d4',
+        \ '#303030',
+        \ '#d16969',
+        \ '#6a9955',
+        \ '#ce9a78',
+        \ '#569cd6',
+        \ '#c586c0',
+        \ '#4ec9b0',
+        \ '#51504f']
     else
-        let g:terminal_color_0 = '#282C34'
-        let g:terminal_color_1 = '#E06C75'
-        let g:terminal_color_2 = '#98C379'
-        let g:terminal_color_3 = '#E5C07B'
-        let g:terminal_color_4 = '#61AFEF'
-        let g:terminal_color_5 = '#C678DD'
-        let g:terminal_color_6 = '#56B6C2'
-        let g:terminal_color_7 = '#ABB2BF'
-        let g:terminal_color_8 = '#3E4452'
-        let g:terminal_color_9 = '#BE5046'
-        let g:terminal_color_10 = '#98C379'
-        let g:terminal_color_11 = '#D19A66'
-        let g:terminal_color_12 = '#61AFEF'
-        let g:terminal_color_13 = '#C678DD'
-        let g:terminal_color_14 = '#56B6C2'
-        let g:terminal_color_15 = '#5C6370'
+        let g:terminal_color_0 = '#1e1e1e'
+        let g:terminal_color_1 = '#f44747'
+        let g:terminal_color_2 = '#6a9955'
+        let g:terminal_color_3 = '#ffaf00'
+        let g:terminal_color_4 = '#0a7aca'
+        let g:terminal_color_5 = '#c586c0'
+        let g:terminal_color_6 = '#4ec9b0'
+        let g:terminal_color_7 = '#d4d4d4'
+        let g:terminal_color_8 = '#303030'
+        let g:terminal_color_9 = '#d16969'
+        let g:terminal_color_10 = '#6a9955'
+        let g:terminal_color_11 = '#ce9a78'
+        let g:terminal_color_12 = '#569cd6'
+        let g:terminal_color_13 = '#c586c0'
+        let g:terminal_color_14 = '#4ec9b0'
+        let g:terminal_color_15 = '#51504f'
     endif
 
     let s:cterm00 = "00"
