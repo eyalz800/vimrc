@@ -348,5 +348,5 @@ ZToggleDevIcons - Toggles the use  of dev icons (off by default).
 
 * Toggle Line Indent View:
 ```
-ZToggleIndentLines - Toggle view of line indentation (off by default)
+<leader>zi / ZToggleIndentLines - Toggle view of line indentation (off by default)
 ```

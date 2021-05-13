@@ -2391,15 +2391,19 @@ endfunction
 
 " Indent Line {{{
 let g:indentLine_char = '│'
+let g:indentLine_first_char = '│'
+let g:indentLine_showFirstIndentLevel = 1
 let g:indentLine_enabled = filereadable(expand('~/.vim/.indentlines'))
+nnoremap <silent> <leader>zi :call ZToggleIndentLines()<CR>
 command! ZToggleIndentLines call ZToggleIndentLines()
 function! ZToggleIndentLines()
     if filereadable(expand('~/.vim/.indentlines'))
         call system("rm ~/.vim/.indentlines")
+        IndentLinesDisable
     else
         call system("touch ~/.vim/.indentlines")
+        IndentLinesEnable
     endif
-    IndentLinesToggle
 endfunction
 " }}}
 
