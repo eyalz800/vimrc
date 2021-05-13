@@ -2470,6 +2470,7 @@ if g:colors_name == 'codedark'
 
     let s:cdBack = {'gui': '#1E1E1E', 'cterm': s:cterm00, 'cterm265': '234'}
     let s:cdLightBlue = {'gui': '#9CDCFE', 'cterm': s:cterm0C, 'cterm256': '117'}
+    let s:cdMidBlue = {'gui': '#519aba', 'cterm': s:cterm0D, 'cterm256': '75'}
     let s:cdBlue = {'gui': '#569CD6', 'cterm': s:cterm0D, 'cterm256': '75'}
     let s:cdDarkBlue = {'gui': '#223E55', 'cterm': s:cterm0D, 'cterm256': '73'}
     let s:cdYellow = {'gui': '#DCDCAA', 'cterm': s:cterm0A, 'cterm256': '187'}
@@ -2537,22 +2538,22 @@ if g:colors_name == 'codedark'
     call ZHighLight('GitGutterDelete', s:cdRed, {}, 'none', {})
 
     " NERDTree
-    call ZHighLight('NERDTreeOpenable', s:cdBlue, {}, 'none', {})
-    call ZHighLight('NERDTreeClosable', s:cdBlue, {}, 'none', {})
+    call ZHighLight('NERDTreeOpenable', s:cdMidBlue, {}, 'none', {})
+    call ZHighLight('NERDTreeClosable', s:cdMidBlue, {}, 'none', {})
     call ZHighLight('NERDTreeHelp', s:cdGreen, {}, 'none', {})
-    call ZHighLight('NERDTreeDir', s:cdBlue, {}, 'none', {})
-    call ZHighLight('NERDTreeUp', s:cdBlue, {}, 'none', {})
-    call ZHighLight('NERDTreeDirSlash', s:cdLightRed, {}, 'none', {})
+    call ZHighLight('NERDTreeDir', s:cdFront, {}, 'none', {})
+    call ZHighLight('NERDTreeUp', s:cdMidBlue, {}, 'none', {})
+    call ZHighLight('NERDTreeDirSlash', s:cdMidBlue, {}, 'none', {})
     call ZHighLight('NERDTreeFile', s:cdFront, {}, 'none', {})
     call ZHighLight('NERDTreeExecFile', s:cdBlueGreen, {}, 'none', {})
     call ZHighLight('NERDTreeLinkFile', s:cdBlueGreen, {}, 'none', {})
-    call ZHighLight('NERDTreeCWD', s:cdPink, {}, 'none', {})
-    call ZHighLight('NERDTreeFlags', s:cdFront, {}, 'none', {})
+    call ZHighLight('NERDTreeCWD', s:cdMidBlue, {}, 'none', {})
+    call ZHighLight('NERDTreeFlags', s:cdMidBlue, {}, 'none', {})
 
     " Tagbar
-    call ZHighLight('TagbarFoldIcon', s:cdLightBlue, {}, 'none', {})
-    call ZHighLight('TagbarKind', s:cdLightBlue, {}, 'none', {})
-    call ZHighLight('TagbarScope', s:cdLightBlue, {}, 'none', {})
+    call ZHighLight('TagbarFoldIcon', s:cdMidBlue, {}, 'none', {})
+    call ZHighLight('TagbarKind', s:cdMidBlue, {}, 'none', {})
+    call ZHighLight('TagbarScope', s:cdMidBlue, {}, 'none', {})
     call ZHighLight('TagbarSignature', s:cdFront, {}, 'none', {})
 
     " Vim
