@@ -273,6 +273,7 @@ ZAsyncPlug 'yaronkh/vim-winmanip'
 if !empty($INSTALL_VIMRC_PLUGINS) || has('nvim')
     ZAsyncPlug 'rbgrouleff/bclose.vim'
 endif
+ZAsyncPlug 'Yggdroot/indentLine'
 call plug#end()
 " }}}
 
@@ -2385,6 +2386,20 @@ function! ZToggleDevIcons()
     else
         call system("touch ~/.vim/.devicons")
     endif
+endfunction
+" }}}
+
+" Indent Line {{{
+let g:indentLine_char = '│'
+let g:indentLine_enabled = filereadable(expand('~/.vim/.indentlines'))
+command! ZToggleIndentLines call ZToggleIndentLines()
+function! ZToggleIndentLines()
+    if filereadable(expand('~/.vim/.indentlines'))
+        call system("rm ~/.vim/.indentlines")
+    else
+        call system("touch ~/.vim/.indentlines")
+    endif
+    IndentLinesToggle
 endfunction
 " }}}
 

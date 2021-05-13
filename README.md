@@ -345,3 +345,8 @@ ZToggleTerminus - Toggles terminus on/off - requires restarting vim.
 ZTogglePowerline - Toggles the use of powerline (off by default).
 ZToggleDevIcons - Toggles the use  of dev icons (off by default).
 ```
+
+* Toggle Line Indent View:
+```
+ZToggleIndentLines - Toggle view of line indentation (off by default)
+```
