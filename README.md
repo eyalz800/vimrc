@@ -333,8 +333,14 @@ cf - Print current file path, if nerd tree is open, show it there as well.
 <leader>u - Toggle fold / unfold.
 ```
 
-* Toggle Terminus
+* Toggle Terminus:
 Note: sometimes there are issues of strange output when using terminus with fzf and nested terminal windows.
 ```
 ZToggleTerminus - Toggles terminus on/off - requires restarting vim.
+```
+
+* Toggle Powerline & Dev Icons:
+```
+ZTogglePowerline - Toggles the use of powerline (off by default).
+ZToggleDevIcons - Toggles the use  of dev icons (off by default).
 ```
