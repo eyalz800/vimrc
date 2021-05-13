@@ -273,7 +273,7 @@ ZAsyncPlug 'yaronkh/vim-winmanip'
 if !empty($INSTALL_VIMRC_PLUGINS) || has('nvim')
     ZAsyncPlug 'rbgrouleff/bclose.vim'
 endif
-ZAsyncPlug 'Yggdroot/indentLine'
+Plug 'Yggdroot/indentLine'
 call plug#end()
 " }}}
 
