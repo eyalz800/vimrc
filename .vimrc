@@ -965,7 +965,7 @@ endfunction
 " Git {{{
 nnoremap <silent> <leader>gb :Git blame<CR>
 nnoremap <silent> <leader>gm :MagitOnly<CR>
-nnoremap <silent> <leader>gc :BCommits!<CR>
+nnoremap <silent> <leader>gc :BCommits<CR>
 nnoremap <silent> <leader>gl :call ZPopTerminal($SHELL . ' -c "cd ' .  expand('%:p:h') . ' ; lazygit"')<CR>
 nnoremap <silent> <leader>gL :call ZPopTerminal('lazygit')<CR>
 " }}}
@@ -1085,7 +1085,7 @@ nnoremap <silent> <C-n> :Tags<CR>
 nnoremap <silent> <C-g> :Rg<CR>
 nnoremap <silent> <leader>fh :call ZFzfToggleFilesCache()<CR>
 nnoremap <silent> <leader>fH :call ZFzfToggleGlobalFilesCache()<CR>
-nnoremap <silent> // :BLines!<CR>
+nnoremap <silent> // :BLines<CR>
 let $BAT_THEME = 'Monokai Extended Origin'
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
