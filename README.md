@@ -24,6 +24,7 @@ Screenshots
 <img src="screenshots/image2.png"/>
 <img src="screenshots/image3.png"/>
 <img src="screenshots/image4.png"/>
+<img src="screenshots/image5.png"/>
 
 Useful Commands
 ---------------
