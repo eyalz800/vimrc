@@ -2394,14 +2394,22 @@ let g:indentLine_char = '│'
 let g:indentLine_first_char = '│'
 let g:indentLine_showFirstIndentLevel = 1
 let g:indentLine_enabled = filereadable(expand('~/.vim/.indentlines'))
+let g:indentLine_color_gui = '#404040'
+if g:indentLine_enabled
+    hi SpecialKey guifg='#404040'
+    set list lcs=tab:\│\ "
+endif
 nnoremap <silent> <leader>zi :call ZToggleIndentLines()<CR>
 command! ZToggleIndentLines call ZToggleIndentLines()
 function! ZToggleIndentLines()
     if filereadable(expand('~/.vim/.indentlines'))
         call system("rm ~/.vim/.indentlines")
+        set list lcs=tab:\ \ "
         IndentLinesDisable
     else
         call system("touch ~/.vim/.indentlines")
+        hi SpecialKey guifg='#404040'
+        set list lcs=tab:\│\ "
         IndentLinesEnable
     endif
 endfunction
