@@ -213,6 +213,9 @@ command! -nargs=+ ZAsyncPlug call ZAsyncLoadPlugin(<args>)
 call plug#begin()
 ZAsyncPlug 'puremourning/vimspector'
 ZAsyncPlug 'preservim/nerdtree'
+if !empty($INSTALL_VIMRC_PLUGINS) || filereadable(expand('~/.vim/.devicons'))
+    ZAsyncPlug 'ryanoasis/vim-devicons'
+endif
 ZAsyncPlug 'majutsushi/tagbar'
 ZAsyncPlug 'ludovicchabant/vim-gutentags'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -2373,6 +2376,17 @@ function! ZTogglePowerline()
 endfunction
 " }}}
 
+" Toggle DevIcons {{{
+command! ZToggleDevIcons call ZToggleDevIcons()
+function! ZToggleDevIcons()
+    if filereadable(expand('~/.vim/.devicons'))
+        call system("rm ~/.vim/.devicons")
+    else
+        call system("touch ~/.vim/.devicons")
+    endif
+endfunction
+" }}}
+
 " Additional color settings {{{
 if g:colors_name == 'codedark'
     " Terminal ansi colors
@@ -2533,6 +2547,7 @@ if g:colors_name == 'codedark'
     call ZHighLight('NERDTreeExecFile', s:cdBlueGreen, {}, 'none', {})
     call ZHighLight('NERDTreeLinkFile', s:cdBlueGreen, {}, 'none', {})
     call ZHighLight('NERDTreeCWD', s:cdPink, {}, 'none', {})
+    call ZHighLight('NERDTreeFlags', s:cdFront, {}, 'none', {})
 
     " Tagbar
     call ZHighLight('TagbarFoldIcon', s:cdLightBlue, {}, 'none', {})
