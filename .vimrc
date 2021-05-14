@@ -922,6 +922,7 @@ function! ZSwitchToArbitraryFolder()
                 \ ' --bind "ctrl-/:toggle-preview"',
                 \ 'sink': function('s:sink')}
 
+    let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --no-ignore-vcs'
     call fzf#run(fzf#wrap('', opts, 0))
 endfunction
 " }}}
