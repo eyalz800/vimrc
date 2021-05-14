@@ -215,6 +215,7 @@ ZAsyncPlug 'puremourning/vimspector'
 ZAsyncPlug 'preservim/nerdtree'
 if !empty($INSTALL_VIMRC_PLUGINS) || filereadable(expand('~/.vim/.devicons'))
     ZAsyncPlug 'ryanoasis/vim-devicons'
+    ZAsyncPlug 'tiagofumo/vim-nerdtree-syntax-highlight'
 endif
 ZAsyncPlug 'majutsushi/tagbar'
 ZAsyncPlug 'ludovicchabant/vim-gutentags'
@@ -938,6 +939,11 @@ nnoremap <silent> cf :call ZShowCurrentFile()<CR>
 let g:NERDTreeWinSize = 30
 let g:NERDTreeAutoCenter = 0
 let g:NERDTreeMinimalUI = 0
+let g:NERDTreeDisableExactMatchHighlight = 1
+let g:NERDTreeDisablePatternMatchHighlight = 1
+let g:NERDTreeLimitedSyntax = 1
+let g:NERDTreeSyntaxDisableDefaultExtensions = 0
+let g:NERDTreeSyntaxEnabledExtensions = ['h', 'sh', 'bash', 'vim', 'md']
 let g:tagbar_width = 30
 let g:tagbar_indent = 0
 let s:tagbar_open = 0
@@ -2434,6 +2440,9 @@ function! ZToggleIndentLines()
 endfunction
 " }}}
 
+" Fern {{{
+let g:fern#renderer = "nerdfont"
+" }}}
 " Additional color settings {{{
 if g:colors_name == 'codedark'
     " Terminal ansi colors
@@ -2535,6 +2544,9 @@ if g:colors_name == 'codedark'
     let s:cdFront = {'gui': '#D4D4D4', 'cterm': s:cterm05, 'cterm256': '188'}
     let s:cdWhite = {'gui': '#FFFFFF', 'cterm':  s:cterm07, 'cterm256': '15'}
 
+    let s:cdIconGreyOrTermFront = {'gui': '#6d8086', 'cterm': s:cterm05, 'cterm256': '188'}
+    let s:cdIconYellowOrTermFront = {'gui': '#cbcb41', 'cterm': s:cterm05, 'cterm256': '188'}
+
     " Codedark colors defined
     let s:codedark_colors_defined = 1
 
@@ -2596,6 +2608,20 @@ if g:colors_name == 'codedark'
     call ZHighLight('NERDTreeLinkFile', s:cdBlueGreen, {}, 'none', {})
     call ZHighLight('NERDTreeCWD', s:cdMidBlue, {}, 'none', {})
     call ZHighLight('NERDTreeFlags', s:cdMidBlue, {}, 'none', {})
+    call ZHighLight('WebDevIconsDefaultFolderSymbol', s:cdMidBlue, {}, 'none', {})
+    call ZHighLight('nerdtreeExactMatchIcon_makefile', s:cdIconGreyOrTermFront, {}, 'none', {})
+    call ZHighLight('nerdtreeExactMatchIcon_license', s:cdIconYellowOrTermFront, {}, 'none', {})
+    call ZHighLight('nerdtreeFileExtensionIcon_json', s:cdIconYellowOrTermFront, {}, 'none', {})
+    call ZHighLight('nerdtreeFileExtensionIcon_h', s:cdMidBlue, {}, 'none', {})
+    call ZHighLight('nerdtreeFileExtensionIcon_c', s:cdMidBlue, {}, 'none', {})
+    call ZHighLight('nerdtreeFileExtensionIcon_cpp', s:cdMidBlue, {}, 'none', {})
+    call ZHighLight('nerdtreeFileExtensionIcon_py', s:cdMidBlue, {}, 'none', {})
+    let g:NERDTreeExtensionHighlightColor = {}
+    let g:NERDTreeExtensionHighlightColor['json'] = ''
+    let g:NERDTreeExtensionHighlightColor['h'] = ''
+    let g:NERDTreeExtensionHighlightColor['c'] = ''
+    let g:NERDTreeExtensionHighlightColor['cpp'] = ''
+    let g:NERDTreeExtensionHighlightColor['py'] = ''
 
     " Tagbar
     call ZHighLight('TagbarFoldIcon', s:cdMidBlue, {}, 'none', {})
