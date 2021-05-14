@@ -2119,7 +2119,7 @@ endfunction
 " Async tasks {{{
 let g:asyncrun_open = 6
 let g:asyncrun_rootmarks = ['.git', '.svn', '.root', '.project', '.hg', '.files', '.repo']
-let g:asynctasks_term_pos = 'tab'
+let g:asynctasks_term_pos = 'bottom'
 let g:asynctasks_term_rows = 10
 let g:asynctasks_term_reuse = 1
 noremap <silent> <F7> :call ZBuildProject()<CR>
