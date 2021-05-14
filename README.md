@@ -273,6 +273,7 @@ cd - Change directory to current file directory.
 cp - Change directory to project root of current file.
 cr - Change directory back to the root - the folder where vim was opened.
 ca - Change directory to arbitrary folder by folder/file.
+cu - Change directory to upper (parent) directory.
 ```
 
 * Clipboard:

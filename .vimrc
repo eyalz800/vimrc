@@ -883,6 +883,7 @@ nnoremap <silent> cr :call ZSwitchToRoot()<CR>
 nnoremap <silent> cp :call ZSwitchToProjectRoot(expand('%:p:h'))<CR>
 nnoremap <silent> cd :execute "cd " . expand('%:p:h')<CR>
 nnoremap <silent> ca :call ZSwitchToArbitraryFolder()<CR>
+nnoremap <silent> cu :execute "cd .."<CR>
 function! ZSwitchToRoot()
     execute "cd " . g:vimroot
 endfunction
