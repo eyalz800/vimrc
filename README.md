@@ -45,7 +45,7 @@ Useful Commands
 * Commands to search for files:
 ```
 <C-p> - Search for a file name.
-<C-]> - Search for a file name, filter common source files as determined in `.vimrc`.
+<C-]> / cz - Search for a file name, filter common source files as determined in `.vimrc`.
 ```
 
 * Commands to search for code:

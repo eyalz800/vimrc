@@ -1096,6 +1096,7 @@ endif
 set rtp+=~/.fzf
 nnoremap <silent> <C-p> :call ZFiles()<CR>
 nnoremap <silent> <C-]> :call ZSourceFiles()<CR>
+nnoremap <silent> cz :call ZSourceFiles()<CR>
 nnoremap <silent> <C-\> :Buf<CR>
 nnoremap <silent> <leader>gf :GFiles<CR>
 nnoremap <silent> <C-n> :Tags<CR>
