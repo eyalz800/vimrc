@@ -320,7 +320,7 @@ set wildmenu " Enhanced completion menu
 set completeopt=longest,menuone,preview " Enhanced completion menu
 set nowrap " Do not wrap text
 set updatetime=250 " Write swp file and trigger cursor hold events every X ms
-set shortmess+=c " Short message when entering vim
+set shortmess+=Ic " Disable splash
 set hidden " Allow hidden buffers with writes
 set cursorline " Activate cursor line
 set noerrorbells visualbell t_vb= " Do not play bell sounds
