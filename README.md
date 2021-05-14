@@ -272,6 +272,7 @@ vimdiff -b [binary_file_1] [binary_file_2]
 cd - Change directory to current file directory.
 cp - Change directory to project root of current file.
 cr - Change directory back to the root - the folder where vim was opened.
+ca - Change directory to arbitrary folder by folder/file.
 ```
 
 * Clipboard:

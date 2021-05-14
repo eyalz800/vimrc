@@ -882,6 +882,7 @@ let g:vimroot=$PWD
 nnoremap <silent> cr :call ZSwitchToRoot()<CR>
 nnoremap <silent> cp :call ZSwitchToProjectRoot(expand('%:p:h'))<CR>
 nnoremap <silent> cd :execute "cd " . expand('%:p:h')<CR>
+nnoremap <silent> ca :call ZSwitchToArbitraryFolder()<CR>
 function! ZSwitchToRoot()
     execute "cd " . g:vimroot
 endfunction
@@ -907,6 +908,20 @@ function! ZSwitchToProjectRoot(start_path)
         let iteration = iteration + 1
     endwhile
     echom "Project root not found!"
+endfunction
+function! ZSwitchToArbitraryFolder()
+    function! s:sink(result)
+        exec 'cd ' . system('dirname ' . a:result)
+    endfunction
+
+    let fzf_color_option = split(fzf#wrap()['options'])[0]
+    let preview = "ls -la --color \\$(dirname {})"
+    let opts = { 'options': fzf_color_option . ' --prompt "> "' .
+                \ ' --preview="' . preview . '"' .
+                \ ' --bind "ctrl-/:toggle-preview"',
+                \ 'sink': function('s:sink')}
+
+    call fzf#run(fzf#wrap('', opts, 0))
 endfunction
 " }}}
 
