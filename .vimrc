@@ -274,6 +274,7 @@ if !empty($INSTALL_VIMRC_PLUGINS) || has('nvim')
     ZAsyncPlug 'rbgrouleff/bclose.vim'
 endif
 Plug 'Yggdroot/indentLine'
+ZAsyncPlug 'metakirby5/codi.vim'
 call plug#end()
 " }}}
 
