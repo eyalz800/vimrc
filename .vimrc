@@ -2627,8 +2627,8 @@ if g:colors_name == 'codedark'
     call ZHighLight('GitGutterDelete', s:cdRed, {}, 'none', {})
 
     " NERDTree
-    call ZHighLight('NERDTreeOpenable', s:cdFront, {}, 'none', {})
-    call ZHighLight('NERDTreeClosable', s:cdFront, {}, 'none', {})
+    call ZHighLight('NERDTreeOpenable', s:cdMidBlue, {}, 'none', {})
+    call ZHighLight('NERDTreeClosable', s:cdMidBlue, {}, 'none', {})
     call ZHighLight('NERDTreeHelp', s:cdMidBlue, {}, 'none', {})
     call ZHighLight('NERDTreeDir', s:cdFront, {}, 'none', {})
     call ZHighLight('NERDTreeUp', s:cdMidBlue, {}, 'none', {})
@@ -2654,7 +2654,7 @@ if g:colors_name == 'codedark'
     let g:NERDTreeExtensionHighlightColor['py'] = ''
 
     " Tagbar
-    call ZHighLight('TagbarFoldIcon', s:cdFront, {}, 'none', {})
+    call ZHighLight('TagbarFoldIcon', s:cdMidBlue, {}, 'none', {})
     call ZHighLight('TagbarKind', s:cdMidBlue, {}, 'none', {})
     call ZHighLight('TagbarScope', s:cdMidBlue, {}, 'none', {})
     call ZHighLight('TagbarSignature', s:cdFront, {}, 'none', {})
