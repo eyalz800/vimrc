@@ -940,6 +940,7 @@ nnoremap <silent> cf :call ZShowCurrentFile()<CR>
 let g:NERDTreeWinSize = 30
 let g:NERDTreeAutoCenter = 0
 let g:NERDTreeMinimalUI = 0
+let NERDTreeShowHidden = 1
 let g:NERDTreeDisableExactMatchHighlight = 1
 let g:NERDTreeDisablePatternMatchHighlight = 1
 let g:NERDTreeLimitedSyntax = 1
@@ -947,14 +948,14 @@ let g:NERDTreeSyntaxDisableDefaultExtensions = 0
 let g:NERDTreeSyntaxEnabledExtensions = ['h', 'sh', 'bash', 'vim', 'md']
 let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \ 'Modified'  :'M',
-                \ 'Staged'    :'✚',
+                \ 'Staged'    :'A',
                 \ 'Untracked' :'U',
                 \ 'Renamed'   :'➜',
                 \ 'Unmerged'  :'═',
                 \ 'Deleted'   :'✖',
-                \ 'Dirty'     :'✗',
+                \ 'Dirty'     :'M',
                 \ 'Ignored'   :'☒',
-                \ 'Clean'     :'✔︎',
+                \ 'Clean'     :'C',
                 \ 'Unknown'   :'?',
                 \ }
 let g:tagbar_width = 30
