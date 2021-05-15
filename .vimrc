@@ -944,6 +944,11 @@ let g:NERDTreeAutoCenter = 0
 let g:NERDTreeMinimalUI = 0
 let NERDTreeShowHidden = 1
 let NERDTreeAutoDeleteBuffer = 1
+if filereadable(expand('~/.vim/.devicons'))
+    let g:NERDTreeDirArrowExpandable = "\uf054"
+    let g:NERDTreeDirArrowCollapsible = "\uf078"
+    let g:tagbar_iconchars = [g:NERDTreeDirArrowExpandable, g:NERDTreeDirArrowCollapsible]
+endif
 let g:NERDTreeDisableExactMatchHighlight = 1
 let g:NERDTreeDisablePatternMatchHighlight = 1
 let g:NERDTreeLimitedSyntax = 1
@@ -2622,8 +2627,8 @@ if g:colors_name == 'codedark'
     call ZHighLight('GitGutterDelete', s:cdRed, {}, 'none', {})
 
     " NERDTree
-    call ZHighLight('NERDTreeOpenable', s:cdMidBlue, {}, 'none', {})
-    call ZHighLight('NERDTreeClosable', s:cdMidBlue, {}, 'none', {})
+    call ZHighLight('NERDTreeOpenable', s:cdFront, {}, 'none', {})
+    call ZHighLight('NERDTreeClosable', s:cdFront, {}, 'none', {})
     call ZHighLight('NERDTreeHelp', s:cdMidBlue, {}, 'none', {})
     call ZHighLight('NERDTreeDir', s:cdFront, {}, 'none', {})
     call ZHighLight('NERDTreeUp', s:cdMidBlue, {}, 'none', {})
@@ -2649,7 +2654,7 @@ if g:colors_name == 'codedark'
     let g:NERDTreeExtensionHighlightColor['py'] = ''
 
     " Tagbar
-    call ZHighLight('TagbarFoldIcon', s:cdMidBlue, {}, 'none', {})
+    call ZHighLight('TagbarFoldIcon', s:cdFront, {}, 'none', {})
     call ZHighLight('TagbarKind', s:cdMidBlue, {}, 'none', {})
     call ZHighLight('TagbarScope', s:cdMidBlue, {}, 'none', {})
     call ZHighLight('TagbarSignature', s:cdFront, {}, 'none', {})
