@@ -1004,7 +1004,8 @@ function! ZShowCurrentFile()
 endfunction
 function! ZShowCurrentDirectory()
     if exists("g:NERDTree") && g:NERDTree.IsOpen()
-        NERDTreeCWD
+        silent NERDTreeCWD
+        silent NERDTreeRefreshRoot
         wincmd w
     endif
     echo getcwd()
