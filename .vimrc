@@ -945,9 +945,10 @@ let g:NERDTreeMinimalUI = 0
 let NERDTreeShowHidden = 1
 let NERDTreeAutoDeleteBuffer = 1
 if filereadable(expand('~/.vim/.devicons'))
-    let g:NERDTreeDirArrowExpandable = "\uf054"
-    let g:NERDTreeDirArrowCollapsible = "\uf078"
-    let g:tagbar_iconchars = [g:NERDTreeDirArrowExpandable, g:NERDTreeDirArrowCollapsible]
+    let g:NERDTreeDirArrowExpandable = ''
+    let g:NERDTreeDirArrowCollapsible = ''
+    let g:DevIconsEnableFoldersOpenClose = 1
+    let g:tagbar_iconchars = ["\uf054", "\uf078"]
 endif
 let g:NERDTreeDisableExactMatchHighlight = 1
 let g:NERDTreeDisablePatternMatchHighlight = 1
@@ -2639,6 +2640,7 @@ if g:colors_name == 'codedark'
     call ZHighLight('NERDTreeCWD', s:cdMidBlue, {}, 'none', {})
     call ZHighLight('NERDTreeFlags', s:cdMidBlue, {}, 'none', {})
     call ZHighLight('WebDevIconsDefaultFolderSymbol', s:cdMidBlue, {}, 'none', {})
+    call ZHighLight('WebDevIconsDefaultOpenFolderSymbol', s:cdMidBlue, {}, 'none', {})
     call ZHighLight('nerdtreeExactMatchIcon_makefile', s:cdIconGreyOrTermFront, {}, 'none', {})
     call ZHighLight('nerdtreeExactMatchIcon_license', s:cdIconYellowOrTermFront, {}, 'none', {})
     call ZHighLight('nerdtreeFileExtensionIcon_json', s:cdIconYellowOrTermFront, {}, 'none', {})
