@@ -2599,7 +2599,7 @@ if g:colors_name == 'codedark'
     " NERDTree
     call ZHighLight('NERDTreeOpenable', s:cdMidBlue, {}, 'none', {})
     call ZHighLight('NERDTreeClosable', s:cdMidBlue, {}, 'none', {})
-    call ZHighLight('NERDTreeHelp', s:cdGreen, {}, 'none', {})
+    call ZHighLight('NERDTreeHelp', s:cdMidBlue, {}, 'none', {})
     call ZHighLight('NERDTreeDir', s:cdFront, {}, 'none', {})
     call ZHighLight('NERDTreeUp', s:cdMidBlue, {}, 'none', {})
     call ZHighLight('NERDTreeDirSlash', s:cdMidBlue, {}, 'none', {})
@@ -2628,6 +2628,7 @@ if g:colors_name == 'codedark'
     call ZHighLight('TagbarKind', s:cdMidBlue, {}, 'none', {})
     call ZHighLight('TagbarScope', s:cdMidBlue, {}, 'none', {})
     call ZHighLight('TagbarSignature', s:cdFront, {}, 'none', {})
+    call ZHighLight('TagbarHelp', s:cdMidBlue, {}, 'none', {})
 
     " Vim
     call ZHighLight('VimOperError', s:cdRed, {}, 'none', {})
