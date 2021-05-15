@@ -934,9 +934,11 @@ endfunction
 nnoremap <silent> <leader>ll :call ZToggleNerdTreeAndTagbar()<CR>
 nnoremap <silent> <leader>lc :call ZToggleNerdTreeAndTagbar()<CR>:call ZShowCurrentFile()<CR>
 nnoremap <silent> <leader>nf :NERDTreeFind<CR>
+nnoremap <silent> <leader>nd :NERDTreeCWD<CR>
 nnoremap <silent> <leader>nt :call ZNerdTreeToggle()<CR>
 nnoremap <silent> <leader>tt :call ZTagbarToggle()<CR>
 nnoremap <silent> cf :call ZShowCurrentFile()<CR>
+nnoremap <silent> cq :call ZShowCurrentDirectory()<CR>
 let g:NERDTreeWinSize = 30
 let g:NERDTreeAutoCenter = 0
 let g:NERDTreeMinimalUI = 0
@@ -998,6 +1000,13 @@ function! ZShowCurrentFile()
         wincmd w
     endif
     echo @%
+endfunction
+function! ZShowCurrentDirectory()
+    if exists("g:NERDTree") && g:NERDTree.IsOpen()
+        NERDTreeCWD
+        wincmd w
+    endif
+    echo getcwd()
 endfunction
 " }}}
 

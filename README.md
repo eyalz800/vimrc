@@ -84,8 +84,12 @@ go - Toggle between source and header file.
 <leader>ll - Turn on / off the directory tree and source code function panes using nerd tree and tagbar.
 <leader>lc - Like previous but shows current file on directory tree.
 <leader>nf - Show current file in the directory tree using nerd tree.
+<leader>nd - Show current directory in nerd tree.
 <leader>nt - Toggle nerd tree on/off.
 <leader>tt - Toggle tagbar on/off.
+
+cf - Print current file path, if nerd tree is open, show it there as well.
+cq - Print current directory path, if nerd tree is open, show it there as well.
 ```
 
 * Terminal commands:
@@ -299,7 +303,6 @@ cu - Change directory to upper (parent) directory.
 * File operations:
 ```
 <C-s> - Save file.
-cf - Print current file path, if nerd tree is open, show it there as well.
 ```
 
 * Toggle seamless tmux/vim navigation:
