@@ -2604,7 +2604,7 @@ if g:colors_name == 'codedark'
     call ZHighLight('NERDTreeUp', s:cdMidBlue, {}, 'none', {})
     call ZHighLight('NERDTreeDirSlash', s:cdMidBlue, {}, 'none', {})
     call ZHighLight('NERDTreeFile', s:cdFront, {}, 'none', {})
-    call ZHighLight('NERDTreeExecFile', s:cdBlueGreen, {}, 'none', {})
+    call ZHighLight('NERDTreeExecFile', s:cdFront, {}, 'none', {})
     call ZHighLight('NERDTreeLinkFile', s:cdBlueGreen, {}, 'none', {})
     call ZHighLight('NERDTreeCWD', s:cdMidBlue, {}, 'none', {})
     call ZHighLight('NERDTreeFlags', s:cdMidBlue, {}, 'none', {})
