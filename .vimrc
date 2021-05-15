@@ -213,6 +213,7 @@ command! -nargs=+ ZAsyncPlug call ZAsyncLoadPlugin(<args>)
 call plug#begin()
 ZAsyncPlug 'puremourning/vimspector'
 ZAsyncPlug 'preservim/nerdtree'
+ZAsyncPlug 'Xuyuanp/nerdtree-git-plugin'
 if !empty($INSTALL_VIMRC_PLUGINS) || filereadable(expand('~/.vim/.devicons'))
     ZAsyncPlug 'ryanoasis/vim-devicons'
     ZAsyncPlug 'tiagofumo/vim-nerdtree-syntax-highlight'
@@ -944,6 +945,18 @@ let g:NERDTreeDisablePatternMatchHighlight = 1
 let g:NERDTreeLimitedSyntax = 1
 let g:NERDTreeSyntaxDisableDefaultExtensions = 0
 let g:NERDTreeSyntaxEnabledExtensions = ['h', 'sh', 'bash', 'vim', 'md']
+let g:NERDTreeGitStatusIndicatorMapCustom = {
+                \ 'Modified'  :'M',
+                \ 'Staged'    :'✚',
+                \ 'Untracked' :'U',
+                \ 'Renamed'   :'➜',
+                \ 'Unmerged'  :'═',
+                \ 'Deleted'   :'✖',
+                \ 'Dirty'     :'✗',
+                \ 'Ignored'   :'☒',
+                \ 'Clean'     :'✔︎',
+                \ 'Unknown'   :'?',
+                \ }
 let g:tagbar_width = 30
 let g:tagbar_indent = 0
 let s:tagbar_open = 0
@@ -2440,9 +2453,6 @@ function! ZToggleIndentLines()
 endfunction
 " }}}
 
-" Fern {{{
-let g:fern#renderer = "nerdfont"
-" }}}
 " Additional color settings {{{
 if g:colors_name == 'codedark'
     " Terminal ansi colors
