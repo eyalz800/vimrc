@@ -1888,6 +1888,8 @@ if g:lsp_choice == 'coc'
     "nmap <silent> gr <Plug>(coc-references)
     nmap <silent> gr :call ZLspJump('References')<CR>
 
+    nmap <leader>qf  <Plug>(coc-fix-current)
+
     nmap <silent> gy <Plug>(coc-type-definition)
     nmap <silent> go :CocCommand clangd.switchSourceHeader<CR>
     nnoremap <silent> K :call <SID>show_documentation()<CR>
