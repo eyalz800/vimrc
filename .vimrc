@@ -943,6 +943,7 @@ let g:NERDTreeWinSize = 30
 let g:NERDTreeAutoCenter = 0
 let g:NERDTreeMinimalUI = 0
 let NERDTreeShowHidden = 1
+let NERDTreeAutoDeleteBuffer = 1
 let g:NERDTreeDisableExactMatchHighlight = 1
 let g:NERDTreeDisablePatternMatchHighlight = 1
 let g:NERDTreeLimitedSyntax = 1
