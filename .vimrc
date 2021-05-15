@@ -2447,6 +2447,7 @@ let g:indentLine_first_char = '│'
 let g:indentLine_showFirstIndentLevel = 1
 let g:indentLine_enabled = filereadable(expand('~/.vim/.indentlines'))
 let g:indentLine_color_gui = '#404040'
+let g:vim_json_conceal = 0
 if g:indentLine_enabled
     hi SpecialKey guifg='#404040'
     set list lcs=tab:\│\ "
