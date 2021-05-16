@@ -334,7 +334,7 @@ set ttyfast " Fast terminal
 set lazyredraw " Redraw screen lazily
 set re=1 " Regex engine 1 feels smoother most of the times
 set foldmethod=marker " Marker based fold method
-set keymodel=startsel,stopsel " Shifted special key starts selection
+set keymodel=startsel " Shifted special key starts selection
 set laststatus=2 " Add status line
 set noshowmode " Do not show command/insert/normal status
 set ttimeoutlen=10 " Responsive escape
