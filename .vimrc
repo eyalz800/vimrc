@@ -342,6 +342,20 @@ if !has('nvim')
 endif
 " }}}
 
+" General Mappings {{{
+
+" Yank to end of line.
+nnoremap <silent> Y y$
+
+" Write as sudo.
+cnoremap <silent> w!! w !sudo tee % > /dev/null
+
+" Jump to matching pairs.
+nnoremap <silent> <Tab> %
+vnoremap <silent> <Tab> %
+
+" }}}
+
 " File indentation {{{
 augroup ZFileIndentation
     autocmd!
