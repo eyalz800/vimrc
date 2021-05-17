@@ -1947,6 +1947,8 @@ if g:lsp_choice == 'coc'
     highlight link CocWarningFloat None
     highlight clear CocInfoSign
     highlight link CocInfoSign None
+    highlight clear CocHintSign
+    highlight link CocHintSign None
     highlight clear CocInfoFloat
     highlight link CocInfoFloat None
 
