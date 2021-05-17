@@ -347,9 +347,6 @@ endif
 " Yank to end of line.
 nnoremap <silent> Y y$
 
-" Write as sudo.
-cnoremap <silent> w!! w !sudo tee % > /dev/null
-
 " Jump to matching pairs.
 nnoremap <silent> <Tab> %
 vnoremap <silent> <Tab> %
@@ -361,6 +358,9 @@ command! Qa qa
 command! -bang Qa qa!
 command! QA qa
 command! -bang QA qa!
+
+" Write as sudo.
+command! ZSudoW w !sudo tee > /dev/null %
 
 " }}}
 
