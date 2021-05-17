@@ -354,6 +354,14 @@ cnoremap <silent> w!! w !sudo tee % > /dev/null
 nnoremap <silent> <Tab> %
 vnoremap <silent> <Tab> %
 
+" Common command aliases.
+command! Q q
+command! -bang Q q!
+command! Qa qa
+command! -bang Qa qa!
+command! QA qa
+command! -bang QA qa!
+
 " }}}
 
 " File indentation {{{
