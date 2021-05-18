@@ -315,7 +315,7 @@ set showcmd " Show command line in the last line of the screen
 set incsearch " Incrementally search words
 set hlsearch " Highlight searches
 set shiftwidth=4 " Shift adds 4 spaces.
-set tabstop=4 " Tab is 4 columns
+set tabstop=4 softtabstop=4 " Tab is 4 columns
 set cmdheight=1 " Command line height is 1.
 set number " Shows line numbers
 set wildmode=list:longest,full " Enhanced completion menu
