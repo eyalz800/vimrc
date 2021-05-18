@@ -2036,7 +2036,7 @@ nnoremap <silent> <leader>bf :call ZBinaryFile()<CR>
 command! -nargs=0 ZBinaryFile call ZBinaryFile()
 augroup ZBinaryFileAutoCommands
     autocmd!
-    autocmd BufReadPost * if &bin | set ft=xxd | silent exec "%!xxd" | endif
+    autocmd BufReadPost * if &bin && (!exists('b:binary_mode') || !b:binary_mode) | let b:binary_mode = 1 | set ft=xxd | silent exec "%!xxd" | endif
     autocmd BufWritePre * if &bin | set ft=xxd | silent exec "%!xxd -r" | endif
     autocmd BufWritePost * if &bin | set ft=xxd | silent exec "%!xxd" | endif
 augroup end
@@ -2046,10 +2046,11 @@ function! ZBinaryFile()
         return
     endif
     if &bin == 0
-        let &bin=1
+        let &bin = 1
+        let b:binary_mode = 0
         silent exec "e"
     else
-        let &bin=0
+        let &bin = 0
         silent exec "e"
     endif
 endfunction
