@@ -277,6 +277,7 @@ if !empty($INSTALL_VIMRC_PLUGINS) || has('nvim')
 endif
 Plug 'Yggdroot/indentLine'
 ZAsyncPlug 'metakirby5/codi.vim'
+Plug 'tpope/vim-abolish'
 call plug#end()
 " }}}
 
@@ -2258,6 +2259,11 @@ function! ZToggleFold()
         set foldlevel=0
     endif
 endfunction
+" }}}
+
+" Abolish {{{
+let g:abolish_no_mappings = 1
+nmap <leader>cr <Plug>(abolish-coerce-word)
 " }}}
 
 " Vimspector {{{
