@@ -155,7 +155,7 @@ function! ZInstallVimrc()
         \ ")
         call ZInstallCommand("sudo -u $SUDO_USER INSTALL_VIMRC_PLUGINS=1 INSTALL_VIMRC= vim -E -s -u ~/.vimrc +qa")
         call ZInstallCommand("sudo -u $SUDO_USER " . python3_command . " ~/.vim/plugged/vimspector/install_gadget.py --sudo --enable-c --enable-python")
-        call ZInstallCommand("echo Done!")
+        silent exec "!echo Done."
     catch
         echo v:exception
         exec ":cq"
