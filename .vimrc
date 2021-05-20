@@ -278,6 +278,7 @@ endif
 Plug 'Yggdroot/indentLine'
 ZAsyncPlug 'metakirby5/codi.vim'
 Plug 'tpope/vim-abolish'
+ZAsyncPlug 'wellle/targets.vim'
 call plug#end()
 " }}}
 
