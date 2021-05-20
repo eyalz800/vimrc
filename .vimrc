@@ -279,6 +279,8 @@ Plug 'Yggdroot/indentLine'
 ZAsyncPlug 'metakirby5/codi.vim'
 Plug 'tpope/vim-abolish'
 ZAsyncPlug 'wellle/targets.vim'
+ZAsyncPlug 'SirVer/ultisnips'
+ZAsyncPlug 'eyalz800/vim-ultisnips'
 call plug#end()
 " }}}
 
@@ -2905,4 +2907,9 @@ function! ZToggleTransparentBackground()
         call system('tmux source ~/.tmux.conf')
     endif
 endfunction
+" }}}
+
+" UltiSnips {{{
+let g:UltiSnipsSnippetDirectories = ["UltiSnips", "vim-ultisnips"]
+let g:UltiSnipsExpandTrigger = '<c-c>'
 " }}}

@@ -368,3 +368,8 @@ ZToggleDevIcons - Toggles the use  of dev icons (off by default).
 <leader>cr. - Convert to dot.case.
 <leader>crt - Convert to Title Case.
 ```
+
+* Snippet complete:
+```
+<C-c> - Complete snippet in insert mode.
+```
