@@ -312,7 +312,7 @@ set ignorecase " Ignore case
 set smartcase " Smart case
 set shellslash " Use forward slash for directories
 set autoindent " Automatic indentation
-set cinoptions=g0N-s " Do not indent namespaces in cindent
+set cinoptions=g0N-sE-s " Do not indent namespaces/extern in cindent
 set backspace=indent,eol,start " Make backspace work like in most programs
 set ruler " Show line and column of cursor position
 set showcmd " Show command line in the last line of the screen
