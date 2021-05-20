@@ -2911,5 +2911,5 @@ endfunction
 
 " UltiSnips {{{
 let g:UltiSnipsSnippetDirectories = ["UltiSnips", "vim-ultisnips"]
-let g:UltiSnipsExpandTrigger = '<c-c>'
+let g:UltiSnipsExpandTrigger = '<c-d>'
 " }}}
