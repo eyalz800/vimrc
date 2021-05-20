@@ -245,6 +245,7 @@ endif
 if !empty($INSTALL_VIMRC_PLUGINS) || g:lsp_choice != 'coc'
     ZAsyncPlug 'vim-scripts/AutoComplPop'
     ZAsyncPlug 'vim-scripts/OmniCppComplete'
+    ZAsyncPlug 'SirVer/ultisnips'
 endif
 Plug 'tmsvg/pear-tree'
 ZAsyncPlug 'mbbill/undotree'
@@ -279,7 +280,6 @@ Plug 'Yggdroot/indentLine'
 ZAsyncPlug 'metakirby5/codi.vim'
 Plug 'tpope/vim-abolish'
 ZAsyncPlug 'wellle/targets.vim'
-ZAsyncPlug 'SirVer/ultisnips'
 ZAsyncPlug 'eyalz800/vim-ultisnips'
 call plug#end()
 " }}}
@@ -299,7 +299,7 @@ if !empty($INSTALL_VIMRC_PLUGINS)
             \ && echo '    \"clangd.semanticHighlighting\": false,' >> ~/.vim/coc-settings.json
             \ && echo '    \"coc.preferences.formatOnType\": false' >> ~/.vim/coc-settings.json
             \ && echo '}' >> ~/.vim/coc-settings.json")
-        call ZInstallCommand("INSTALL_VIMRC_PLUGINS=post vim -E -s -u ~/.vimrc +'CocInstall -sync coc-clangd coc-pyright coc-vimlsp coc-ultisnips' +qa")
+        call ZInstallCommand("INSTALL_VIMRC_PLUGINS=post vim -E -s -u ~/.vimrc +'CocInstall -sync coc-clangd coc-pyright coc-vimlsp coc-snippets' +qa")
     endif
 endif
 " }}}
@@ -1908,7 +1908,7 @@ endif
 
 " Coc {{{
 if g:lsp_choice == 'coc'
-    let g:coc_global_extensions = ['coc-clangd', 'coc-pyright', 'coc-vimlsp', 'coc-ultisnips']
+    let g:coc_global_extensions = ['coc-clangd', 'coc-pyright', 'coc-vimlsp', 'coc-snippets']
     let g:coc_fzf_preview = 'right:50%'
 
     "nmap <silent> gd <Plug>(coc-definition)
@@ -1929,6 +1929,9 @@ if g:lsp_choice == 'coc'
     nmap <silent> ]g <Plug>(coc-diagnostic-next)
     nmap <silent> <leader>rn <Plug>(coc-rename)
     xmap <silent> <leader>lf <Plug>(coc-format-selected)
+    imap <C-d> <Plug>(coc-snippets-expand)
+    vmap <C-d> <Plug>(coc-snippets-select)
+
     nnoremap <silent> <leader>ld :CocDiagnostics<CR>
     inoremap <silent> <expr> <CR> "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"")"))
 
@@ -2911,5 +2914,7 @@ endfunction
 
 " UltiSnips {{{
 let g:UltiSnipsSnippetDirectories = ["UltiSnips", "vim-ultisnips"]
-let g:UltiSnipsExpandTrigger = '<c-d>'
+if g:lsp_choice != 'coc'
+    let g:UltiSnipsExpandTrigger = '<c-d>'
+endif
 " }}}
