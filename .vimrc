@@ -445,7 +445,7 @@ command! ZToggleOscCopy call ZToggleOscCopy() | source ~/.vimrc
 command! ZToggleForceXServer call ZToggleForceXServer()
 function! ZOscCopy()
     let encodedText=@"
-    let encodedText=substitute(encodedText, '\', '\\', "g")
+    let encodedText=substitute(encodedText, '\', '\\\\', "g")
     let encodedText=substitute(encodedText, "'", "'\\\\''", "g")
     let executeCmd="echo -n '".encodedText."' | base64 | tr -d '\\n'"
     let encodedText=system(executeCmd)
@@ -458,7 +458,7 @@ function! ZOscCopy()
 endfunction
 function! ZOscCopyPtty()
     let encodedText=@"
-    let encodedText=substitute(encodedText, '\', '\\', "g")
+    let encodedText=substitute(encodedText, '\', '\\\\', "g")
     let encodedText=substitute(encodedText, "'", "'\\\\''", "g")
     let executeCmd="echo -n '".encodedText."' | base64 | tr -d '\\n'"
     let encodedText=system(executeCmd)
