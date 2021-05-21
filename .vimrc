@@ -214,8 +214,13 @@ call plug#begin()
 ZAsyncPlug 'puremourning/vimspector'
 ZAsyncPlug 'preservim/nerdtree'
 if !empty($INSTALL_VIMRC_PLUGINS) || filereadable(expand('~/.vim/.devicons'))
-    ZAsyncPlug 'Xuyuanp/nerdtree-git-plugin'
-    ZAsyncPlug 'ryanoasis/vim-devicons'
+    if !has('nvim')
+        ZAsyncPlug 'Xuyuanp/nerdtree-git-plugin'
+        ZAsyncPlug 'ryanoasis/vim-devicons'
+    else
+        Plug 'Xuyuanp/nerdtree-git-plugin'
+        Plug 'ryanoasis/vim-devicons'
+    endif
     ZAsyncPlug 'tiagofumo/vim-nerdtree-syntax-highlight'
 endif
 ZAsyncPlug 'majutsushi/tagbar'
