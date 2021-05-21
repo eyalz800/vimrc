@@ -286,6 +286,7 @@ ZAsyncPlug 'metakirby5/codi.vim'
 Plug 'tpope/vim-abolish'
 ZAsyncPlug 'wellle/targets.vim'
 ZAsyncPlug 'eyalz800/vim-ultisnips'
+ZAsyncPlug 'voldikss/vim-floaterm'
 call plug#end()
 " }}}
 
@@ -1057,27 +1058,13 @@ nnoremap <silent> <leader>gl :call ZPopTerminal($SHELL . ' -c "cd ' .  expand('%
 nnoremap <silent> <leader>gL :call ZPopTerminal('lazygit')<CR>
 " }}}
 
+" Float Term {{{
+let g:floaterm_title = 'terminal'
+" }}}
+
 " Pop Terminal {{{
 function! ZPopTerminal(command)
-    if !has('nvim')
-        let buf = term_start(a:command, #{hidden: 1, term_finish: 'close'})
-        let winid = popup_dialog(buf, #{minheight: 40, minwidth: 150})
-        let bufn = winbufnr(winid)
-    else
-        let termopen_opts = {}
-        function! termopen_opts.on_exit(job_id, code, event)
-            for buf in getbufinfo()
-                if has_key(buf.variables, 'terminal_job_id') && buf.variables.terminal_job_id == a:job_id
-                    let bufnr = buf.bufnr
-                    break
-                endif
-            endfor
-            call execute('Bclose! ' . bufnr)
-        endfunction
-        call termopen(a:command, termopen_opts)
-        tunmap <silent> <buffer> <ScrollWheelUp>
-        startinsert
-    endif
+    silent execute 'FloatermNew --height=0.9 --width=0.9 --autoclose=2 ' . a:command
 endfunction
 " }}}
 
