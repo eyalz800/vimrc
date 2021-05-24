@@ -856,10 +856,10 @@ endif
 augroup ZTerminalAutoCommands
     autocmd!
     if !has('nvim')
-        autocmd TerminalOpen * DisableWhitespace
+        autocmd TerminalOpen * if exists('g:better_whitespace_enabled') | DisableWhitespace
         autocmd TerminalOpen * tnoremap <silent> <buffer> <ScrollWheelUp> <C-w>:call ZTerminalEnterNormalMode()<CR>
     else
-        autocmd TermOpen * DisableWhitespace
+        autocmd TermOpen * if exists('g:better_whitespace_enabled') | DisableWhitespace
         autocmd TermOpen * tnoremap <silent> <buffer> <ScrollWheelUp> <C-\><C-n>:call ZTerminalEnterNormalMode()<CR>
         autocmd TermOpen * setlocal nonumber signcolumn=no
     endif
