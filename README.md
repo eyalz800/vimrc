@@ -371,5 +371,6 @@ ZToggleDevIcons - Toggles the use  of dev icons (off by default).
 
 * Snippet complete:
 ```
-<C-d> - Complete snippet in insert mode.
+<C-d> - Expand snippet in insert mode.
+<C-r> - Replace-Expand snippet in visual mode.
 ```

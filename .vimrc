@@ -1924,7 +1924,7 @@ if g:lsp_choice == 'coc'
     nmap <silent> <leader>rn <Plug>(coc-rename)
     xmap <silent> <leader>lf <Plug>(coc-format-selected)
     imap <C-d> <Plug>(coc-snippets-expand)
-    vmap <C-d> <Plug>(coc-snippets-select)
+    vmap <C-r> <Plug>(coc-snippets-select)
 
     nnoremap <silent> <leader>ld :CocDiagnostics<CR>
     inoremap <silent> <expr> <CR> "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"")"))
