@@ -1401,10 +1401,17 @@ function! ZToggleTmuxNavitaion()
         nnoremap <silent> <C-w>j :TmuxNavigateDown<cr>
         nnoremap <silent> <C-w>k :TmuxNavigateUp<cr>
         nnoremap <silent> <C-w>l :TmuxNavigateRight<cr>
-        tnoremap <silent> <C-w>h <C-w>:TmuxNavigateLeft<cr>
-        tnoremap <silent> <C-w>j <C-w>:TmuxNavigateDown<cr>
-        tnoremap <silent> <C-w>k <C-w>:TmuxNavigateUp<cr>
-        tnoremap <silent> <C-w>l <C-w>:TmuxNavigateRight<cr>
+        if !has('nvim')
+            tnoremap <silent> <C-w>h <C-w>:TmuxNavigateLeft<cr>
+            tnoremap <silent> <C-w>j <C-w>:TmuxNavigateDown<cr>
+            tnoremap <silent> <C-w>k <C-w>:TmuxNavigateUp<cr>
+            tnoremap <silent> <C-w>l <C-w>:TmuxNavigateRight<cr>
+        else
+            tnoremap <silent> <C-w>h <C-\><C-n>:TmuxNavigateLeft<cr>
+            tnoremap <silent> <C-w>j <C-\><C-n>:TmuxNavigateDown<cr>
+            tnoremap <silent> <C-w>k <C-\><C-n>:TmuxNavigateUp<cr>
+            tnoremap <silent> <C-w>l <C-\><C-n>:TmuxNavigateRight<cr>
+        endif
         let s:tmux_navigation_enabled = 1
     else
         nunmap <C-w>h
