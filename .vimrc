@@ -196,7 +196,9 @@ function! ZAsyncLoadPlugin(github_ref, ...) abort
         call plug#(a:github_ref, plug_args)
         return
     endif
-    call extend(plug_args, { 'on': [] })
+    if !has_key(plug_args, 'on')
+        call extend(plug_args, { 'on': [] })
+    endif
     call plug#(a:github_ref, plug_args)
     let plugin = a:github_ref[stridx(a:github_ref, '/') + 1:]
     let args = '"'.plugin.'"'
@@ -257,7 +259,7 @@ ZAsyncPlug 'mbbill/undotree'
 ZAsyncPlug 'thezeroalpha/vim-lf'
 ZAsyncPlug 'tpope/vim-commentary'
 Plug 'tomasiser/vim-code-dark'
-ZAsyncPlug 'ntpeters/vim-better-whitespace'
+ZAsyncPlug 'ntpeters/vim-better-whitespace', { 'on': ['DisableWhitespace', 'EnableWhitespace'] }
 ZAsyncPlug 'troydm/zoomwintab.vim'
 if !empty($INSTALL_VIMRC_PLUGINS) || ((exists('g:not_inside_vim') || empty($INSIDE_VIM)) && filereadable(expand('~/.vim/.terminus')))
     Plug 'wincent/terminus'
@@ -286,7 +288,7 @@ ZAsyncPlug 'metakirby5/codi.vim'
 Plug 'tpope/vim-abolish'
 ZAsyncPlug 'wellle/targets.vim'
 ZAsyncPlug 'eyalz800/vim-ultisnips'
-ZAsyncPlug 'voldikss/vim-floaterm'
+ZAsyncPlug 'voldikss/vim-floaterm', { 'on': ['FloatermNew'] }
 call plug#end()
 " }}}
 
@@ -856,10 +858,10 @@ endif
 augroup ZTerminalAutoCommands
     autocmd!
     if !has('nvim')
-        autocmd TerminalOpen * if exists('g:better_whitespace_enabled') | DisableWhitespace
+        autocmd TerminalOpen * DisableWhitespace
         autocmd TerminalOpen * tnoremap <silent> <buffer> <ScrollWheelUp> <C-w>:call ZTerminalEnterNormalMode()<CR>
     else
-        autocmd TermOpen * if exists('g:better_whitespace_enabled') | DisableWhitespace
+        autocmd TermOpen * DisableWhitespace
         autocmd TermOpen * tnoremap <silent> <buffer> <ScrollWheelUp> <C-\><C-n>:call ZTerminalEnterNormalMode()<CR>
         autocmd TermOpen * setlocal nonumber signcolumn=no
     endif
