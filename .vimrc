@@ -42,7 +42,7 @@ function! ZInstallVimrc()
         exec ":q"
     endif
     try
-        call ZInstallCommand("mkdir -p ~/.vim/tmp ~/.vim/bin/python ~/.vim/bin/llvm ~/.vim/undo ~/.config/coc ~/.cache")
+        call ZInstallCommand("mkdir -p ~/.vim/tmp ~/.vim/bin/python ~/.vim/bin/llvm ~/.vim/undo ~/.vim/nundo ~/.config/coc ~/.cache")
         if !executable('brew')
             call ZInstallCommand("DEBIAN_FRONTEND=noninteractive add-apt-repository -y ppa:lazygit-team/release")
             call ZInstallCommand("curl -sL https://deb.nodesource.com/setup_14.x | bash -")
@@ -2170,7 +2170,11 @@ let g:SignatureMap = {
 " }}}
 
 " Undo file {{{
-set undodir=~/.vim/undo
+if !has('nvim')
+    set undodir=~/.vim/undo
+else
+    set undodir=~/.vim/nundo
+endif
 set undolevels=10000
 set undofile
 command! -nargs=0 ZUndoCleanup call ZUndoCleanup()
