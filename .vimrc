@@ -2532,6 +2532,9 @@ else
     endif
     let g:indent_blankline_char = '│'
     let g:indent_blankline_show_first_indent_level = v:true
+    if empty(&colorcolumn)
+        set colorcolumn=99999
+    endif
     hi IndentBlanklineChar guifg=#404040 gui=nocombine
     command! ZToggleIndentLines call ZToggleIndentLines()
     function! ZToggleIndentLines()
