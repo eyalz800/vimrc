@@ -410,7 +410,7 @@ nnoremap <silent> <C-w>w :q<CR>
 " }}}
 
 " Close buffer {{{
-nnoremap <silent> <C-w>d :bd<CR>
+nnoremap <silent> <C-w>d :bd \| call airline#extensions#tabline#buflist#clean()<CR>
 " }}}
 
 " Save file {{{
