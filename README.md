@@ -374,3 +374,9 @@ ZToggleDevIcons - Toggles the use of dev icons (off by default).
 <C-d> - Expand snippet in insert mode.
 <C-r> - Replace-Expand snippet in visual mode.
 ```
+
+* Previous / Next Buffer:
+```
+<f1> - Move to previous buffer.
+<f2> - Move to next buffer.
+```

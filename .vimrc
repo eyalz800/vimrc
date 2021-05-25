@@ -2853,6 +2853,19 @@ let g:airline#extensions#whitespace#conflicts_format = 'conflict[%s]'
 let g:airline_theme_patch_func = 'ZAirlineThemePatch'
 let g:airline#extensions#zoomwintab#enabled = 1
 let g:airline#extensions#zoomwintab#status_zoomed_in = '(zoom)'
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#tabs_label = ''
+let g:airline#extensions#tabline#buffers_label = ''
+let g:airline#extensions#tabline#show_splits = 0
+let g:airline#extensions#tabline#show_close_button = 0
+let g:airline#extensions#tabline#show_tab_type = 0
+let g:airlie#extensions#tabline#show_tab_nr = 0
+let g:airline#extensions#tabline#show_buffers = 1
+let g:airline#extensions#tabline#fnamecollapse = 1
+let g:airline#extensions#tabline#fnamemod = ':t'
+set showtabline=2
+nnoremap <silent> <f1> :bp<CR>
+nnoremap <silent> <f2> :bn<CR>
 if filereadable(expand('~/.vim/.powerline'))
     let g:airline_powerline_fonts = 1
 else
