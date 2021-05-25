@@ -285,7 +285,7 @@ if !empty($INSTALL_VIMRC_PLUGINS) || !has('nvim')
 endif
 if !empty($INSTALL_VIMRC_PLUGINS) || has('nvim')
     ZAsyncPlug 'rbgrouleff/bclose.vim'
-    Plug 'lukas-reineke/indent-blankline.nvim', { 'branch': 'lua' }
+    ZAsyncPlug 'lukas-reineke/indent-blankline.nvim', { 'branch': 'lua' }
 endif
 ZAsyncPlug 'metakirby5/codi.vim'
 Plug 'tpope/vim-abolish'
@@ -2497,37 +2497,51 @@ function! ZToggleDevIcons()
 endfunction
 " }}}
 
-" Indent Line {{{
-let g:indentLine_char = '│'
-let g:indentLine_first_char = '│'
-let g:indentLine_showFirstIndentLevel = 1
-let g:indentLine_enabled = filereadable(expand('~/.vim/.indentlines'))
-let g:indentLine_color_gui = '#404040'
-let g:vim_json_conceal = 0
-if g:indentLine_enabled
-    hi SpecialKey guifg='#404040' gui=nocombine
-    set list lcs=tab:\│\ "
-endif
+" Indent Line / Blankline {{{
 nnoremap <silent> <leader>zi :call ZToggleIndentLines()<CR>
-command! ZToggleIndentLines call ZToggleIndentLines()
-function! ZToggleIndentLines()
-    if filereadable(expand('~/.vim/.indentlines'))
-        call system("rm ~/.vim/.indentlines")
-        set list lcs=tab:\ \ "
-        IndentLinesDisable
-    else
-        call system("touch ~/.vim/.indentlines")
+if !has('nvim')
+    let g:indentLine_char = '│'
+    let g:indentLine_first_char = '│'
+    let g:indentLine_showFirstIndentLevel = 1
+    let g:indentLine_enabled = filereadable(expand('~/.vim/.indentlines'))
+    let g:indentLine_color_gui = '#404040'
+    let g:vim_json_conceal = 0
+    if g:indentLine_enabled
         hi SpecialKey guifg='#404040' gui=nocombine
         set list lcs=tab:\│\ "
-        IndentLinesEnable
     endif
-endfunction
-" }}}
-
-" Indent Blankline {{{
-if has('nvim')
-    let g:indent_blankline_show_first_indent_level = 1
-    highlight IndentBlanklineContextChar guifg=#707070 gui=nocombine
+    command! ZToggleIndentLines call ZToggleIndentLines()
+    function! ZToggleIndentLines()
+        if filereadable(expand('~/.vim/.indentlines'))
+            call system("rm ~/.vim/.indentlines")
+            set list lcs=tab:\ \ "
+            IndentLinesDisable
+        else
+            call system("touch ~/.vim/.indentlines")
+            hi SpecialKey guifg='#404040' gui=nocombine
+            set list lcs=tab:\│\ "
+            IndentLinesEnable
+        endif
+    endfunction
+else
+    if filereadable(expand('~/.vim/.indentlines'))
+        let g:indent_blankline_enabled = v:true
+    else
+        let g:indent_blankline_enabled = v:false
+    endif
+    let g:indent_blankline_char = '│'
+    let g:indent_blankline_show_first_indent_level = v:true
+    hi IndentBlanklineChar guifg=#404040 gui=nocombine
+    command! ZToggleIndentLines call ZToggleIndentLines()
+    function! ZToggleIndentLines()
+        if filereadable(expand('~/.vim/.indentlines'))
+            call system("rm ~/.vim/.indentlines")
+            IndentBlanklineDisable!
+        else
+            call system("touch ~/.vim/.indentlines")
+            IndentBlanklineEnable!
+        endif
+    endfunction
 endif
 " }}}
 
