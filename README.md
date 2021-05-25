@@ -188,9 +188,10 @@ gc - Comment in/out selected code.
 s{char1}{char2} - Jump to a location with the following two characters {char1}{char2}.
 ```
 
-* Close current window:
+* Close current window / buffer:
 ```
 <C-w>w - Close current window.
+<C-w>d - Close current buffer.
 ```
 
 * View / select from open buffers:

@@ -409,6 +409,10 @@ nnoremap <silent> <C-q> <C-v>
 nnoremap <silent> <C-w>w :q<CR>
 " }}}
 
+" Close buffer {{{
+nnoremap <silent> <C-w>d :bd<CR>
+" }}}
+
 " Save file {{{
 nnoremap <silent> <C-s> :w<CR>
 inoremap <silent> <C-s> <C-o>:w<CR>
