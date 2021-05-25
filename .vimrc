@@ -280,10 +280,13 @@ ZAsyncPlug 'scrooloose/vim-slumlord'
 ZAsyncPlug 'aklt/plantuml-syntax'
 ZAsyncPlug 'skywind3000/asynctasks.vim'
 ZAsyncPlug 'yaronkh/vim-winmanip'
+if !empty($INSTALL_VIMRC_PLUGINS) || !has('nvim')
+    Plug 'Yggdroot/indentLine'
+endif
 if !empty($INSTALL_VIMRC_PLUGINS) || has('nvim')
     ZAsyncPlug 'rbgrouleff/bclose.vim'
+    Plug 'lukas-reineke/indent-blankline.nvim', { 'branch': 'lua' }
 endif
-Plug 'Yggdroot/indentLine'
 ZAsyncPlug 'metakirby5/codi.vim'
 Plug 'tpope/vim-abolish'
 ZAsyncPlug 'wellle/targets.vim'
@@ -2502,7 +2505,7 @@ let g:indentLine_enabled = filereadable(expand('~/.vim/.indentlines'))
 let g:indentLine_color_gui = '#404040'
 let g:vim_json_conceal = 0
 if g:indentLine_enabled
-    hi SpecialKey guifg='#404040'
+    hi SpecialKey guifg='#404040' gui=nocombine
     set list lcs=tab:\│\ "
 endif
 nnoremap <silent> <leader>zi :call ZToggleIndentLines()<CR>
@@ -2514,11 +2517,18 @@ function! ZToggleIndentLines()
         IndentLinesDisable
     else
         call system("touch ~/.vim/.indentlines")
-        hi SpecialKey guifg='#404040'
+        hi SpecialKey guifg='#404040' gui=nocombine
         set list lcs=tab:\│\ "
         IndentLinesEnable
     endif
 endfunction
+" }}}
+
+" Indent Blankline {{{
+if has('nvim')
+    let g:indent_blankline_show_first_indent_level = 1
+    highlight IndentBlanklineContextChar guifg=#707070 gui=nocombine
+endif
 " }}}
 
 " Additional color settings {{{
