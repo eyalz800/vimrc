@@ -983,7 +983,7 @@ nnoremap <silent> cf :call ZShowCurrentFile()<CR>
 nnoremap <silent> cq :call ZShowCurrentDirectory()<CR>
 let g:NERDTreeWinSize = 30
 let g:NERDTreeAutoCenter = 0
-let g:NERDTreeMinimalUI = 0
+let g:NERDTreeMinimalUI = 1
 let NERDTreeShowHidden = 1
 let NERDTreeAutoDeleteBuffer = 1
 if filereadable(expand('~/.vim/.devicons'))
@@ -1011,6 +1011,7 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \ }
 let g:tagbar_width = 30
 let g:tagbar_indent = 0
+let g:tagbar_compact = 2
 let s:tagbar_open = 0
 augroup ZNerdTree
     autocmd!
