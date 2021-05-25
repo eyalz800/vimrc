@@ -376,8 +376,9 @@ ZToggleDevIcons - Toggles the use of dev icons (off by default).
 <C-r> - Replace-Expand snippet in visual mode.
 ```
 
-* Previous / Next Buffer:
+* Moving between buffer tabs:
 ```
 <f1> - Move to previous buffer.
 <f2> - Move to next buffer.
+<leader>1...9 - Select buffer #1..#9
 ```
