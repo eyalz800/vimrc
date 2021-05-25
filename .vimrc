@@ -356,6 +356,7 @@ set ttimeoutlen=10 " Responsive escape
 if !has('nvim')
     set balloondelay=250 " Fast balloon popup.
 endif
+let loaded_gzip = 0 " Disable loading gzip plugin.
 " }}}
 
 " General Mappings {{{
