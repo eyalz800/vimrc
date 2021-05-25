@@ -140,6 +140,7 @@ function! ZInstallVimrc()
                 \ && echo 'source ~/.vimrc' >> ~/.config/nvim/init.vim
             \ ")
         endif
+        call ZInstallCommand("touch ~/.vim/.indentlines")
         call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim")
         call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.config")
         call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.cache")
