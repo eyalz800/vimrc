@@ -2571,7 +2571,7 @@ if g:colors_name == 'codedark'
         \ '#303030',
         \ '#d16969',
         \ '#6a9955',
-        \ '#ce9a78',
+        \ '#ce9178',
         \ '#569cd6',
         \ '#c586c0',
         \ '#4ec9b0',
@@ -2588,7 +2588,7 @@ if g:colors_name == 'codedark'
         let g:terminal_color_8 = '#303030'
         let g:terminal_color_9 = '#d16969'
         let g:terminal_color_10 = '#6a9955'
-        let g:terminal_color_11 = '#ce9a78'
+        let g:terminal_color_11 = '#ce9178'
         let g:terminal_color_12 = '#569cd6'
         let g:terminal_color_13 = '#c586c0'
         let g:terminal_color_14 = '#4ec9b0'
