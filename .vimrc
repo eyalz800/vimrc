@@ -229,7 +229,7 @@ endif
 ZAsyncPlug 'majutsushi/tagbar'
 ZAsyncPlug 'ludovicchabant/vim-gutentags'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-ZAsyncPlug 'junegunn/fzf.vim'
+ZAsyncPlug 'junegunn/fzf.vim', { 'on': ['Files', 'BLines'] }
 ZAsyncPlug 'skywind3000/asyncrun.vim'
 ZAsyncPlug 'justinmk/vim-sneak'
 ZAsyncPlug 'easymotion/vim-easymotion'
