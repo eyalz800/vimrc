@@ -230,15 +230,21 @@ ZAsyncPlug 'majutsushi/tagbar'
 ZAsyncPlug 'ludovicchabant/vim-gutentags'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 ZAsyncPlug 'junegunn/fzf.vim'
-ZAsyncPlug 'vim-airline/vim-airline'
 ZAsyncPlug 'skywind3000/asyncrun.vim'
 ZAsyncPlug 'justinmk/vim-sneak'
 ZAsyncPlug 'easymotion/vim-easymotion'
 ZAsyncPlug 'mg979/vim-visual-multi'
 ZAsyncPlug 'erig0/cscope_dynamic', { 'do': s:sed . " -i 's/call s:runShellCommand/call system/g' ./plugin/cscope_dynamic.vim" }
 ZAsyncPlug 'octol/vim-cpp-enhanced-highlight'
-ZAsyncPlug 'airblade/vim-gitgutter'
-ZAsyncPlug 'tpope/vim-fugitive'
+if !has('nvim')
+    ZAsyncPlug 'vim-airline/vim-airline'
+    ZAsyncPlug 'airblade/vim-gitgutter'
+    ZAsyncPlug 'tpope/vim-fugitive'
+else
+    ZAsyncPlug 'airblade/vim-gitgutter'
+    ZAsyncPlug 'tpope/vim-fugitive'
+    ZAsyncPlug 'vim-airline/vim-airline'
+endif
 if !empty($INSTALL_VIMRC_PLUGINS) || g:lsp_choice == 'vim-lsp'
     Plug 'prabirshrestha/async.vim'
     Plug 'prabirshrestha/vim-lsp'
