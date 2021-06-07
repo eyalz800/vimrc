@@ -141,6 +141,8 @@ function! ZInstallVimrc()
             \ ")
         endif
         call ZInstallCommand("touch ~/.vim/.indentlines")
+        call ZInstallCommand("touch ~/.viminfo")
+        call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.viminfo")
         call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim")
         call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.config")
         call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.cache")
@@ -299,6 +301,7 @@ Plug 'tpope/vim-abolish'
 ZAsyncPlug 'wellle/targets.vim'
 ZAsyncPlug 'eyalz800/vim-ultisnips'
 ZAsyncPlug 'voldikss/vim-floaterm', { 'on': ['FloatermNew'] }
+ZAsyncPlug 'will133/vim-dirdiff'
 call plug#end()
 " }}}
 
