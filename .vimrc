@@ -374,7 +374,6 @@ let loaded_gzip = 0 " Disable loading gzip plugin.
 nnoremap <silent> Y y$
 
 " Jump to matching pairs.
-nnoremap <silent> <Tab> %
 vnoremap <silent> <Tab> %
 
 " Common command aliases.
