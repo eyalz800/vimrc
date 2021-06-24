@@ -176,6 +176,8 @@ H - Modify width - 1
     - Shift-P to push.
     - ? for help.
 <leader>gL - Lazy git launch in current dir instead of file dir.
+<leader>gt - Open tig in file directory.
+<leader>gT - Open tig in current directory.
 ```
 
 * Comment in/out:

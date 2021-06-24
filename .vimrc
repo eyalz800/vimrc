@@ -50,12 +50,12 @@ function! ZInstallVimrc()
                 \ https://apt.llvm.org/llvm.sh
                 \ ; cd ~/.vim/tmp/llvm-install; chmod +x ./llvm.sh; ./llvm.sh " . s:clang_version)
             call ZInstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y curl silversearcher-ag exuberant-ctags cscope git
-                \ make autoconf automake pkg-config openjdk-8-jre python3 python3-pip gdb golang nodejs lazygit libc++-" . s:clang_version . "-dev libc++abi-" . s:clang_version . "-dev")
+                \ make autoconf automake pkg-config openjdk-8-jre python3 python3-pip gdb golang nodejs lazygit tig libc++-" . s:clang_version . "-dev libc++abi-" . s:clang_version . "-dev")
             call ZInstallCommand("rm -rf ~/.vim/bin/llvm/clangd && ln -s $(command -v clangd-" . s:clang_version . ") ~/.vim/bin/llvm/clangd")
             let lazygit_config_path = '~/.config/jesseduffield/lazygit'
         else
             call ZInstallCommand("sudo -u $SUDO_USER brew install curl ag ctags cscope git
-                \ llvm make autoconf automake pkg-config python3 nodejs gnu-sed bat ripgrep lazygit golang pandoc || true")
+                \ llvm make autoconf automake pkg-config python3 nodejs gnu-sed bat ripgrep lazygit tig golang pandoc || true")
             call ZInstallCommand("rm -rf /usr/local/bin/2to3")
             call ZInstallCommand("sudo -u $SUDO_USER brew link python3")
             call ZInstallCommand("sudo -u $SUDO_USER brew tap AdoptOpenJDK/openjdk")
@@ -697,7 +697,7 @@ function! ZGenerateFlags()
         let cpp_include_2 = system("dirname " . cpp_include_2)
     endif
 
-    copen
+    below copen
     exec ":AsyncRun
     \ echo -std=c++20 > compile_flags.txt
     \ && echo -isystem >> compile_flags.txt
@@ -713,29 +713,29 @@ endfunction
 
 " Generate Tags
 function! ZGenerateTags()
-    copen
+    below copen
     exec ":AsyncRun echo '" . g:ctagsOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && ctags " . g:ctagsOptions
 endfunction
 
 function! ZGenerateEveryTags()
-    copen
+    below copen
     exec ":AsyncRun echo '" . g:ctagsEverythingOptions . "' > .gutctags && " . s:sed . " -i 's/ /\\n/g' .gutctags && ctags " . g:ctagsEverythingOptions
 endfunction
 
 " Generate Files
 function! ZGenerateSourceFilesCache()
-    copen
+    below copen
     exec ":AsyncRun rg --files " . g:sourceFilePatterns . " > .files"
 endfunction
 
 function! ZGenerateFilesCache()
-    copen
+    below copen
     exec ":AsyncRun " . g:fzf_files_nocache_command . " > .files"
 endfunction
 
 " Generate C++
 function! ZGenerateCpp()
-    copen
+    below copen
     exec ":AsyncRun
     \ echo '" . g:ctagsOptions . "' > .gutctags
     \ && " . s:sed . " -i 's/ /\\n/g' .gutctags
@@ -746,7 +746,7 @@ endfunction
 
 " Generate Opengrok
 function! ZGenerateOpengrok()
-    copen
+    below copen
     exec ":AsyncRun java -Xmx2048m -jar ~/.vim/bin/opengrok/lib/opengrok.jar -q -c " . g:opengrok_ctags . " -s . -d .opengrok
          \ " . g:opengrokFilePatterns . "
          \ -P -S -G -W .opengrok/configuration.xml"
@@ -754,7 +754,7 @@ endfunction
 
 " Generate Cpp and Opengrok
 function! ZGenerateCppAndOpengrok()
-    copen
+    below copen
     exec ":AsyncRun
     \ echo '" . g:ctagsOptions . "' > .gutctags
     \ && " . s:sed . " -i 's/ /\\n/g' .gutctags
@@ -772,7 +772,7 @@ function! ZGenerateCompileCommandsJson()
     call inputsave()
     let compile_command = input('Compile (make) command: ')
     call inputrestore()
-    copen
+    below copen
     if executable('compiledb')
         exec ":AsyncRun compiledb " . compile_command
     else
@@ -1001,6 +1001,8 @@ nnoremap <silent> <leader>gm :MagitOnly<CR>
 nnoremap <silent> <leader>gc :BCommits<CR>
 nnoremap <silent> <leader>gl :call ZPopTerminal($SHELL . ' -c "cd ' .  expand('%:p:h') . ' ; lazygit"')<CR>
 nnoremap <silent> <leader>gL :call ZPopTerminal('lazygit')<CR>
+nnoremap <silent> <leader>gt :call ZPopTerminal($SHELL . ' -c "cd ' .  expand('%:p:h') . ' ; tig"')<CR>
+nnoremap <silent> <leader>gL :call ZPopTerminal('tig')<CR>
 " }}}
 
 " Float Term {{{
@@ -1325,7 +1327,7 @@ endfunction
 " }}}
 
 " QuickFix {{{
-nnoremap <silent> <C-w>p :copen<CR>
+nnoremap <silent> <C-w>p :below copen<CR>
 nnoremap <silent> <C-w>q :cclose<CR>
 " }}}
 
@@ -2131,7 +2133,7 @@ set undolevels=10000
 set undofile
 command! -nargs=0 ZUndoCleanup call ZUndoCleanup()
 function! ZUndoCleanup()
-    copen
+    below copen
     AsyncRun find ~/.vim/undo -type f -mtime +90 -delete
 endfunction
 " }}}
