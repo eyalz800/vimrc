@@ -983,7 +983,7 @@ function! ZShowCurrentFile()
         NERDTreeFind
         wincmd w
     endif
-    echo @%
+    echo expand("%:p")
 endfunction
 function! ZShowCurrentDirectory()
     if exists("g:NERDTree") && g:NERDTree.IsOpen()
