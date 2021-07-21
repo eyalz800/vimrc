@@ -1582,7 +1582,7 @@ function! ZGoToSymbol(symbol, type)
 endfunction
 
 function! ZGetTargetSymbolJumpIfCtagType(symbol, file, lines, ctags_tag_types)
-    let ctags = split(system("ctags -o - " . g:ctagsOptions . " " . shellescape(a:file)
+    let ctags = split(system("ctags -o - " . g:ctagsEverythingOptions . " " . shellescape(a:file)
         \ . " 2>/dev/null | grep " . shellescape(a:symbol)), '\n')
     let lines_and_columns = []
     for ctag in ctags
