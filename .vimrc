@@ -2451,6 +2451,9 @@ if !has('nvim')
     let g:indentLine_enabled = filereadable(expand('~/.vim/.indentlines'))
     let g:indentLine_color_gui = '#404040'
     let g:vim_json_conceal = 0
+    let g:vim_markdown_conceal = 0
+    let g:vim_markdown_conceal_code_blocks = 0
+    let g:indentLine_fileTypeExclude = ['markdown']
     if g:indentLine_enabled
         hi SpecialKey guifg='#404040' gui=nocombine
         set list lcs=tab:\│\ "
