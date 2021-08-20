@@ -301,6 +301,7 @@ ZAsyncPlug 'wellle/targets.vim'
 ZAsyncPlug 'eyalz800/vim-ultisnips'
 ZAsyncPlug 'voldikss/vim-floaterm', { 'on': ['FloatermNew'] }
 ZAsyncPlug 'will133/vim-dirdiff'
+ZAsyncPlug 'junegunn/goyo.vim'
 call plug#end()
 " }}}
 
