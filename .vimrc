@@ -302,6 +302,7 @@ ZAsyncPlug 'eyalz800/vim-ultisnips'
 ZAsyncPlug 'voldikss/vim-floaterm', { 'on': ['FloatermNew'] }
 ZAsyncPlug 'will133/vim-dirdiff'
 ZAsyncPlug 'junegunn/goyo.vim'
+ZAsyncPlug 'yazgoo/yank-history'
 call plug#end()
 " }}}
 
@@ -2923,4 +2924,8 @@ let g:UltiSnipsSnippetDirectories = ["UltiSnips", "vim-ultisnips"]
 if g:lsp_choice != 'coc'
     let g:UltiSnipsExpandTrigger = '<c-d>'
 endif
+" }}}
+
+" Yank History {{{
+nnoremap <silent> <space>h :YankHistoryRgPaste<CR>
 " }}}

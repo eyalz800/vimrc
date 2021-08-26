@@ -384,3 +384,8 @@ ZToggleDevIcons - Toggles the use of dev icons (off by default).
 <f2> - Move to next buffer.
 <leader>1...9 - Select buffer #1..#9
 ```
+
+* Pasting from history:
+```
+<space>h - Paste from yank history.
+```
