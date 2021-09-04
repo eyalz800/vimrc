@@ -2811,6 +2811,8 @@ elseif g:colors_name == 'tokyonight'
     if !has('nvim')
         hi Comment guifg=#565f89
         hi VertSplit guifg=#1d202f
+        hi SignColumn guibg=NONE
+        hi CursorLineNr guibg=NONE
     else
         hi Folded guifg=#565f89 guibg=#282d42
     endif
