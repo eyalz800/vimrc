@@ -369,6 +369,7 @@ set keymodel=startsel " Shifted special key starts selection
 set laststatus=2 " Add status line
 set noshowmode " Do not show command/insert/normal status
 set ttimeoutlen=10 " Responsive escape
+set fillchars=vert:\│ " Bar for vertical split
 if !has('nvim')
     set balloondelay=250 " Fast balloon popup.
 endif
@@ -2809,6 +2810,7 @@ elseif g:colors_name == 'nord'
 elseif g:colors_name == 'tokyonight'
     if !has('nvim')
         hi Comment guifg=#565f89
+        hi VertSplit guifg=#1d202f
     else
         hi Folded guifg=#565f89 guibg=#282d42
     endif
