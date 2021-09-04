@@ -2806,6 +2806,12 @@ elseif g:colors_name == 'nord'
 
     " Makefile
     call ZHighLight("makeIdent", s:nord8_gui, "", s:nord8_term, "", "", "")
+elseif g:colors_name == 'tokyonight'
+    if !has('nvim')
+        hi Comment guifg=#565f89
+    else
+        hi Folded guifg=#565f89 guibg=#282d42
+    endif
 endif
 " }}}
 
