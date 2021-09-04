@@ -303,6 +303,12 @@ ZAsyncPlug 'voldikss/vim-floaterm', { 'on': ['FloatermNew'] }
 ZAsyncPlug 'will133/vim-dirdiff'
 ZAsyncPlug 'junegunn/goyo.vim'
 ZAsyncPlug 'yazgoo/yank-history'
+if !empty($INSTALL_VIMRC_PLUGINS) || !has('nvim')
+    Plug 'ghifarit53/tokyonight-vim'
+endif
+if !empty($INSTALL_VIMRC_PLUGINS) || has('nvim')
+    Plug 'eyalz800/tokyonight.nvim'
+endif
 call plug#end()
 " }}}
 
@@ -1031,8 +1037,16 @@ endif
 let g:onedark_color_overrides = {
     \ "special_grey": { "gui": "#5C6370", "cterm": "59", "cterm16": "15" }
 \ }
-let s:available_colors = ['onedark', 'codedark', 'nord']
+let s:available_colors = ['onedark', 'codedark', 'nord', 'tokyonight']
 let s:vim_color = readfile(expand('~/.vim/.color'))[0]
+if !has('nvim')
+    let g:tokyonight_style = 'storm'
+    let g:tokyonight_enable_italic = 0
+    let g:tokyonight_disable_italic_comment = 1
+else
+    let g:tokyonight_italic_keywords = 0
+    let g:tokyonight_italic_comments = 0
+endif
 exec ':color ' . s:vim_color
 function! ZColor(color)
     call system('echo ' . a:color . ' > ~/.vim/.color')
