@@ -140,6 +140,8 @@ function! ZInstallVimrc()
             \ ")
         endif
         call ZInstallCommand("touch ~/.vim/.indentlines")
+        call ZInstallCommand("touch ~/.vim/.powerline")
+        call ZInstallCommand("touch ~/.vim/.devicons")
         call ZInstallCommand("touch ~/.viminfo")
         call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.viminfo")
         call ZInstallCommand("chown -R $SUDO_USER:$SUDO_GID ~/.vim")
