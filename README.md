@@ -257,6 +257,7 @@ and invoke 'vim -S' to restore the session at the next time.
 :ZColor 'onedark' - using onedark.
 :ZColor 'codedark' - using codedark.
 :ZColor 'nord' - using nord.
+:ZColor 'tokyonight' - using tokyonight.
 <leader>tb - transparent background.
 ```
 
