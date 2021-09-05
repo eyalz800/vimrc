@@ -2818,14 +2818,24 @@ elseif g:colors_name == 'tokyonight'
         hi Conditional guifg=#bb9af7
         hi Repeat guifg=#bb9af7
         hi cLabel guifg=#bb9af7
+        hi cCustomAccessKey guifg=#bb9af7
+        hi cppAccess guifg=#bb9af7
         hi vimLet guifg=#bb9af7
         hi vimMap guifg=#bb9af7
         hi Identifier guifg=#bb9af7
+        hi markdownH1 guifg=#bb9af7
+        hi markdownListMarker guifg=#bb9af7
+        hi htmlTagName guifg=#bb9af7
+        hi NERDTreeDirSlash guifg=#bb9af7
+        hi TagbarKind guifg=#bb9af7
+        hi TagbarFoldIcon guifg=#bb9af7
+        hi cPreCondit guifg=#7dcfff
         hi PreProc guifg=#7dcfff
         hi Include guifg=#7dcfff
         hi Keyword guifg=#7dcfff
-        hi String guifg=#9ece6a
+        hi Macro guifg=#7dcfff
         hi Type guifg=#2ac3de
+        hi Operator guifg=#89ddff
         hi cCustomClass guifg=#2ac3de
         hi cppStructure guifg=#2ac3de
         hi cppStorageClass guifg=#2ac3de
@@ -2833,27 +2843,49 @@ elseif g:colors_name == 'tokyonight'
         hi Special guifg=#2ac3de
         hi Delimiter guifg=#2ac3de
         hi vimMapMod guifg=#2ac3de
+        hi markdownHeadingRule guifg=#2ac3de
+        hi markdownCodeDelimiter guifg=#2ac3de
+        hi htmlArg guifg=#2ac3de
         hi Function guifg=#7aa2f7
         hi vimFuncName guifg=#7aa2f7
+        hi markdownH2 guifg=#7aa2f7
+        hi markdownLinkText guifg=#7aa2f7 gui=NONE
+        hi htmlTag guifg=#7aa2f7
+        hi NERDTreeDir guifg=#7aa2f7
+        hi NERDTreeExecFile guifg=#7aa2f7
+        hi WebDevIconsDefaultFolderSymbol guifg=#7aa2f7
         hi Constant guifg=#ff9e64
         hi Number guifg=#ff9e64
         hi Boolean guifg=#ff9e64
         hi cppSTLnamespace guifg=#ff9e64
-        hi Operator guifg=#89ddff
-
+        hi String guifg=#9ece6a
+        hi markdownCode guifg=#1abc9c
         hi Comment guifg=#565f89
         hi Folded guifg=#565f89 guibg=#282d42
+        hi TagbarSignature guifg=#545c7e
+
+        hi GitGutterAdd guibg=NONE
+        hi GitGutterChange guibg=NONE
+        hi GitGutterDelete guibg=NONE
+        hi GitGutterChangeDelete guibg=NONE
+        hi CocHintSign guibg=NONE
+        hi CocWarningSign guibg=NONE
+        hi CocErrorSign guibg=NONE
 
         hi clear vimFunction
         hi clear vimUserFunc
         hi clear vimMapRhs
         hi clear vimMapLhs
+        hi clear markdownLinkTextDelimiter
+        hi clear NERDTreeNodeDelimiters
     else
         hi Folded guifg=#565f89 guibg=#282d42
 
         hi Type guifg=#2ac3de
         hi cCustomClass guifg=#2ac3de
         hi cppStructure guifg=#2ac3de
+
+        hi markdownLinkText guifg=#7aa2f7 gui=NONE
     endif
 endif
 " }}}
