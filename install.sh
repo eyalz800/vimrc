@@ -9,7 +9,7 @@ fi
 if [ -x "$(command -v brew)" ]; then
     sudo -u $SUDO_USER brew install vim || true
 else
-    vim_version=8.2.2847
+    vim_version=8.2.3404
     python3_command=python3
 
     DEBIAN_FRONTEND=noninteractive apt update
