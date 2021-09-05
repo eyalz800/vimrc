@@ -2516,380 +2516,394 @@ endif
 " }}}
 
 " Additional color settings {{{
-if g:colors_name == 'codedark'
-    " Terminal ansi colors
-    if !has('nvim')
-        let g:terminal_ansi_colors =
-        \ ['#1e1e1e',
-        \ '#f44747',
-        \ '#6a9955',
-        \ '#ffaf00',
-        \ '#0a7aca',
-        \ '#c586c0',
-        \ '#4ec9b0',
-        \ '#d4d4d4',
-        \ '#303030',
-        \ '#d16969',
-        \ '#6a9955',
-        \ '#ce9178',
-        \ '#569cd6',
-        \ '#c586c0',
-        \ '#4ec9b0',
-        \ '#51504f']
-    else
-        let g:terminal_color_0 = '#1e1e1e'
-        let g:terminal_color_1 = '#f44747'
-        let g:terminal_color_2 = '#6a9955'
-        let g:terminal_color_3 = '#ffaf00'
-        let g:terminal_color_4 = '#0a7aca'
-        let g:terminal_color_5 = '#c586c0'
-        let g:terminal_color_6 = '#4ec9b0'
-        let g:terminal_color_7 = '#d4d4d4'
-        let g:terminal_color_8 = '#303030'
-        let g:terminal_color_9 = '#d16969'
-        let g:terminal_color_10 = '#6a9955'
-        let g:terminal_color_11 = '#ce9178'
-        let g:terminal_color_12 = '#569cd6'
-        let g:terminal_color_13 = '#c586c0'
-        let g:terminal_color_14 = '#4ec9b0'
-        let g:terminal_color_15 = '#51504f'
-    endif
-
-    let s:cterm00 = "00"
-    let s:cterm03 = "08"
-    let s:cterm05 = "07"
-    let s:cterm07 = "15"
-    let s:cterm08 = "01"
-    let s:cterm0A = "03"
-    let s:cterm0B = "02"
-    let s:cterm0C = "06"
-    let s:cterm0D = "04"
-    let s:cterm0E = "05"
-    if exists('base16colorspace') && base16colorspace == "256"
-      let s:cterm01 = "18"
-      let s:cterm02 = "19"
-      let s:cterm04 = "20"
-      let s:cterm06 = "21"
-      let s:cterm09 = "16"
-      let s:cterm0F = "17"
-    else
-      let s:cterm01 = "00"
-      let s:cterm02 = "08"
-      let s:cterm04 = "07"
-      let s:cterm06 = "07"
-      let s:cterm09 = "06"
-      let s:cterm0F = "03"
-    endif
-
-    function! ZHighLight(group, fg, bg, attr, sp)
-        if !empty(a:fg)
-            exec "hi " . a:group . " guifg=" . a:fg.gui . " ctermfg=" . (g:codedark_term256 ? a:fg.cterm256 : a:fg.cterm)
+function! ZCustomizeColors()
+    if g:colors_name == 'codedark'
+        " Terminal ansi colors
+        if !has('nvim')
+            let g:terminal_ansi_colors =
+            \ ['#1e1e1e',
+            \ '#f44747',
+            \ '#6a9955',
+            \ '#ffaf00',
+            \ '#0a7aca',
+            \ '#c586c0',
+            \ '#4ec9b0',
+            \ '#d4d4d4',
+            \ '#303030',
+            \ '#d16969',
+            \ '#6a9955',
+            \ '#ce9178',
+            \ '#569cd6',
+            \ '#c586c0',
+            \ '#4ec9b0',
+            \ '#51504f']
+        else
+            let g:terminal_color_0 = '#1e1e1e'
+            let g:terminal_color_1 = '#f44747'
+            let g:terminal_color_2 = '#6a9955'
+            let g:terminal_color_3 = '#ffaf00'
+            let g:terminal_color_4 = '#0a7aca'
+            let g:terminal_color_5 = '#c586c0'
+            let g:terminal_color_6 = '#4ec9b0'
+            let g:terminal_color_7 = '#d4d4d4'
+            let g:terminal_color_8 = '#303030'
+            let g:terminal_color_9 = '#d16969'
+            let g:terminal_color_10 = '#6a9955'
+            let g:terminal_color_11 = '#ce9178'
+            let g:terminal_color_12 = '#569cd6'
+            let g:terminal_color_13 = '#c586c0'
+            let g:terminal_color_14 = '#4ec9b0'
+            let g:terminal_color_15 = '#51504f'
         endif
-        if !empty(a:bg)
-            exec "hi " . a:group . " guibg=" . a:bg.gui . " ctermbg=" . (g:codedark_term256 ? a:bg.cterm256 : a:bg.cterm)
+
+        let s:cterm00 = "00"
+        let s:cterm03 = "08"
+        let s:cterm05 = "07"
+        let s:cterm07 = "15"
+        let s:cterm08 = "01"
+        let s:cterm0A = "03"
+        let s:cterm0B = "02"
+        let s:cterm0C = "06"
+        let s:cterm0D = "04"
+        let s:cterm0E = "05"
+        if exists('base16colorspace') && base16colorspace == "256"
+          let s:cterm01 = "18"
+          let s:cterm02 = "19"
+          let s:cterm04 = "20"
+          let s:cterm06 = "21"
+          let s:cterm09 = "16"
+          let s:cterm0F = "17"
+        else
+          let s:cterm01 = "00"
+          let s:cterm02 = "08"
+          let s:cterm04 = "07"
+          let s:cterm06 = "07"
+          let s:cterm09 = "06"
+          let s:cterm0F = "03"
         endif
-        if a:attr != ""
-            exec "hi " . a:group . " gui=" . a:attr . " cterm=" . a:attr
-        endif
-        if !empty(a:sp)
-            exec "hi " . a:group . " guisp=" . a:sp.gui
-        endif
-    endfunction
 
-    let s:cdBack = {'gui': '#1E1E1E', 'cterm': s:cterm00, 'cterm265': '234'}
-    let s:cdLightBlue = {'gui': '#9CDCFE', 'cterm': s:cterm0C, 'cterm256': '117'}
-    let s:cdMidBlue = {'gui': '#519aba', 'cterm': s:cterm0D, 'cterm256': '75'}
-    let s:cdBlue = {'gui': '#569CD6', 'cterm': s:cterm0D, 'cterm256': '75'}
-    let s:cdDarkBlue = {'gui': '#223E55', 'cterm': s:cterm0D, 'cterm256': '73'}
-    let s:cdYellow = {'gui': '#DCDCAA', 'cterm': s:cterm0A, 'cterm256': '187'}
-    let s:cdYellowOrange = {'gui': '#D7BA7D', 'cterm': s:cterm0A, 'cterm256': '179'}
-    let s:cdPink = {'gui': '#C586C0', 'cterm': s:cterm0E, 'cterm256': '176'}
-    let s:cdBlueGreen = {'gui': '#4EC9B0', 'cterm': s:cterm0F, 'cterm256': '43'}
-    let s:cdGreen = {'gui': '#6A9955', 'cterm': s:cterm0B, 'cterm256': '65'}
-    let s:cdLightGreen = {'gui': '#B5CEA8', 'cterm': s:cterm09, 'cterm256': '151'}
-    let s:cdOrange = {'gui': '#CE9178', 'cterm': s:cterm0F, 'cterm256': '173'}
-    let s:cdVividOrange = {'gui': '#FFAF00', 'cterm': s:cterm0A, 'cterm256': '214'}
-    let s:cdLightRed = {'gui': '#D16969', 'cterm': s:cterm08, 'cterm256': '167'}
-    let s:cdRed = {'gui': '#F44747', 'cterm': s:cterm08, 'cterm256': '203'}
-    let s:cdViolet = {'gui': '#646695', 'cterm': s:cterm04, 'cterm256': '60'}
-    let s:cdVividBlue = {'gui': '#0A7ACA', 'cterm': s:cterm0D, 'cterm256': '32'}
-    let s:cdFront = {'gui': '#D4D4D4', 'cterm': s:cterm05, 'cterm256': '188'}
-    let s:cdWhite = {'gui': '#FFFFFF', 'cterm':  s:cterm07, 'cterm256': '15'}
+        function! ZHighLight(group, fg, bg, attr, sp)
+            if !empty(a:fg)
+                exec "hi " . a:group . " guifg=" . a:fg.gui . " ctermfg=" . (g:codedark_term256 ? a:fg.cterm256 : a:fg.cterm)
+            endif
+            if !empty(a:bg)
+                exec "hi " . a:group . " guibg=" . a:bg.gui . " ctermbg=" . (g:codedark_term256 ? a:bg.cterm256 : a:bg.cterm)
+            endif
+            if a:attr != ""
+                exec "hi " . a:group . " gui=" . a:attr . " cterm=" . a:attr
+            endif
+            if !empty(a:sp)
+                exec "hi " . a:group . " guisp=" . a:sp.gui
+            endif
+        endfunction
 
-    let s:cdIconGreyOrTermFront = {'gui': '#6d8086', 'cterm': s:cterm05, 'cterm256': '188'}
-    let s:cdIconYellowOrTermFront = {'gui': '#cbcb41', 'cterm': s:cterm05, 'cterm256': '188'}
+        let s:cdBack = {'gui': '#1E1E1E', 'cterm': s:cterm00, 'cterm265': '234'}
+        let s:cdLightBlue = {'gui': '#9CDCFE', 'cterm': s:cterm0C, 'cterm256': '117'}
+        let s:cdMidBlue = {'gui': '#519aba', 'cterm': s:cterm0D, 'cterm256': '75'}
+        let s:cdBlue = {'gui': '#569CD6', 'cterm': s:cterm0D, 'cterm256': '75'}
+        let s:cdDarkBlue = {'gui': '#223E55', 'cterm': s:cterm0D, 'cterm256': '73'}
+        let s:cdYellow = {'gui': '#DCDCAA', 'cterm': s:cterm0A, 'cterm256': '187'}
+        let s:cdYellowOrange = {'gui': '#D7BA7D', 'cterm': s:cterm0A, 'cterm256': '179'}
+        let s:cdPink = {'gui': '#C586C0', 'cterm': s:cterm0E, 'cterm256': '176'}
+        let s:cdBlueGreen = {'gui': '#4EC9B0', 'cterm': s:cterm0F, 'cterm256': '43'}
+        let s:cdGreen = {'gui': '#6A9955', 'cterm': s:cterm0B, 'cterm256': '65'}
+        let s:cdLightGreen = {'gui': '#B5CEA8', 'cterm': s:cterm09, 'cterm256': '151'}
+        let s:cdOrange = {'gui': '#CE9178', 'cterm': s:cterm0F, 'cterm256': '173'}
+        let s:cdVividOrange = {'gui': '#FFAF00', 'cterm': s:cterm0A, 'cterm256': '214'}
+        let s:cdLightRed = {'gui': '#D16969', 'cterm': s:cterm08, 'cterm256': '167'}
+        let s:cdRed = {'gui': '#F44747', 'cterm': s:cterm08, 'cterm256': '203'}
+        let s:cdViolet = {'gui': '#646695', 'cterm': s:cterm04, 'cterm256': '60'}
+        let s:cdVividBlue = {'gui': '#0A7ACA', 'cterm': s:cterm0D, 'cterm256': '32'}
+        let s:cdFront = {'gui': '#D4D4D4', 'cterm': s:cterm05, 'cterm256': '188'}
+        let s:cdWhite = {'gui': '#FFFFFF', 'cterm':  s:cterm07, 'cterm256': '15'}
 
-    " Codedark colors defined
-    let s:codedark_colors_defined = 1
+        let s:cdIconGreyOrTermFront = {'gui': '#6d8086', 'cterm': s:cterm05, 'cterm256': '188'}
+        let s:cdIconYellowOrTermFront = {'gui': '#cbcb41', 'cterm': s:cterm05, 'cterm256': '188'}
 
-    " C++
-    call ZHighLight('cCustomAccessKey', s:cdBlue, {}, 'none', {})
-    call ZHighLight('cppModifier', s:cdBlue, {}, 'none', {})
-    call ZHighLight('cppExceptions', s:cdBlue, {}, 'none', {})
-    call ZHighLight('cOperator', s:cdBlue, {}, 'none', {})
-    call ZHighLight('cppStatement', s:cdBlue, {}, 'none', {})
-    call ZHighLight('cppSTLType', s:cdBlueGreen, {}, 'none', {})
-    call ZHighLight('cppSTLnamespace', s:cdBlueGreen, {}, 'none', {})
-    call ZHighLight('cCustomClassName', s:cdBlueGreen, {}, 'none', {})
-    call ZHighLight('cCustomClass', s:cdBlueGreen, {}, 'none', {})
-    call ZHighLight('cppSTLexception', s:cdBlueGreen, {}, 'none', {})
-    call ZHighLight('cppSTLconstant', s:cdLightBlue, {}, 'none', {})
-    call ZHighLight('cppSTLvariable', s:cdLightBlue, {}, 'none', {})
-    call ZHighLight('cCustomMemVar', s:cdLightBlue, {}, 'none', {})
-    call ZHighLight('cppSTLfunction', s:cdYellow, {}, 'none', {})
-    call ZHighLight('cCustomOperator', s:cdYellow, {}, 'none', {})
-    call ZHighLight('cConstant', s:cdPink, {}, 'none', {})
-    call ZHighLight('cppNew', s:cdPink, {}, 'none', {})
-    call ZHighLight('cppDelete', s:cdPink, {}, 'none', {})
-    call ZHighLight('cppUsing', s:cdPink, {}, 'none', {})
-    "call ZHighLight('cRepeat', s:cdPink, {}, 'none', {})
-    "call ZHighLight('cConditional', s:cdPink, {}, 'none', {})
-    "call ZHighLight('cStatement', s:cdPink, {}, 'none', {})
+        " Codedark colors defined
+        let s:codedark_colors_defined = 1
 
-    " Python
-    call ZHighLight('pythonBuiltin', s:cdBlueGreen, {}, 'none', {})
-    call ZHighLight('pythonExceptions', s:cdBlueGreen, {}, 'none', {})
-    call ZHighLight('pythonBuiltinObj', s:cdLightBlue, {}, 'none', {})
-    call ZHighLight('pythonRepeat', s:cdPink, {}, 'none', {})
-    call ZHighLight('pythonConditional', s:cdPink, {}, 'none', {})
-    call ZHighLight('pythonException', s:cdPink, {}, 'none', {})
-    call ZHighLight('pythonInclude', s:cdPink, {}, 'none', {})
-    call ZHighLight('pythonImport', s:cdPink, {}, 'none', {})
-    call ZHighLight('pythonStatement', s:cdPink, {}, 'none', {})
-    call ZHighLight('pythonOperator', s:cdBlue, {}, 'none', {})
-    call ZHighLight('pythonDef', s:cdBlue, {}, 'none', {})
-    call ZHighLight('pythonLambda', s:cdBlue, {}, 'none', {})
-    call ZHighLight('pythonFunction', s:cdYellow, {}, 'none', {})
-    call ZHighLight('pythonDecorator', s:cdYellow, {}, 'none', {})
-    call ZHighLight('pythonBuiltinFunc', s:cdYellow, {}, 'none', {})
+        " C++
+        call ZHighLight('cCustomAccessKey', s:cdBlue, {}, 'none', {})
+        call ZHighLight('cppModifier', s:cdBlue, {}, 'none', {})
+        call ZHighLight('cppExceptions', s:cdBlue, {}, 'none', {})
+        call ZHighLight('cOperator', s:cdBlue, {}, 'none', {})
+        call ZHighLight('cppStatement', s:cdBlue, {}, 'none', {})
+        call ZHighLight('cppSTLType', s:cdBlueGreen, {}, 'none', {})
+        call ZHighLight('cppSTLnamespace', s:cdBlueGreen, {}, 'none', {})
+        call ZHighLight('cCustomClassName', s:cdBlueGreen, {}, 'none', {})
+        call ZHighLight('cCustomClass', s:cdBlueGreen, {}, 'none', {})
+        call ZHighLight('cppSTLexception', s:cdBlueGreen, {}, 'none', {})
+        call ZHighLight('cppSTLconstant', s:cdLightBlue, {}, 'none', {})
+        call ZHighLight('cppSTLvariable', s:cdLightBlue, {}, 'none', {})
+        call ZHighLight('cCustomMemVar', s:cdLightBlue, {}, 'none', {})
+        call ZHighLight('cppSTLfunction', s:cdYellow, {}, 'none', {})
+        call ZHighLight('cCustomOperator', s:cdYellow, {}, 'none', {})
+        call ZHighLight('cConstant', s:cdPink, {}, 'none', {})
+        call ZHighLight('cppNew', s:cdPink, {}, 'none', {})
+        call ZHighLight('cppDelete', s:cdPink, {}, 'none', {})
+        call ZHighLight('cppUsing', s:cdPink, {}, 'none', {})
+        "call ZHighLight('cRepeat', s:cdPink, {}, 'none', {})
+        "call ZHighLight('cConditional', s:cdPink, {}, 'none', {})
+        "call ZHighLight('cStatement', s:cdPink, {}, 'none', {})
 
-    " Gitgutter
-    call ZHighLight('GitGutterAdd', s:cdGreen, {}, 'none', {})
-    call ZHighLight('GitGutterChange', s:cdFront, {}, 'none', {})
-    call ZHighLight('GitGutterDelete', s:cdRed, {}, 'none', {})
+        " Python
+        call ZHighLight('pythonBuiltin', s:cdBlueGreen, {}, 'none', {})
+        call ZHighLight('pythonExceptions', s:cdBlueGreen, {}, 'none', {})
+        call ZHighLight('pythonBuiltinObj', s:cdLightBlue, {}, 'none', {})
+        call ZHighLight('pythonRepeat', s:cdPink, {}, 'none', {})
+        call ZHighLight('pythonConditional', s:cdPink, {}, 'none', {})
+        call ZHighLight('pythonException', s:cdPink, {}, 'none', {})
+        call ZHighLight('pythonInclude', s:cdPink, {}, 'none', {})
+        call ZHighLight('pythonImport', s:cdPink, {}, 'none', {})
+        call ZHighLight('pythonStatement', s:cdPink, {}, 'none', {})
+        call ZHighLight('pythonOperator', s:cdBlue, {}, 'none', {})
+        call ZHighLight('pythonDef', s:cdBlue, {}, 'none', {})
+        call ZHighLight('pythonLambda', s:cdBlue, {}, 'none', {})
+        call ZHighLight('pythonFunction', s:cdYellow, {}, 'none', {})
+        call ZHighLight('pythonDecorator', s:cdYellow, {}, 'none', {})
+        call ZHighLight('pythonBuiltinFunc', s:cdYellow, {}, 'none', {})
 
-    " NERDTree
-    call ZHighLight('NERDTreeOpenable', s:cdMidBlue, {}, 'none', {})
-    call ZHighLight('NERDTreeClosable', s:cdMidBlue, {}, 'none', {})
-    call ZHighLight('NERDTreeHelp', s:cdMidBlue, {}, 'none', {})
-    call ZHighLight('NERDTreeDir', s:cdFront, {}, 'none', {})
-    call ZHighLight('NERDTreeUp', s:cdMidBlue, {}, 'none', {})
-    call ZHighLight('NERDTreeDirSlash', s:cdMidBlue, {}, 'none', {})
-    call ZHighLight('NERDTreeFile', s:cdFront, {}, 'none', {})
-    call ZHighLight('NERDTreeExecFile', s:cdFront, {}, 'none', {})
-    call ZHighLight('NERDTreeLinkFile', s:cdBlueGreen, {}, 'none', {})
-    call ZHighLight('NERDTreeCWD', s:cdMidBlue, {}, 'none', {})
-    call ZHighLight('NERDTreeFlags', s:cdMidBlue, {}, 'none', {})
-    call ZHighLight('WebDevIconsDefaultFolderSymbol', s:cdMidBlue, {}, 'none', {})
-    call ZHighLight('WebDevIconsDefaultOpenFolderSymbol', s:cdMidBlue, {}, 'none', {})
-    call ZHighLight('nerdtreeExactMatchIcon_makefile', s:cdIconGreyOrTermFront, {}, 'none', {})
-    call ZHighLight('nerdtreeExactMatchIcon_license', s:cdIconYellowOrTermFront, {}, 'none', {})
-    call ZHighLight('nerdtreeFileExtensionIcon_json', s:cdIconYellowOrTermFront, {}, 'none', {})
-    call ZHighLight('nerdtreeFileExtensionIcon_h', s:cdMidBlue, {}, 'none', {})
-    call ZHighLight('nerdtreeFileExtensionIcon_c', s:cdMidBlue, {}, 'none', {})
-    call ZHighLight('nerdtreeFileExtensionIcon_cpp', s:cdMidBlue, {}, 'none', {})
-    call ZHighLight('nerdtreeFileExtensionIcon_py', s:cdMidBlue, {}, 'none', {})
-    let g:NERDTreeExtensionHighlightColor = {}
-    let g:NERDTreeExtensionHighlightColor['json'] = ''
-    let g:NERDTreeExtensionHighlightColor['h'] = ''
-    let g:NERDTreeExtensionHighlightColor['c'] = ''
-    let g:NERDTreeExtensionHighlightColor['cpp'] = ''
-    let g:NERDTreeExtensionHighlightColor['py'] = ''
+        " Gitgutter
+        call ZHighLight('GitGutterAdd', s:cdGreen, {}, 'none', {})
+        call ZHighLight('GitGutterChange', s:cdFront, {}, 'none', {})
+        call ZHighLight('GitGutterDelete', s:cdRed, {}, 'none', {})
 
-    " Tagbar
-    call ZHighLight('TagbarFoldIcon', s:cdMidBlue, {}, 'none', {})
-    call ZHighLight('TagbarKind', s:cdMidBlue, {}, 'none', {})
-    call ZHighLight('TagbarScope', s:cdMidBlue, {}, 'none', {})
-    call ZHighLight('TagbarSignature', s:cdFront, {}, 'none', {})
-    call ZHighLight('TagbarHelp', s:cdMidBlue, {}, 'none', {})
+        " NERDTree
+        call ZHighLight('NERDTreeOpenable', s:cdMidBlue, {}, 'none', {})
+        call ZHighLight('NERDTreeClosable', s:cdMidBlue, {}, 'none', {})
+        call ZHighLight('NERDTreeHelp', s:cdMidBlue, {}, 'none', {})
+        call ZHighLight('NERDTreeDir', s:cdFront, {}, 'none', {})
+        call ZHighLight('NERDTreeUp', s:cdMidBlue, {}, 'none', {})
+        call ZHighLight('NERDTreeDirSlash', s:cdMidBlue, {}, 'none', {})
+        call ZHighLight('NERDTreeFile', s:cdFront, {}, 'none', {})
+        call ZHighLight('NERDTreeExecFile', s:cdFront, {}, 'none', {})
+        call ZHighLight('NERDTreeLinkFile', s:cdBlueGreen, {}, 'none', {})
+        call ZHighLight('NERDTreeCWD', s:cdMidBlue, {}, 'none', {})
+        call ZHighLight('NERDTreeFlags', s:cdMidBlue, {}, 'none', {})
+        call ZHighLight('WebDevIconsDefaultFolderSymbol', s:cdMidBlue, {}, 'none', {})
+        call ZHighLight('WebDevIconsDefaultOpenFolderSymbol', s:cdMidBlue, {}, 'none', {})
+        call ZHighLight('nerdtreeExactMatchIcon_makefile', s:cdIconGreyOrTermFront, {}, 'none', {})
+        call ZHighLight('nerdtreeExactMatchIcon_license', s:cdIconYellowOrTermFront, {}, 'none', {})
+        call ZHighLight('nerdtreeFileExtensionIcon_json', s:cdIconYellowOrTermFront, {}, 'none', {})
+        call ZHighLight('nerdtreeFileExtensionIcon_h', s:cdMidBlue, {}, 'none', {})
+        call ZHighLight('nerdtreeFileExtensionIcon_c', s:cdMidBlue, {}, 'none', {})
+        call ZHighLight('nerdtreeFileExtensionIcon_cpp', s:cdMidBlue, {}, 'none', {})
+        call ZHighLight('nerdtreeFileExtensionIcon_py', s:cdMidBlue, {}, 'none', {})
+        let g:NERDTreeExtensionHighlightColor = {}
+        let g:NERDTreeExtensionHighlightColor['json'] = ''
+        let g:NERDTreeExtensionHighlightColor['h'] = ''
+        let g:NERDTreeExtensionHighlightColor['c'] = ''
+        let g:NERDTreeExtensionHighlightColor['cpp'] = ''
+        let g:NERDTreeExtensionHighlightColor['py'] = ''
 
-    " Vim
-    call ZHighLight('VimOperError', s:cdRed, {}, 'none', {})
-    call ZHighLight('vimFunction', s:cdYellow, {}, 'none', {})
+        " Tagbar
+        call ZHighLight('TagbarFoldIcon', s:cdMidBlue, {}, 'none', {})
+        call ZHighLight('TagbarKind', s:cdMidBlue, {}, 'none', {})
+        call ZHighLight('TagbarScope', s:cdMidBlue, {}, 'none', {})
+        call ZHighLight('TagbarSignature', s:cdFront, {}, 'none', {})
+        call ZHighLight('TagbarHelp', s:cdMidBlue, {}, 'none', {})
 
-    " Json
-    call ZHighLight('jsonCommentError', s:cdGreen, {}, 'none', {})
-    call ZHighLight('jsonString', s:cdOrange, {}, 'none', {})
-    call ZHighLight('jsonNumber', s:cdLightGreen, {}, 'none', {})
+        " Vim
+        call ZHighLight('VimOperError', s:cdRed, {}, 'none', {})
+        call ZHighLight('vimFunction', s:cdYellow, {}, 'none', {})
 
-    " Yaml
-    call ZHighLight('yamlBlockCollectionItemStart', s:cdFront, {}, 'none', {})
-    call ZHighLight('yamlKeyValueDelimiter', s:cdFront, {}, 'none', {})
-    call ZHighLight('yamlPlainScalar', s:cdOrange, {}, 'none', {})
-    call ZHighLight('yamlBlockMappingKey', s:cdLightBlue, {}, 'none', {})
+        " Json
+        call ZHighLight('jsonCommentError', s:cdGreen, {}, 'none', {})
+        call ZHighLight('jsonString', s:cdOrange, {}, 'none', {})
+        call ZHighLight('jsonNumber', s:cdLightGreen, {}, 'none', {})
 
-    " Plant Uml
-    call ZHighLight('plantumlPreviewMethodCallParen', s:cdFront, {}, 'none', {})
-    call ZHighLight('plantumlPreviewMethodCall', s:cdYellow, {}, 'none', {})
+        " Yaml
+        call ZHighLight('yamlBlockCollectionItemStart', s:cdFront, {}, 'none', {})
+        call ZHighLight('yamlKeyValueDelimiter', s:cdFront, {}, 'none', {})
+        call ZHighLight('yamlPlainScalar', s:cdOrange, {}, 'none', {})
+        call ZHighLight('yamlBlockMappingKey', s:cdLightBlue, {}, 'none', {})
 
-    " Cursor line
-    highlight CursorLine ctermbg=235 guibg=#262626
-elseif g:colors_name == 'onedark'
-    let s:group_colors = {} " Cache of default highlight group settings, for later reference via `onedark#extend_highlight`
-    function! ZHighLight(group, style, ...)
-        if (a:0 > 0) " Will be true if we got here from onedark#extend_highlight
-            let s:highlight = s:group_colors[a:group]
-            for style_type in ["fg", "bg", "sp"]
-                if (has_key(a:style, style_type))
-                    let l:default_style = (has_key(s:highlight, style_type) ? s:highlight[style_type] : { "cterm16": "NONE", "cterm": "NONE", "gui": "NONE" })
-                    let s:highlight[style_type] = extend(l:default_style, a:style[style_type])
+        " Plant Uml
+        call ZHighLight('plantumlPreviewMethodCallParen', s:cdFront, {}, 'none', {})
+        call ZHighLight('plantumlPreviewMethodCall', s:cdYellow, {}, 'none', {})
+
+        " Cursor line
+        highlight CursorLine ctermbg=235 guibg=#262626
+    elseif g:colors_name == 'onedark'
+        let s:group_colors = {} " Cache of default highlight group settings, for later reference via `onedark#extend_highlight`
+        function! ZHighLight(group, style, ...)
+            if (a:0 > 0) " Will be true if we got here from onedark#extend_highlight
+                let s:highlight = s:group_colors[a:group]
+                for style_type in ["fg", "bg", "sp"]
+                    if (has_key(a:style, style_type))
+                        let l:default_style = (has_key(s:highlight, style_type) ? s:highlight[style_type] : { "cterm16": "NONE", "cterm": "NONE", "gui": "NONE" })
+                        let s:highlight[style_type] = extend(l:default_style, a:style[style_type])
+                    endif
+                endfor
+                if (has_key(a:style, "gui"))
+                    let s:highlight.gui = a:style.gui
                 endif
-            endfor
-            if (has_key(a:style, "gui"))
-                let s:highlight.gui = a:style.gui
+            else
+                let s:highlight = a:style
+                let s:group_colors[a:group] = s:highlight " Cache default highlight group settings
             endif
+
+            if g:onedark_terminal_italics == 0
+                if has_key(s:highlight, "cterm") && s:highlight["cterm"] == "italic"
+                    unlet s:highlight.cterm
+                endif
+                if has_key(s:highlight, "gui") && s:highlight["gui"] == "italic"
+                    unlet s:highlight.gui
+                endif
+            endif
+
+            if g:onedark_termcolors == 16
+                let l:ctermfg = (has_key(s:highlight, "fg") ? s:highlight.fg.cterm16 : "NONE")
+                let l:ctermbg = (has_key(s:highlight, "bg") ? s:highlight.bg.cterm16 : "NONE")
+            else
+                let l:ctermfg = (has_key(s:highlight, "fg") ? s:highlight.fg.cterm : "NONE")
+                let l:ctermbg = (has_key(s:highlight, "bg") ? s:highlight.bg.cterm : "NONE")
+            endif
+
+            execute "highlight" a:group
+                \ "guifg="     (has_key(s:highlight, "fg")        ? s:highlight.fg.gui     : "NONE")
+                \ "guibg="     (has_key(s:highlight, "bg")        ? s:highlight.bg.gui     : "NONE")
+                \ "guisp="     (has_key(s:highlight, "sp")        ? s:highlight.sp.gui     : "NONE")
+                \ "gui="         (has_key(s:highlight, "gui")     ? s:highlight.gui            : "NONE")
+                \ "ctermfg=" . l:ctermfg
+                \ "ctermbg=" . l:ctermbg
+                \ "cterm="     (has_key(s:highlight, "cterm") ? s:highlight.cterm        : "NONE")
+        endfunction
+
+        let s:onedarkWhite = { "gui": "#ABB2BF", "cterm": "145", "cterm16": "7" }
+        let s:onedarkCyan = { "gui": "#56B6C2", "cterm": "38", "cterm16": "6" }
+
+        " Tagbar Highlights
+        call ZHighLight('TagbarSignature', {"fg": s:onedarkWhite})
+
+        " Cpp
+        call ZHighLight('cCompundObject', {"fg": s:onedarkWhite})
+        call ZHighLight('cIntegerType', {"fg": s:onedarkCyan})
+    elseif g:colors_name == 'nord'
+        function! ZHighLight(group, guifg, guibg, ctermfg, ctermbg, attr, guisp)
+          if a:guifg != ""
+            exec "hi " . a:group . " guifg=" . a:guifg
+          endif
+          if a:guibg != ""
+            exec "hi " . a:group . " guibg=" . a:guibg
+          endif
+          if a:ctermfg != ""
+            exec "hi " . a:group . " ctermfg=" . a:ctermfg
+          endif
+          if a:ctermbg != ""
+            exec "hi " . a:group . " ctermbg=" . a:ctermbg
+          endif
+          if a:attr != ""
+            exec "hi " . a:group . " gui=" . a:attr . " cterm=" . substitute(a:attr, "undercurl", s:underline, "")
+          endif
+          if a:guisp != ""
+            exec "hi " . a:group . " guisp=" . a:guisp
+          endif
+        endfunction
+
+        " Colors
+        let s:nord8_gui = "#88C0D0"
+        let s:nord8_term = "6"
+
+        " Makefile
+        call ZHighLight("makeIdent", s:nord8_gui, "", s:nord8_term, "", "", "")
+    elseif g:colors_name == 'tokyonight'
+        if !has('nvim')
+            hi SignColumn guibg=NONE
+            hi CursorLineNr guibg=NONE
+
+            hi VertSplit guifg=#1d202f
+
+            hi Statement guifg=#bb9af7
+            hi Conditional guifg=#bb9af7
+            hi Repeat guifg=#bb9af7
+            hi cLabel guifg=#bb9af7
+            hi cCustomAccessKey guifg=#bb9af7
+            hi cppAccess guifg=#bb9af7
+            hi vimLet guifg=#bb9af7
+            hi vimMap guifg=#bb9af7
+            hi Identifier guifg=#bb9af7
+            hi markdownH1 guifg=#bb9af7
+            hi markdownListMarker guifg=#bb9af7
+            hi htmlTagName guifg=#bb9af7
+            hi NERDTreeDirSlash guifg=#bb9af7
+            hi TagbarKind guifg=#bb9af7
+            hi TagbarFoldIcon guifg=#bb9af7
+            hi cPreCondit guifg=#7dcfff
+            hi PreProc guifg=#7dcfff
+            hi Include guifg=#7dcfff
+            hi Keyword guifg=#7dcfff
+            hi Macro guifg=#7dcfff
+            hi NERDTreeLinkFile guifg=#7dcfff
+            hi Operator guifg=#89ddff
+            hi Type guifg=#2ac3de
+            hi cCustomClass guifg=#2ac3de
+            hi cFormat guifg=#2ac3de
+            hi cppStructure guifg=#2ac3de
+            hi cppStorageClass guifg=#2ac3de
+            hi cppSTLtype guifg=#2ac3de
+            hi Special guifg=#2ac3de
+            hi cSpecial  guifg=#2ac3de
+            hi Delimiter guifg=#2ac3de
+            hi vimMapMod guifg=#2ac3de
+            hi markdownHeadingRule guifg=#2ac3de
+            hi markdownCodeDelimiter guifg=#2ac3de
+            hi htmlArg guifg=#2ac3de
+            hi NERDTreeLinkTarget guifg=#2ac3de
+            hi Function guifg=#7aa2f7
+            hi vimFuncName guifg=#7aa2f7
+            hi markdownH2 guifg=#7aa2f7
+            hi markdownLinkText guifg=#7aa2f7 gui=NONE
+            hi htmlTag guifg=#7aa2f7
+            hi NERDTreeDir guifg=#7aa2f7
+            hi NERDTreeExecFile guifg=#7aa2f7
+            hi WebDevIconsDefaultFolderSymbol guifg=#7aa2f7
+            hi TagbarScope guifg=#7aa2f7
+            hi Constant guifg=#ff9e64
+            hi Number guifg=#ff9e64
+            hi Boolean guifg=#ff9e64
+            hi cppSTLnamespace guifg=#ff9e64
+            hi String guifg=#9ece6a
+            hi markdownCode guifg=#1abc9c
+            hi Comment guifg=#565f89
+            hi Folded guifg=#565f89 guibg=#282d42
+            hi TagbarSignature guifg=#545c7e
+            hi Search guifg=#c0caf5 guibg=#3d59a1
+
+            hi GitGutterAdd guibg=NONE
+            hi GitGutterChange guibg=NONE
+            hi GitGutterDelete guibg=NONE
+            hi GitGutterChangeDelete guibg=NONE
+            hi CocHintSign guibg=NONE
+            hi CocWarningSign guibg=NONE
+            hi CocErrorSign guibg=NONE
+
+            hi clear vimFunction
+            hi clear vimUserFunc
+            hi clear vimMapRhs
+            hi clear vimMapLhs
+            hi clear markdownLinkTextDelimiter
+            hi clear NERDTreeNodeDelimiters
         else
-            let s:highlight = a:style
-            let s:group_colors[a:group] = s:highlight " Cache default highlight group settings
+            hi Folded guifg=#565f89 guibg=#282d42
+
+            hi Type guifg=#2ac3de
+            hi cCustomClass guifg=#2ac3de
+            hi cppStructure guifg=#2ac3de
+            hi Ignore guifg=#444b6a
+
+            hi markdownLinkText guifg=#7aa2f7 gui=NONE
         endif
 
-        if g:onedark_terminal_italics == 0
-            if has_key(s:highlight, "cterm") && s:highlight["cterm"] == "italic"
-                unlet s:highlight.cterm
-            endif
-            if has_key(s:highlight, "gui") && s:highlight["gui"] == "italic"
-                unlet s:highlight.gui
-            endif
-        endif
-
-        if g:onedark_termcolors == 16
-            let l:ctermfg = (has_key(s:highlight, "fg") ? s:highlight.fg.cterm16 : "NONE")
-            let l:ctermbg = (has_key(s:highlight, "bg") ? s:highlight.bg.cterm16 : "NONE")
-        else
-            let l:ctermfg = (has_key(s:highlight, "fg") ? s:highlight.fg.cterm : "NONE")
-            let l:ctermbg = (has_key(s:highlight, "bg") ? s:highlight.bg.cterm : "NONE")
-        endif
-
-        execute "highlight" a:group
-            \ "guifg="     (has_key(s:highlight, "fg")        ? s:highlight.fg.gui     : "NONE")
-            \ "guibg="     (has_key(s:highlight, "bg")        ? s:highlight.bg.gui     : "NONE")
-            \ "guisp="     (has_key(s:highlight, "sp")        ? s:highlight.sp.gui     : "NONE")
-            \ "gui="         (has_key(s:highlight, "gui")     ? s:highlight.gui            : "NONE")
-            \ "ctermfg=" . l:ctermfg
-            \ "ctermbg=" . l:ctermbg
-            \ "cterm="     (has_key(s:highlight, "cterm") ? s:highlight.cterm        : "NONE")
-    endfunction
-
-    let s:onedarkWhite = { "gui": "#ABB2BF", "cterm": "145", "cterm16": "7" }
-    let s:onedarkCyan = { "gui": "#56B6C2", "cterm": "38", "cterm16": "6" }
-
-    " Tagbar Highlights
-    call ZHighLight('TagbarSignature', {"fg": s:onedarkWhite})
-
-    " Cpp
-    call ZHighLight('cCompundObject', {"fg": s:onedarkWhite})
-    call ZHighLight('cIntegerType', {"fg": s:onedarkCyan})
-elseif g:colors_name == 'nord'
-    function! ZHighLight(group, guifg, guibg, ctermfg, ctermbg, attr, guisp)
-      if a:guifg != ""
-        exec "hi " . a:group . " guifg=" . a:guifg
-      endif
-      if a:guibg != ""
-        exec "hi " . a:group . " guibg=" . a:guibg
-      endif
-      if a:ctermfg != ""
-        exec "hi " . a:group . " ctermfg=" . a:ctermfg
-      endif
-      if a:ctermbg != ""
-        exec "hi " . a:group . " ctermbg=" . a:ctermbg
-      endif
-      if a:attr != ""
-        exec "hi " . a:group . " gui=" . a:attr . " cterm=" . substitute(a:attr, "undercurl", s:underline, "")
-      endif
-      if a:guisp != ""
-        exec "hi " . a:group . " guisp=" . a:guisp
-      endif
-    endfunction
-
-    " Colors
-    let s:nord8_gui = "#88C0D0"
-    let s:nord8_term = "6"
-
-    " Makefile
-    call ZHighLight("makeIdent", s:nord8_gui, "", s:nord8_term, "", "", "")
-elseif g:colors_name == 'tokyonight'
-    if !has('nvim')
-        hi SignColumn guibg=NONE
-        hi CursorLineNr guibg=NONE
-
-        hi VertSplit guifg=#1d202f
-
-        hi Statement guifg=#bb9af7
-        hi Conditional guifg=#bb9af7
-        hi Repeat guifg=#bb9af7
-        hi cLabel guifg=#bb9af7
-        hi cCustomAccessKey guifg=#bb9af7
-        hi cppAccess guifg=#bb9af7
-        hi vimLet guifg=#bb9af7
-        hi vimMap guifg=#bb9af7
-        hi Identifier guifg=#bb9af7
-        hi markdownH1 guifg=#bb9af7
-        hi markdownListMarker guifg=#bb9af7
-        hi htmlTagName guifg=#bb9af7
-        hi NERDTreeDirSlash guifg=#bb9af7
-        hi TagbarKind guifg=#bb9af7
-        hi TagbarFoldIcon guifg=#bb9af7
-        hi cPreCondit guifg=#7dcfff
-        hi PreProc guifg=#7dcfff
-        hi Include guifg=#7dcfff
-        hi Keyword guifg=#7dcfff
-        hi Macro guifg=#7dcfff
-        hi Type guifg=#2ac3de
-        hi Operator guifg=#89ddff
-        hi cCustomClass guifg=#2ac3de
-        hi cppStructure guifg=#2ac3de
-        hi cppStorageClass guifg=#2ac3de
-        hi cppSTLtype guifg=#2ac3de
-        hi Special guifg=#2ac3de
-        hi Delimiter guifg=#2ac3de
-        hi vimMapMod guifg=#2ac3de
-        hi markdownHeadingRule guifg=#2ac3de
-        hi markdownCodeDelimiter guifg=#2ac3de
-        hi htmlArg guifg=#2ac3de
-        hi Function guifg=#7aa2f7
-        hi vimFuncName guifg=#7aa2f7
-        hi markdownH2 guifg=#7aa2f7
-        hi markdownLinkText guifg=#7aa2f7 gui=NONE
-        hi htmlTag guifg=#7aa2f7
-        hi NERDTreeDir guifg=#7aa2f7
-        hi NERDTreeExecFile guifg=#7aa2f7
-        hi WebDevIconsDefaultFolderSymbol guifg=#7aa2f7
-        hi Constant guifg=#ff9e64
-        hi Number guifg=#ff9e64
-        hi Boolean guifg=#ff9e64
-        hi cppSTLnamespace guifg=#ff9e64
-        hi String guifg=#9ece6a
-        hi markdownCode guifg=#1abc9c
-        hi Comment guifg=#565f89
-        hi Folded guifg=#565f89 guibg=#282d42
-        hi TagbarSignature guifg=#545c7e
-
-        hi GitGutterAdd guibg=NONE
-        hi GitGutterChange guibg=NONE
-        hi GitGutterDelete guibg=NONE
-        hi GitGutterChangeDelete guibg=NONE
-        hi CocHintSign guibg=NONE
-        hi CocWarningSign guibg=NONE
-        hi CocErrorSign guibg=NONE
-
-        hi clear vimFunction
-        hi clear vimUserFunc
-        hi clear vimMapRhs
-        hi clear vimMapLhs
-        hi clear markdownLinkTextDelimiter
-        hi clear NERDTreeNodeDelimiters
-    else
-        hi Folded guifg=#565f89 guibg=#282d42
-
-        hi Type guifg=#2ac3de
-        hi cCustomClass guifg=#2ac3de
-        hi cppStructure guifg=#2ac3de
-
-        hi markdownLinkText guifg=#7aa2f7 gui=NONE
+        let s:tokyonight_colors_defined = 1
     endif
-
-    let s:tokyonight_colors_defined = 1
-endif
+endfunction
+call ZCustomizeColors()
+augroup ZCustomizeColorsGroup
+    autocmd!
+    autocmd ColorScheme * if exists('*ZCustomizeColors') | call ZCustomizeColors() | endif
+augroup end
 " }}}
 
 " Airline {{{
