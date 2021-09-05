@@ -2936,6 +2936,17 @@ let g:airline#extensions#tabline#show_tab_nr = 0
 let g:airline#extensions#tabline#show_buffers = 1
 let g:airline#extensions#tabline#fnamecollapse = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
+function! ZTabLine()
+    if !exists('*airline#extensions#tabline#get')
+        return ''
+    endif
+    if exists('g:NERDTree') && g:NERDTree.IsOpen()
+        return '%#VertSplit#' . repeat(' ', winwidth(1)) . '│' . airline#extensions#tabline#get()
+    else
+        return airline#extensions#tabline#get()
+    endif
+endfunction
+call timer_start(1000, {tid->execute('set tabline=%!ZTabLine()')})
 set showtabline=2
 nmap <leader>1 <Plug>AirlineSelectTab1
 nmap <leader>2 <Plug>AirlineSelectTab2
