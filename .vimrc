@@ -2809,12 +2809,51 @@ elseif g:colors_name == 'nord'
     call ZHighLight("makeIdent", s:nord8_gui, "", s:nord8_term, "", "", "")
 elseif g:colors_name == 'tokyonight'
     if !has('nvim')
-        hi Comment guifg=#565f89
-        hi VertSplit guifg=#1d202f
         hi SignColumn guibg=NONE
         hi CursorLineNr guibg=NONE
+
+        hi VertSplit guifg=#1d202f
+
+        hi Statement guifg=#bb9af7
+        hi Conditional guifg=#bb9af7
+        hi Repeat guifg=#bb9af7
+        hi cLabel guifg=#bb9af7
+        hi vimLet guifg=#bb9af7
+        hi vimMap guifg=#bb9af7
+        hi Identifier guifg=#bb9af7
+        hi PreProc guifg=#7dcfff
+        hi Include guifg=#7dcfff
+        hi Keyword guifg=#7dcfff
+        hi String guifg=#9ece6a
+        hi Type guifg=#2ac3de
+        hi cCustomClass guifg=#2ac3de
+        hi cppStructure guifg=#2ac3de
+        hi cppStorageClass guifg=#2ac3de
+        hi cppSTLtype guifg=#2ac3de
+        hi Special guifg=#2ac3de
+        hi Delimiter guifg=#2ac3de
+        hi vimMapMod guifg=#2ac3de
+        hi Function guifg=#7aa2f7
+        hi vimFuncName guifg=#7aa2f7
+        hi Constant guifg=#ff9e64
+        hi Number guifg=#ff9e64
+        hi Boolean guifg=#ff9e64
+        hi cppSTLnamespace guifg=#ff9e64
+        hi Operator guifg=#89ddff
+
+        hi Comment guifg=#565f89
+        hi Folded guifg=#565f89 guibg=#282d42
+
+        hi clear vimFunction
+        hi clear vimUserFunc
+        hi clear vimMapRhs
+        hi clear vimMapLhs
     else
         hi Folded guifg=#565f89 guibg=#282d42
+
+        hi Type guifg=#2ac3de
+        hi cCustomClass guifg=#2ac3de
+        hi cppStructure guifg=#2ac3de
     endif
 endif
 " }}}
