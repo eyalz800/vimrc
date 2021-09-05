@@ -1131,10 +1131,14 @@ function! BLinesPreview()
     if !exists('*fzf#vim#grep')
         call plug#load('fzf.vim')
     endif
-    call fzf#vim#grep(
-        \ 'rg --with-filename --column --line-number --no-heading --smart-case . '.fnameescape(expand('%:p')), 1,
-        \ fzf#vim#with_preview({'options': '--keep-right --delimiter : --nth 4.. --preview "bat -p --color always {}"'
-        \ . ' --bind "ctrl-/:toggle-preview"'}, 'right:50%' ))
+    if !filereadable(expand('%'))
+        BLines
+    else
+        call fzf#vim#grep(
+            \ 'rg --with-filename --column --line-number --no-heading --smart-case . '.fnameescape(expand('%:p')), 1,
+            \ fzf#vim#with_preview({'options': '--keep-right --delimiter : --nth 4.. --preview "bat -p --color always {}"'
+            \ . ' --bind "ctrl-/:toggle-preview"'}, 'right:50%' ))
+    endif
 endfunction
 let $BAT_THEME = 'Monokai Extended Origin'
 let g:fzf_colors =
