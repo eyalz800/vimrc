@@ -60,7 +60,7 @@ Useful Commands
 gd - Go to definition (fast) (current word).
 <leader>zg - Go to definition (current word), first use lsp, then fallback to cscope/opengrok.
 
-<leader>zd - Go to definition (current word) using cscope/opengrok.
+gz / <leader>zd - Go to definition (current word) using cscope/opengrok.
 <leader><leader>zd - Go to definition - search arbitrary input text using cscope/opengrok.
 
 <leader>zD - Go to declaration (current word) using cscope/opengrok.

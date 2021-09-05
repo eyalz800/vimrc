@@ -1449,6 +1449,7 @@ endfunction
 " }}}
 
 " Go to definition {{{
+nnoremap <silent> gz :call ZGoToSymbol(expand('<cword>'), 'definition')<CR>
 nnoremap <silent> <leader>zd :call ZGoToSymbol(expand('<cword>'), 'definition')<CR>
 nnoremap <silent> <leader>zD :call ZGoToSymbol(expand('<cword>'), 'declaration')<CR>
 nnoremap <silent> <leader>zg :call ZGoToDefinition()<CR>
