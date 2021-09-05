@@ -214,7 +214,7 @@ s{char1}{char2} - Jump to a location with the following two characters {char1}{c
 
 * Toggle LSP server, switch between coc and vim-lsp:
 ```
-<leader>tl - Switch between coc and vim-lsp.
+:call ZToggleLspPersistent() - Switch between coc and vim-lsp.
 ```
 
 * Multiple Cursors:

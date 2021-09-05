@@ -176,7 +176,6 @@ if filereadable(expand('~/.vim/.nococ'))
     let g:lsp_choice = 'vim-lsp'
 endif
 
-nnoremap <silent> <leader>tl :call ZToggleLspPersistent()<CR>:source ~/.vimrc<CR>
 function! ZToggleLspPersistent()
     if filereadable(expand('~/.vim/.nococ'))
         call system("rm ~/.vim/.nococ")
