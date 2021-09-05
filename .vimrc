@@ -2887,6 +2887,8 @@ elseif g:colors_name == 'tokyonight'
 
         hi markdownLinkText guifg=#7aa2f7 gui=NONE
     endif
+
+    let s:tokyonight_colors_defined = 1
 endif
 " }}}
 
@@ -2929,8 +2931,8 @@ else
 endif
 function! ZAirlineThemePatch(palette)
     if g:airline_theme == 'codedark' && exists('s:codedark_colors_defined') && s:codedark_colors_defined
-        let airline_error = [ s:cdWhite.gui, s:cdRed.gui, s:cdWhite.cterm, s:cdRed.cterm]
-        let airline_warning = [ s:cdWhite.gui, s:cdRed.gui, s:cdWhite.cterm, s:cdRed.cterm]
+        let airline_error = [s:cdWhite.gui, s:cdRed.gui, s:cdWhite.cterm, s:cdRed.cterm]
+        let airline_warning = [s:cdWhite.gui, s:cdRed.gui, s:cdWhite.cterm, s:cdRed.cterm]
 
         let a:palette.normal.airline_warning = airline_warning
         let a:palette.normal.airline_error = airline_error
@@ -2952,6 +2954,20 @@ function! ZAirlineThemePatch(palette)
         let a:palette.inactive.airline_error = airline_error
         let a:palette.inactive_modified.airline_warning = airline_warning
         let a:palette.inactive_modified.airline_error = airline_error
+    elseif g:airline_theme == 'tokyonight' && exists('s:tokyonight_colors_defined') && s:tokyonight_colors_defined
+        let airline_error = ['#000000', '#db4b4b', '0', '0']
+        let airline_warning = ['#000000', '#e0af68', '0', '0']
+
+        let a:palette.normal.airline_warning = airline_warning
+        let a:palette.normal.airline_error = airline_error
+        let a:palette.insert.airline_warning = airline_warning
+        let a:palette.insert.airline_error = airline_error
+        let a:palette.replace.airline_warning = airline_warning
+        let a:palette.replace.airline_error = airline_error
+        let a:palette.visual.airline_warning = airline_warning
+        let a:palette.visual.airline_error = airline_error
+        let a:palette.inactive.airline_warning = airline_warning
+        let a:palette.inactive.airline_error = airline_error
     endif
 endfunction
 " }}}
