@@ -1126,7 +1126,18 @@ nnoremap <silent> <C-n> :Tags<CR>
 nnoremap <silent> <C-g> :Rg<CR>
 nnoremap <silent> <leader>fh :call ZFzfToggleFilesCache()<CR>
 nnoremap <silent> <leader>fH :call ZFzfToggleGlobalFilesCache()<CR>
-nnoremap <silent> // :BLines<CR>
+nnoremap <silent> // :BLinesPreview<CR>
+command! -bang -nargs=* BLinesPreview call BLinesPreview()
+function! BLinesPreview()
+    if !exists('*fzf#vim#grep')
+        BLines
+    else
+        call fzf#vim#grep(
+            \ 'rg --with-filename --column --line-number --no-heading --smart-case . '.fnameescape(expand('%:p')), 1,
+            \ fzf#vim#with_preview({'options': '--keep-right --delimiter : --nth 4.. --preview "bat -p --color always {}"'
+            \ . ' --bind "ctrl-/:toggle-preview"'}, 'right:50%' ))
+    endif
+endfunction
 let $BAT_THEME = 'Monokai Extended Origin'
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
