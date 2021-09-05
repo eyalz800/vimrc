@@ -2875,6 +2875,8 @@ function! ZCustomizeColors()
             hi Folded guifg=#565f89 guibg=#282d42
             hi TagbarSignature guifg=#545c7e
             hi Search guifg=#c0caf5 guibg=#3d59a1
+            hi PmenuSel guifg=#c0caf5 guibg=#3d59a1
+            hi WildMenu guifg=#c0caf5 guibg=#3d59a1
             hi SpecialKey guifg=#3b4261 gui=nocombine
 
             hi GitGutterAdd guibg=NONE
