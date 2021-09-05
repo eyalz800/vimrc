@@ -2517,6 +2517,8 @@ endif
 
 " Additional color settings {{{
 function! ZCustomizeColors()
+    let g:indentLine_color_gui = '#404040'
+
     if g:colors_name == 'codedark'
         " Terminal ansi colors
         if !has('nvim')
@@ -2810,6 +2812,8 @@ function! ZCustomizeColors()
         call ZHighLight("makeIdent", s:nord8_gui, "", s:nord8_term, "", "", "")
     elseif g:colors_name == 'tokyonight'
         if !has('nvim')
+            let g:indentLine_color_gui = '#3b4261'
+
             hi SignColumn guibg=NONE
             hi CursorLineNr guibg=NONE
 
@@ -2847,6 +2851,7 @@ function! ZCustomizeColors()
             hi cSpecial  guifg=#2ac3de
             hi Delimiter guifg=#2ac3de
             hi vimMapMod guifg=#2ac3de
+            hi vimNotation guifg=#2ac3de
             hi markdownHeadingRule guifg=#2ac3de
             hi markdownCodeDelimiter guifg=#2ac3de
             hi htmlArg guifg=#2ac3de
@@ -2870,6 +2875,7 @@ function! ZCustomizeColors()
             hi Folded guifg=#565f89 guibg=#282d42
             hi TagbarSignature guifg=#545c7e
             hi Search guifg=#c0caf5 guibg=#3d59a1
+            hi SpecialKey guifg=#3b4261 gui=nocombine
 
             hi GitGutterAdd guibg=NONE
             hi GitGutterChange guibg=NONE
@@ -2894,6 +2900,7 @@ function! ZCustomizeColors()
             hi Ignore guifg=#444b6a
 
             hi markdownLinkText guifg=#7aa2f7 gui=NONE
+            hi IndentBlanklineChar guifg=#3b4261 gui=nocombine
         endif
 
         let s:tokyonight_colors_defined = 1
