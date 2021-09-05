@@ -2989,6 +2989,11 @@ if g:lsp_choice != 'coc'
 endif
 " }}}
 
+" Goyo {{{
+let g:goyo_width='50%'
+nnoremap <silent> <C-w>f :Goyo<CR>
+" }}}
+
 " Yank History {{{
 nnoremap <silent> <space>h :YankHistoryRgPaste<CR>
 " }}}

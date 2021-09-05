@@ -389,3 +389,8 @@ ZToggleDevIcons - Toggles the use of dev icons (off by default).
 ```
 <space>h - Paste from yank history.
 ```
+
+* Focus writing mode:
+```
+<C-w>f - Focus writing mode using goyo plugin.
+```
