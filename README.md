@@ -165,11 +165,11 @@ H - Modify width - 1
 
 * Git:
 ```
-<leader>gm - Vimagit staging plugin.
-<leader>gb - View blame.
+gm / <leader>gm - Vimagit staging plugin.
+gb / <leader>gb - View blame.
 <leader>gc - View commits.
 <leader>gf - View git files.
-<leader>gl - Lazy git staging plugin.
+gl / <leader>gl - Lazy git staging plugin.
     - up/down to move between files.
     - space to stage/unstage.
     - enter to go into staging each lines individually.

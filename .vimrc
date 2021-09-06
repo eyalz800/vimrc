@@ -1012,13 +1012,16 @@ endfunction
 " }}}
 
 " Git {{{
+nnoremap <silent> gb :Git blame<CR>
 nnoremap <silent> <leader>gb :Git blame<CR>
+nnoremap <silent> gm :MagitOnly<CR>
 nnoremap <silent> <leader>gm :MagitOnly<CR>
 nnoremap <silent> <leader>gc :BCommits<CR>
+nnoremap <silent> gl :call ZPopTerminal($SHELL . ' -c "cd ' .  expand('%:p:h') . ' ; lazygit"')<CR>
 nnoremap <silent> <leader>gl :call ZPopTerminal($SHELL . ' -c "cd ' .  expand('%:p:h') . ' ; lazygit"')<CR>
 nnoremap <silent> <leader>gL :call ZPopTerminal('lazygit')<CR>
 nnoremap <silent> <leader>gt :call ZPopTerminal($SHELL . ' -c "cd ' .  expand('%:p:h') . ' ; tig"')<CR>
-nnoremap <silent> <leader>gL :call ZPopTerminal('tig')<CR>
+nnoremap <silent> <leader>gT :call ZPopTerminal('tig')<CR>
 " }}}
 
 " Float Term {{{
