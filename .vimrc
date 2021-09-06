@@ -391,6 +391,11 @@ nnoremap <silent> Y y$
 " Jump to matching pairs.
 vnoremap <silent> <Tab> %
 
+" Go to end of line (and work around accidental g followed by escape leading
+" to hang due to tag searching)
+nnoremap <silent> g[ 0
+nnoremap <silent> g] $
+
 " Common command aliases.
 command! Q q
 command! -bang Q q!
