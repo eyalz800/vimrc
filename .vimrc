@@ -2867,6 +2867,7 @@ function! ZCustomizeColors()
 
             hi VertSplit guifg=#1d202f
 
+            hi Normal guifg=#c0caf5
             hi Statement guifg=#bb9af7
             hi Conditional guifg=#bb9af7
             hi Repeat guifg=#bb9af7
@@ -2883,11 +2884,13 @@ function! ZCustomizeColors()
             hi TagbarKind guifg=#bb9af7
             hi TagbarFoldIcon guifg=#bb9af7
             hi jsonKeyword guifg=#bb9af7
+            hi PreCondit guifg=#7dcfff
             hi cPreCondit guifg=#7dcfff
             hi PreProc guifg=#7dcfff
             hi Include guifg=#7dcfff
             hi Keyword guifg=#7dcfff
             hi Macro guifg=#7dcfff
+            hi Define guifg=#7dcfff
             hi NERDTreeLinkFile guifg=#7dcfff
             hi Operator guifg=#89ddff
             hi Type guifg=#2ac3de
@@ -2907,6 +2910,7 @@ function! ZCustomizeColors()
             hi htmlArg guifg=#2ac3de
             hi NERDTreeLinkTarget guifg=#2ac3de
             hi Function guifg=#7aa2f7
+            hi makeTarget guifg=#7aa2f7
             hi vimFuncName guifg=#7aa2f7
             hi markdownH2 guifg=#7aa2f7
             hi markdownLinkText guifg=#7aa2f7 gui=NONE
@@ -2920,6 +2924,7 @@ function! ZCustomizeColors()
             hi Boolean guifg=#ff9e64
             hi cppSTLnamespace guifg=#ff9e64
             hi jsonBoolean guifg=#ff9e64
+            hi makeCommands guifg=#ff9e64
             hi String guifg=#9ece6a
             hi markdownCode guifg=#1abc9c
             hi Comment guifg=#565f89
