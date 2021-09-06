@@ -14,6 +14,12 @@ if !exists('s:os')
 endif
 " }}}
 
+" Shell {{{
+if empty($SHELL)
+    let $SHELL='bash'
+endif
+" }}}
+
 " Installation {{{
 
 " Clang Version
