@@ -1040,7 +1040,7 @@ let g:gutentags_project_root = ['.git', '.hg', '.svn', '.repo', '.files']
 command! -nargs=1 ZColor call ZColor(<f-args>) | source ~/.vimrc | silent exec ":silent! e!"
 nnoremap <silent> <leader>nc :call ZNextColor()<CR>:source ~/.vimrc<CR>:silent! e!<CR>
 if !filereadable(expand('~/.vim/.color'))
-    call system('echo onedark > ~/.vim/.color')
+    call system('echo tokyonight > ~/.vim/.color')
 endif
 let g:onedark_color_overrides = {
     \ "special_grey": { "gui": "#5C6370", "cterm": "59", "cterm16": "15" }
