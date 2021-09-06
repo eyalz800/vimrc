@@ -84,7 +84,7 @@ go - Toggle between source and header file.
 * Commands to view directory tree and source code function pane on each side of the screen:
 ```
 <leader>ll - Turn on / off the directory tree and source code function panes using nerd tree and tagbar.
-<leader>lc - Like previous but shows current file on directory tree.
+<space>v / <leader>lc - Like previous but shows current file on directory tree.
 <leader>nf - Show current file in the directory tree using nerd tree.
 <leader>nd - Show current directory in nerd tree.
 <leader>nt - Toggle nerd tree on/off.
