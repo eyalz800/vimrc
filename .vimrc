@@ -1102,6 +1102,7 @@ let g:Hexokinase_ftOptInPatterns = {
 \ }
 
 " Fzf
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.85, 'border': 'sharp' } }
 let g:fzf_files_nocache_command = "rg --files --no-ignore-vcs --hidden"
 let g:fzf_files_cache_command = "
     \ if [ -f .files ]; then
