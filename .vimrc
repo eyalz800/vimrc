@@ -820,7 +820,6 @@ augroup ZTerminalAutoCommands
         autocmd TerminalOpen * tnoremap <silent> <buffer> <ScrollWheelUp> <C-w>:call ZTerminalEnterNormalMode()<CR>
     else
         autocmd TermOpen * DisableWhitespace
-        autocmd TermOpen * tnoremap <silent> <buffer> <ScrollWheelUp> <C-\><C-n>:call ZTerminalEnterNormalMode()<CR>
         autocmd TermOpen * setlocal nonumber signcolumn=no
     endif
 augroup end
@@ -1033,6 +1032,7 @@ let g:floaterm_title = 'terminal'
 " }}}
 
 " Pop Terminal {{{
+command -nargs=1 ZTerminal call ZPopTerminal(<f-args>)
 function! ZPopTerminal(command)
     silent execute 'FloatermNew --height=0.9 --width=0.9 --autoclose=2 ' . a:command
 endfunction
