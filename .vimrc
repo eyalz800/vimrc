@@ -1125,11 +1125,12 @@ set rtp+=~/.fzf
 nnoremap <silent> <C-p> :call ZFiles()<CR>
 nnoremap <silent> <C-]> :call ZSourceFiles()<CR>
 nnoremap <silent> cz :call ZSourceFiles()<CR>
-nnoremap <silent> <C-\> :Buf<CR>
+nnoremap <silent> <space>b :Buf<CR>
 nnoremap <silent> <leader>gf :GFiles<CR>
 nnoremap <silent> <C-n> :Tags<CR>
 nnoremap <silent> <C-g> :Rg<CR>
 nnoremap <silent> <space>f :ZRg<CR>
+nnoremap <silent> <C-\> :ZRg<CR>
 nnoremap <silent> <leader>fh :call ZFzfToggleFilesCache()<CR>
 nnoremap <silent> <leader>fH :call ZFzfToggleGlobalFilesCache()<CR>
 nnoremap <silent> // :BLinesPreview<CR>

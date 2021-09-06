@@ -73,7 +73,7 @@ z/ or z? - Fuzzy search inside file.
 // - Fuzzy search the current file lines.
 
 <C-g> - Search recursively using rg, filter with fzf.
-<space>f - Search recursively using rg - filter with rg using type:file-type (e.g type:cpp) or pattern:*.extension (e.g pattern:*.cpp)
+<C-\> / <space>f - Search recursively using rg - filter with rg using type:file-type (e.g type:cpp) or pattern:*.extension (e.g pattern:*.cpp)
 ```
 
 * Toggle between source and header file:
@@ -200,7 +200,7 @@ s{char1}{char2} - Jump to a location with the following two characters {char1}{c
 
 * View / select from open buffers:
 ```
-<C-\> - View / select from open buffers.
+<space>b - View / select from open buffers.
 ```
 
 * Toggle on/off term gui colors persistently, by default it is on but may cause problems:
