@@ -2920,6 +2920,7 @@ function! ZCustomizeColors()
             hi PmenuSel guifg=#c0caf5 guibg=#3d59a1
             hi WildMenu guifg=#c0caf5 guibg=#3d59a1
             hi SpecialKey guifg=#3b4261 gui=nocombine
+            hi IncSearch guifg=#1d202f guibg=#ff9e64
 
             hi GitGutterAdd guibg=NONE
             hi GitGutterChange guibg=NONE
