@@ -379,6 +379,7 @@ ZToggleDevIcons - Toggles the use of dev icons (on by default).
 ```
 <C-d> - Expand snippet in insert mode.
 <C-r> - Replace-Expand snippet in visual mode.
+<C-j> - Move to next snippet cell.
 ```
 
 * Moving between buffer tabs:
