@@ -1485,12 +1485,16 @@ endfunction
 " }}}
 
 " Go to definition {{{
-nnoremap <silent> gz :call ZGoToSymbol(expand('<cword>'), 'definition')<CR>
+nnoremap <silent> gs :call ZGoToSymbol(expand('<cword>'), 'definition')<CR>
+nnoremap <silent> gS :call ZGoToSymbol(expand('<cword>'), 'declaration')<CR>
 nnoremap <silent> <leader>zd :call ZGoToSymbol(expand('<cword>'), 'definition')<CR>
 nnoremap <silent> <leader>zD :call ZGoToSymbol(expand('<cword>'), 'declaration')<CR>
-nnoremap <silent> <leader>zg :call ZGoToDefinition()<CR>
+nnoremap <silent> <leader>gs :call ZGoToSymbolInput('definition')<CR>
+nnoremap <silent> <leader>gS :call ZGoToSymbolInput('declaration')<CR>
 nnoremap <silent> <leader><leader>zd :call ZGoToSymbolInput('definition')<CR>
 nnoremap <silent> <leader><leader>zD :call ZGoToSymbolInput('declaration')<CR>
+nnoremap <silent> gz :call ZGoToDefinition()<CR>
+nnoremap <silent> <leader>zg :call ZGoToDefinition()<CR>
 
 function! ZGoToSymbolInput(type)
     call inputsave()
