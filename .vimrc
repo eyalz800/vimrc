@@ -432,7 +432,9 @@ nnoremap <silent> <C-q> <C-v>
 " Window movements {{{
 nnoremap <silent> <C-w>w :q<CR>
 nnoremap <silent> <C-w>g :if filereadable(expand('%')) \| NERDTreeFind \| else \| NERDTree \| endif<CR>
+nnoremap <silent> <C-w>a :if filereadable(expand('%')) \| NERDTreeFind \| else \| NERDTree \| endif<CR>
 nnoremap <silent> <C-w>; :TagbarOpenAutoClose<CR>
+nnoremap <silent> <C-w>e :TagbarClose<CR>:NERDTreeClose<CR>:cclose<CR>
 " }}}
 
 " Close buffer {{{
@@ -968,7 +970,6 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
 let g:tagbar_width = 30
 let g:tagbar_indent = 0
 let g:tagbar_compact = 2
-let s:tagbar_open = 0
 augroup ZNerdTree
     autocmd!
     autocmd FileType nerdtree setlocal signcolumn=no
@@ -982,21 +983,17 @@ function! ZNerdTreeToggle()
     endif
 endfunction
 function! ZTagbarToggle()
-    if s:tagbar_open == 0
-        TagbarOpen
-    else
-        TagbarClose
-    endif
-    let s:tagbar_open = !s:tagbar_open
+    TagbarToggle
 endfunction
 function! ZToggleNerdTreeAndTagbar()
     let nerdtree_open = exists("g:NERDTree") && g:NERDTree.IsOpen()
-    if (nerdtree_open == 1 && s:tagbar_open == 1) || (nerdtree_open == 0 && s:tagbar_open == 0)
+    let tagbar_open = exists("*tagbar#IsOpen()") && tagbar#IsOpen()
+    if (nerdtree_open == 1 && tagbar_open == 1) || (nerdtree_open == 0 && tagbar_open == 0)
         call ZNerdTreeToggle()
         call ZTagbarToggle()
     elseif !nerdtree_open
         call ZNerdTreeToggle()
-    elseif s:tagbar_open == 0
+    elseif tagbar_open == 0
         call ZTagbarToggle()
     endif
 endfunction
