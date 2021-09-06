@@ -837,7 +837,11 @@ function! ZTerminalToggleScrolling()
         tunmap <silent> <buffer> <ScrollWheelUp>
         let b:terminal_scrolling_enabled = 0
     else
-        tnoremap <silent> <buffer> <ScrollWheelUp> <C-\><C-n>:call ZTerminalEnterNormalMode()<CR>
+        if !has('nvim')
+            tnoremap <silent> <buffer> <ScrollWheelUp> <C-w>:call ZTerminalEnterNormalMode()<CR>
+        else
+            tnoremap <silent> <buffer> <ScrollWheelUp> <C-\><C-n>:call ZTerminalEnterNormalMode()<CR>
+        endif
         let b:terminal_scrolling_enabled = 1
     endif
 endfunction
