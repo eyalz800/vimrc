@@ -2876,6 +2876,7 @@ function! ZCustomizeColors()
             hi NERDTreeDirSlash guifg=#bb9af7
             hi TagbarKind guifg=#bb9af7
             hi TagbarFoldIcon guifg=#bb9af7
+            hi jsonKeyword guifg=#bb9af7
             hi cPreCondit guifg=#7dcfff
             hi PreProc guifg=#7dcfff
             hi Include guifg=#7dcfff
@@ -2891,6 +2892,7 @@ function! ZCustomizeColors()
             hi cppSTLtype guifg=#2ac3de
             hi Special guifg=#2ac3de
             hi cSpecial  guifg=#2ac3de
+            hi jsonBraces guifg=#2ac3de
             hi Delimiter guifg=#2ac3de
             hi vimMapMod guifg=#2ac3de
             hi vimNotation guifg=#2ac3de
@@ -2911,21 +2913,23 @@ function! ZCustomizeColors()
             hi Number guifg=#ff9e64
             hi Boolean guifg=#ff9e64
             hi cppSTLnamespace guifg=#ff9e64
+            hi jsonBoolean guifg=#ff9e64
             hi String guifg=#9ece6a
             hi markdownCode guifg=#1abc9c
             hi Comment guifg=#565f89
             hi Folded guifg=#565f89 guibg=#282d42
             hi TagbarSignature guifg=#545c7e
+            hi jsonCommentError guifg=#565f89
             hi Search guifg=#c0caf5 guibg=#3d59a1
             hi PmenuSel guifg=#c0caf5 guibg=#3d59a1
             hi WildMenu guifg=#c0caf5 guibg=#3d59a1
             hi SpecialKey guifg=#3b4261 gui=nocombine
             hi IncSearch guifg=#1d202f guibg=#ff9e64
 
-            hi GitGutterAdd guibg=NONE
-            hi GitGutterChange guibg=NONE
-            hi GitGutterDelete guibg=NONE
-            hi GitGutterChangeDelete guibg=NONE
+            hi GitGutterAdd guifg=#266d6a guibg=NONE
+            hi GitGutterChange guifg=#536c9e guibg=NONE
+            hi GitGutterDelete guifg=#b2555b guibg=NONE
+            hi GitGutterChangeDelete guifg=#536c9e guibg=NONE
             hi CocHintSign guibg=NONE
             hi CocWarningSign guibg=NONE
             hi CocErrorSign guibg=NONE
@@ -2946,6 +2950,8 @@ function! ZCustomizeColors()
 
             hi markdownLinkText guifg=#7aa2f7 gui=NONE
             hi IndentBlanklineChar guifg=#3b4261 gui=nocombine
+
+            hi jsonCommentError guifg=#565f89
         endif
 
         let s:tokyonight_colors_defined = 1
