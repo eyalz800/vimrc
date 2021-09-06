@@ -429,8 +429,10 @@ nnoremap <silent> ` :noh<CR>
 nnoremap <silent> <C-q> <C-v>
 " }}}
 
-" Close window {{{
+" Window movements {{{
 nnoremap <silent> <C-w>w :q<CR>
+nnoremap <silent> <C-w>g :if filereadable(expand('%')) \| NERDTreeFind \| else \| NERDTree \| endif<CR>
+nnoremap <silent> <C-w>; :TagbarOpenAutoClose<CR>
 " }}}
 
 " Close buffer {{{
@@ -1387,6 +1389,7 @@ endfunction
 
 " QuickFix {{{
 nnoremap <silent> <C-w>p :below copen<CR>
+nnoremap <silent> <C-w>m :below copen<CR>
 nnoremap <silent> <C-w>q :cclose<CR>
 " }}}
 
