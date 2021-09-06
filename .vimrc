@@ -580,7 +580,7 @@ command! ZToggleTerminus call ZToggleTerminus()
 
 " Cursor shape on entry {{{
 if s:os == 'Linux'
-    let &t_SI .= ZWrapIfTmux("\<Esc>[5 q") " ]
+    let &t_SI .= ZWrapIfTmux("\<Esc>[6 q") " ]
     let &t_EI .= ZWrapIfTmux("\<Esc>[2 q") " ]
 endif
 " }}}
