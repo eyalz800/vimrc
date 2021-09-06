@@ -549,26 +549,26 @@ endfunction
 " }}}
 
 " Bracketed paste {{{
-exec "set <f22>=\<Esc>[200~" | " ]
-exec "set <f23>=\<Esc>[201~" | " ]
-inoremap <special> <expr> <f22> ZXTermPasteBegin('')
-nnoremap <special> <expr> <f22> ZXTermPasteBegin('i')
-vnoremap <special> <expr> <f22> ZXTermPasteBegin('c')
-cnoremap <f22> <nop>
-cnoremap <f23> <nop>
+exec "set <f25>=\<Esc>[200~" | " ]
+exec "set <f26>=\<Esc>[201~" | " ]
+inoremap <special> <expr> <f25> ZXTermPasteBegin('')
+nnoremap <special> <expr> <f25> ZXTermPasteBegin('i')
+vnoremap <special> <expr> <f25> ZXTermPasteBegin('c')
+cnoremap <f25> <nop>
+cnoremap <f26> <nop>
 let &t_ti .= ZWrapIfTmux("\<Esc>[?2004h") " ]
 let &t_te = ZWrapIfTmux("\<Esc>[?2004l") . &t_te " ]
 function! ZXTermPasteBegin(ret)
-    setlocal pastetoggle=<f23>
+    setlocal pastetoggle=<f26>
     set paste
     return a:ret
 endfunction
 augroup ZTerminalBracketedPaste
     autocmd!
     if !has('nvim')
-        autocmd TerminalOpen * exec "setlocal <f22>= | setlocal <f23>= "
+        autocmd TerminalOpen * exec "setlocal <f25>= | setlocal <f26>= "
     else
-        autocmd TermOpen * exec "setlocal <f22>= | setlocal <f23>= "
+        autocmd TermOpen * exec "setlocal <f25>= | setlocal <f26>= "
     endif
 augroup end
 " }}}
@@ -2298,15 +2298,27 @@ nnoremap <silent> <leader>dd :if !filereadable('.vimspector.json') \| call ZVims
 nmap <leader>dc <plug>VimspectorContinue
 nmap <F5> <plug>VimspectorContinue
 nmap <leader>dr <plug>VimspectorRestart
-nmap <S-F5> <plug>VimspectorRestart
+if !has('nvim')
+    nmap <S-F5> <plug>VimspectorRestart
+else
+    nmap <F17> <plug>VimspectorRestart
+endif
 nmap <leader>dp <plug>VimspectorPause
 nmap <F6> <plug>VimspectorPause
 nmap <leader>ds <plug>VimspectorStop
-nmap <S-F6> <plug>VimspectorStop
+if !has('nvim')
+    nmap <S-F6> <plug>VimspectorStop
+else
+    nmap <F18> <plug>VimspectorStop
+endif
 nmap <leader>db <plug>VimspectorToggleBreakpoint
 nmap <F9> <plug>VimspectorToggleBreakpoint
 nmap <leader><leader>db <plug>VimspectorToggleConditionalBreakpoint
-nmap <S-F9> <plug>VimspectorToggleConditionalBreakpoint
+if !has('nvim')
+    nmap <S-F9> <plug>VimspectorToggleConditionalBreakpoint
+else
+    nmap <F21> <plug>VimspectorToggleConditionalBreakpoint
+endif
 nmap <leader>df <plug>VimspectorAddFunctionBreakpoint
 nmap <leader><F9> <plug>VimspectorAddFunctionBreakpoint
 nnoremap <silent> <leader>dB :call vimspector#ClearBreakpoints()<CR>
@@ -2317,7 +2329,11 @@ nmap <leader>di <plug>VimspectorStepInto
 nnoremap <silent> <S-F10> :exec "normal \<plug>VimspectorStepInto"<CR>:call vimspector#ListBreakpoints()<CR>:wincmd p<CR>
 nnoremap <silent> <F11> :exec "normal \<plug>VimspectorStepInto"<CR>:call vimspector#ListBreakpoints()<CR>:wincmd p<CR>
 nmap <leader>do <plug>VimspectorStepOut
-nmap <S-F11> <plug>VimspectorStepOut
+if !has('nvim')
+    nmap <S-F11> <plug>VimspectorStepOut
+else
+    nmap <F23> <plug>VimspectorStepOut
+endif
 nnoremap <silent> <leader>dq :VimspectorReset<CR>
 let g:vimspector_install_gadgets = ['debugpy', 'vscode-cpptools']
 let g:vimspector_sign_priority = {
