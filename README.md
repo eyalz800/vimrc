@@ -72,7 +72,8 @@ z/ or z? - Fuzzy search inside file.
 
 // - Fuzzy search the current file lines.
 
-<C-g> - Search recursively using rg.
+<C-g> - Search recursively using rg, filter with fzf.
+<space>f - Search recursively using rg - filter with rg using type:file-type (e.g type:cpp) or pattern:*.extension (e.g pattern:*.cpp)
 ```
 
 * Toggle between source and header file:

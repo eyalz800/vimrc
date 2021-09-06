@@ -1129,10 +1129,21 @@ nnoremap <silent> <C-\> :Buf<CR>
 nnoremap <silent> <leader>gf :GFiles<CR>
 nnoremap <silent> <C-n> :Tags<CR>
 nnoremap <silent> <C-g> :Rg<CR>
+nnoremap <silent> <space>f :ZRg<CR>
 nnoremap <silent> <leader>fh :call ZFzfToggleFilesCache()<CR>
 nnoremap <silent> <leader>fH :call ZFzfToggleGlobalFilesCache()<CR>
 nnoremap <silent> // :BLinesPreview<CR>
 command! -bang -nargs=* BLinesPreview call BLinesPreview()
+command! -bang ZRg call ZRg(<bang>0)
+function! ZRg(fullscreen)
+    let initial_command = 'rg --column --line-number --no-heading --color=always --smart-case . '
+    let reload_command = 'echo {q} | ' . s:sed . ' "s/^\(type:\)\([A-Za-z0-9]*\) */-t \2 /g"'
+                \ . ' | ' . s:sed . ' "s/^\(pattern:\)\([A-Za-z0-9*.]*\) */-g \"\2\" /g"'
+                \ . ' | ' . s:sed . ' "s/^\(-[gt] *[A-Za-z0-9*.\"]* \)\\?\(.*\)/\1\"\2\"/g"'
+                \ . ' | xargs rg --column --line-number --no-heading --color=always --smart-case || true'
+    let spec = {'options': ['--phony', '--bind', 'change:reload:'.reload_command]}
+    call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
 function! BLinesPreview()
     if !exists('*fzf#vim#grep')
         call plug#load('fzf.vim')
