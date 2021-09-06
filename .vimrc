@@ -1130,8 +1130,8 @@ else
 endif
 
 set rtp+=~/.fzf
-nnoremap <silent> <C-p> :call ZFiles()<CR>
-nnoremap <silent> <C-]> :call ZSourceFiles()<CR>
+nnoremap <silent> <C-]> :call ZFiles()<CR>
+nnoremap <silent> <C-p> :call ZSourceFiles()<CR>
 nnoremap <silent> cz :call ZSourceFiles()<CR>
 nnoremap <silent> <space>b :Buf<CR>
 nnoremap <silent> <leader>gf :GFiles<CR>
