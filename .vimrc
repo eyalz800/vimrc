@@ -2949,6 +2949,7 @@ function! ZCustomizeColors()
             hi cppSTLnamespace guifg=#ff9e64
             hi jsonBoolean guifg=#ff9e64
             hi makeCommands guifg=#ff9e64
+            hi MatchParen guibg=NONE guifg=#ff9e64 gui=bold
             hi String guifg=#9ece6a
             hi markdownCode guifg=#1abc9c
             hi Comment guifg=#565f89
