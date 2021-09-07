@@ -54,6 +54,9 @@ Useful Commands
 <leader>zo - Search opengrok for word under cursor.
 <leader><leader>zo - Search opengrok for arbitrary input text.
 
+<leader>zO - Search opengrok for word under cursor for definitions.
+<leader><leader>zO - Search opengrok for arbitrary input text for definitions.
+
 <leader>cs - Search cscope for word under cursor.
 <leader><leader>cs - Search cscope for arbitrary input text.
 

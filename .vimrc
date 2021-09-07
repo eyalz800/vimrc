@@ -1540,8 +1540,7 @@ function! ZGoToSymbol(symbol, type)
     let ctags_tag_types = []
     let opengrok_query_type = 'f'
     let cscope_query_type = '0'
-    let cscope_file_line_separator = ': '
-    let opengrok_file_line_separator = '['
+    let file_line_separator = ': '
     if a:type == 'definition'
         let ctags_tag_types = ['f', 'c', 's', 't', 'd', 'm', 'e', 'g']
         let opengrok_query_type = 'd'
@@ -1560,52 +1559,57 @@ function! ZGoToSymbol(symbol, type)
             \    " | awk '" . awk_program . "'"
         let results = split(system(cscope_command), '\n')
 
-        if len(results) > overall_limit
-            return ZCscope(cscope_query_type, a:symbol, 1)
-        endif
+        if len(results) <= overall_limit
+            let files_to_results = {}
 
-        let files_to_results = {}
-
-        for result in results
-            let file_line = split(trim(split(result, cscope_file_line_separator)[0]), ':')
-            if has_key(files_to_results, file_line[0])
-                call add(files_to_results[file_line[0]][0], file_line[1])
-                call add(files_to_results[file_line[0]][1], result)
-            else
-                let files_to_results[file_line[0]] = [[file_line[1]], [result]]
-            endif
-        endfor
-
-        if len(files_to_results) > limit
-            return ZCscope(cscope_query_type, a:symbol, 1)
-        endif
-
-        let valid_results = []
-        let valid_jumps = []
-
-        for [file_path, file_results] in items(files_to_results)
-            let [file_lines, results] = file_results
-            for [target_line, target_column] in ZGetTargetSymbolJumpIfCtagType(a:symbol, file_path, file_lines, ctags_tag_types)
-                call add(valid_jumps, [file_path, target_line, target_column])
-                call add(valid_results, results[index(file_lines, target_line)])
+            for result in results
+                let file_line = split(trim(split(result, file_line_separator)[0]), ':')
+                if has_key(files_to_results, file_line[0])
+                    call add(files_to_results[file_line[0]][0], file_line[1])
+                    call add(files_to_results[file_line[0]][1], result)
+                else
+                    let files_to_results[file_line[0]] = [[file_line[1]], [result]]
+                endif
             endfor
-        endfor
 
-        if len(valid_jumps) == 1
-            call ZTagstackPushCurrent(a:symbol)
-            call ZJumpToLocation(valid_jumps[0][0], valid_jumps[0][1], valid_jumps[0][2])
-            return 1
-        elseif len(valid_jumps) > 1
-            return ZFzfStringPreview(join(valid_results, '\r\n'))
+            if len(files_to_results) <= limit
+                let valid_results = []
+                let valid_jumps = []
+
+                for [file_path, file_results] in items(files_to_results)
+                    let [file_lines, results] = file_results
+                    for [target_line, target_column] in ZGetTargetSymbolJumpIfCtagType(a:symbol, file_path, file_lines, ctags_tag_types)
+                        call add(valid_jumps, [file_path, target_line, target_column])
+                        call add(valid_results, results[index(file_lines, target_line)])
+                    endfor
+                endfor
+
+                if len(valid_jumps) == 1
+                    call ZTagstackPushCurrent(a:symbol)
+                    call ZJumpToLocation(valid_jumps[0][0], valid_jumps[0][1], valid_jumps[0][2])
+                    return 1
+                elseif len(valid_jumps) > 1
+                    return ZFzfStringPreview(join(valid_results, '\r\n'))
+                endif
+            endif
+        endif
+
+        if !filereadable('.opengrok/configuration.xml') || !filereadable(g:opengrok_jar)
+            return ZCscope(cscope_query_type, a:symbol, 1)
         endif
     endif
 
     " Opengrok
     if filereadable('.opengrok/configuration.xml') && filereadable(g:opengrok_jar)
-        let results = split(system("java -Xmx2048m -cp ~/.vim/bin/opengrok/lib/opengrok.jar
-            \ org.opensolaris.opengrok.search.Search -R .opengrok/configuration.xml -" . opengrok_query_type
-            \ . " ". shellescape(a:symbol) . "| grep \"^/.*\""), '\n')
+        let awk_program =
+            \    '{ x = $1; $1 = ""; z = $3; $3 = ""; ' .
+            \    'printf "%s:%s:%s\n", x,z,$0; }'
+        let opengrok_command =
+            \    "java -Xmx2048m -cp ~/.vim/bin/opengrok/lib/opengrok.jar org.opensolaris.opengrok.search.Search -R .opengrok/configuration.xml -" .
+            \    opengrok_query_type . " " . shellescape(a:symbol) . "| grep \"^/.*\" | " . s:sed . " 's@</\\?.>@@g' | " . s:sed . " 's/&amp;/\\&/g' | " . s:sed . " 's/-\&gt;/->/g'" .
+            \    " | awk '" . awk_program . "'"
 
+        let results = split(system(opengrok_command), '\n')
         if len(results) > overall_limit
             return ZOgQuery(opengrok_query_type, a:symbol, 1)
         endif
@@ -1613,7 +1617,7 @@ function! ZGoToSymbol(symbol, type)
         let files_to_results = {}
 
         for result in results
-            let file_line = split(trim(split(result, opengrok_file_line_separator)[0]), ':')
+            let file_line = split(trim(split(result, file_line_separator)[0]), ':')
             if has_key(files_to_results, file_line[0])
                 call add(files_to_results[file_line[0]][0], file_line[1])
                 call add(files_to_results[file_line[0]][1], result)
@@ -1623,7 +1627,7 @@ function! ZGoToSymbol(symbol, type)
         endfor
 
         if len(files_to_results) > limit
-            return ZCscope(cscope_query_type, a:symbol, 1)
+            return ZOgQuery(opengrok_query_type, a:symbol, 1)
         endif
 
         let valid_results = []
@@ -1652,7 +1656,7 @@ endfunction
 
 function! ZGetTargetSymbolJumpIfCtagType(symbol, file, lines, ctags_tag_types)
     let ctags = split(system("ctags -o - " . g:ctagsEverythingOptions . " " . shellescape(a:file)
-        \ . " 2>/dev/null | grep " . shellescape(a:symbol)), '\n')
+        \ . " 2>/dev/null | rg " . shellescape(a:symbol)), '\n')
     let lines_and_columns = []
     for ctag in ctags
         let ctag = split(ctag, '\t')
@@ -1814,8 +1818,8 @@ endfunction
 " Opengrok {{{
 nnoremap <silent> <leader>zo :call ZOgQuery('f', expand('<cword>'), 1)<CR>
 nnoremap <silent> <leader><leader>zo :call ZOgQuery('f', input('Text: '), 1)<CR>
-nnoremap <silent> <leader>zO :call ZOgQuery('f', expand('<cword>'), 0)<CR>
-nnoremap <silent> <leader><leader>zO :call ZOgQuery('f', input('Text: '), 0)<CR>
+nnoremap <silent> <leader>zO :call ZOgQuery('d', expand('<cword>'), 1)<CR>
+nnoremap <silent> <leader><leader>zO :call ZOgQuery('d', input('Text: '), 1)<CR>
 
 function! ZOgQuery(option, query, preview)
     let awk_program =
