@@ -3161,5 +3161,6 @@ nnoremap <silent> <C-w>f :Goyo<CR>
 " }}}
 
 " Yank History {{{
+nnoremap <silent> <leader>p :YankHistoryRgPaste<CR>
 nnoremap <silent> <space>h :YankHistoryRgPaste<CR>
 " }}}

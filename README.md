@@ -397,7 +397,7 @@ ZToggleDevIcons - Toggles the use of dev icons (on by default).
 
 * Pasting from history:
 ```
-<space>h - Paste from yank history.
+<leader>p / <space>h - Paste from yank history.
 ```
 
 * Focus writing mode:
