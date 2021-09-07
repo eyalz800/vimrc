@@ -300,7 +300,7 @@ if !empty($INSTALL_VIMRC_PLUGINS) || !has('nvim')
 endif
 if !empty($INSTALL_VIMRC_PLUGINS) || has('nvim')
     ZAsyncPlug 'rbgrouleff/bclose.vim'
-    ZAsyncPlug 'lukas-reineke/indent-blankline.nvim', { 'branch': 'lua' }
+    ZAsyncPlug 'lukas-reineke/indent-blankline.nvim'
 endif
 ZAsyncPlug 'metakirby5/codi.vim'
 Plug 'tpope/vim-abolish'
