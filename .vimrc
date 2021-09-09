@@ -437,7 +437,6 @@ nnoremap <silent> <C-q> <C-v>
 " Window movements {{{
 nnoremap <silent> <C-w>w :q<CR>
 nnoremap <silent> <C-w>g :if filereadable(expand('%')) \| NERDTreeFind \| else \| NERDTree \| endif<CR>
-nnoremap <silent> <C-w>a :if filereadable(expand('%')) \| NERDTreeFind \| else \| NERDTree \| endif<CR>
 nnoremap <silent> <C-w>; :TagbarOpenAutoClose<CR>
 nnoremap <silent> <C-w>e :TagbarClose<CR>:NERDTreeClose<CR>:cclose<CR>
 " }}}
