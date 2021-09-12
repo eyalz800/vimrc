@@ -101,7 +101,7 @@ cq - Print current directory path, if nerd tree is open, show it there as well.
 
 * Terminal commands:
 ```
-<leader>zb - Open a small terminal window below.
+<C-w>b / <leader>zb - Open a small terminal window below.
 <leader>zv - Open a terminal window on a vertical split.
 <leader>zs - Open a terminal window below.
 <C-w>m - Toggle terminal scrolling (enabled by default)
@@ -187,9 +187,10 @@ gl / <leader>gl - Lazy git staging plugin.
 <leader>gT - Open tig in current directory.
 ```
 
-* Comment in/out:
+* Commenting and formatting:
 ```
 gc - Comment in/out selected code.
+gf / <leader>lf - Format selected code (need .clang-format).
 ```
 
 * Jump within file:

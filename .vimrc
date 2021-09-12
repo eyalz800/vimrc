@@ -819,6 +819,7 @@ if !has('nvim')
     tnoremap <silent> <C-w>n <C-w>N
     tnoremap <silent> <C-w>m <C-w>:call ZTerminalToggleScrolling()<CR>
 else
+    nnoremap <silent> <C-w>b :below 10new +terminal<CR>a
     nnoremap <silent> <leader>zb :below 10new +terminal<CR>a
     nnoremap <silent> <leader>zs :below new +terminal<CR>a
     nnoremap <silent> <leader>zv :vert rightb new +terminal<CR>a
@@ -1951,9 +1952,10 @@ if g:lsp_choice == 'coc'
     nmap <silent> [g <Plug>(coc-diagnostic-prev)
     nmap <silent> ]g <Plug>(coc-diagnostic-next)
     nmap <silent> <leader>rn <Plug>(coc-rename)
+    xmap <silent> gf <Plug>(coc-format-selected)
     xmap <silent> <leader>lf <Plug>(coc-format-selected)
     imap <C-d> <Plug>(coc-snippets-expand)
-    vmap <C-r> <Plug>(coc-snippets-select)
+    xmap <C-r> <Plug>(coc-snippets-select)
 
     nnoremap <silent> <leader>ld :CocDiagnostics<CR>
     inoremap <silent> <expr> <CR> "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"")"))
