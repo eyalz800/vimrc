@@ -3047,6 +3047,20 @@ nmap <leader>9 <Plug>AirlineSelectTab9
 nmap <leader>0 <Plug>AirlineSelectTab0
 nmap <f1> <Plug>AirlineSelectPrevTab
 nmap <f2> <Plug>AirlineSelectNextTab
+
+nmap <C-w>1 <Plug>AirlineSelectTab1
+nmap <C-w>2 <Plug>AirlineSelectTab2
+nmap <C-w>3 <Plug>AirlineSelectTab3
+nmap <C-w>4 <Plug>AirlineSelectTab4
+nmap <C-w>5 <Plug>AirlineSelectTab5
+nmap <C-w>6 <Plug>AirlineSelectTab6
+nmap <C-w>7 <Plug>AirlineSelectTab7
+nmap <C-w>8 <Plug>AirlineSelectTab8
+nmap <C-w>9 <Plug>AirlineSelectTab9
+nmap <C-w>0 <Plug>AirlineSelectTab0
+nmap <C-w>, <Plug>AirlineSelectPrevTab
+nmap <C-w>. <Plug>AirlineSelectNextTab
+
 if filereadable(expand('~/.vim/.powerline'))
     let g:airline_powerline_fonts = 1
 else

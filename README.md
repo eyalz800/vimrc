@@ -390,9 +390,9 @@ ZToggleDevIcons - Toggles the use of dev icons (on by default).
 
 * Moving between buffer tabs:
 ```
-<f1> - Move to previous buffer.
-<f2> - Move to next buffer.
-<leader>1...9 - Select buffer #1..#9
+<C-w>, / <f1> - Move to previous buffer.
+<C-w>. / <f2> - Move to next buffer.
+<C-w>1...9 / <leader>1...9 - Select buffer #1..#9
 ```
 
 * Pasting from history:
