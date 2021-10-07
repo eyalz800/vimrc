@@ -1151,8 +1151,8 @@ nnoremap <silent> <space>f :ZRg<CR>
 nnoremap <silent> <C-\> :ZRg<CR>
 nnoremap <silent> <leader>fh :call ZFzfToggleFilesCache()<CR>
 nnoremap <silent> <leader>fH :call ZFzfToggleGlobalFilesCache()<CR>
-nnoremap <silent> // :BLinesPreview<CR>
-command! -bang -nargs=* BLinesPreview call BLinesPreview()
+nnoremap <silent> // :ZBLinesPreview<CR>
+command! -bang -nargs=* ZBLinesPreview call ZBLinesPreview()
 command! -bang ZRg call ZRg(<bang>0)
 function! ZRg(fullscreen)
     let initial_command = 'rg --column --line-number --no-heading --color=always --smart-case . '
@@ -1163,11 +1163,11 @@ function! ZRg(fullscreen)
     let spec = {'options': ['--phony', '--bind', 'change:reload:'.reload_command]}
     call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
-function! BLinesPreview()
+function! ZBLinesPreview()
     if !exists('*fzf#vim#grep')
         call plug#load('fzf.vim')
     endif
-    if !filereadable(expand('%'))
+    if !filereadable(expand('%')) || (exists('b:objdump_view') && b:objdump_view) || (exists('b:binary_mode') && b:binary_mode)
         BLines
     else
         call fzf#vim#grep(
@@ -2068,6 +2068,7 @@ imap <BS> <Plug>(PearTreeBackspace)
 " }}}
 
 " Binary {{{
+nnoremap <silent> <leader>bv :call ZBinaryFile()<CR>
 nnoremap <silent> <leader>bf :call ZBinaryFile()<CR>
 command! -nargs=0 ZBinaryFile call ZBinaryFile()
 augroup ZBinaryFileAutoCommands

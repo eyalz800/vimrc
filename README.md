@@ -276,7 +276,7 @@ vim -b [binary_file]
 vimdiff -b [binary_file_1] [binary_file_2]
 
 // After the file is open:
-<leader>bf - Switch to/from binary file editting.
+<leader>bv / <leader>bf - Switch to/from binary file editting.
 ```
 
 * Disassembly view (objdump):
