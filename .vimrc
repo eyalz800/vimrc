@@ -1547,7 +1547,7 @@ function! ZGoToSymbol(symbol, type)
     let cscope_query_type = '0'
     let file_line_separator = ': '
     if a:type == 'definition'
-        let ctags_tag_types = ['f', 'c', 's', 't', 'd', 'm', 'e', 'g']
+        let ctags_tag_types = ['f', 'c', 's', 't', 'd', 'm', 'e', 'g', 'v']
         let opengrok_query_type = 'd'
     elseif a:type == 'declaration'
         let ctags_tag_types = ['p', 'd']
