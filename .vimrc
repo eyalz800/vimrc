@@ -1554,7 +1554,7 @@ function! ZGoToSymbol(symbol, type)
         let opengrok_query_type = 'f'
     endif
 
-    " ZCscope
+    " CScope
     if filereadable('cscope.out')
         let awk_program =
             \    '{ x = $1; $1 = ""; z = $3; $3 = ""; ' .
@@ -1821,6 +1821,10 @@ endfunction
 " }}}
 
 " Opengrok {{{
+nnoremap <silent> gw :call ZOgQuery('f', expand('<cword>'), 1)<CR>
+nnoremap <silent> <leader>gw :call ZOgQuery('f', input('Text: '), 1)<CR>
+nnoremap <silent> gW :call ZOgQuery('d', expand('<cword>'), 1)<CR>
+nnoremap <silent> <leader>gW :call ZOgQuery('d', input('Text: '), 1)<CR>
 nnoremap <silent> <leader>zo :call ZOgQuery('f', expand('<cword>'), 1)<CR>
 nnoremap <silent> <leader><leader>zo :call ZOgQuery('f', input('Text: '), 1)<CR>
 nnoremap <silent> <leader>zO :call ZOgQuery('d', expand('<cword>'), 1)<CR>
