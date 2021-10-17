@@ -812,6 +812,7 @@ endfunction
 
 " Terminal {{{
 if !has('nvim')
+    nnoremap <silent> <C-w>b :below terminal ++rows=10<CR>
     nnoremap <silent> <leader>zb :below terminal ++rows=10<CR>
     nnoremap <silent> <leader>zs :below terminal<CR>
     nnoremap <silent> <leader>zv :vert rightb terminal<CR>
@@ -1068,9 +1069,20 @@ if !has('nvim')
     let g:tokyonight_style = 'storm'
     let g:tokyonight_enable_italic = 0
     let g:tokyonight_disable_italic_comment = 1
+    if filereadable(expand('~/.vim/.transparent'))
+        let g:tokyonight_transparent_background = 1
+    else
+        let g:tokyonight_transparent_background = 0
+    endif
 else
+    let g:tokyonight_style = 'storm'
     let g:tokyonight_italic_keywords = 0
     let g:tokyonight_italic_comments = 0
+    if filereadable(expand('~/.vim/.transparent'))
+        let g:tokyonight_transparent = 1
+    else
+        let g:tokyonight_transparent = 0
+    endif
 endif
 exec ':color ' . s:vim_color
 function! ZColor(color)
@@ -2899,6 +2911,8 @@ function! ZCustomizeColors()
 
             hi SignColumn guibg=NONE
             hi CursorLineNr guibg=NONE
+            hi Folded guifg=#565f89 guibg=NONE
+            hi FoldColumn guibg=NONE
 
             hi VertSplit guifg=#1d202f
 
@@ -2964,7 +2978,6 @@ function! ZCustomizeColors()
             hi String guifg=#9ece6a
             hi markdownCode guifg=#1abc9c
             hi Comment guifg=#565f89
-            hi Folded guifg=#565f89 guibg=#282d42
             hi TagbarSignature guifg=#545c7e
             hi jsonCommentError guifg=#565f89
             hi Search guifg=#c0caf5 guibg=#3d59a1
@@ -2988,7 +3001,10 @@ function! ZCustomizeColors()
             hi clear markdownLinkTextDelimiter
             hi clear NERDTreeNodeDelimiters
         else
-            hi Folded guifg=#565f89 guibg=#282d42
+            hi SignColumn guibg=NONE
+            hi CursorLineNr guibg=NONE
+            hi Folded guifg=#565f89 guibg=NONE
+            hi FoldColumn guibg=NONE
 
             hi Type guifg=#2ac3de
             hi cCustomClass guifg=#2ac3de
@@ -3160,6 +3176,9 @@ if filereadable(expand('~/.vim/.transparent')) && g:colors_name != 'codedark'
     let s:is_transparent = 1
     hi Normal guibg=NONE ctermbg=NONE
     hi CursorLine ctermbg=NONE guibg=NONE
+    if has('nvim')
+        hi NormalFloat guibg=NONE
+    endif
 endif
 command! ZToggleTransparentBackground call ZToggleTransparentBackground() | source ~/.vimrc
 function! ZToggleTransparentBackground()
