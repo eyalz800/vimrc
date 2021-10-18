@@ -1069,8 +1069,10 @@ if !has('nvim')
     let g:tokyonight_enable_italic = 0
     let g:tokyonight_disable_italic_comment = 1
     if filereadable(expand('~/.vim/.transparent'))
+        let s:is_transparent = 1
         let g:tokyonight_transparent_background = 1
     else
+        let s:is_transparent = 0
         let g:tokyonight_transparent_background = 0
     endif
 else
@@ -1078,8 +1080,10 @@ else
     let g:tokyonight_italic_keywords = 0
     let g:tokyonight_italic_comments = 0
     if filereadable(expand('~/.vim/.transparent'))
+        let s:is_transparent = 1
         let g:tokyonight_transparent = 1
     else
+        let s:is_transparent = 0
         let g:tokyonight_transparent = 0
     endif
 endif
@@ -1192,8 +1196,8 @@ let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
   \ 'hl':      ['fg', 'SpecialKey'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'fg+':     ['fg', 'CursorColumn', 'CursorLine', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorColumn', 'CursorLine'],
   \ 'hl+':     ['fg', 'String'],
   \ 'info':    ['fg', 'Comment'],
   \ 'border':  ['fg', 'Ignore'],
@@ -3016,6 +3020,10 @@ function! ZCustomizeColors()
             hi jsonCommentError guifg=#565f89
         endif
 
+        if s:is_transparent
+            hi CursorLine ctermbg=242 guibg=#364a82
+        endif
+
         let s:tokyonight_colors_defined = 1
     endif
 endfunction
@@ -3174,7 +3182,9 @@ let s:is_transparent = 0
 if filereadable(expand('~/.vim/.transparent')) && g:colors_name != 'codedark'
     let s:is_transparent = 1
     hi Normal guibg=NONE ctermbg=NONE
-    hi CursorLine ctermbg=NONE guibg=NONE
+    if g:colors_name != 'tokyonight'
+        hi CursorLine ctermbg=NONE guibg=NONE
+    endif
     if has('nvim')
         hi NormalFloat guibg=NONE
     endif
