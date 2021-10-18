@@ -223,16 +223,24 @@ command! -nargs=+ ZAsyncPlug call ZAsyncLoadPlugin(<args>)
 " Plugins {{{
 call plug#begin()
 ZAsyncPlug 'puremourning/vimspector'
-ZAsyncPlug 'preservim/nerdtree'
+if !has('nvim')
+    ZAsyncPlug 'preservim/nerdtree'
+else
+    ZAsyncPlug 'airblade/vim-gitgutter'
+    ZAsyncPlug 'tpope/vim-fugitive'
+    ZAsyncPlug 'vim-airline/vim-airline'
+endif
 if !empty($INSTALL_VIMRC_PLUGINS) || filereadable(expand('~/.vim/.devicons'))
-    if !has('nvim')
-        ZAsyncPlug 'Xuyuanp/nerdtree-git-plugin'
-        ZAsyncPlug 'ryanoasis/vim-devicons'
-    else
-        Plug 'Xuyuanp/nerdtree-git-plugin'
-        Plug 'ryanoasis/vim-devicons'
-    endif
+    ZAsyncPlug 'Xuyuanp/nerdtree-git-plugin'
+    ZAsyncPlug 'ryanoasis/vim-devicons'
     ZAsyncPlug 'tiagofumo/vim-nerdtree-syntax-highlight'
+endif
+if !has('nvim')
+    ZAsyncPlug 'vim-airline/vim-airline'
+    ZAsyncPlug 'airblade/vim-gitgutter'
+    ZAsyncPlug 'tpope/vim-fugitive'
+else
+    ZAsyncPlug 'preservim/nerdtree'
 endif
 ZAsyncPlug 'majutsushi/tagbar'
 ZAsyncPlug 'ludovicchabant/vim-gutentags'
@@ -244,15 +252,6 @@ ZAsyncPlug 'easymotion/vim-easymotion'
 ZAsyncPlug 'mg979/vim-visual-multi'
 ZAsyncPlug 'erig0/cscope_dynamic', { 'do': s:sed . " -i 's/call s:runShellCommand/call system/g' ./plugin/cscope_dynamic.vim" }
 ZAsyncPlug 'octol/vim-cpp-enhanced-highlight'
-if !has('nvim')
-    ZAsyncPlug 'vim-airline/vim-airline'
-    ZAsyncPlug 'airblade/vim-gitgutter'
-    ZAsyncPlug 'tpope/vim-fugitive'
-else
-    ZAsyncPlug 'airblade/vim-gitgutter'
-    ZAsyncPlug 'tpope/vim-fugitive'
-    ZAsyncPlug 'vim-airline/vim-airline'
-endif
 if !empty($INSTALL_VIMRC_PLUGINS) || g:lsp_choice == 'vim-lsp'
     Plug 'prabirshrestha/async.vim'
     Plug 'prabirshrestha/vim-lsp'
