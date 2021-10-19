@@ -1196,8 +1196,8 @@ let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
   \ 'hl':      ['fg', 'SpecialKey'],
-  \ 'fg+':     ['fg', 'CursorColumn', 'CursorLine', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorColumn', 'CursorLine'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
   \ 'hl+':     ['fg', 'String'],
   \ 'info':    ['fg', 'Comment'],
   \ 'border':  ['fg', 'Ignore'],
@@ -3021,7 +3021,7 @@ function! ZCustomizeColors()
         endif
 
         if s:is_transparent
-            hi CursorLine ctermbg=242 guibg=#364a82
+            hi CursorLine ctermbg=242 guibg=#3b4261
         endif
 
         let s:tokyonight_colors_defined = 1
