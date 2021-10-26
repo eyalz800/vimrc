@@ -2002,6 +2002,7 @@ if g:lsp_choice == 'coc'
     highlight link CocHintSign None
     highlight clear CocInfoFloat
     highlight link CocInfoFloat None
+    highlight def link FgCocErrorFloatBgCocFloating None
 
     function! s:show_documentation()
       if (index(['vim','help'], &filetype) >= 0)
