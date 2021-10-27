@@ -470,11 +470,16 @@ if !filereadable(expand('~/.vim/.noosccopy'))
         vnoremap <silent> <C-x> "*d:call ZOscCopy()<CR>
         inoremap <silent> <C-v> <C-o>"*gp
         nnoremap <silent> <C-v> "*p
-    else
+    elseif s:os != 'Darwin'
         vnoremap <silent> <C-c> ""y:call ZOscCopyPtty()<CR>
         vnoremap <silent> <C-x> ""d:call ZOscCopyPtty()<CR>
         inoremap <silent> <C-v> <C-o>""gp
         nnoremap <silent> <C-v> ""p
+    else
+        vnoremap <silent> <C-c> "*y:call ZOscCopy()<CR>
+        vnoremap <silent> <C-x> "*d:call ZOscCopy()<CR>
+        inoremap <silent> <C-v> <C-o>"*gp
+        nnoremap <silent> <C-v> "*p
     endif
 else
     let s:osc_clipboard = 0
