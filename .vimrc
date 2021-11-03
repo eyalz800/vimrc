@@ -2996,9 +2996,16 @@ function! ZCustomizeColors()
             hi VertSplit guifg=#1d202f
 
             hi Normal guifg=#c0caf5
+            hi pythonDot guifg=#c0caf5
+            hi jsonQuote guifg=#c0caf5
+            hi jsonNoise guifg=#c0caf5
             hi Statement guifg=#bb9af7
+            hi cppExceptions guifg=#bb9af7
+            hi pythonException guifg=#bb9af7
             hi Conditional guifg=#bb9af7
+            hi pythonConditional guifg=#bb9af7
             hi Repeat guifg=#bb9af7
+            hi pythonRepeat guifg=#bb9af7
             hi cLabel guifg=#bb9af7
             hi cCustomAccessKey guifg=#bb9af7
             hi cppAccess guifg=#bb9af7
@@ -3021,7 +3028,9 @@ function! ZCustomizeColors()
             hi Define guifg=#7dcfff
             hi NERDTreeLinkFile guifg=#7dcfff
             hi Operator guifg=#89ddff
+            hi pythonOperator guifg=#89ddff
             hi Type guifg=#2ac3de
+            hi pythonExClass guifg=#2ac3de
             hi cCustomClass guifg=#2ac3de
             hi cFormat guifg=#2ac3de
             hi cppStructure guifg=#2ac3de
