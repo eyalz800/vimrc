@@ -1366,6 +1366,7 @@ function! ZApplyCppSyntax()
     syntax keyword cIntegerType intptr_t
     syntax keyword cIntegerType ptrdiff_t
     syntax keyword cIntegerType size_t
+    syntax keyword cIntegerType byte
     hi def link cIntegerType cCustomClass
     syntax keyword cCharType char8_t
     syntax keyword cCharType char16_t
