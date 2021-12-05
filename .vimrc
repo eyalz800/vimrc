@@ -312,6 +312,7 @@ endif
 if !empty($INSTALL_VIMRC_PLUGINS) || has('nvim')
     Plug 'eyalz800/tokyonight.nvim'
 endif
+Plug 'qpkorr/vim-bufkill'
 call plug#end()
 " }}}
 
@@ -438,7 +439,7 @@ nnoremap <silent> <C-w>e :TagbarClose<CR>:NERDTreeClose<CR>:cclose<CR>
 " }}}
 
 " Close buffer {{{
-nnoremap <silent> <C-w>d :bd \| call airline#extensions#tabline#buflist#clean()<CR>
+nnoremap <silent> <C-w>d :BD<CR>:call airline#extensions#tabline#buflist#clean()<CR>
 " }}}
 
 " Save file {{{
