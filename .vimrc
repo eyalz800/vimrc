@@ -629,7 +629,9 @@ nnoremap <silent> <leader>zm :call ZToggleMouse()<CR>
 function! ZToggleMouse()
     if &mouse == 'a'
         set mouse=
-        set ttymouse=xterm
+        if !has('nvim')
+            set ttymouse=xterm
+        endif
     else
         set mouse=a
         if has('mouse_sgr')
