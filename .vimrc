@@ -329,7 +329,11 @@ if !empty($INSTALL_VIMRC_PLUGINS)
         call ZInstallCommand("
             \ echo '{' > ~/.vim/coc-settings.json
             \ && echo '    \"clangd.semanticHighlighting\": false,' >> ~/.vim/coc-settings.json
-            \ && echo '    \"coc.preferences.formatOnType\": false' >> ~/.vim/coc-settings.json
+            \ && echo '    \"coc.preferences.formatOnType\": false,' >> ~/.vim/coc-settings.json
+            \ && echo '    \"diagnostic.infoSign\": \"\",' >> ~/.vim/coc-settings.json
+            \ && echo '    \"diagnostic.hintSign\": \"\",' >> ~/.vim/coc-settings.json
+            \ && echo '    \"diagnostic.warningSign\": \"⚠\",' >> ~/.vim/coc-settings.json
+            \ && echo '    \"diagnostic.errorSign\": \"✖\"' >> ~/.vim/coc-settings.json
             \ && echo '}' >> ~/.vim/coc-settings.json")
         call ZInstallCommand("INSTALL_VIMRC_PLUGINS=post
                     \ vim -E -s -u ~/.vimrc +'CocInstall -sync coc-clangd coc-pyright coc-vimlsp coc-snippets coc-spell-checker' +qa")
@@ -2007,16 +2011,17 @@ if g:lsp_choice == 'coc'
                 \ coc#refresh()
     inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
-    highlight clear CocErrorSign
-    highlight link CocErrorSign None
+    "highlight clear CocErrorSign
+    "highlight link CocErrorSign None
     highlight clear CocErrorFloat
     highlight link CocErrorFloat None
     highlight clear CocWarningFloat
     highlight link CocWarningFloat None
     highlight clear CocInfoSign
-    highlight link CocInfoSign None
-    highlight clear CocHintSign
-    highlight link CocHintSign None
+    "highlight link CocInfoSign None
+    highlight link CocInfoSign LineNr
+    "highlight clear CocHintSign
+    "highlight link CocHintSign None
     highlight clear CocInfoFloat
     highlight link CocInfoFloat None
     highlight def link FgCocErrorFloatBgCocFloating None
