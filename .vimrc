@@ -331,7 +331,8 @@ if !empty($INSTALL_VIMRC_PLUGINS)
             \ && echo '    \"clangd.semanticHighlighting\": false,' >> ~/.vim/coc-settings.json
             \ && echo '    \"coc.preferences.formatOnType\": false' >> ~/.vim/coc-settings.json
             \ && echo '}' >> ~/.vim/coc-settings.json")
-        call ZInstallCommand("INSTALL_VIMRC_PLUGINS=post vim -E -s -u ~/.vimrc +'CocInstall -sync coc-clangd coc-pyright coc-vimlsp coc-snippets' +qa")
+        call ZInstallCommand("INSTALL_VIMRC_PLUGINS=post
+                    \ vim -E -s -u ~/.vimrc +'CocInstall -sync coc-clangd coc-pyright coc-vimlsp coc-snippets coc-spell-checker' +qa")
     endif
 endif
 " }}}
@@ -1957,7 +1958,13 @@ endif
 
 " Coc {{{
 if g:lsp_choice == 'coc'
-    let g:coc_global_extensions = ['coc-clangd', 'coc-pyright', 'coc-vimlsp', 'coc-snippets']
+    let g:coc_global_extensions = [
+                \ 'coc-clangd',
+                \ 'coc-pyright',
+                \ 'coc-vimlsp',
+                \ 'coc-snippets',
+                \ 'coc-spell-checker']
+
     let g:coc_fzf_preview = 'right:50%'
 
     "nmap <silent> gd <Plug>(coc-definition)
