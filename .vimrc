@@ -1969,6 +1969,10 @@ if g:lsp_choice == 'coc'
     "nmap <silent> gr <Plug>(coc-references)
     nmap <silent> gr :call ZLspJump('References')<CR>
 
+    " Apply action to code.
+    nmap <leader>ac <plug>(coc-codeaction)
+
+    " Apply quickfix
     nmap <leader>qf  <Plug>(coc-fix-current)
 
     nmap <silent> gy <Plug>(coc-type-definition)
