@@ -2217,6 +2217,44 @@ cmap <c-j> <Plug>CmdlineCompleteForward
 
 " Wrap {{{
 nnoremap <silent> - :setlocal wrap!<CR>
+function! ZWrapScreenMovement(movement)
+    if &wrap && b:wrap_screen_move == 1
+        return "g" . a:movement
+    else
+        return a:movement
+    endif
+endfunction
+onoremap <silent> <expr> j ZWrapScreenMovement("j")
+onoremap <silent> <expr> k ZWrapScreenMovement("k")
+onoremap <silent> <expr> 0 ZWrapScreenMovement("0")
+onoremap <silent> <expr> ^ ZWrapScreenMovement("^")
+onoremap <silent> <expr> $ ZWrapScreenMovement("$")
+nnoremap <silent> <expr> j ZWrapScreenMovement("j")
+nnoremap <silent> <expr> k ZWrapScreenMovement("k")
+nnoremap <silent> <expr> 0 ZWrapScreenMovement("0")
+nnoremap <silent> <expr> ^ ZWrapScreenMovement("^")
+nnoremap <silent> <expr> $ ZWrapScreenMovement("$")
+vnoremap <silent> <expr> j ZWrapScreenMovement("j")
+vnoremap <silent> <expr> k ZWrapScreenMovement("k")
+vnoremap <silent> <expr> 0 ZWrapScreenMovement("0")
+vnoremap <silent> <expr> ^ ZWrapScreenMovement("^")
+vnoremap <silent> <expr> $ ZWrapScreenMovement("$")
+vnoremap <silent> <expr> j ZWrapScreenMovement("j")
+function! ZToggleShowBreak()
+    if &showbreak == ''
+        set showbreak=>
+    else
+        set showbreak=
+    endif
+endfunction
+let b:wrap_screen_move = 1
+function! ZToggleWrapScreenMove()
+    if exists("b:wrap_screen_move") && b:wrap_screen_move == 1
+        let b:wrap_screen_move = 0
+    else
+        let b:wrap_screen_move = 1
+    endif
+endfunction
 " }}}
 
 " vim-signature {{{
