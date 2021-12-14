@@ -2216,7 +2216,7 @@ cmap <c-j> <Plug>CmdlineCompleteForward
 " }}}
 
 " Wrap {{{
-nnoremap <silent> - :setlocal wrap!<CR>
+nnoremap <silent> - :setlocal wrap! lbr!<CR>
 function! ZWrapScreenMovement(movement)
     if &wrap && b:wrap_screen_move == 1
         return "g" . a:movement
