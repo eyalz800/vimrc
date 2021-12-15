@@ -12,6 +12,9 @@ strategy:
     macOS-10.15:
       VM_IMAGE: 'macOS-10.15'
       OPERATING_SYSTEM: 'mac-os'
+    macOS-11:
+      VM_IMAGE: 'macOS-11'
+      OPERATING_SYSTEM: 'mac-os'
 
 pool:
   vmImage: $(VM_IMAGE)
