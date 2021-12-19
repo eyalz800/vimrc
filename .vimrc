@@ -1399,6 +1399,7 @@ function! ZApplyCppSyntax()
         hi def link cppMemberFunction cCustomFunc
         syntax match cppVariable "\h\w*\({\)" contains=cCurlyBrace " }
         hi def link cppVariable cCustomMemVar
+        syntax keyword cppSTLbool same_as
     endif
 endfunction
 " }}}
