@@ -1976,7 +1976,7 @@ if g:lsp_choice == 'coc'
     nmap <silent> gd :call ZLspJump('Definition')<CR>
 
     "nmap <silent> gi <Plug>(coc-implementation)
-    nmap <silent> gi :call ZLspJump('Implementation')<CR>
+    "nmap <silent> gi :call ZLspJump('Implementation')<CR>
 
     "nmap <silent> gr <Plug>(coc-references)
     nmap <silent> gr :call ZLspJump('References')<CR>
