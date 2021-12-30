@@ -420,6 +420,13 @@ augroup ZFileIndentation
 augroup end
 " }}}
 
+" File paris {{{
+augroup ZFilePairs
+    autocmd!
+    autocmd filetype cpp setlocal matchpairs+=<:>
+augroup end
+" }}}
+
 " CPP Modules {{{
 augroup ZCppModuleFileTypes
     autocmd!
