@@ -1,5 +1,7 @@
 vimrc
 =====
+
+[![.github/workflows/actions.yml](https://github.com/eyalz800/vimrc/actions/workflows/actions.yml/badge.svg)](https://github.com/eyalz800/vimrc/actions/workflows/actions.yml)
 [![Build Status](https://dev.azure.com/eyalz800/vimrc/_apis/build/status/eyalz800.vimrc?branchName=master)](https://dev.azure.com/eyalz800/vimrc/_build/latest?definitionId=6&branchName=master)
 
 Installation

@@ -1,0 +1,30 @@
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  schedule:
+    - cron: '0 8 * * *'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.config.vm_image }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - name: Ubuntu 18.04
+            vm_image: ubuntu-18.04
+          - name: Ubuntu 20.04
+            vm_image: ubuntu-20.04
+          - name: MacOS 10.15
+            vm_image: macos-10.15
+          - name: MacOS 11
+            vm_image: macos-11
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: install
+        run: ./install.sh
