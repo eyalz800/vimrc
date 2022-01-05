@@ -1174,7 +1174,7 @@ endif
 
 set rtp+=~/.fzf
 nnoremap <silent> <C-]> :call ZFiles()<CR>
-nnoremap <silent> <C-p> :call ZSourceFiles()<CR>
+nnoremap <silent> <C-p> :call ZNonHiddenFiles()<CR>
 nnoremap <silent> cz :call ZSourceFiles()<CR>
 nnoremap <silent> <space>b :Buf<CR>
 nnoremap <silent> <leader>gf :GFiles<CR>
@@ -1231,6 +1231,11 @@ function! ZFiles()
     else
         let $FZF_DEFAULT_COMMAND = g:fzf_files_nocache_command
     endif
+    silent exec "Files"
+endfunction
+
+function! ZNonHiddenFiles()
+    let $FZF_DEFAULT_COMMAND = 'rg --files'
     silent exec "Files"
 endfunction
 
