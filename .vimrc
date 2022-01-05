@@ -330,6 +330,7 @@ if !empty($INSTALL_VIMRC_PLUGINS)
             \ echo '{' > ~/.vim/coc-settings.json
             \ && echo '    \"clangd.semanticHighlighting\": false,' >> ~/.vim/coc-settings.json
             \ && echo '    \"coc.preferences.formatOnType\": false,' >> ~/.vim/coc-settings.json
+            \ && echo '    \"diagnostic.enableHighlightLineNumber\": \"false\",' >> ~/.vim/coc-settings.json
             \ && echo '    \"diagnostic.infoSign\": \"\",' >> ~/.vim/coc-settings.json
             \ && echo '    \"diagnostic.hintSign\": \"\",' >> ~/.vim/coc-settings.json
             \ && echo '    \"diagnostic.warningSign\": \"⚠\",' >> ~/.vim/coc-settings.json
@@ -2027,7 +2028,7 @@ if g:lsp_choice == 'coc'
     highlight link CocWarningFloat None
     highlight clear CocInfoSign
     "highlight link CocInfoSign None
-    highlight link CocInfoSign LineNr
+    highlight link CocInfoSign SignColumn
     "highlight clear CocHintSign
     "highlight link CocHintSign None
     highlight clear CocInfoFloat
@@ -2965,6 +2966,9 @@ function! ZCustomizeColors()
 
         " Cursor line
         highlight CursorLine ctermbg=235 guibg=#262626
+
+        " Sign Column
+        highlight SignColumn guifg=#bbbbbb guibg=NONE
     elseif g:colors_name == 'onedark'
         let s:group_colors = {} " Cache of default highlight group settings, for later reference via `onedark#extend_highlight`
         function! ZHighLight(group, style, ...)
@@ -3048,11 +3052,14 @@ function! ZCustomizeColors()
 
         " Makefile
         call ZHighLight("makeIdent", s:nord8_gui, "", s:nord8_term, "", "", "")
+
+        " Sign Column
+        highlight SignColumn guifg=#d8dee9 guibg=NONE
     elseif g:colors_name == 'tokyonight'
         if !has('nvim')
             let g:indentLine_color_gui = '#3b4261'
 
-            hi SignColumn guibg=NONE
+            hi SignColumn guifg=#737aa2 guibg=NONE
             hi CursorLineNr guibg=NONE
             hi Folded guifg=#565f89 guibg=NONE
             hi FoldColumn guibg=NONE
@@ -3153,7 +3160,7 @@ function! ZCustomizeColors()
             hi clear markdownLinkTextDelimiter
             hi clear NERDTreeNodeDelimiters
         else
-            hi SignColumn guibg=NONE
+            hi SignColumn guifg=#737aa2 guibg=NONE
             hi CursorLineNr guibg=NONE
             hi Folded guifg=#565f89 guibg=NONE
             hi FoldColumn guibg=NONE
