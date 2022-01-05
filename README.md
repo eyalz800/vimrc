@@ -301,6 +301,7 @@ cu - Change directory to upper (parent) directory.
 <C-c> - Copy selected text to clipboard.
 <C-x> - Cut selected text into clipboard.
 <C-v> - Paste from unnamed register.
+<leader>p / <space>h - Paste from yank history.
 :ZToggleOscCopy - persistently toggle osc copy (default on)
 :ZToggleForceXServer - persistently force / no force connect to x server on ssh (default off).
 ```
@@ -397,11 +398,6 @@ ZToggleDevIcons - Toggles the use of dev icons (on by default).
 <C-w>, / <f1> - Move to previous buffer.
 <C-w>. / <f2> - Move to next buffer.
 <C-w>1...9 / <leader>1...9 - Select buffer #1..#9
-```
-
-* Pasting from history:
-```
-<leader>p / <space>h - Paste from yank history.
 ```
 
 * Focus writing mode:
