@@ -305,7 +305,7 @@ ZAsyncPlug 'eyalz800/vim-ultisnips'
 ZAsyncPlug 'voldikss/vim-floaterm', { 'on': ['FloatermNew'] }
 ZAsyncPlug 'will133/vim-dirdiff'
 ZAsyncPlug 'junegunn/goyo.vim'
-ZAsyncPlug 'yazgoo/yank-history'
+ZAsyncPlug 'eyalz800/yank-history'
 if !empty($INSTALL_VIMRC_PLUGINS) || !has('nvim')
     Plug 'ghifarit53/tokyonight-vim'
 endif
