@@ -54,7 +54,7 @@ function! ZInstallVimrc()
             call ZInstallCommand("curl -sL https://deb.nodesource.com/setup_14.x | bash -")
             call ZInstallCommand("curl -fLo ~/.vim/tmp/llvm-install/llvm.sh --create-dirs
                 \ https://apt.llvm.org/llvm.sh
-                \ ; cd ~/.vim/tmp/llvm-install; chmod +x ./llvm.sh; ./llvm.sh " . s:clang_version)
+                \ ; cd ~/.vim/tmp/llvm-install; chmod +x ./llvm.sh; ./llvm.sh " . s:clang_version . " all")
             call ZInstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y curl silversearcher-ag exuberant-ctags cscope git
                 \ make autoconf automake pkg-config openjdk-8-jre python3 python3-pip gdb golang nodejs lazygit tig libc++-" . s:clang_version . "-dev libc++abi-" . s:clang_version . "-dev")
             call ZInstallCommand("rm -rf ~/.vim/bin/llvm/clangd && ln -s $(command -v clangd-" . s:clang_version . ") ~/.vim/bin/llvm/clangd")
