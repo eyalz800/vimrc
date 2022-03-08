@@ -2444,10 +2444,10 @@ nmap <leader><F9> <plug>VimspectorAddFunctionBreakpoint
 nnoremap <silent> <leader>dB :call vimspector#ClearBreakpoints()<CR>
 nnoremap <silent> <leader><leader><F9> :call vimspector#ClearBreakpoints()<CR>
 nmap <leader>dn <plug>VimspectorStepOver
-nnoremap <silent> <F10> :exec "normal \<plug>VimspectorStepOver"<CR>:call vimspector#ListBreakpoints()<CR>:wincmd p<CR>
+nnoremap <silent> <F10> :exec "normal \<plug>VimspectorStepOver"<CR>
 nmap <leader>di <plug>VimspectorStepInto
-nnoremap <silent> <S-F10> :exec "normal \<plug>VimspectorStepInto"<CR>:call vimspector#ListBreakpoints()<CR>:wincmd p<CR>
-nnoremap <silent> <F11> :exec "normal \<plug>VimspectorStepInto"<CR>:call vimspector#ListBreakpoints()<CR>:wincmd p<CR>
+nnoremap <silent> <S-F10> :exec "normal \<plug>VimspectorStepInto"<CR>
+nnoremap <silent> <F11> :exec "normal \<plug>VimspectorStepInto"<CR>
 nmap <leader>do <plug>VimspectorStepOut
 if !has('nvim')
     nmap <S-F11> <plug>VimspectorStepOut
@@ -2471,10 +2471,6 @@ augroup end
 function! ZVimspectorSetupUi()
     call win_gotoid(g:vimspector_session_windows.output)
     set ft=asm
-    vert rightb copen
-    exec ":vert resize " . winwidth(g:vimspector_session_windows.output)/3
-    nnoremenu <silent> WinBar.ListBreakpoints :call vimspector#ListBreakpoints()<CR>
-    call vimspector#ListBreakpoints()
     call win_gotoid(g:vimspector_session_windows.code)
 endfunction
 function! ZVimspectorInitializePrompt()
