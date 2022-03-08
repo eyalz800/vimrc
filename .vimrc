@@ -421,7 +421,7 @@ augroup ZFileIndentation
 augroup end
 " }}}
 
-" File paris {{{
+" File pairs {{{
 augroup ZFilePairs
     autocmd!
     autocmd filetype cpp setlocal matchpairs+=<:>
@@ -471,6 +471,22 @@ vnoremap <silent> <leader>- <C-x>
 nnoremap <silent> <C-a> ggVG
 vnoremap <silent> <C-a> <esc>ggVG
 inoremap <silent> <C-a> <esc>ggVG
+" }}}
+"
+
+" Swap file {{{
+function! ZToggleSwapFile()
+    if filereadable(expand('~/.vim/.noswapfile'))
+        call system("rm ~/.vim/.noswapfile")
+    else
+        call system("touch ~/.vim/.noswapfile")
+    endif
+endfunction
+command! ZToggleSwapFile call ZToggleSwapFile()
+
+if filereadable(expand('~/.vim/.noswapfile'))
+    set noswapfile
+endif
 " }}}
 
 " Clipboard {{{

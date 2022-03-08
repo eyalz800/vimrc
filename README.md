@@ -404,3 +404,8 @@ ZToggleDevIcons - Toggles the use of dev icons (on by default).
 ```
 <C-w>f - Focus writing mode using goyo plugin.
 ```
+
+* Toggle swap files persistently (enabled by default)
+```
+ZToggleSwapFile - Toggle swap files persistently (enabled by default).
+```
