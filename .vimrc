@@ -56,14 +56,16 @@ function! ZInstallVimrc()
                 \ https://apt.llvm.org/llvm.sh
                 \ ; cd ~/.vim/tmp/llvm-install; chmod +x ./llvm.sh; ./llvm.sh " . s:clang_version . " all")
             call ZInstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y curl silversearcher-ag exuberant-ctags cscope git
-                \ make autoconf automake pkg-config openjdk-8-jre python3 python3-pip gdb golang nodejs lazygit tig libc++-" . s:clang_version . "-dev libc++abi-" . s:clang_version . "-dev")
+                \ make autoconf automake pkg-config libtool openjdk-8-jre python3 python3-pip gdb golang nodejs lazygit tig libc++-" . s:clang_version . "-dev libc++abi-" . s:clang_version . "-dev")
             call ZInstallCommand("rm -rf ~/.vim/bin/llvm/clangd && ln -s $(command -v clangd-" . s:clang_version . ") ~/.vim/bin/llvm/clangd")
             let lazygit_config_path = '~/.config/jesseduffield/lazygit'
         else
             call ZInstallCommand("sudo -u $SUDO_USER brew install curl ag ctags cscope git
-                \ llvm make autoconf automake pkg-config python3 nodejs gnu-sed bat ripgrep lazygit tig golang pandoc || true")
+                \ llvm make autoconf automake pkg-config libtool gettext python3 nodejs gnu-sed bat ripgrep lazygit tig golang pandoc || true")
             call ZInstallCommand("rm -rf /usr/local/bin/2to3")
             call ZInstallCommand("sudo -u $SUDO_USER brew link python3")
+            call ZInstallCommand("sudo -u $SUDO_USER brew link --overwrite autoconf")
+            call ZInstallCommand("sudo -u $SUDO_USER brew link --overwrite pkg-config")
             call ZInstallCommand("sudo -u $SUDO_USER brew tap AdoptOpenJDK/openjdk")
             call ZInstallCommand("sudo -u $SUDO_USER brew install --cask adoptopenjdk/openjdk/adoptopenjdk8")
             call ZInstallCommand("sudo -u $SUDO_USER curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py")
