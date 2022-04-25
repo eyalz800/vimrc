@@ -60,7 +60,8 @@ function! ZInstallVimrc()
             call ZInstallCommand("rm -rf ~/.vim/bin/llvm/clangd && ln -s $(command -v clangd-" . s:clang_version . ") ~/.vim/bin/llvm/clangd")
             let lazygit_config_path = '~/.config/jesseduffield/lazygit'
         else
-            call ZInstallCommand("sudo -u $SUDO_USER brew install curl ag ctags cscope git
+            call ZInstallCommand("sudo -u $SUDO_USER brew install git || true")
+            call ZInstallCommand("sudo -u $SUDO_USER brew install curl ag ctags cscope
                 \ llvm make autoconf automake pkg-config python3 nodejs gnu-sed bat ripgrep lazygit tig golang pandoc || true")
             call ZInstallCommand("rm -rf /usr/local/bin/2to3")
             call ZInstallCommand("sudo -u $SUDO_USER brew link python3")
