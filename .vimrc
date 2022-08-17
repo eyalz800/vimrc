@@ -473,7 +473,6 @@ nnoremap <silent> <C-a> ggVG
 vnoremap <silent> <C-a> <esc>ggVG
 inoremap <silent> <C-a> <esc>ggVG
 " }}}
-"
 
 " Swap file {{{
 function! ZToggleSwapFile()
