@@ -2030,10 +2030,10 @@ if g:lsp_choice == 'coc'
     endfunction
 
     inoremap <silent><expr> <Tab>
-                \ pumvisible() ? "\<C-n>" :
+                \ coc#pum#visible() ? coc#pum#next(1) :
                 \ <SID>check_back_space() ? "\<Tab>" :
                 \ coc#refresh()
-    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+    inoremap <expr> <S-Tab> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
     "highlight clear CocErrorSign
     "highlight link CocErrorSign None
