@@ -331,6 +331,7 @@ if !empty($INSTALL_VIMRC_PLUGINS)
             \ echo '{' > ~/.vim/coc-settings.json
             \ && echo '    \"clangd.semanticHighlighting\": false,' >> ~/.vim/coc-settings.json
             \ && echo '    \"coc.preferences.formatOnType\": false,' >> ~/.vim/coc-settings.json
+            \ && echo '    \"notification.disabledProgressSources\": [\"*\"],' >> ~/.vim/coc-settings.json
             \ && echo '    \"diagnostic.enableHighlightLineNumber\": \"false\",' >> ~/.vim/coc-settings.json
             \ && echo '    \"diagnostic.infoSign\": \"\",' >> ~/.vim/coc-settings.json
             \ && echo '    \"diagnostic.hintSign\": \"\",' >> ~/.vim/coc-settings.json
