@@ -23,7 +23,7 @@ endif
 " Installation {{{
 
 " Clang Version
-let s:clang_version = 12
+let s:clang_version = 14
 
 " Sed program to use
 let s:sed = 'sed'
@@ -51,7 +51,7 @@ function! ZInstallVimrc()
         call ZInstallCommand("mkdir -p ~/.vim/tmp ~/.vim/bin/python ~/.vim/bin/llvm ~/.vim/undo ~/.vim/nundo ~/.config/coc ~/.cache")
         if !executable('brew')
             call ZInstallCommand("DEBIAN_FRONTEND=noninteractive add-apt-repository -y ppa:lazygit-team/release")
-            call ZInstallCommand("curl -sL https://deb.nodesource.com/setup_14.x | bash -")
+            call ZInstallCommand("curl -sL https://deb.nodesource.com/setup_18.x | bash -")
             call ZInstallCommand("curl -fLo ~/.vim/tmp/llvm-install/llvm.sh --create-dirs
                 \ https://apt.llvm.org/llvm.sh
                 \ ; cd ~/.vim/tmp/llvm-install; chmod +x ./llvm.sh; ./llvm.sh " . s:clang_version . " all")
