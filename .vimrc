@@ -900,6 +900,9 @@ vnoremap <silent> <C-h> 20zh
 
 " Vim-better-whitespace {{{
 let g:better_whitespace_filetypes_blacklist = ['diff', 'gitcommit', 'git', 'unite', 'qf', 'help', 'VimspectorPrompt', 'xxd']
+if filereadable(expand('~/.vim/.nowhitespace'))
+    let g:better_whitespace_enabled = 0
+endif
 nnoremap <silent> <leader>zw :StripWhitespace<CR>
 nnoremap <silent> <leader>zW :ToggleWhitespace<CR>
 " }}}
