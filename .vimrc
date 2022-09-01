@@ -82,6 +82,7 @@ function! ZInstallVimrc()
             let python3_command = 'python3'
         endif
         if executable(python3_command)
+            call ZInstallCommand("sudo -u $SUDO_USER " . python3_command . " -m pip install --upgrade pip wheel")
             call ZInstallCommand("sudo -u $SUDO_USER " . python3_command . " -m pip install setuptools")
             call ZInstallCommand("sudo -u $SUDO_USER " . python3_command . " -m pip install pylint compiledb jedi")
         endif
