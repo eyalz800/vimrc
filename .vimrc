@@ -74,10 +74,10 @@ function! ZInstallVimrc()
             endif
             let lazygit_config_path = '~/Library/Application\ Support/jesseduffield/lazygit'
         endif
-        if 0 == system('python3 -c "import sys; print(1 if sys.version_info.major >= 3 and sys.version_info.minor >= 7 else 0)"') && executable('python3.7')
-            call ZInstallCommand("rm -rf ~/.vim/bin/python/python3 && ln -s $(command -v python3.7) ~/.vim/bin/python/python3")
+        if 0 == system('python3 -c "import sys; print(1 if sys.version_info.major >= 3 and sys.version_info.minor >= 8 else 0)"') && executable('python3.8')
+            call ZInstallCommand("rm -rf ~/.vim/bin/python/python3 && ln -s $(command -v python3.8) ~/.vim/bin/python/python3")
             let $PATH = expand('~/.vim/bin/python') . ':' . $PATH
-            let python3_command = 'python3.7'
+            let python3_command = 'python3.8'
         else
             let python3_command = 'python3'
         endif

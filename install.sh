@@ -17,14 +17,14 @@ else
         python3-dev curl build-essential make libncurses5-dev libncursesw5-dev gcc \
         libx11-dev libxtst-dev libxt-dev libsm-dev libxpm-dev
 
-    if ! [ $(python3 -c "import sys; print(1 if sys.version_info.major >= 3 and sys.version_info.minor >= 7 else 0)") == 1 ]; then
-        if ! [ -x "$(command -v python3.7)" ] || \
-           ! [ $(dpkg-query -W -f='${Status}' python3.7-dev 2>/dev/null | grep -c "ok installed") == 1 ]; then
+    if ! [ $(python3 -c "import sys; print(1 if sys.version_info.major >= 3 and sys.version_info.minor >= 8 else 0)") == 1 ]; then
+        if ! [ -x "$(command -v python3.8)" ] || \
+           ! [ $(dpkg-query -W -f='${Status}' python3.8-dev 2>/dev/null | grep -c "ok installed") == 1 ]; then
             DEBIAN_FRONTEND=noninteractive add-apt-repository -y ppa:deadsnakes/ppa
             DEBIAN_FRONTEND=noninteractive apt update
-            DEBIAN_FRONTEND=noninteractive apt install -y python3.7-dev
+            DEBIAN_FRONTEND=noninteractive apt install -y python3.8-dev
         fi
-        python3_command=python3.7
+        python3_command=python3.8
     fi
 
     if ! [ -d ~/.vim/tmp/vim/vim-$vim_version ]; then
