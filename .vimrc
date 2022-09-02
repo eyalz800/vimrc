@@ -1271,9 +1271,11 @@ function! ZFzfToggleFilesCache()
     else
         if filereadable('.fzf-files-cache')
             call system("rm .fzf-files-cache")
+            let g:fzf_files_cache = 0
             let $FZF_DEFAULT_COMMAND = g:fzf_files_nocache_command
         else
             call system("touch .fzf-files-cache")
+            let g:fzf_files_cache = 1
             let $FZF_DEFAULT_COMMAND = g:fzf_files_cache_command
         endif
     endif
