@@ -2003,6 +2003,7 @@ if g:lsp_choice == 'coc'
 
     "nmap <silent> gd <Plug>(coc-definition)
     nmap <silent> gd :call ZLspJump('Definition')<CR>
+    nmap <silent> gD :call CocAction('jumpDefinition')<CR>
 
     "nmap <silent> gi <Plug>(coc-implementation)
     "nmap <silent> gi :call ZLspJump('Implementation')<CR>
@@ -2065,44 +2066,59 @@ if g:lsp_choice == 'coc'
       endif
     endfunction
 
+    set tagfunc=CocTagFunc
     let g:lsp_jump_function = 1
-    function! ZLspJump(jump_type)
-        if a:jump_type == 'definition'
-            let jump_type = 'Definition'
-        else
-            let jump_type = a:jump_type
-        endif
-        let name = expand('<cword>')
-        let pos = getcurpos()
-        let buf = bufnr()
-        call setpos('.', [pos[0], pos[1], pos[2]+1, pos[3]])
-        if CocAction('jump' . jump_type)
-            " If on the same buffer and line.
-            let newpos = getcurpos()
-            if buf == bufnr() && pos[1] == newpos[1]
-                " If the cursor was moved already, it means that the jump was
-                " finished, and that we landed on the same line, return
-                " failure.
-                if pos[2]+1 != newpos[2]
-                    return 0
+    if filereadable(expand('~/.vim/.noasynclspjump'))
+        function! ZLspJump(jump_type)
+            if a:jump_type == 'definition'
+                let jump_type = 'Definition'
+            else
+                let jump_type = a:jump_type
+            endif
+            let name = expand('<cword>')
+            let pos = getcurpos()
+            let buf = bufnr()
+            call setpos('.', [pos[0], pos[1], pos[2]+1, pos[3]])
+            if CocAction('jump' . jump_type)
+                " If on the same buffer and line.
+                let newpos = getcurpos()
+                if buf == bufnr() && pos[1] == newpos[1]
+                    " If the cursor was moved already, it means that the jump was
+                    " finished, and that we landed on the same line, return
+                    " failure.
+                    if pos[2]+1 != newpos[2]
+                        return 0
+                    endif
+
+                    " The position has not changed, a popup is in front of the
+                    " user, assume success.
+                    call setpos('.', pos)
+                    call ZTagstackPush(name, pos, buf)
+                    return 1
                 endif
 
-                " The position has not changed, a popup is in front of the
-                " user, assume success.
-                call setpos('.', pos)
+                " Jump already occurred as we are not in the same buffer or line,
+                " return success.
                 call ZTagstackPush(name, pos, buf)
                 return 1
+            else
+                call setpos('.', pos)
             endif
-
-            " Jump already occurred as we are not in the same buffer or line,
-            " return success.
-            call ZTagstackPush(name, pos, buf)
-            return 1
-        else
-            call setpos('.', pos)
-        endif
-        return 0
-    endfunction
+            return 0
+        endfunction
+    else
+        function! ZLspJump(jump_type)
+            if a:jump_type == 'definition'
+                let jump_type = 'Definition'
+            else
+                let jump_type = a:jump_type
+            endif
+            if CocActionAsync('jump' . jump_type)
+                return 1
+            endif
+            return 0
+        endfunction
+    endif
 endif
 " }}}
 
