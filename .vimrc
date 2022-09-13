@@ -315,6 +315,7 @@ if !empty($INSTALL_VIMRC_PLUGINS) || has('nvim')
     Plug 'eyalz800/tokyonight.nvim'
 endif
 Plug 'qpkorr/vim-bufkill'
+Plug 'cormacrelf/vim-colors-github'
 call plug#end()
 " }}}
 
@@ -1096,7 +1097,7 @@ endif
 let g:onedark_color_overrides = {
     \ "special_grey": { "gui": "#5C6370", "cterm": "59", "cterm16": "15" }
 \ }
-let s:available_colors = ['onedark', 'codedark', 'nord', 'tokyonight']
+let s:available_colors = ['onedark', 'codedark', 'nord', 'tokyonight', 'github']
 let s:vim_color = readfile(expand('~/.vim/.color'))[0]
 if !has('nvim')
     let g:tokyonight_style = 'storm'
@@ -1120,6 +1121,11 @@ else
         let s:is_transparent = 0
         let g:tokyonight_transparent = 0
     endif
+endif
+if s:vim_color == 'github'
+    set background=light
+else
+    set background=dark
 endif
 exec ':color ' . s:vim_color
 function! ZColor(color)
@@ -1329,7 +1335,11 @@ let g:cscopedb_auto_files = 0
 " Mappings - (See https://github.com/mg979/vim-visual-multi/wiki/Mappings)
 " Tutorial - ~/.vim/plugged/vim-visual-multi/doc/vm-tutorial
 let g:VM_default_mappings = 0
-let g:VM_theme = 'iceblue'
+if &background == 'dark'
+    let g:VM_theme = 'iceblue'
+else
+    let g:VM_theme = 'lightblue1'
+endif
 let g:VM_leader = '<leader>m'
 let g:VM_maps = {
     \ 'Find Under': '<leader>ms',
@@ -3216,6 +3226,51 @@ function! ZCustomizeColors()
         endif
 
         let s:tokyonight_colors_defined = 1
+    elseif g:colors_name == 'github'
+        " Terminal ansi colors
+        if !has('nvim')
+            let g:terminal_ansi_colors =
+            \ ['#000000',
+            \ '#c72e0f',
+            \ '#008000',
+            \ '#FFAF00',
+            \ '#007acc',
+            \ '#af00db',
+            \ '#56b6c2',
+            \ '#000000',
+            \ '#808080',
+            \ '#c72e0f',
+            \ '#008000',
+            \ '#795e25',
+            \ '#007acc',
+            \ '#af00db',
+            \ '#56b6c2',
+            \ '#000000']
+        else
+            let g:terminal_color_0 = '#000000'
+            let g:terminal_color_1 = '#c72e0f'
+            let g:terminal_color_2 = '#008000'
+            let g:terminal_color_3 = '#ffaf00'
+            let g:terminal_color_4 = '#007acc'
+            let g:terminal_color_5 = '#af00db'
+            let g:terminal_color_6 = '#56b6c2'
+            let g:terminal_color_7 = '#000000'
+            let g:terminal_color_8 = '#808080'
+            let g:terminal_color_9 = '#c72e0f'
+            let g:terminal_color_10 = '#008000'
+            let g:terminal_color_11 = '#795e25'
+            let g:terminal_color_12 = '#007acc'
+            let g:terminal_color_13 = '#af00db'
+            let g:terminal_color_14 = '#56b6c2'
+            let g:terminal_color_15 = '#000000'
+        endif
+
+        if !has('nvim')
+            let g:indentLine_color_gui = '#bbbbbb'
+        else
+            hi IndentBlanklineChar guifg=#bbbbbb gui=nocombine
+        endif
+        let s:github_colors_defined = 1
     endif
 endfunction
 call ZCustomizeColors()
@@ -3326,6 +3381,16 @@ function! ZAirlineThemePatch(palette)
         let a:palette.visual.airline_error = airline_error
         let a:palette.inactive.airline_warning = airline_warning
         let a:palette.inactive.airline_error = airline_error
+    elseif g:airline_theme == 'github' && exists('s:github_colors_defined') && s:github_colors_defined
+        let airline_insert_1 = ['#ffffff', '#ef5939', '0', '0']
+        let airline_insert_2 = ['#dddddd', '#404040', '0', '0']
+        let airline_insert_3 = ['#000000', '#dddddd', '0', '0']
+        let a:palette.insert = airline#themes#generate_color_map(airline_insert_1, airline_insert_2, airline_insert_3)
+
+        let airline_visual_1 = ['#ffffff', '#159828', '0', '0']
+        let airline_visual_2 = ['#dddddd', '#404040', '0', '0']
+        let airline_visual_3 = ['#000000', '#dddddd', '0', '0']
+        let a:palette.visual = airline#themes#generate_color_map(airline_visual_1, airline_visual_2, airline_visual_3)
     endif
 endfunction
 " }}}
