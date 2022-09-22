@@ -376,14 +376,14 @@ ZToggleDevIcons - Toggles the use of dev icons (on by default).
 
 * Switch current word case style:
 ```
-<leader>crs - Convert to snake_case.
-<leader>crm - Convert to MixedCase.
-<leader>crc - Convert to camelCase.
-<leader>cru - Convert to UPPER_CASE.
-<leader>cr- - Convert to dash-case.
-<leader>cr<space> - Convert to space case.
-<leader>cr. - Convert to dot.case.
-<leader>crt - Convert to Title Case.
+crs - Convert to snake_case.
+crm - Convert to MixedCase.
+crc - Convert to camelCase.
+cru - Convert to UPPER_CASE.
+cr- - Convert to dash-case.
+cr<space> - Convert to space case.
+cr. - Convert to dot.case.
+crt - Convert to Title Case.
 ```
 
 * Snippet complete:

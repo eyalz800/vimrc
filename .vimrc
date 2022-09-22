@@ -2444,6 +2444,7 @@ endfunction
 " Abolish {{{
 let g:abolish_no_mappings = 1
 nmap <leader>cr <Plug>(abolish-coerce-word)
+nmap cr <Plug>(abolish-coerce-word)
 " }}}
 
 " Vimspector {{{
