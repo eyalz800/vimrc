@@ -926,7 +926,8 @@ endif
 
 " Root / project / file folder switching {{{
 let g:vimroot=$PWD
-nnoremap <silent> cr :call ZSwitchToRoot()<CR>
+nnoremap <silent> cR :call ZSwitchToRoot()<CR>
+nnoremap <silent> cro :call ZSwitchToRoot()<CR>
 nnoremap <silent> cp :call ZSwitchToProjectRoot(expand('%:p:h'))<CR>
 nnoremap <silent> cd :execute "cd " . expand('%:p:h')<CR>
 nnoremap <silent> ca :call ZSwitchToArbitraryFolder()<CR>
