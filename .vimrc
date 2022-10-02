@@ -2386,12 +2386,16 @@ function! ZBuildProject()
     if !filereadable('.tasks')
         call ZBuildConfig()
     endif
+    below copen
+    wincmd p
     AsyncTask project-build
 endfunction
 function! ZCleanProject()
     if !filereadable('.tasks')
         call ZBuildConfig()
     endif
+    below copen
+    wincmd p
     AsyncTask project-clean
 endfunction
 function! ZRunProject()
