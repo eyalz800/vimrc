@@ -23,7 +23,7 @@ endif
 " Installation {{{
 
 " Clang Version
-let s:clang_version = 14
+let s:clang_version = 16
 
 " Sed program to use
 let s:sed = 'sed'
