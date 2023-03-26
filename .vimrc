@@ -347,7 +347,7 @@ if !empty($INSTALL_VIMRC_PLUGINS)
             \ && echo '    \"diagnostic.errorSign\": \"✖\"' >> ~/.vim/coc-settings.json
             \ && echo '}' >> ~/.vim/coc-settings.json")
         call ZInstallCommand("INSTALL_VIMRC_PLUGINS=post
-                    \ vim -E -s -u ~/.vimrc +'CocInstall -sync coc-clangd coc-pyright coc-vimlsp coc-snippets coc-spell-checker' +qa")
+                    \ vim -E -s -u ~/.vimrc +'doautocmd VimEnter' +'CocInstall -sync coc-clangd coc-pyright coc-vimlsp coc-snippets coc-spell-checker' +qa")
     endif
 endif
 " }}}
