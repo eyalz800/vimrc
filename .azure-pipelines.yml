@@ -3,11 +3,11 @@ trigger:
 
 strategy:
   matrix:
-    ubuntu-18.04:
-      VM_IMAGE: 'ubuntu-18.04'
-      OPERATING_SYSTEM: 'linux'
     ubuntu-20.04:
       VM_IMAGE: 'ubuntu-20.04'
+      OPERATING_SYSTEM: 'linux'
+    ubuntu-22.04:
+      VM_IMAGE: 'ubuntu-22.04'
       OPERATING_SYSTEM: 'linux'
     macOS-10.15:
       VM_IMAGE: 'macOS-10.15'
