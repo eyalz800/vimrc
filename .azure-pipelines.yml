@@ -9,11 +9,11 @@ strategy:
     ubuntu-22.04:
       VM_IMAGE: 'ubuntu-22.04'
       OPERATING_SYSTEM: 'linux'
-    macOS-10.15:
-      VM_IMAGE: 'macOS-10.15'
-      OPERATING_SYSTEM: 'mac-os'
     macOS-11:
       VM_IMAGE: 'macOS-11'
+      OPERATING_SYSTEM: 'mac-os'
+    macOS-12:
+      VM_IMAGE: 'macOS-12'
       OPERATING_SYSTEM: 'mac-os'
 
 pool:
