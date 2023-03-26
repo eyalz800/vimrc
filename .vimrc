@@ -50,13 +50,18 @@ function! ZInstallVimrc()
     try
         call ZInstallCommand("mkdir -p ~/.vim/tmp ~/.vim/bin/python ~/.vim/bin/llvm ~/.vim/undo ~/.vim/nundo ~/.config/coc ~/.cache")
         if !executable('brew')
-            call ZInstallCommand("DEBIAN_FRONTEND=noninteractive add-apt-repository -y ppa:lazygit-team/release")
+            call ZInstallCommand('
+                \ LAZYGIT_VERSION=`curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po "\"tag_name\": \"v\K[^\"]*"`;
+                \ curl -fLo ~/.vim/tmp/lazygit-install/lazygit.tar.gz --create-dirs "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz";
+                \ cd ~/.vim/tmp/lazygit-install;
+                \ tar xf lazygit.tar.gz lazygit;
+                \ install lazygit /usr/local/bin')
             call ZInstallCommand("curl -sL https://deb.nodesource.com/setup_lts.x | bash -")
             call ZInstallCommand("curl -fLo ~/.vim/tmp/llvm-install/llvm.sh --create-dirs
                 \ https://apt.llvm.org/llvm.sh
                 \ ; cd ~/.vim/tmp/llvm-install; chmod +x ./llvm.sh; ./llvm.sh " . s:clang_version . " all")
             call ZInstallCommand("DEBIAN_FRONTEND=noninteractive apt install -y curl silversearcher-ag exuberant-ctags cscope git
-                \ make autoconf automake pkg-config openjdk-8-jre python3 python3-pip gdb golang nodejs lazygit tig libc++-" . s:clang_version . "-dev libc++abi-" . s:clang_version . "-dev")
+                \ make autoconf automake pkg-config openjdk-8-jre python3 python3-pip gdb golang nodejs tig libc++-" . s:clang_version . "-dev libc++abi-" . s:clang_version . "-dev")
             call ZInstallCommand("rm -rf ~/.vim/bin/llvm/clangd && ln -s $(command -v clangd-" . s:clang_version . ") ~/.vim/bin/llvm/clangd")
             let lazygit_config_path = '~/.config/jesseduffield/lazygit'
         else
