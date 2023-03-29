@@ -1237,7 +1237,11 @@ function! ZBLinesPreview()
             \ . ' --bind "ctrl-/:toggle-preview"'}, 'right:50%' ))
     endif
 endfunction
-let $BAT_THEME = 'Monokai Extended Origin'
+if &background == 'dark'
+    let $BAT_THEME = 'Monokai Extended Origin'
+else
+    let $BAT_THEME = 'Monokai Extended Light'
+endif
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
