@@ -470,6 +470,12 @@ nnoremap <silent> <C-s> :w<CR>
 inoremap <silent> <C-s> <C-o>:w<CR>
 " }}}
 
+" Editor Config {{{
+if filereadable(expand('~/.vim/.noeditorconfig'))
+    let g:editorconfig = v:false
+endif
+" }}}
+
 " Increment and decrement {{{
 nnoremap <silent> <leader>= <C-a>
 vnoremap <silent> <leader>= <C-a>
