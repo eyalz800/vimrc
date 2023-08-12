@@ -2522,6 +2522,7 @@ let g:vimspector_sign_priority = {
   \    'vimspectorPC':         999,
   \    'vimspectorPCBP':       999,
   \ }
+let s:disable_codelldb_default = filereadable(expand('~/.vim/.disable_codelldb_default'))
 augroup ZVimspectorCustomMappings
     autocmd!
     autocmd FileType VimspectorPrompt call ZVimspectorInitializePrompt()
@@ -2574,11 +2575,11 @@ function! ZVimspectorGenerateCpp()
     call inputsave()
     let target = input('Target (Executable/IP): ')
     call inputrestore()
-    if s:os == 'Linux'
-        let debugger = 'gdb'
-        if !executable('gdb') && executable('lldb')
-            let debugger = 'lldb'
-        endif
+    let debugger = 'gdb'
+    if !executable('gdb') && executable('lldb')
+        let debugger = 'lldb'
+    endif
+    if s:disable_codelldb_default " vscode-cpptools
         if stridx(target, ':') != -1 && !filereadable(target)
             call inputsave()
             let main_file = input('Main File: ')
@@ -2631,7 +2632,10 @@ function! ZVimspectorGenerateCpp()
                 \ echo '    }' >> .vimspector.json &&
                 \ echo '}' >> .vimspector.json")
         endif
-    else " Darwin
+    else " CodeLLDB
+        if executable('lldb')
+            let debugger = 'lldb'
+        endif
         if stridx(target, ':') != -1 && !filereadable(target)
             call inputsave()
             let main_file = input('Main File: ')
@@ -2645,7 +2649,7 @@ function! ZVimspectorGenerateCpp()
                 \ echo '                \"name\": \"remote attach\",' >> .vimspector.json &&
                 \ echo '                \"request\": \"launch\",' >> .vimspector.json &&
                 \ echo '                \"custom\": true,' >> .vimspector.json &&
-                \ echo '                \"type\": \"lldb\",' >> .vimspector.json &&
+                \ echo '                \"type\": \"" . debugger . "\",' >> .vimspector.json &&
                 \ echo '                \"targetCreateCommands\": [\"target create " . main_file . "\"],' >> .vimspector.json &&
                 \ echo '                \"processCreateCommands\": [\"gdb-remote " . target . "\"],' >> .vimspector.json &&
                 \ echo '                \"args\": [],' >> .vimspector.json &&
@@ -2678,7 +2682,7 @@ function! ZVimspectorGenerateCpp()
                 \ echo '            \"configuration\": {' >> .vimspector.json &&
                 \ echo '                \"name\": \"launch\",' >> .vimspector.json &&
                 \ echo '                \"request\": \"launch\",' >> .vimspector.json &&
-                \ echo '                \"type\": \"lldb\",' >> .vimspector.json &&
+                \ echo '                \"type\": \"" . debugger . "\",' >> .vimspector.json &&
                 \ echo '                \"program\": \"" . target . "\",' >> .vimspector.json &&
                 \ echo '                \"args\": [],' >> .vimspector.json &&
                 \ echo '                \"environment\": [],' >> .vimspector.json &&
