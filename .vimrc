@@ -1106,26 +1106,29 @@ let g:gitgutter_sign_removed_first_line = '‾'
 
 " Gitsigns
 if has('nvim') && !filereadable(expand('~/.vim/.nvim_gitgutter'))
-    " lua require('gitsigns').setup {
-    "             \ signs = {
-    "             \     add          = { text = '│' },
-    "             \     change       = { text = '│' },
-    "             \     delete       = { text = '_' },
-    "             \     topdelete    = { text = '‾' },
-    "             \     changedelete = { text = '~' },
-    "             \     untracked    = { text = '┆' },
-    "             \ }
-    "             \ }
-    lua require('gitsigns').setup {
-                \ signs = {
-                \     add          = { text = '┃' },
-                \     change       = { text = '┃' },
-                \     delete       = { text = '_' },
-                \     topdelete    = { text = '‾' },
-                \     changedelete = { text = '~' },
-                \     untracked    = { text = '┆' },
-                \ }
-                \ }
+    function! ZLoadGitSigns()
+        " lua require('gitsigns').setup {
+        "             \ signs = {
+        "             \     add          = { text = '│' },
+        "             \     change       = { text = '│' },
+        "             \     delete       = { text = '_' },
+        "             \     topdelete    = { text = '‾' },
+        "             \     changedelete = { text = '~' },
+        "             \     untracked    = { text = '┆' },
+        "             \ }
+        "             \ }
+        lua require('gitsigns').setup {
+                    \ signs = {
+                    \     add          = { text = '┃' },
+                    \     change       = { text = '┃' },
+                    \     delete       = { text = '_' },
+                    \     topdelete    = { text = '‾' },
+                    \     changedelete = { text = '~' },
+                    \     untracked    = { text = '┆' },
+                    \ }
+                    \ }
+    endfunction
+    call timer_start(0, {tid->execute('call ZLoadGitSigns()')})
 endif
 
 " }}}
