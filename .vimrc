@@ -2116,8 +2116,17 @@ if g:lsp_choice == 'coc'
                 \ coc#refresh()
     inoremap <expr> <S-Tab> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
+    if !has('nvim')
+        hi def DiagnosticUnderlineHint cterm=underline gui=underline guisp=#1abc9c
+        hi def DiagnosticUnderlineWarn cterm=underline gui=underline guisp=#e0af68
+        hi def DiagnosticUnderlineError cterm=underline gui=underline guisp=#db4b4b
+        hi clear CocErrorHighlight
+        hi link CocErrorHighlight DiagnosticUnderlineError
+        hi clear CocWarningHighlight
+        hi link CocWarningHighlight DiagnosticUnderlineWarn
+    endif
     highlight clear CocUnusedHighlight
-    highlight link CocUnusedHighlight None
+    highlight link CocUnusedHighlight DiagnosticUnderlineWarn
     "highlight clear CocErrorSign
     "highlight link CocErrorSign None
     highlight clear CocErrorFloat
@@ -3218,6 +3227,7 @@ function! ZCustomizeColors()
             hi TagbarKind guifg=#bb9af7
             hi TagbarFoldIcon guifg=#bb9af7
             hi jsonKeyword guifg=#bb9af7
+            hi cppSTLexception guifg=#bb9af7
             hi PreCondit guifg=#7dcfff
             hi cPreCondit guifg=#7dcfff
             hi PreProc guifg=#7dcfff
@@ -3277,9 +3287,10 @@ function! ZCustomizeColors()
             hi GitGutterChange guifg=#536c9e guibg=NONE
             hi GitGutterDelete guifg=#b2555b guibg=NONE
             hi GitGutterChangeDelete guifg=#536c9e guibg=NONE
-            hi CocHintSign guibg=NONE
-            hi CocWarningSign guibg=NONE
-            hi CocErrorSign guibg=NONE
+            hi CocInfosign guibg=NONE guifg=#0db9d7
+            hi CocHintSign guibg=NONE guifg=#1abc9c
+            hi CocWarningSign guibg=NONE guifg=#e0af68
+            hi CocErrorSign guibg=NONE guifg=#db4b4b
 
             hi clear vimFunction
             hi clear vimUserFunc
