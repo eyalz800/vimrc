@@ -2425,7 +2425,11 @@ function! ZBuildConfig()
     call inputrestore()
     normal :<ESC>
     if !empty(command)
-        call system("echo '[project-build]' > .tmptasks; echo -e 'command=" . command . "\n' >> .tmptasks")
+        if filereadable(expand('~/.vim/.asynctasks_nosave'))
+            call system("echo '[project-build]' > .tmptasks; echo -e 'command=" . command . "\n' >> .tmptasks")
+        else
+            call system("echo '[project-build]' > .tmptasks; echo -e 'command=" . command . "\n save=2 \n' >> .tmptasks")
+        endif
     endif
 
     call inputsave()
