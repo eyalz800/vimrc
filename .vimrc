@@ -1139,8 +1139,16 @@ let g:floaterm_title = 'terminal'
 
 " Pop Terminal {{{
 command -nargs=1 ZTerminal call ZPopTerminal(<f-args>)
-function! ZPopTerminal(command)
+function! ZPopTerminalSync(command)
     silent execute 'FloatermNew --height=0.9 --width=0.9 --autoclose=2 ' . a:command
+endfunction
+function! ZPopTerminal(command)
+    if !exists('s:terminal_popped')
+        call timer_start(0, {tid->execute("call ZPopTerminalSync('" . a:command . "')")})
+        let s:terminal_popped = 1
+    else
+        call ZPopTerminalSync(a:command)
+    endif
 endfunction
 " }}}
 
