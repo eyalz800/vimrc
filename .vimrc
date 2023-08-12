@@ -251,7 +251,9 @@ else
     ZAsyncPlug 'preservim/nerdtree'
 endif
 ZAsyncPlug 'majutsushi/tagbar'
-ZAsyncPlug 'ludovicchabant/vim-gutentags'
+if !empty($INSTALL_VIMRC_PLUGINS) || filereadable(expand('~/.vim/.gutentags'))
+    ZAsyncPlug 'ludovicchabant/vim-gutentags'
+endif
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 ZAsyncPlug 'junegunn/fzf.vim', { 'on': ['Files', 'BLines'] }
 ZAsyncPlug 'skywind3000/asyncrun.vim'
