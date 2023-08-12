@@ -2398,7 +2398,7 @@ else
     inoremap <silent> <F31> <esc>:call ZBuildConfig()<CR>
 endif
 function! ZBuildProject()
-    if !filereadable('.tasks')
+    if empty(asynctasks#list(""))
         call ZBuildConfig()
     endif
     below copen
@@ -2406,7 +2406,7 @@ function! ZBuildProject()
     AsyncTask project-build
 endfunction
 function! ZCleanProject()
-    if !filereadable('.tasks')
+    if empty(asynctasks#list(""))
         call ZBuildConfig()
     endif
     below copen
@@ -2414,7 +2414,7 @@ function! ZCleanProject()
     AsyncTask project-clean
 endfunction
 function! ZRunProject()
-    if !filereadable('.tasks')
+    if empty(asynctasks#list(""))
         call ZBuildConfig()
     endif
     AsyncTask project-run
