@@ -687,13 +687,21 @@ endfunction
 " }}}
 
 " Sign column {{{
-set signcolumn=yes
+if has('nvim')
+    set signcolumn=yes:2
+else
+    set signcolumn=yes
+endif
 function! ZToggleSignColumn()
     if !exists("b:signcolumn_on") || b:signcolumn_on
         set signcolumn=no
         let b:signcolumn_on = 0
     else
-        set signcolumn=yes
+        if has('nvim')
+            set signcolumn=yes:2
+        else
+            set signcolumn=yes
+        endif
         let b:signcolumn_on = 1
     endif
 endfunction
@@ -2562,6 +2570,12 @@ let g:vimspector_sign_priority = {
   \    'vimspectorPC':         999,
   \    'vimspectorPCBP':       999,
   \ }
+sign define vimspectorBP            text=● texthl=WarningMsg
+sign define vimspectorBPCond        text=◆ texthl=WarningMsg
+sign define vimspectorBPLog         text=◆ texthl=SpellRare
+sign define vimspectorBPDisabled    text=● texthl=LineNr
+sign define vimspectorPC            text=▶ texthl=MatchParen linehl=CursorLine
+sign define vimspectorPCBP          text=●▶ texthl=MatchParen linehl=CursorLine
 let s:disable_codelldb_default = filereadable(expand('~/.vim/.disable_codelldb_default'))
 augroup ZVimspectorCustomMappings
     autocmd!
