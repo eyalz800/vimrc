@@ -385,7 +385,7 @@ set hidden " Allow hidden buffers with writes
 set cursorline " Activate cursor line
 set noerrorbells visualbell t_vb= " Do not play bell sounds
 set belloff=all " Turn off all bells
-set t_u7= " Workaround for some terminals that make vim launch in relace mode
+set t_u7= " Workaround for some terminals that make vim launch in replace mode
 set ttyfast " Fast terminal
 set lazyredraw " Redraw screen lazily
 set re=1 " Regex engine 1 feels smoother most of the times
