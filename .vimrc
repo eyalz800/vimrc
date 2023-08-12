@@ -1083,6 +1083,15 @@ nnoremap <silent> <leader>gl :call ZPopTerminal($SHELL . ' -c "cd ' .  expand('%
 nnoremap <silent> <leader>gL :call ZPopTerminal('lazygit')<CR>
 nnoremap <silent> <leader>gt :call ZPopTerminal($SHELL . ' -c "cd ' .  expand('%:p:h') . ' ; tig"')<CR>
 nnoremap <silent> <leader>gT :call ZPopTerminal('tig')<CR>
+
+" Gitgutter
+let g:gitgutter_sign_added = '┃'
+let g:gitgutter_sign_modified = '┃'
+let g:gitgutter_sign_removed = '_'
+let g:gitgutter_sign_removed_first_line = '‾'
+"let g:gitgutter_sign_removed_above_and_below = '_¯'
+"let g:gitgutter_sign_modified_removed = '~_'
+
 " }}}
 
 " Float Term {{{
