@@ -2077,9 +2077,9 @@ if g:lsp_choice == 'coc'
     highlight link CocErrorFloat None
     highlight clear CocWarningFloat
     highlight link CocWarningFloat None
-    highlight clear CocInfoSign
+    "highlight clear CocInfoSign
     "highlight link CocInfoSign None
-    highlight link CocInfoSign SignColumn
+    "highlight link CocInfoSign SignColumn
     "highlight clear CocHintSign
     "highlight link CocHintSign None
     highlight clear CocInfoFloat
