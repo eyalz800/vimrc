@@ -230,7 +230,11 @@ ZAsyncPlug 'puremourning/vimspector'
 if !has('nvim')
     ZAsyncPlug 'preservim/nerdtree'
 else
-    ZAsyncPlug 'airblade/vim-gitgutter'
+    if !empty($INSTALL_VIMRC_PLUGINS) || filereadable(expand('~/.vim/.nvim_gitgutter'))
+        ZAsyncPlug 'airblade/vim-gitgutter'
+    else
+        Plug 'lewis6991/gitsigns.nvim'
+    endif
     ZAsyncPlug 'tpope/vim-fugitive'
     ZAsyncPlug 'vim-airline/vim-airline'
 endif
@@ -1091,6 +1095,30 @@ let g:gitgutter_sign_removed = '_'
 let g:gitgutter_sign_removed_first_line = '‾'
 "let g:gitgutter_sign_removed_above_and_below = '_¯'
 "let g:gitgutter_sign_modified_removed = '~_'
+
+" Gitsigns
+if has('nvim') && !filereadable(expand('~/.vim/.nvim_gitgutter'))
+    " lua require('gitsigns').setup {
+    "             \ signs = {
+    "             \     add          = { text = '│' },
+    "             \     change       = { text = '│' },
+    "             \     delete       = { text = '_' },
+    "             \     topdelete    = { text = '‾' },
+    "             \     changedelete = { text = '~' },
+    "             \     untracked    = { text = '┆' },
+    "             \ }
+    "             \ }
+    lua require('gitsigns').setup {
+                \ signs = {
+                \     add          = { text = '┃' },
+                \     change       = { text = '┃' },
+                \     delete       = { text = '_' },
+                \     topdelete    = { text = '‾' },
+                \     changedelete = { text = '~' },
+                \     untracked    = { text = '┆' },
+                \ }
+                \ }
+endif
 
 " }}}
 
@@ -2080,6 +2108,8 @@ if g:lsp_choice == 'coc'
                 \ coc#refresh()
     inoremap <expr> <S-Tab> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
+    highlight clear CocUnusedHighlight
+    highlight link CocUnusedHighlight None
     "highlight clear CocErrorSign
     "highlight link CocErrorSign None
     highlight clear CocErrorFloat
