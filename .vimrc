@@ -337,6 +337,7 @@ if !empty($INSTALL_VIMRC_PLUGINS)
         call ZInstallCommand("
             \ echo '{' > ~/.vim/coc-settings.json
             \ && echo '    \"clangd.semanticHighlighting\": false,' >> ~/.vim/coc-settings.json
+            \ && echo '    \"inlayHint.enable\": false,' >> ~/.vim/coc-settings.json
             \ && echo '    \"coc.preferences.formatOnType\": false,' >> ~/.vim/coc-settings.json
             \ && echo '    \"suggest.noselect\": true,' >> ~/.vim/coc-settings.json
             \ && echo '    \"notification.disabledProgressSources\": [\"*\"],' >> ~/.vim/coc-settings.json
