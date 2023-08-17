@@ -349,7 +349,7 @@ if !empty($INSTALL_VIMRC_PLUGINS)
             \ && echo '    \"notification.disabledProgressSources\": [\"*\"],' >> ~/.vim/coc-settings.json
             \ && echo '    \"diagnostic.enableHighlightLineNumber\": \"false\",' >> ~/.vim/coc-settings.json
             \ && echo '    \"diagnostic.infoSign\": \"\",' >> ~/.vim/coc-settings.json
-            \ && echo '    \"diagnostic.hintSign\": \"\",' >> ~/.vim/coc-settings.json
+            \ && echo '    \"diagnostic.hintSign\": \"󰌶\",' >> ~/.vim/coc-settings.json
             \ && echo '    \"diagnostic.warningSign\": \"⚠\",' >> ~/.vim/coc-settings.json
             \ && echo '    \"diagnostic.errorSign\": \"✖\"' >> ~/.vim/coc-settings.json
             \ && echo '}' >> ~/.vim/coc-settings.json")
